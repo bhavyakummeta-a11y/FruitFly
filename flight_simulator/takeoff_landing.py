@@ -36,7 +36,7 @@ MAX_SINK_FPM = 500.0
 
 def make_brain(args):
     if args.brain == 'standin':
-        return StandInBrain(args.silence)
+        return StandInBrain(args.silence, noise_seed=args.noise_seed)
     from .brain import ConnectomeBrain
     return ConnectomeBrain(args.data, seed=args.seed, silence=args.silence)
 
@@ -145,6 +145,8 @@ def main(argv=None):
     p.add_argument('--backend', choices=['demo', 'flightgear'], default='demo')
     p.add_argument('--data', default='data/brain')
     p.add_argument('--seed', type=int, default=0)
+    p.add_argument('--noise-seed', type=int,
+                   help='standin only: add the connectome\'s spike-count noise (1-4 neurons per readout)')
     p.add_argument('--silence', nargs='+', default=[], choices=list(INPUTS) + list(READOUTS),
                    help='Lesion control: cut the outgoing synapses of these groups')
     p.add_argument('--period', type=float, default=0.5, help='Seconds of sim time between brain trials')
@@ -162,6 +164,7 @@ def main(argv=None):
     p.add_argument('--telemetry-port', type=int, default=5501)
     p.add_argument('--control-port', type=int, default=5502)
     p.add_argument('--log', help='CSV of every sim step, incl. sensory inputs and DN rates')
+    p.add_argument('--plot', help='PNG of sugar input, brain activity, altitude and airspeed (needs matplotlib)')
     args = p.parse_args(argv)
     if not math.isfinite(args.seconds) or args.seconds <= 0 or args.period <= 0:
         p.error('--seconds and --period must be positive')
@@ -187,6 +190,12 @@ def main(argv=None):
                 w = csv.DictWriter(f, fields)
                 w.writeheader()
                 w.writerows(log)
+        if args.plot and log:
+            from .plot_run import plot
+            title = f'{fly.name}, {brain.name} ({args.backend}): ' + ('success' if result['success'] else 'FAILED')
+            # The CSV round-trip keeps the plot identical to plot_run on the saved log.
+            rows = [{k: ('' if v is None else str(v)) for k, v in r.items()} for r in log]
+            print(f'Plot written to {plot(rows, args.plot, title)}', flush=True)
         print(json.dumps(result, indent=2))
         return 0 if result['success'] else 2
     except KeyboardInterrupt:

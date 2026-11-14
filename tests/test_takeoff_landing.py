@@ -243,5 +243,52 @@ class LaunchPhaseTests(unittest.TestCase):
         self.assertIn('Could not copy', install_protocols(fg / 'missing'))
 
 
+class NoiseRobustnessTests(unittest.TestCase):
+    """The connectome reads 1-2 neurons per readout, so trial-to-trial rates jitter.
+    The stand-in with spike-count noise reproduces that (it broke the first landing)."""
+
+    def test_noisy_landings_mostly_succeed(self):
+        good = 0
+        for seed in range(8):
+            r, _ = landing(StandInBrain(noise_seed=seed), y=15.0)
+            good += judge('landing', r) and not r['go_around']
+        self.assertGreaterEqual(good, 6)
+
+    def test_noisy_takeoffs_succeed(self):
+        for seed in range(4):
+            r, _ = takeoff(StandInBrain(noise_seed=seed), y=3.0, yaw=0.004)
+            self.assertTrue(judge('takeoff', r), (seed, r))
+
+    def test_glideslope_ignored_below_100_ft(self):
+        # Near the aim point the angular glideslope error explodes; it must not dive the nose.
+        fly = LandingFly(StandInBrain(), trim_pitch=2.0)
+        fly.encode(RunwayState(x=-400, agl=120 * FT, speed=74, gamma=-0.05, on_ground=False))
+        frozen = fly.flare_pitch_deg
+        fly.encode(RunwayState(x=290, agl=30 * FT, speed=74, gamma=-0.05, on_ground=False))
+        self.assertEqual(fly.flare_pitch_deg, frozen)
+
+    def test_no_bitter_below_100_ft(self):
+        fly = LandingFly(StandInBrain(), trim_pitch=2.0)
+        inputs = fly.encode(RunwayState(x=290, agl=30 * FT, speed=60, gamma=-0.05, on_ground=False))
+        self.assertEqual(inputs['bitter'], 0.0)
+
+
+class PlotTests(unittest.TestCase):
+    def test_plot_from_run_log(self):
+        import tempfile
+        try:
+            import matplotlib  # noqa: F401
+        except ImportError:
+            self.skipTest('matplotlib not installed')
+        from flight_simulator.plot_run import main as plot_main
+        from flight_simulator.takeoff_landing import main as run_main
+        d = Path(tempfile.mkdtemp())
+        self.assertEqual(run_main(['landing', '--brain', 'standin', '--log', str(d / 'l.csv'),
+                                   '--plot', str(d / 'direct.png')]), 0)
+        self.assertEqual(plot_main([str(d / 'l.csv')]), 0)
+        for png in (d / 'direct.png', d / 'l.png'):
+            self.assertEqual(png.read_bytes()[:4], b'\x89PNG')
+
+
 if __name__ == '__main__':
     unittest.main()

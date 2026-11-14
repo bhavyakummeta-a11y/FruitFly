@@ -34,6 +34,15 @@ Useful flags:
 | `--offset-m 15`, `--yaw-drift 0.004` | Start off the centerline / add a crosswind-like yaw drift |
 | `--period 0.5` | Seconds of sim time between brain trials (Landing uses 0.25 s below 200 ft) |
 | `--backend flightgear` | Fly the live FlightGear 737 instead of the reduced local model (below) |
+| `--plot runs/x.png` | Save a plot of sugar input, brain activity, altitude and airspeed (needs matplotlib) |
+
+### Plot: sugar input and brain activity
+
+Add `--plot runs/landing.png` to any run (demo or FlightGear) to get a picture of the flight: the flight phases, the **sugar input** the brain receives (Hz), a **brain activity** heatmap with one row per descending neuron (darker blue = firing harder), altitude and airspeed, all on one time axis. To plot a run you already logged with `--log`:
+
+```sh
+python3 -m flight_simulator.plot_run runs/landing.csv          # writes runs/landing.png
+```
 
 Exit status: `0` means the plan's "done when" criteria were met, `2` means they weren't, `1` means an error. Every brain trial takes about 3–4 s on a laptop CPU with the connectome, so a takeoff takes about 8 minutes of wall time and a landing about 15.
 
