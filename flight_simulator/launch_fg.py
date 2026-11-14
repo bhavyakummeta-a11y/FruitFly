@@ -163,6 +163,8 @@ def main():
     parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir, or an fgfs/AppImage file (or set FG_INSTALL)')
     parser.add_argument('--print', action='store_true', help='Only print the command')
     parser.add_argument('--name', help='Session name (required to launch): what this session is for')
+    from .fg_graphics import add_argument as add_graphics_argument
+    add_graphics_argument(parser)
     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
                         help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
                              '(default brain: connectome)')
@@ -175,6 +177,10 @@ def main():
     if not args.print and not (args.name or '').strip():
         parser.error('A FlightGear session needs a name: --name "what this session is testing"')
     cmd = command(args)
+    # Graphics profile (fg_graphics.py) goes before the user's extra args so those still win.
+    from .fg_graphics import profile_args
+    at = next(i for i, a in enumerate(cmd) if a.startswith('--fg-aircraft='))
+    cmd[at:at] = profile_args(args.graphics)
     # Refuse a --state the aircraft doesn't define (FlightGear would ignore it; issue #2).
     from .aircraft_states import check_command
     try:

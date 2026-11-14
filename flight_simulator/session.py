@@ -180,7 +180,8 @@ def parse_cmdline(cmd):
     return {'name': name.strip() if name and name.strip() else None,
             'httpd': int(httpd) if httpd else None,
             'telemetry_port': int(telemetry) if telemetry else None,
-            'aircraft': find(r'--aircraft=(\S+)')}
+            'aircraft': find(r'--aircraft=(\S+)'),
+            'graphics': find(r'--prop:string:/fruitfly/graphics=(\w+)')}
 
 
 def sessions_dir():
@@ -348,6 +349,7 @@ class Session:
         self.httpd = a.httpd or info['httpd'] or 8080
         telemetry = info['telemetry_port'] or 5501
         self.aircraft = info['aircraft']
+        self.graphics = info.get('graphics') or 'not set (FlightGear defaults or launcher settings)'
         self.who = runlog.git('config', 'user.name', check=False) or os.environ.get('USERNAME', 'unknown')
         self.stamp = datetime.fromtimestamp(self.started, timezone.utc).strftime('%Y-%m-%dT%H%M%SZ')
         self.id = self._run_id()
@@ -866,7 +868,7 @@ class Session:
                 'control_timeline': [{'who': g['who'], 'label': g['label'], 'detail': g['detail'],
                                       'from_s': round(g['since'] - self.started, 1),
                                       'to_s': round(g['until'] - self.started, 1)} for g in segments],
-                'name': self.name, 'aircraft': self.aircraft,
+                'name': self.name, 'aircraft': self.aircraft, 'graphics': self.graphics,
                 'fgfs_pid': self.a.pid, 'fgfs_exit_code': code,
                 'started_utc': datetime.fromtimestamp(self.started, timezone.utc).isoformat(),
                 'duration_s': duration, 'httpd_port': self.httpd,
