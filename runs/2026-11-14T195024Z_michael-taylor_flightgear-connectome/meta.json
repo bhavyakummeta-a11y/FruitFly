@@ -1,0 +1,65 @@
+{
+  "run_id": "2026-11-14T195024Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T19:50:24.541954+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain connectome --seconds 180 --note 'tornado obstacle course, user request; light graphics + storm sky'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "connectome",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "vision_port": 5601,
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_cockpit_fly": false,
+    "no_scene": false,
+    "note": "tornado obstacle course, user request; light graphics + storm sky",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "9923429f1174b16a613dcf000c59232fed02ff4c",
+    "branch": "main",
+    "dirty": [],
+    "untracked": [
+      "flight_simulator/fg_crashes.py",
+      "tests/test_fg_crashes.py"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+    "neurons_decide": "escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input",
+    "code_decides": "synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "tornado obstacle course - CONNECTOME fly brain (user request)",
+      "run_id": "2026-11-14T194947Z_michael-taylor_fg-tornado-obstacle-course-connectome-fly-brain-user-request"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 44
+  },
+  "finished_utc": "2026-11-14T19:50:53.487779+00:00",
+  "exit_code": 1
+}

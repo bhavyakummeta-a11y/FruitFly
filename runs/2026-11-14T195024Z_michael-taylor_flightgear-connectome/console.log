@@ -1,0 +1,16 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T195024Z_michael-taylor_flightgear-connectome
+[control] FLY BRAIN (connectome) decides when to escape; code flies the airplane
+[control]   neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input
+[control]   code decides:   synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Real time: FlightGear stays at 1x and is not paused for brain trials; the plane flies on the last decision while the connectome works. A crash is data.
+Waiting for airborne FlightGear telemetry on localhost...
+FlightGear connected. Hold targets: 914 m (3000 ft, now 941 m), 113 m/s, current heading.
+Placed 3 obstacle tornadoes in FlightGear (telnet 5500).
+Handover: airplane autopilot confirmed OFF; the controller flies.
+   2.2s AVOID  altitude=  941.7m speed=118.4m/s escape=  0.0Hz clearance= 7143.6m
+   3.5s ENVELOPE BREACH (logged, run continues): altitude +42 m from target (>40)
+  12.2s ALTITUDE RECOVERY / AVOID altitude=  955.5m speed=119.2m/s escape= 72.5Hz clearance= 5908.0m
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: No FlightGear telemetry; check UDP flags and protocol XML.
