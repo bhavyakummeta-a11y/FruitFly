@@ -284,7 +284,7 @@ def summarize(mission, sim):
 
 def run_flightgear(mission, args, log):
     """Whole flight in FlightGear, started on the runway (launch_fg --phase takeoff)."""
-    from .flightgear import RunwayFlightGear
+    from .flightgear import RunwayFlightGear, engine_asymmetry
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port)
     body = None
     try:
@@ -293,9 +293,10 @@ def run_flightgear(mission, args, log):
             body = BodyLink(args.body_port)
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
+        bridge.send(bridge.last_controls)  # idle + brakes until the fly's first decision
         if not s.on_ground:
             raise ValueError('Start FlightGear on the runway: python -m flight_simulator.launch_fg --phase takeoff')
-        previous, touchdown = s.time, None
+        previous, touchdown, asym_since = s.time, None, None
         while not mission.done:
             handing_over = (mission.fly.status.done and not isinstance(mission.fly, LandingFly)) \
                 or mission.fly.decision_due(s)
@@ -317,6 +318,12 @@ def run_flightgear(mission, args, log):
                 s = bridge.read()
             except KeyboardInterrupt:
                 print('\nCtrl-C: pausing FlightGear.', flush=True)
+                break
+            warning = engine_asymmetry(s, controls.throttle)
+            asym_since = (asym_since or s.time) if warning else None
+            if warning and s.time - asym_since >= 2.0:
+                print(warning, flush=True)
+                bridge.send(replace(controls, throttle=0.0, brake=1.0))
                 break
             if not was_ground and s.on_ground and touchdown is None and isinstance(mission.fly, LandingFly):
                 touchdown = (round(s.x), round(-log[-1]['climb_fpm']))

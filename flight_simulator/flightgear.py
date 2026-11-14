@@ -347,7 +347,9 @@ class RunwayFlightGear(FlightGear):
         self.gear_down = True
         self.flaps = 0.375  # flaps 5 (737 detent); set by the scripted checklist
         from .runway import AirlinerControls
-        self.last_controls = AirlinerControls()
+        # Safe until the fly decides: idle and brakes on. (The Controls default is
+        # throttle 0.65 with no brakes, which a freeze/pause request would send.)
+        self.last_controls = AirlinerControls(throttle=0.0, brake=1.0)
 
     def parse(self, packet):
         from .runway import RunwayState, KT, FT
@@ -355,9 +357,10 @@ class RunwayFlightGear(FlightGear):
             values = [float(v) for v in packet.decode('ascii').strip().split(',')]
         except (ValueError, UnicodeError) as exc:
             raise ValueError('Malformed FlightGear telemetry') from exc
-        if len(values) != 11 or not all(math.isfinite(v) for v in values):
+        if len(values) not in (11, 13) or not all(math.isfinite(v) for v in values):
             raise ValueError('Expected eleven finite runway telemetry fields')
-        clock, lat, lon, agl_ft, heading, roll, pitch, speed_kt, climb_fps, wow, frozen = values
+        n1 = values[11:13] if len(values) == 13 else (None, None)  # older protocol copies: no N1
+        clock, lat, lon, agl_ft, heading, roll, pitch, speed_kt, climb_fps, wow, frozen = values[:11]
         if not (-90 <= lat <= 90 and -180 <= lon <= 180 and -5 < speed_kt < 1000
                 and -180 <= roll <= 180 and -90 <= pitch <= 90 and frozen in (0, 1) and wow in (0, 1)):
             raise ValueError('FlightGear runway state out of range')
@@ -386,7 +389,7 @@ class RunwayFlightGear(FlightGear):
         state = RunwayState(time=self.active_time, x=x, y=y, agl=max(0.0, (agl_ft - self.agl_offset_ft) * FT),
                             psi=wrap(math.radians(heading - rwy)), roll=math.radians(roll),
                             pitch=math.radians(pitch), gamma=gamma, speed=speed,
-                            on_ground=bool(wow))
+                            on_ground=bool(wow), n1_left=n1[0], n1_right=n1[1])
         if self.previous is not None and active and delta < 0.5:
             state.roll_rate = wrap(state.roll - self.previous.roll) / delta
             state.pitch_rate = (state.pitch - self.previous.pitch) / delta
@@ -411,6 +414,9 @@ class RunwayFlightGear(FlightGear):
         paused = False
         try:
             self.last_controls = replace(self.last_controls, aileron=0.0, rudder=0.0)
+            if self.previous is None or self.previous.on_ground:
+                # On the ground (or never heard from FG): idle and brakes, never leave thrust on.
+                self.last_controls = replace(self.last_controls, throttle=0.0, brake=1.0)
             for _ in range(5):  # UDP: repeat rather than trust one packet
                 self.send(self.last_controls, True)
                 time.sleep(0.05)
@@ -423,3 +429,16 @@ class RunwayFlightGear(FlightGear):
             self.rx.close()
             self.tx.close()
         return paused
+
+
+def engine_asymmetry(state, throttle, limit=15.0):
+    """On the ground with real thrust asked for, are the two engines' N1 far apart?
+    Returns a warning string, or '' (also when N1 isn't reported)."""
+    a, b = state.n1_left, state.n1_right
+    if a is None or b is None or not state.on_ground or throttle < 0.3:
+        return ''
+    if abs(a - b) > limit:
+        return (f'ENGINE ASYMMETRY: N1 left {a:.0f}% vs right {b:.0f}% at throttle {throttle:.2f}. '
+                'One engine is not producing thrust, so the 737 would pivot on the runway. '
+                'Idle and brakes: start both engines, then run again.')
+    return ''

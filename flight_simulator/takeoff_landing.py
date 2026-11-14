@@ -88,7 +88,8 @@ def _set_speed_up(telnet_port, value):
 
 def run_flightgear(args, fly, log):
     """Live FlightGear. The sim is frozen during every brain trial."""
-    from .flightgear import RunwayFlightGear
+    from dataclasses import replace
+    from .flightgear import RunwayFlightGear, engine_asymmetry
     runway = tuple(args.runway) if args.runway else None
     # Without --runway, landing assumes the launch_fg --phase landing start:
     # on the extended centerline, --final-nm before the threshold.
@@ -106,6 +107,7 @@ def run_flightgear(args, fly, log):
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
+        bridge.send(bridge.last_controls)  # idle + brakes until the fly's first decision
         if args.phase == 'takeoff' and not s.on_ground:
             raise ValueError('Start FlightGear on the runway (main gear on the ground) for takeoff')
         if args.phase == 'landing' and (s.on_ground or s.agl < 300 * FT):
@@ -123,6 +125,7 @@ def run_flightgear(args, fly, log):
         print('Handover: airplane autopilot confirmed OFF; the fly flies.', flush=True)
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
+        asym_since = None
         body = None
         if not args.no_cockpit_fly:
             # The fly pilot in the 737's captain seat, animated by this brain (display only).
@@ -186,6 +189,12 @@ def run_flightgear(args, fly, log):
                 liftoff = s.x
             if not was_ground and s.on_ground and touchdown is None:
                 touchdown = (s.x, -log[-1]['climb_fpm'], log[-1]['pitch_deg'])
+            warning = engine_asymmetry(s, controls.throttle)
+            asym_since = (asym_since or s.time) if warning else None
+            if warning and s.time - asym_since >= 2.0:
+                print(warning, flush=True)
+                bridge.send(replace(controls, throttle=0.0, brake=1.0))
+                break
             if s.on_ground and math.degrees(s.pitch) > 11:
                 tail_strike = True
                 break

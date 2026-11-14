@@ -466,7 +466,7 @@ def row(fly, s, c):
     data = {'time': round(s.time, 3), 'phase': fly.status.phase, 'x': s.x, 'y': s.y,
             'agl_ft': s.agl / FT, 'ias_kt': s.speed / KT, 'pitch_deg': math.degrees(s.pitch),
             'roll_deg': math.degrees(s.roll), 'climb_fpm': s.climb / FT * 60,
-            'on_ground': s.on_ground, 'aileron': c.aileron, 'elevator': c.elevator,
+            'on_ground': s.on_ground, 'n1_left': s.n1_left, 'n1_right': s.n1_right, 'aileron': c.aileron, 'elevator': c.elevator,
             'rudder': c.rudder, 'throttle': c.throttle, 'brake': c.brake}
     if last:
         data.update({f'in_{k}': v for k, v in last.inputs.items()})

@@ -72,6 +72,20 @@
         <type>bool</type>
         <format>%d</format>
       </chunk>
+      <chunk>
+        <!-- Both engines' N1 (%): detects one engine not running (a 737 spun in
+             place on the runway with symmetric throttle, 2026-11-14). -->
+        <name>n1_left</name>
+        <node>/engines/engine[0]/n1</node>
+        <type>float</type>
+        <format>%.2f</format>
+      </chunk>
+      <chunk>
+        <name>n1_right</name>
+        <node>/engines/engine[1]/n1</node>
+        <type>float</type>
+        <format>%.2f</format>
+      </chunk>
     </output>
   </generic>
 </PropertyList>

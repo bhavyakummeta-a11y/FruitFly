@@ -195,7 +195,7 @@ class RunwayProtocolTests(unittest.TestCase):
     def test_protocol_xml_matches_wire_order(self):
         state = [c.find('name').text for c in ET.parse(PROTOCOLS / 'flybrain-runway-state.xml').iter('chunk')]
         self.assertEqual(state, ['elapsed', 'latitude', 'longitude', 'agl', 'heading', 'roll', 'pitch',
-                                 'airspeed', 'climb', 'wow', 'frozen'])
+                                 'airspeed', 'climb', 'wow', 'frozen', 'n1_left', 'n1_right'])
         controls = [c.find('name').text for c in ET.parse(PROTOCOLS / 'flybrain-runway-controls.xml').iter('chunk')]
         self.assertEqual(controls, ['aileron', 'elevator', 'rudder', 'throttle0', 'throttle1',
                                     'brake_left', 'brake_right', 'gear_down', 'frozen', 'frozen_clock', 'flaps'])
@@ -365,6 +365,77 @@ class SteeringBiasTests(unittest.TestCase):
         _, fly = self.roll(True, 0)
         self.assertEqual(set(fly.calibration), {'steer'})
         self.assertGreater(fly.zero['steer'], STEER_ZERO)  # biased left -> zero moves up
+
+
+class SpinOnRunwayTests(unittest.TestCase):
+    """2026-11-14 FG session 'takeoff fly - CONNECTOME (latest 51e2af8)': no fly was flying,
+    yet throttle 0.65 appeared with brakes off and the 737 spun in place (298 -> 79 deg in
+    12 s at 1-4 kt). 0.65 is the Controls default the bridge would send in a freeze/pause
+    before the fly's first decision; spinning with the rudder centred means one engine."""
+
+    def bridge(self, sink):
+        return RunwayFlightGear(0, sink.getsockname()[1], timeout=.2, runway=(37.0, -122.0, 90.0))
+
+    def setUp(self):
+        self.sink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sink.bind(('127.0.0.1', 0))
+        self.sink.settimeout(1)
+
+    def tearDown(self):
+        self.sink.close()
+
+    def last_packet(self):
+        data = None
+        self.sink.settimeout(0.2)
+        try:
+            while True:
+                data = self.sink.recvfrom(8192)[0]
+        except socket.timeout:
+            pass
+        return [float(v) for v in data.decode().split(',')]
+
+    def test_default_controls_are_idle_with_brakes(self):
+        b = self.bridge(self.sink)
+        try:
+            self.assertEqual((b.last_controls.throttle, b.last_controls.brake), (0.0, 1.0))
+        finally:
+            b.rx.close(); b.tx.close()
+
+    def test_close_on_ground_idles_and_brakes_even_after_thrust(self):
+        b = self.bridge(self.sink)
+        b.parse(b'1,37.0,-122.0,7.95,90,0,0,30,0,1,0,60,60\n')
+        b.send(AirlinerControls(0.2, 0, 0.3, 1.0, 0.0))
+        b.close()
+        f = self.last_packet()
+        self.assertEqual(f[3:7], [0.0, 0.0, 1.0, 1.0])   # both throttles idle, both brakes on
+        self.assertEqual(f[0], 0.0)
+
+    def test_close_in_the_air_keeps_thrust(self):
+        b = self.bridge(self.sink)
+        b.parse(b'1,37.0,-122.0,1000,90,0,5,150,10,0,0,85,85\n')
+        b.send(AirlinerControls(0.2, 0, 0.3, 0.8, 0.0))
+        b.close()
+        f = self.last_packet()
+        self.assertEqual(f[3:5], [0.8, 0.8])
+
+    def test_n1_parsed_and_old_protocol_still_accepted(self):
+        b = self.bridge(self.sink)
+        try:
+            s = b.parse(b'1,37.0,-122.0,7.95,90,0,0,0,0,1,0,22.5,61.0\n')
+            self.assertEqual((s.n1_left, s.n1_right), (22.5, 61.0))
+            s = b.parse(b'2,37.0,-122.0,7.95,90,0,0,0,0,1,0\n')
+            self.assertIsNone(s.n1_left)
+        finally:
+            b.rx.close(); b.tx.close()
+
+    def test_engine_asymmetry_warning(self):
+        from flight_simulator.flightgear import engine_asymmetry
+        one_engine = RunwayState(on_ground=True, n1_left=21.0, n1_right=70.0)
+        self.assertIn('ENGINE ASYMMETRY', engine_asymmetry(one_engine, 0.65))
+        self.assertEqual(engine_asymmetry(one_engine, 0.1), '')                 # idle: fine
+        both = RunwayState(on_ground=True, n1_left=70.0, n1_right=72.0)
+        self.assertEqual(engine_asymmetry(both, 0.9), '')
+        self.assertEqual(engine_asymmetry(RunwayState(on_ground=True), 0.9), '')  # no N1 data
 
 
 if __name__ == '__main__':

@@ -70,6 +70,8 @@ class RunwayState:
     yaw_rate: float = 0.0
     spool: float = 0.05       # actual thrust fraction (lags the throttle)
     on_ground: bool = True
+    n1_left: float = None     # engine N1 %, FlightGear only (None in the local model)
+    n1_right: float = None
 
     @property
     def climb(self):
