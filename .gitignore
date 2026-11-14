@@ -2,3 +2,4 @@
 .sessions/
 .watcher.log
 .watchdog.log
+.media-recorder.log
