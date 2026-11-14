@@ -1,0 +1,15 @@
+16:39:37 [session] Session 'obstacle avoidance: connectome, in-air start, tornadoes' watching fgfs pid 73557 (738-flies)
+16:39:37 [session] Live log page: http://127.0.0.1:8765/
+16:40:58 [fgfs] 81.64 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:368: Shutdown of non-init-ed group:
+16:40:58 [fgfs] 81.64 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:368: Shutdown of non-init-ed group:
+16:40:58 [fgfs] 81.64 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:368: Shutdown of non-init-ed group:
+16:40:58 [fgfs] 81.64 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:368: Shutdown of non-init-ed group:
+16:40:58 [fgfs] 81.64 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:368: Shutdown of non-init-ed group:
+16:40:58 [fgfs] 81.64 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:368: Shutdown of non-init-ed group:
+16:40:58 [fgfs] 81.65 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:401: Unbind of non-bound group:
+16:40:58 [fgfs] 81.65 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:401: Unbind of non-bound group:
+16:40:58 [fgfs] 81.65 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:401: Unbind of non-bound group:
+16:40:58 [fgfs] 81.65 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:401: Unbind of non-bound group:
+16:40:58 [fgfs] 81.65 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:401: Unbind of non-bound group:
+16:40:58 [fgfs] 81.65 [ALRT]:event     /builds/flightgear/fgmeta/simgear/simgear/structure/subsystem_mgr.cxx:401: Unbind of non-bound group:
+16:41:23 [session] FlightGear exited (code None)
