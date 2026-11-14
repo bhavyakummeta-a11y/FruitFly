@@ -1,0 +1,82 @@
+diff --git a/flight_simulator/media.py b/flight_simulator/media.py
+index 25d61ee..6e46c2c 100644
+--- a/flight_simulator/media.py
++++ b/flight_simulator/media.py
+@@ -52,8 +52,10 @@ PAGE_EVERY_S = float(os.environ.get('FRUITFLY_MEDIA_PAGE_S', 90))
+ EVENT_GAP_S = 5            # min spacing between event-triggered frames
+ MAX_W = 1280               # stored frame width (JPEG q80, ~80-150 kB)
+ RECORDER_PORT = 8763       # bound by the recorder: one per machine
+-EVENT_WORDS = re.compile(r'paused|resumed|connected to property|controller|crash|collision|stop|takeoff|'
+-                         r'landing|rotate|liftoff|touchdown|avoid|handover|hands over|exited|error', re.I)
++EVENT_WORDS = re.compile(r'paused|resumed|connected to property|controller run|crash|collision|\bstop\b|'
++                         r'rotate|liftoff|lift-off|touchdown|handover|hands over|exited|error|started|finished', re.I)
++# periodic controller status line, e.g. "[controller]   43.0s AVOID  altitude=..."; only a phase change is an event
++STATUS = re.compile(r'\]\s+[\d.]+s\s+([A-Z][A-Z_-]+)\s+\w+=')
+ EDGE = [Path(os.environ.get('ProgramFiles(x86)', r'C:\Program Files (x86)')) / 'Microsoft/Edge/Application/msedge.exe',
+         Path(os.environ.get('ProgramFiles', r'C:\Program Files')) / 'Microsoft/Edge/Application/msedge.exe']
+ TELEMETRY = {'alt_ft': '/position/altitude-ft', 'agl_ft': '/position/altitude-agl-ft',
+@@ -97,14 +99,23 @@ def page_frame(url, size=(1400, 900), timeout=40):
+     edge = next((p for p in EDGE if p.exists()), None)
+     if not edge:
+         raise RuntimeError('Microsoft Edge not found for page screenshots')
+-    with tempfile.TemporaryDirectory() as tmp:
+-        out = Path(tmp) / 'page.png'
++    # One reused profile (Edge's helper processes linger and lock a fresh one); a unique output file per shot.
++    profile = Path(tempfile.gettempdir()) / 'fruitfly-media-edge'
++    profile.mkdir(exist_ok=True)
++    out = profile / f'page-{os.getpid()}-{time.time_ns()}.png'
++    try:
+         subprocess.run([str(edge), '--headless=new', '--disable-gpu', '--hide-scrollbars', '--mute-audio',
+-                        f'--user-data-dir={Path(tmp) / "profile"}', f'--window-size={size[0]},{size[1]}',
++                        f'--user-data-dir={profile / "profile"}', f'--window-size={size[0]},{size[1]}',
+                         '--virtual-time-budget=4000', f'--screenshot={out}', url],
+                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=timeout,
+                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+-        return Image.open(out).convert('RGB')
++        with Image.open(out) as img:
++            return img.convert('RGB')
++    finally:
++        try:
++            out.unlink(missing_ok=True)
++        except OSError:
++            pass
+ 
+ 
+ def find_windows(title):
+@@ -282,6 +293,7 @@ class Track:
+         self.next_page = time.time() + 15     # let the page load first
+         self.last_event_frame = 0.0
+         self.events_offset = None
++        self.phase = None
+         self.failures = 0
+ 
+     def media(self):
+@@ -299,7 +311,17 @@ class Track:
+             f.seek(self.events_offset)
+             text = f.read()
+             self.events_offset = f.tell()
+-        return [l for l in text.splitlines() if EVENT_WORDS.search(l)]
++        out = []
++        for line in text.splitlines():
++            m = STATUS.search(line)
++            if m:
++                if m.group(1) != self.phase:
++                    if self.phase is not None:
++                        out.append(f'Phase {self.phase} -> {m.group(1)}: ' + line.split(']', 1)[-1].strip())
++                    self.phase = m.group(1)
++            elif EVENT_WORDS.search(line):
++                out.append(line)
++        return out
+ 
+     def tick(self):
+         now = time.time()
+@@ -556,7 +578,10 @@ def cmd_render(a):
+     m, file = resolve(a.image)
+     row = next(r for r in m.images() if r['file'] == file)
+     out = Path(a.out or (Path(tempfile.gettempdir()) / f'annotated-{file}'))
+-    render(m.dir / file, row, a.title or m.run_dir.name).save(out, quality=90)
++    title = a.title or next((i.get('name') for i in live_sessions() if i['run_id'] == m.run_dir.name), None)
++    if not title and (m.run_dir / 'meta.json').exists():
++        title = json.loads((m.run_dir / 'meta.json').read_text(encoding='utf-8')).get('name')
++    render(m.dir / file, row, title or m.run_dir.name).save(out, quality=90)
+     print(out)
