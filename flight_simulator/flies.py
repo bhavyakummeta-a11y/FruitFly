@@ -43,6 +43,9 @@ GS_GAIN = 3.0          # deg of pitch target per deg below the glideslope
 JUMP_RATE = 2.5        # deg/s nose-up at full escape activity (FG 737 lifted off at 10.9 deg with 3.0)
 AIR_RUDDER = 0.1       # max rudder in the air (0.3 held after handover rolled the FG 737 over)
 HOLD_PITCH = 10.0      # deg: after the phase ends in the air, keep flying (no Cruise fly yet)
+APPROACH_ALPHA = 4.5   # deg, 737 angle of attack on approach (flaps 30, ~Vref)
+PATH_I_RATE = 0.15     # deg of pitch target per second per deg of path error (slow re-trim)
+SETTLE_S = 20.0        # s after the Landing fly takes over before it may call a go-around
 HOLD_THROTTLE = 0.7    # scripted climb power while holding
 VS_PITCH_GAIN = 12.0   # Hz of VS drive per deg of pitch error (1-neuron DNp20 readouts: see HS_GAIN)
 VS_ROLL_GAIN = 8.0     # Hz of VS push-pull per deg of bank
@@ -369,12 +372,32 @@ class LandingFly(PhaseFly):
         self.go_around = False
         self.touched_down = False
         self.flare_pitch_deg = None
+        self.handover_time = None
+        self.anchored = False
+        self.path_i, self.path_i_time = 0.0, None
+        self.path_angle = GLIDESLOPE   # re-anchored once the settling window ends
         self.status = Status('APPROACH')
 
     def unstable(self, s):
         # Judged between 1,000 and 100 ft; below 100 ft the pilot flies the flare by eye.
+        # Settling window: a live FlightGear handover can catch the plane ballooning
+        # (+1,900 fpm, 13 deg pitch). Capture the glideslope first, judge after 20 s.
+        if self.handover_time is None:
+            self.handover_time = s.time
+        if s.time - self.handover_time < SETTLE_S:
+            return False
+        if not self.anchored:
+            # Visual approach: fly a straight path from where the plane actually is to the
+            # touchdown point, instead of going around because the handover left it off 3 deg.
+            self.anchored = True
+            here = math.atan2(s.agl, max(AIM_POINT - s.x, 1.0))
+            self.path_angle = min(max(here, math.radians(1.5)), math.radians(4.0))
+            self.trim_pitch_deg = APPROACH_ALPHA - math.degrees(self.path_angle)
+            self.flare_pitch_deg = None
+            print(f'Landing fly: approach path re-anchored at {math.degrees(self.path_angle):.1f} deg '
+                  f'from {s.agl / FT:.0f} ft, {AIM_POINT - s.x:.0f} m out', flush=True)
         return (100 * FT < s.agl < 1000 * FT and not s.on_ground and
-                (self.off_glideslope(s) or self.off_localizer(s)
+                ((s.agl > 300 * FT and self.off_glideslope(s)) or self.off_localizer(s)
                  or not -8 * KT <= s.speed - VREF <= 15 * KT))
 
     @staticmethod
@@ -385,13 +408,16 @@ class LandingFly(PhaseFly):
         distance = max(3600.0 - s.x, 1.0)  # localizer antenna ~ far end of the runway
         return abs(s.y) > max(40.0, distance * math.tan(math.radians(0.6)))
 
-    @staticmethod
-    def off_glideslope(s):
+    def path_error(self, s):
+        """Degrees above (+) or below (-) this fly's approach path (3 deg unless re-anchored)."""
+        return math.degrees(math.atan2(s.agl, max(AIM_POINT - s.x, 1.0)) - self.path_angle)
+
+    def off_glideslope(self, s):
         """More than 0.7 deg off, but never stricter than 10 m in height: the same height
         error is a growing angle near the runway (a full flight went around at 118 ft
         while only 8.6 m high and converging)."""
         distance = max(AIM_POINT - s.x, 1.0)
-        height_error = s.agl - distance * math.tan(GLIDESLOPE)
+        height_error = s.agl - distance * math.tan(getattr(self, 'path_angle', GLIDESLOPE))
         return abs(height_error) > max(10.0, distance * math.tan(math.radians(0.7)))
 
     def encode(self, s):
@@ -405,8 +431,13 @@ class LandingFly(PhaseFly):
             if s.agl > 100 * FT or self.flare_pitch_deg is None:
                 # Follow the glideslope. The angular error is clipped: it grows without
                 # bound near the aim point. Below 100 ft the target is frozen.
-                gs = clip(s.glideslope_error(), -1.5, 1.5)
-                self.flare_pitch_deg = self.trim_pitch_deg - GS_GAIN * gs
+                gs = clip(self.path_error(s), -1.5, 1.5)
+                # Slow re-trim on a persistent path error (a proportional loop alone flew a live
+                # FlightGear approach 21 m low all the way down). Integrated per decision.
+                dt = s.time - self.path_i_time if self.path_i_time is not None else 0.0
+                self.path_i_time = s.time
+                self.path_i = clip(self.path_i - PATH_I_RATE * gs * dt, -3.0, 3.0)
+                self.flare_pitch_deg = self.trim_pitch_deg - GS_GAIN * gs + self.path_i
             pitch_target = self.flare_pitch_deg
         sugar = clip(TONIC + 4.0 * (VAPP - s.speed) / KT, 80, 200)
         bitter = 200.0 if (self.unstable(s) and not self.go_around) else 0.0

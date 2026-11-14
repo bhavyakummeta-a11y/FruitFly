@@ -110,7 +110,25 @@ def run_flightgear(args, fly, log):
         if args.phase == 'landing' and (s.on_ground or s.agl < 300 * FT):
             raise ValueError('Start FlightGear on a stabilised approach above 300 ft for landing')
         if args.phase == 'landing':
-            fly.trim_throttle = fly.throttle = args.approach_throttle
+            # Bumpless handover from what FlightGear is flying right now: its elevator and
+            # throttle, and the attitude that flies the 3 deg glideslope at a sane angle of
+            # attack. (Taking the first sampled pitch as the reference made the fly hold 13 deg
+            # nose-up when it caught the plane ballooning, and climb away.)
+            from .flightgear import telnet_get
+            def fg_value(path, default):
+                try:
+                    v = float(telnet_get(args.telemetry_port - 1, path, timeout=2))
+                    return v if math.isfinite(v) else default
+                except (OSError, TypeError, ValueError):
+                    return default
+            throttle_now = fg_value('/controls/engines/engine[0]/throttle', args.approach_throttle)
+            fly.trim_throttle = fly.throttle = throttle_now if throttle_now > 0.15 else args.approach_throttle
+            fly.elevator_i = fg_value('/controls/flight/elevator', 0.0)
+            from .flies import APPROACH_ALPHA
+            fly.trim_pitch_deg = APPROACH_ALPHA - 3.0  # not the sampled pitch: it may be mid-balloon or mid-dive
+            print(f'Landing handover: throttle {fly.trim_throttle:.2f}, elevator {fly.elevator_i:+.2f}, '
+                  f'reference attitude {fly.trim_pitch_deg:.1f} deg (plane at {math.degrees(s.pitch):.1f} deg, '
+                  f'{s.climb / FT * 60:+.0f} fpm)', flush=True)
         # No-autopilot rule: the fly never flies with the airplane autopilot on. In an in-air
         # 737 start the overlay's autopilot holds the plane until the handover switches it off.
         from .flightgear import AutopilotGuard, hand_over
