@@ -47,8 +47,12 @@ class BodyLink:
         if activity:
             self.activity = {k: round(v, 2) for k, v in activity.items()
                              if k.endswith('_hz') and isinstance(v, (int, float)) and math.isfinite(v)}
+        alt = getattr(state, 'altitude', None)
         msg = {'roll': round(state.roll, 4), 'pitch': round(state.pitch, 4), 'phase': phase,
-               'brain': brain, 'escape_hz': round(float(escape_hz), 2), 'alt_m': round(state.altitude, 1),
+               'brain': brain, 'escape_hz': round(float(escape_hz), 2),
+               'alt_m': round(alt if alt is not None else getattr(state, 'agl', 0.0), 1),
+               'alt_kind': 'MSL' if alt is not None else 'AGL',
+               'on_ground': bool(getattr(state, 'on_ground', False)),
                'speed_ms': round(state.speed, 1), 'activity': self.activity}
         try:
             self.sock.sendto(json.dumps(msg).encode(), self.address)
@@ -72,6 +76,7 @@ class Drive:
         self.power = self.steer = self.escape = 0.0
         self.jump_t = -10.0
         self.last = {}
+        self.on_ground = False
 
     def norm(self, key, value, floor=20.0):
         self.peak[key] = max(self.peak.get(key, floor), value)
@@ -79,6 +84,7 @@ class Drive:
 
     def update(self, msg, now):
         self.last = msg
+        self.on_ground = bool(msg.get('on_ground', False))
         a = msg.get('activity', {})
         gf = max(float(msg.get('escape_hz', 0.0)), float(a.get('DNp01_hz', 0.0)))
         self.target = {
@@ -126,12 +132,14 @@ class FlyPose:
     def apply(self, data, t, drive, connected):
         q = data.qpos
         q[:] = self.model.qpos0
-        flying = connected
         jump = clip(1 - (t - drive.jump_t) / 0.8, 0.0, 1.0)  # 1 right after a Giant Fibre spike, fades
+        # On the runway the Takeoff fly is a standing fly (wings folded); it flies once airborne.
+        standing = connected and drive.on_ground and jump == 0.0
+        flying = connected and not standing
         # Body: hover and ride the airplane's attitude (roll about x, pitch about y).
         bob = 0.01 * math.sin(2 * math.pi * 1.3 * t) if flying else 0.0
         q[0:3] = (0.0, 0.0, (self.HOVER + bob + 0.12 * jump) if flying else 0.0)
-        roll, pitch = (drive.roll, drive.pitch) if flying else (0.0, 0.0)
+        roll, pitch = (drive.roll, drive.pitch) if connected else (0.0, 0.0)
         cr, sr, cp, sp = math.cos(roll / 2), math.sin(roll / 2), math.cos(-pitch / 2), math.sin(-pitch / 2)
         q[3:7] = (cr * cp, sr * cp, cr * sp, -sr * sp)
         if not flying:
@@ -170,8 +178,10 @@ def caption(drive, connected):
                 m.get('brain', '?'), m.get('phase', '?'), max(m.get('escape_hz', 0), a.get('DNp01_hz', 0)),
                 a.get('DNg02_hz', 0), a.get('DNa01_L_hz', 0) + a.get('DNa02_L_hz', 0),
                 a.get('DNa01_R_hz', 0) + a.get('DNa02_R_hz', 0)))
-    right = 'Boeing 737: %.0f m, %.0f m/s\nbank %+.0f deg, pitch %+.0f deg' % (
-        m.get('alt_m', 0), m.get('speed_ms', 0), math.degrees(m.get('roll', 0)), math.degrees(m.get('pitch', 0)))
+    right = 'Boeing 737: %.0f m %s, %.0f kt%s\nbank %+.0f deg, pitch %+.0f deg' % (
+        m.get('alt_m', 0), m.get('alt_kind', 'MSL'), m.get('speed_ms', 0) / 0.514444,
+        ', on the runway' if m.get('on_ground') else '',
+        math.degrees(m.get('roll', 0)), math.degrees(m.get('pitch', 0)))
     return left, right
 
 
