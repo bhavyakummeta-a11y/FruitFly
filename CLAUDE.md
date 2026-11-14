@@ -77,6 +77,14 @@ From a checkout whose branch predates `tickets.py`, run the main copy:
 5. When testing the logging code itself, set `FRUITFLY_NO_PUSH=1` so test logs
    are never committed to the shared `sim-logs` branch.
 6. Ask the user before opening FlightGear windows; they take over the screen/GPU.
+7. **One FlightGear at a time on this machine (user rule).** Two sims compete for
+   the CPU/GPU, which skews fly-brain timing, and they push each other's log and brain
+   pages to other ports. The project launchers enforce it with a machine-wide queue
+   (`flight_simulator/sim_queue.py`): a launch waits until no `fgfs.exe` is running
+   and every earlier request has had its turn (`--no-wait` exits instead). Check with
+   `python -m flight_simulator.sim_queue status`. Don't bypass it: no second
+   `--instance`, no bare `fgfs.exe`. Close your sim when your check is done so the
+   next one in line can start.
 7. **The logs must always say who is flying** (fly brain / code / autopilot /
    LLM / human). The session log keeps a control timeline automatically; you
    must keep it truthful:

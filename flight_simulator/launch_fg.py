@@ -168,6 +168,8 @@ def main():
     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
                         help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
                              '(default brain: connectome)')
+    parser.add_argument('--no-wait', action='store_true',
+                        help='One FlightGear at a time: exit instead of queueing if a sim is running')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if args.instance is None:
@@ -212,8 +214,11 @@ def main():
         # Every session is logged and pushed; the watchdog reads the name from fgfs's args.
         from .session import ensure_watchdog, name_arg
         cmd.insert(1, name_arg(args.name))
+        # One FlightGear at a time on this machine (sim_queue.py): wait for our turn.
+        from .sim_queue import wait_for_turn
+        queue, turn = wait_for_turn(args.name, wait=not args.no_wait)
         ensure_watchdog()
-        subprocess.Popen(cmd, env=env)
+        queue.running(turn, subprocess.Popen(cmd, env=env).pid)
         if args.phase and args.fly:
             print('Waiting for FlightGear to load, then the fly brain takes the controls...', flush=True)
             if not wait_ready(p['telnet']):
