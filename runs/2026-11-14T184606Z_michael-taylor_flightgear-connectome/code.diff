@@ -1,0 +1,173 @@
+diff --git a/flight_simulator/scenery.py b/flight_simulator/scenery.py
+index b152b82..8f205dc 100644
+--- a/flight_simulator/scenery.py
++++ b/flight_simulator/scenery.py
+@@ -9,6 +9,7 @@ import json
+ import math
+ from pathlib import Path
+ from .core import Obstacle
++from .tornado_shape import funnel_rings, is_dark_band
+ 
+ EARTH_RADIUS = 6371000.0
+ 
+@@ -48,35 +49,40 @@ def tile_path(latitude, longitude):
+     return Path('Objects') / directory(lon//10*10, lat//10*10) / directory(lon,lat) / f'{index}.stg'
+ 
+ 
+-def tower_model(radius, height, segments=32, bands=10):
+-    """Closed red/white polygonal cylinder inscribed in the collision cylinder."""
++def tornado_model(radius, height, segments=32, levels=24):
++    """Static tornado inside the collision cylinder: a bent two-tone funnel, as wide as
++    the cylinder at the top and narrow at the ground, closed by a flat cap cloud.
++    Same shape as the live obstacle tornadoes (tornado_shape.py). AC3D is Y-up."""
++    rings = funnel_rings(levels, segments)
+     lines = ['AC3Db',
+-             'MATERIAL "red" rgb 0.95 0.08 0.04 amb 0.4 0.1 0.1 emis 0.15 0.01 0.01 spec 0 0 0 shi 0 trans 0',
+-             'MATERIAL "white" rgb 0.95 0.95 0.9 amb 0.5 0.5 0.5 emis 0.08 0.08 0.08 spec 0 0 0 shi 0 trans 0',
+-             'OBJECT world', 'kids 1', 'OBJECT poly', 'name "fly-obstacle-tower"',
+-             f'numvert {(bands+1)*segments}']
+-    for band in range(bands+1):
+-        for i in range(segments):
+-            angle = i*2*math.pi/segments
+-            lines.append(f'{radius*math.cos(angle):.6f} {height*band/bands:.6f} {radius*math.sin(angle):.6f}')
+-    lines.append(f'numsurf {bands*segments+2}')
++             'MATERIAL "dark" rgb 0.20 0.21 0.23 amb 0.20 0.21 0.23 emis 0 0 0 spec 0 0 0 shi 0 trans 0',
++             'MATERIAL "mid" rgb 0.38 0.39 0.42 amb 0.38 0.39 0.42 emis 0 0 0 spec 0 0 0 shi 0 trans 0',
++             'OBJECT world', 'kids 1', 'OBJECT poly', 'name "fly-obstacle-tornado"',
++             f'numvert {(levels+1)*segments}']
++    for ring in rings:
++        for x, y, z in ring:
++            lines.append(f'{radius*x:.6f} {height*z:.6f} {radius*y:.6f}')
++    lines.append(f'numsurf {levels*segments+2}')
+     def face(indices, material):
+         lines.extend(['SURF 0x20', f'mat {material}', f'refs {len(indices)}'])
+         lines.extend(f'{i} 0 0' for i in indices)
+-    for b in range(bands):
++    for level in range(levels):
+         for i in range(segments):
+             j=(i+1)%segments
+-            face([b*segments+i, b*segments+j, (b+1)*segments+j, (b+1)*segments+i], b%2)
++            face([level*segments+i, level*segments+j, (level+1)*segments+j, (level+1)*segments+i],
++                 0 if is_dark_band(level, i) else 1)
+     face(list(reversed(range(segments))), 0)
+-    face([bands*segments+i for i in range(segments)], 0)
++    face([levels*segments+i for i in range(segments)], 0)
+     lines.append('kids 0')
+-    return '\n'.join(lines)+'\n'
++    return '
++'.join(lines)+'
++'
+ 
+ 
+ def generate(output, origin=(37.60,-122.35), obstacles=None):
+     validate_origin({'latitude':origin[0], 'longitude':origin[1]})
+     obstacles = obstacles if obstacles is not None else [
+-        Obstacle('Tower A',0,1300,150), Obstacle('Tower B',500,3300,180), Obstacle('Tower C',-150,5400,200)]
++        Obstacle('Tornado A',0,1300,150), Obstacle('Tornado B',500,3300,180), Obstacle('Tornado C',-150,5400,200)]
+     for o in obstacles:
+         if not all(math.isfinite(v) for v in [o.east,o.north,o.radius,o.bottom,o.top]) or o.radius <= 0 or o.top <= o.bottom:
+             raise ValueError('Invalid obstacle geometry')
+@@ -88,8 +94,8 @@ def generate(output, origin=(37.60,-122.35), obstacles=None):
+         lat,lon = to_geographic(o.east,o.north,origin)
+         tile = output / tile_path(lat,lon)
+         tile.parent.mkdir(parents=True,exist_ok=True)
+-        name=f'tower-{i+1}.ac'
+-        (tile.parent/name).write_text(tower_model(o.radius,o.top-o.bottom))
++        name=f'tornado-{i+1}.ac'
++        (tile.parent/name).write_text(tornado_model(o.radius,o.top-o.bottom))
+         tiles.setdefault(tile,[]).append(f'OBJECT_STATIC {name} {lon:.10f} {lat:.10f} {o.bottom:.3f} 0 0 0')
+     for tile,lines in tiles.items():
+         tile.write_text('\n'.join(lines)+'\n')
+diff --git a/flightgear/tools/make_obstacles.py b/flightgear/tools/make_obstacles.py
+index 2f95ae4..bba4807 100644
+--- a/flightgear/tools/make_obstacles.py
++++ b/flightgear/tools/make_obstacles.py
+@@ -34,6 +34,9 @@ import sys
+ 
+ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+ from make_cabin import Mesh, write_ac  # noqa: E402  (same AC writer + FG->AC axes)
++sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
++from flight_simulator.tornado_shape import (funnel_radius, funnel_centre,  # noqa: E402,F401
++                                            funnel_rings, is_dark_band)
+ 
+ HERE = os.path.dirname(os.path.abspath(__file__))
+ OUT = os.path.join(HERE, "..", "Aircraft", "FlyCabin", "Models", "Obstacles")
+@@ -48,18 +51,6 @@ TALL = ("Dark", "Mid", "Cap", "Debris", "Bolt")  # scaled by the obstacle's heig
+ ALL = TALL + ("Ring",)
+ 
+ 
+-def funnel_radius(z):
+-    """Narrow at the ground, as wide as the obstacle cylinder (1.0) at the top."""
+-    return 0.16 + 0.84 * z ** 1.7
+-
+-
+-def funnel_centre(z):
+-    """Sideways bend of the funnel; zero at the top so it never leaves the cylinder."""
+-    slack = max(0.0, 1.0 - funnel_radius(z))        # room left inside the unit cylinder
+-    return (0.8 * slack * 0.45 * math.sin(2.4 * math.pi * z),
+-            0.8 * slack * 0.35 * math.sin(1.6 * math.pi * z + 1.0))
+-
+-
+ def circle(z, r, centre=(0.0, 0.0)):
+     return [(centre[0] + r * math.cos(2 * math.pi * k / SIDES),
+              centre[1] + r * math.sin(2 * math.pi * k / SIDES), z) for k in range(SIDES)]
+@@ -67,12 +58,10 @@ def circle(z, r, centre=(0.0, 0.0)):
+ 
+ def tornado_meshes():
+     dark, mid = Mesh("Dark", "dark"), Mesh("Mid", "mid")
+-    rings = [circle(L / LEVELS, funnel_radius(L / LEVELS), funnel_centre(L / LEVELS))
+-             for L in range(LEVELS + 1)]
++    rings = funnel_rings(LEVELS, SIDES)             # shape shared with the scenery course
+     for L in range(LEVELS):
+         for k in range(SIDES):
+-            # Two tones in a helix, so the spin is visible.
+-            m = dark if ((k + 3 * L) // 5) % 2 == 0 else mid
++            m = dark if is_dark_band(L, k) else mid
+             lo, hi = rings[L], rings[L + 1]
+             m.quad(lo[k], lo[(k + 1) % SIDES], hi[(k + 1) % SIDES], hi[k])
+     cap = Mesh("Cap", "cap")                         # flat storm cloud closing the top
+diff --git a/scenarios/obstacles.json b/scenarios/obstacles.json
+index f63cd7d..0d12784 100644
+--- a/scenarios/obstacles.json
++++ b/scenarios/obstacles.json
+@@ -1,8 +1,8 @@
+ {
+   "description": "Virtual cylinders relative to the aircraft's initial position; metres. Not FlightGear scenery objects.",
+   "obstacles": [
+-    {"name": "Tower A", "east": 0, "north": 1300, "radius": 150, "bottom": 0, "top": 2000},
+-    {"name": "Tower B", "east": 500, "north": 3300, "radius": 180, "bottom": 0, "top": 2000},
+-    {"name": "Tower C", "east": -150, "north": 5400, "radius": 200, "bottom": 0, "top": 2000}
++    {"name": "Tornado A", "east": 0, "north": 1300, "radius": 150, "bottom": 0, "top": 2000},
++    {"name": "Tornado B", "east": 500, "north": 3300, "radius": 180, "bottom": 0, "top": 2000},
++    {"name": "Tornado C", "east": -150, "north": 5400, "radius": 200, "bottom": 0, "top": 2000}
+   ]
+ }
+diff --git a/tests/test_scenery.py b/tests/test_scenery.py
+index fd06d17..cf5a3e1 100644
+--- a/tests/test_scenery.py
++++ b/tests/test_scenery.py
+@@ -11,7 +11,7 @@ from flight_simulator.flightgear import FlightGear
+ class SceneryTests(unittest.TestCase):
+     def test_known_flightgear_tile(self):
+         # Example object coordinates/tile from FlightGear's UFO placement guide.
+-        self.assertEqual(str(tile_path(50.03667992,8.57928135)), 'Objects/e000n50/e008n50/3089154.stg')
++        self.assertEqual(tile_path(50.03667992,8.57928135).as_posix(), 'Objects/e000n50/e008n50/3089154.stg')
+ 
+     def test_coordinate_roundtrip_and_dateline(self):
+         for origin in [(37.6,-122.35),(-35.2,149.1),(40,179.999)]:
+@@ -48,8 +48,14 @@ class SceneryTests(unittest.TestCase):
+                 vertices=[tuple(map(float,l.split())) for l in lines[index+1:index+1+count]]
+                 self.assertEqual(min(v[1] for v in vertices),0)
+                 self.assertEqual(max(v[1] for v in vertices),o.top-o.bottom)
++                # Tornado funnel: never outside the controller's cylinder, as wide as it at the top.
+                 for x,y,z in vertices:
+-                    self.assertAlmostEqual(math.hypot(x,z),o.radius,places=5)
++                    self.assertLessEqual(math.hypot(x,z),o.radius+1e-5)
++                top=[math.hypot(x,z) for x,y,z in vertices if y==o.top-o.bottom]
++                self.assertAlmostEqual(max(top),o.radius,places=5)
++                foot=[math.hypot(x,z) for x,y,z in vertices if y==0]
++                self.assertLess(max(foot),o.radius*.5)
++                self.assertTrue(model.name.startswith('tornado-'))
+                 for j,line in enumerate(lines):
+                     if line.startswith('refs '):
+                         for ref in lines[j+1:j+1+int(line.split()[1])]:
