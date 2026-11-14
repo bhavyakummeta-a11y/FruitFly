@@ -115,6 +115,10 @@ class LiveLog(list):
         brain = getattr(self.fly, 'brain', None)
         counts = getattr(brain, 'last_counts', None)
         dn = tuple(v for k, v in entry.items() if k.startswith('dn_'))
+        if not dn:
+            # No brain decision yet: a row now would fix fly_activity.csv's header
+            # without the input/neuron columns (2026-11-14 run lost them all).
+            return
         # One fly row per brain decision: a new trial publishes a new counts array
         # (connectome) or new readout rates (stand-in).
         if counts is not None and counts is not self._last_counts:
