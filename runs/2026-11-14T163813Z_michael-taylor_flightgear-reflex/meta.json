@@ -1,0 +1,54 @@
+{
+  "run_id": "2026-11-14T163813Z_michael-taylor_flightgear-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:38:13.327540+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain reflex --seconds 180 --no-plot --note 'eval 1: reflex baseline, 737 738-flies, default course, live towers'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "reflex",
+    "data": "data/brain",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": true,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "no_scene": false,
+    "note": "eval 1: reflex baseline, 737 738-flies, default course, live towers",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "e8e35d4689a0b4e4add52192a119786136c915ae",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/launch_fg.py",
+      " M flight_simulator/runlog.py",
+      " M flight_simulator/session.py",
+      " M flight_simulator/session_view.html",
+      " M flightgear/launch.py"
+    ],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "fg_sessions": [
+    {
+      "name": "737 obstacle avoidance evals",
+      "run_id": "2026-11-14T163750Z_michael-taylor_fg-737-obstacle-avoidance-evals"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 31
+  },
+  "finished_utc": "2026-11-14T16:38:13.991309+00:00",
+  "exit_code": 1
+}

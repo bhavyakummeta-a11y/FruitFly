@@ -1,0 +1,5 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T163813Z_michael-taylor_flightgear-reflex
+REFLEX BASELINE (no connectome)
+Waiting for airborne FlightGear telemetry on localhost...
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: Start FlightGear in stable flight, at least 35 m/s and wings near level.
