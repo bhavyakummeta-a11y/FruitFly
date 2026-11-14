@@ -1,0 +1,45 @@
+{
+  "run_id": "2026-11-14T200455Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T20:04:55.680779+00:00",
+  "command": "python -m flight_simulator takeoff_live takeoff --brain connectome --backend flightgear",
+  "args": {
+    "phase": "takeoff",
+    "brain": "connectome",
+    "backend": "flightgear",
+    "telemetry_port": 5501,
+    "stop_at_ft": 2000.0,
+    "screen_record": true
+  },
+  "code": {
+    "commit": "cbb98ebeef73dcd1c1d67e22d7ccd8afc90021e7",
+    "branch": "HEAD",
+    "dirty": [],
+    "untracked": [
+      "fgvideo-738-flies-20261114-150447.mkv"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the takeoff",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "takeoff fly to 2000 ft - CONNECTOME, HALF SPEED, no 3D clouds, screen-recorded",
+      "run_id": "2026-11-14T200356Z_michael-taylor_fg-takeoff-fly-to-2000-ft-connectome-half-speed-no-3d-clouds-screen-recorded"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 44
+  },
+  "finished_utc": "2026-11-14T20:05:14.431123+00:00",
+  "exit_code": 1
+}
