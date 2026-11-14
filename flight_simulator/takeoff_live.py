@@ -14,10 +14,27 @@ the fly live. Nothing about how the fly flies changes (takeoff_landing.py is unt
 """
 import argparse
 import csv
+import socket
 import sys
 
 from . import takeoff_landing as tl
 from .runlog import RunLog
+
+
+def parking_brake(telnet_port, on):
+    """Hold the 737 still while the brain calibrates (minutes for the connectome).
+
+    The takeoff start has the engines already running and the parking brake off, so
+    without this the airplane creeps off the runway at idle before the fly ever gets
+    the controls (2026-11-14: 30 m off the centerline, heading 195 instead of 284, at
+    handover). Released right before the fly takes over. Not an autopilot."""
+    from .flightgear import telnet_get
+    try:
+        with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
+            s.sendall(f'data\r\nset /controls/gear/brake-parking {int(on)}\r\nquit\r\n'.encode())
+    except OSError:
+        return False
+    return telnet_get(telnet_port, '/controls/gear/brake-parking') in (str(int(on)), str(bool(on)).lower())
 
 
 def fly_row(entry):
@@ -75,6 +92,11 @@ def main(argv=None):
     p.add_argument('--backend', default='demo')
     p.add_argument('--telemetry-port', type=int, default=5501)
     ns, _ = p.parse_known_args(argv)
+    telnet = ns.telemetry_port - 1
+    hold = ns.backend == 'flightgear' and ns.phase == 'takeoff'
+    if hold:
+        print('Parking brake ' + ('SET' if parking_brake(telnet, True) else 'could NOT be set')
+              + ' while the fly brain calibrates.', flush=True)
     runlog = RunLog(ns, ['takeoff_live', *argv])
     live = {}
     real = {'demo': tl.run_demo, 'flightgear': tl.run_flightgear}
@@ -82,6 +104,10 @@ def main(argv=None):
     def wrap(name):
         def run(args, fly, log):
             live['log'] = LiveLog(runlog, fly)
+            if hold and name == 'flightgear':
+                if not parking_brake(telnet, False):
+                    raise RuntimeError('Could not release the parking brake for the takeoff roll')
+                print('Parking brake released: the fly has the airplane.', flush=True)
             result = real[name](args, fly, live['log'])
             log.extend(live['log'])
             runlog.result = {**result, 'phase': ns.phase}
