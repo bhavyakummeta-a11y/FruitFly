@@ -72,6 +72,7 @@ def run(args, runlog=None):
             obstacles = [replace(o, east=o.east*cs + o.north*scale*sn,
                                  north=-o.east*sn + o.north*scale*cs,
                                  top=max(o.top, state.altitude+500)) for o in obstacles]
+        controller.configure_course(obstacles, origin=(state.east, state.north))
         if bridge and not args.no_scene and not course.get('scenery'):
             # Show the virtual cylinders as live towers inside FlightGear. A fixed
             # scenery course (flightgear/SCENERY.md) already has its own towers.
@@ -91,7 +92,9 @@ def run(args, runlog=None):
             log_file = open(args.log, 'w', newline='')
             fields = list(asdict(state)) + ['phase', 'brain', 'looming_hz', 'escape_hz',
                       'clearance', 'aileron', 'elevator', 'rudder', 'throttle',
-                      'reward', 'dan_hz', 'plastic_edges_changed']
+                      'reward', 'dan_hz', 'plastic_edges_changed', 'altitude_target', 'altitude_error',
+                      'vertical_speed_target', 'pitch_target', 'bank_target', 'heading_target',
+                      'cross_track', 'predicted_clearance', 'decision_source']
             writer = csv.DictWriter(log_file, fields)
             writer.writeheader()
         next_brain, next_display, next_print = 0.0, 0.0, 0.0
@@ -129,7 +132,7 @@ def run(args, runlog=None):
                            or abs(state.roll) > math.radians(50)
                            or abs(state.pitch) > math.radians(25)
                            or state.speed < .70 * controller.speed
-                           or state.altitude < controller.altitude - 150):
+                           or abs(state.altitude-controller.altitude) > 40):
                 raise RuntimeError('Flight departed the test envelope (heading, bank, pitch, speed or altitude); pausing. Check aircraft controls and trim.')
             controls = controller.update(state, stimulus, escape)
             clearance = min((o.clearance(state) for o in obstacles), default=math.inf)
@@ -141,15 +144,25 @@ def run(args, runlog=None):
                                  'brain': args.brain, 'looming_hz': stimulus.looming_hz,
                                  'escape_hz': escape, 'clearance': clearance,
                                  'reward': learning_event['reward'], 'dan_hz': learning_event['dan_hz'],
-                                 'plastic_edges_changed': learning_event['changed_edges']})
+                                 'plastic_edges_changed': learning_event['changed_edges'],
+                                 'altitude_target': controller.altitude,
+                                 'altitude_error': controller.altitude-state.altitude,
+                                 'vertical_speed_target': controller.desired_climb,
+                                 'pitch_target': controller.target_pitch,
+                                 'bank_target': controller.target_bank,
+                                 'heading_target': controller.target_heading,
+                                 'cross_track': controller.guidance.cross_track,
+                                 'predicted_clearance': controller.guidance.clearance,
+                                 'decision_source': controller.decision_source})
             if state.time >= next_print:
                 print(f'{state.time:6.1f}s {controller.phase:6} altitude={state.altitude:7.1f}m '
                       f'speed={state.speed:5.1f}m/s escape={escape:5.1f}Hz clearance={clearance:7.1f}m', flush=True)
                 next_print = state.time + 10
-            if scene and state.time >= next_display:
-                scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
-            if view and state.time >= next_display:
-                view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading)
+            if state.time >= next_display:
+                if scene:
+                    scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
+                if view:
+                    view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading, controller=controller)
                 next_display = state.time + .2
             if collision:
                 if args.learn:

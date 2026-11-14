@@ -102,64 +102,99 @@ class FlightController:
 
     This is an assisted autopilot, not evidence of direct neural stabilization.
     """
-    def __init__(self, altitude=900.0, heading=0.0, speed=50.0, pitch=0.0):
+    def __init__(self, altitude=900.0, heading=0.0, speed=50.0, pitch=0.0, safety=True):
+        from .guidance import RouteGuidance
         self.altitude, self.heading, self.speed = altitude, heading, speed
         self.trim_pitch = pitch
         self.phase = 'CRUISE'
         self.activations = 0
         self.target_heading = heading
         self.target_bank = 0.0
-        self.active_obstacle = None
-        self.started = 0.0
+        self.target_pitch = pitch
+        self.desired_climb = 0.0
         self.last_time = None
         self.last_controls = Controls()
+        self.safety = safety
+        self.obstacles = []
+        self.guidance = RouteGuidance(heading)
+        self.next_plan = 0.0
+        self.avoidance = False
+        self.decision_source = 'cruise rules'
+        self.pitch_integral = 0.0
+        self.speed_integral = 0.0
+        self.trim_elevator = 0.0
+        self.trim_throttle = .65
+        self.preferred_turn = 0
+        self.initialized = False
+
+    def configure_course(self, obstacles, origin=(0.0, 0.0)):
+        self.obstacles = list(obstacles)
+        self.guidance.origin = origin
+        self.next_plan = 0.0
 
     def update(self, state, stimulus, escape_hz):
-        dt = .05 if self.last_time is None else clip(state.time - self.last_time, 0, .2)
+        dt = .05 if self.last_time is None else clip(state.time-self.last_time,0,.2)
         self.last_time = state.time
-        # Latch a bounded heading offset, not a continuously renewed bank command.
-        # Hold that heading until the obstacle is behind the nominal flight path.
-        if self.active_obstacle is not None:
-            east, north, radius = self.active_obstacle
-            ahead = ((east - state.east) * math.sin(self.heading)
-                     + (north - state.north) * math.cos(self.heading))
-            if ahead < -radius - 200:
-                self.active_obstacle = None
-                self.target_heading = self.heading
-                self.phase = 'RECOVER'
-            elif state.time - self.started > 90:
-                raise RuntimeError('Avoidance made no forward progress for 90 s; stopping instead of circling.')
-        threat_ahead = ((stimulus.east-state.east)*math.sin(self.heading)
-                        + (stimulus.north-state.north)*math.cos(self.heading))
-        if (self.active_obstacle is None and escape_hz > 0 and stimulus.looming_hz > 0
-                and threat_ahead >= -stimulus.radius):
-            self.active_obstacle = (stimulus.east, stimulus.north, stimulus.radius)
-            self.target_heading = wrap(self.heading + stimulus.turn * math.radians(35))
-            self.started = state.time
-            self.phase = 'AVOID'
-            self.activations += 1
-        heading_error = wrap(self.target_heading - state.heading)
-        if self.active_obstacle is None:
-            self.phase = 'CRUISE' if abs(heading_error) < math.radians(3) else 'RECOVER'
-        desired_bank = clip(.65 * heading_error, -math.radians(18), math.radians(18))
-        if state.speed < .8 * self.speed:
-            desired_bank = clip(desired_bank, -.10, .10)
-        # Slew bank target and surfaces to prevent abrupt swiveling.
-        self.target_bank += clip(desired_bank - self.target_bank, -math.radians(6)*dt, math.radians(6)*dt)
-        desired_climb = clip(.05 * (self.altitude - state.altitude), -3, 3)
-        target_pitch = clip(self.trim_pitch + desired_climb / max(state.speed, 25)
-                            + .025 * abs(state.roll), -.10, .15)
-        raw = Controls(
-            clip(.85 * (self.target_bank - state.roll) - .55 * state.roll_rate, -.35, .35),
-            clip(-1.4 * (target_pitch - state.pitch) + .65 * state.pitch_rate, -.30, .30),
-            0.0, clip(.65 + .035 * (self.speed - state.speed) + .02 * desired_climb, .2, 1),
-        )
-        old = self.last_controls
-        self.last_controls = Controls(
-            old.aileron + clip(raw.aileron-old.aileron, -.35*dt, .35*dt),
-            old.elevator + clip(raw.elevator-old.elevator, -.20*dt, .20*dt),
-            0.0, old.throttle + clip(raw.throttle-old.throttle, -.10*dt, .10*dt),
-        ).bounded()
+        if not self.initialized:
+            # Nose attitude alone is not level-flight trim: subtract flight-path
+            # angle. The GitHub descent log starts nose-up but sinking at 4.7 m/s.
+            gamma=math.atan2(state.climb,max(state.speed,25))
+            self.trim_pitch=clip(state.pitch-gamma,-.05,.15)
+            self.initialized=True
+        if stimulus.obstacle and not any(o.name==stimulus.obstacle for o in self.obstacles):
+            self.obstacles.append(Obstacle(stimulus.obstacle,stimulus.east,stimulus.north,stimulus.radius))
+        altitude_error=self.altitude-state.altitude
+        # Strong vertical-speed feedback acts before a large altitude error builds.
+        self.desired_climb=clip(.12*altitude_error,-2.0,3.0)
+        vertical_error=self.desired_climb-state.climb
+        self.pitch_integral=clip(self.pitch_integral+.0025*vertical_error*dt,-.06,.10)
+        bank_lift=self.trim_pitch*(1/max(math.cos(state.roll),.75)-1)
+        self.target_pitch=clip(self.trim_pitch+math.atan2(self.desired_climb,max(state.speed,25))
+                               +.018*vertical_error+self.pitch_integral+bank_lift,-.10,.22)
+        pitch_error=self.target_pitch-state.pitch
+        # Integral trim removes persistent airframe/control bias. Anti-windup:
+        # integrate only when the resulting elevator has room to move.
+        elevator=-2.2*pitch_error+.8*state.pitch_rate+self.trim_elevator
+        if abs(elevator)<.65:
+            self.trim_elevator=clip(self.trim_elevator-.16*pitch_error*dt,-.35,.35)
+        speed_error=self.speed-state.speed
+        self.speed_integral=clip(self.speed_integral+.004*speed_error*dt,-.25,.25)
+        throttle=self.trim_throttle+.035*speed_error+self.speed_integral+.025*max(self.desired_climb,0)
+        throttle+=.25*(1/max(math.cos(state.roll),.75)-1)
+        if state.climb < -1 or altitude_error > 5:
+            # Do not cut power just because a descent has increased airspeed.
+            throttle=max(throttle,self.trim_throttle+.08)
+        bank_limit=math.radians(18 if abs(altitude_error)<10 and state.climb>-2 else 10)
+        if state.speed < .85*self.speed:
+            bank_limit=math.radians(5)
+        if state.time >= self.next_plan:
+            if self.safety or escape_hz>0:
+                if not self.avoidance:
+                    self.preferred_turn=stimulus.turn if escape_hz>0 else 0
+                target,avoid=self.guidance.choose(state,self.obstacles,self.target_heading,bank_limit,
+                                                  self.preferred_turn)
+                if avoid and not self.avoidance:
+                    self.activations+=1
+                self.avoidance=avoid
+                self.target_heading=target
+                self.decision_source=('neural + obstacle rules' if self.preferred_turn else 'obstacle rules') if avoid else 'route recovery rules'
+            else:
+                self.target_heading=self.heading
+                self.avoidance=False
+                self.decision_source='neural-only experiment'
+            self.next_plan=state.time+.5
+        heading_error=wrap(self.target_heading-state.heading)
+        self.phase='AVOID' if self.avoidance else ('RECOVER' if abs(self.guidance.cross_track)>50 or abs(heading_error)>math.radians(3) else 'CRUISE')
+        if altitude_error > 10 or state.climb < -2:
+            self.phase='ALTITUDE RECOVERY / '+self.phase
+        desired_bank=clip(.65*heading_error,-bank_limit,bank_limit)
+        self.target_bank+=clip(desired_bank-self.target_bank,-math.radians(6)*dt,math.radians(6)*dt)
+        raw=Controls(clip(.85*(self.target_bank-state.roll)-.55*state.roll_rate,-.35,.35),
+                     clip(elevator,-.65,.65),0.0,clip(throttle,.2,1))
+        old=self.last_controls
+        self.last_controls=Controls(old.aileron+clip(raw.aileron-old.aileron,-.35*dt,.35*dt),
+                                    old.elevator+clip(raw.elevator-old.elevator,-.35*dt,.35*dt),0.0,
+                                    old.throttle+clip(raw.throttle-old.throttle,-.20*dt,.20*dt)).bounded()
         return self.last_controls
 
 
