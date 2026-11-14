@@ -3,7 +3,7 @@
 **This is the project's default aircraft** (`738-flies`). `flightgear/launch.py` and `flight_simulator/launch_fg.py` both start it unless told otherwise. The C172 (`c172p`) is the fallback.
 
 ```
-python flightgear/setup_aircraft.py     # once: downloads the stock 737-800 (~40 MB) and installs our overlay
+python flightgear/setup_aircraft.py     # once: installs our overlay (the stock 737-800 is already in the repo; re-downloads only if it's missing or changed)
 python flightgear/launch.py             # starts fgfs at KSFO 28R with telnet 5500 + httpd 8080
 ```
 
@@ -24,7 +24,7 @@ In the sim, press **v** to cycle views, or use **View → Select view**. Two cab
 
 | Path | What | Committed? |
 |---|---|---|
-| `Aircraft/737-800/` | Stock FGAddon Boeing 737-800 (package id `738`, rev 6882), from the Aircraft-2024 catalog | No (downloaded) |
+| `Aircraft/737-800/` | Stock FGAddon Boeing 737-800 (package id `738`, rev 6882), from the Aircraft-2024 catalog. GPL-2, see its `LICENSE`. | Yes, unmodified (~46 MB) |
 | `overlay/738-flies-set.xml` | Our aircraft definition. It includes the stock `738-set.xml`, swaps in the cabin model, adds the cabin views, and loads our Nasal. `setup_aircraft.py` copies it into `Aircraft/737-800/` because JSBSim loads the flight model from the -set file's folder. | Yes |
 | `Aircraft/FlyCabin/Models/` | `738-flies.xml` (stock model + cabin + 166 flies), `cabin.ac`, `fly.ac`, `fly-group{0,1,2}.xml` | Yes, generated |
 | `Aircraft/FlyCabin/Nasal/fruitfly.nas` | Animates the passengers and adds the autostart hook | Yes |

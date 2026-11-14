@@ -1,0 +1,1131 @@
+<?xml version="1.0"?>
+<PropertyList>
+  <sim>
+    <author>David Culp (FDM), Syd Adams(glass instruments), Innis Cunningham (3D and Panel), Michael Soitanen (current development)</author>
+    <status>early-production</status>
+    <rating>
+      <FDM type="int">4</FDM>
+      <systems type="int">1</systems>
+      <cockpit type="int">3</cockpit>
+      <model type="int">4</model>
+    </rating>
+    <flight-model>jsb</flight-model>
+
+    <tags>
+      <tag>transport</tag>
+      <tag>boeing</tag>
+      <tag>1990s</tag> <!-- production started 1996 -->
+      <tag>2000s</tag>
+      <tag>2010s</tag>
+      <tag>etops</tag>
+      <tag>glass-cockpit</tag>
+      <tag>ifr</tag>
+      <tag>retractable-gear</tag>
+      <tag>tricycle</tag>
+      <tag>jet</tag>
+      <tag>twin-engine</tag>
+    </tags>
+
+    <systems>
+
+      <electrical>
+        <path></path> <!-- disable -->
+      </electrical>
+
+      <autopilot>
+        <path>Aircraft/737-800/Systems/737-afds.xml</path>
+      </autopilot>
+
+      <autopilot>
+        <path>Aircraft/737-800/Systems/737-fcc-a.xml</path>
+      </autopilot>
+
+      <autopilot>
+        <path>Aircraft/737-800/Systems/737-fcc-b.xml</path>
+      </autopilot>
+
+	  <autopilot>
+		<path>Aircraft/737-800/Systems/hydraulics.xml</path>
+	  </autopilot>
+
+	  <autopilot>
+		<path>Aircraft/737-800/Systems/autospeedbrake.xml</path>
+      </autopilot>
+
+	  <autopilot>
+		<path>Aircraft/737-800/Systems/fadec.xml</path>
+      </autopilot>
+
+      <autopilot>
+        <path>Aircraft/737-800/Systems/737_pfd.xml</path>
+      </autopilot>
+
+      <autopilot>
+        <path>Aircraft/737-800/Systems/737_fmc_fg.xml</path>
+      </autopilot>
+
+      <autopilot>
+        <path>Aircraft/737-800/Systems/aircraft-systems-logic.xml</path>
+      </autopilot>
+
+      <path>Aircraft/737-800/Systems/systems.xml</path>
+
+      <property-rule n="101">
+        <path>Aircraft/737-800/Systems/instrument-filters.xml</path>
+      </property-rule>
+
+    </systems>
+
+    <instrumentation>
+      <path>Aircraft/737-800/Systems/instrumentation.xml</path>
+    </instrumentation>
+    <sound>
+      <path>Sounds/737-sound.xml</path>
+    </sound>
+    <virtual-cockpit archive="y">true</virtual-cockpit>
+    <allow-toggle-cockpit archive="y">false</allow-toggle-cockpit>
+    <model>
+      <fallback-model-index type="int">206</fallback-model-index>
+      <pushback>
+        <kp type="double">100</kp>
+        <ki type="double">25</ki>
+        <kd type="double">0</kd>
+        <position-norm type="double">0</position-norm>
+      </pushback>
+    </model>
+    <view n="1">
+      <config>
+        <!-- big plane, so extend chase view offset a bit -->
+        <z-offset-m type="double" archive="y">-80.0</z-offset-m>
+      </config>
+    </view>
+    <chase-distance-m>-30</chase-distance-m>
+    <flaps>
+      <setting>0.000</setting>
+      <!-- flaps up -->
+      <setting>0.125</setting>
+      <!-- flaps 1  -->
+      <setting>0.250</setting>
+      <!-- flaps 2  -->
+      <setting>0.375</setting>
+      <!-- flaps 5  -->
+      <setting>0.500</setting>
+      <!-- flaps 10 -->
+      <setting>0.625</setting>
+      <!-- flaps 15 -->
+      <setting>0.750</setting>
+      <!-- flaps 25 -->
+      <setting>0.875</setting>
+      <!-- flaps 30 -->
+      <setting>1.000</setting>
+      <!-- flaps 40 -->
+    </flaps>
+
+    <ai>
+      <submodels>
+        <contrails type="bool">false</contrails>
+      </submodels>
+    </ai>
+
+    <submodels>
+      <serviceable>true</serviceable>
+      <path>submodels.xml</path>
+    </submodels>
+
+    <menubar>
+      <default>
+        <menu n="5">
+          <item n="10">
+            <label>Pushback</label>
+            <name>pushback</name>
+            <binding>
+              <command>dialog-show</command>
+              <dialog-name>pushback</dialog-name>
+            </binding>
+          </item>
+        </menu>
+        <menu n="100">
+          <label>737-800</label>
+          <enabled type="bool">true</enabled>
+          <item>
+            <label>Autostart</label>
+            <binding>
+              <command>nasal</command>
+              <script>boeing737.autostart()</script>
+            </binding>
+          </item>
+          <item>
+            <label>Select Livery</label>
+            <binding>
+              <command>nasal</command>
+              <script>aircraft.livery.dialog.toggle()</script>
+            </binding>
+          </item>
+          <item>
+              <label>Announcements</label>
+              <binding>
+                    <command>nasal</command>
+                    <script>
+                        var mal = gui.Dialog.new("/sim/gui/dialogs/announcements/menu/dialog", "Aircraft/737-800/Dialogs/announcements-dialog.xml");
+                        mal.open();
+               </script>
+              </binding>
+          </item>
+          <item>
+              <label>Failures</label>
+              <binding>
+                    <command>nasal</command>
+                    <script>
+                        var fail = gui.Dialog.new("/sim/gui/dialogs/failures/menu/dialog", "Aircraft/737-800/Dialogs/fail.xml");
+                        fail.open();
+               </script>
+              </binding>
+          </item>
+          <item>
+              <label>Show/Hide Yokes</label>
+              <binding>
+                  <command>property-toggle</command>
+                  <property>sim/yokes-visible</property>
+              </binding>
+          </item>
+          <item>
+            <label>Tiller steering</label>
+            <binding>
+              <command>nasal</command>
+              <script>
+                var tiller = gui.Dialog.new("/sim/gui/dialogs/b737/menu/dialog","Aircraft/737-800/Dialogs/tiller-steering.xml");
+                tiller.open();
+              </script>
+            </binding>
+          </item>
+		  <item>
+              <label>Toggle External Power</label>
+              <binding>
+                  <command>property-toggle</command>
+                  <property>services/ext-pwr/enable</property>
+              </binding>
+          </item>
+
+          <item>
+              <label>Reload CDU</label>
+              <binding>
+                  <command>cdu-reload</command>
+              </binding>
+          </item>
+        </menu>
+      </default>
+    </menubar>
+
+    <checklists include="737ng-checklist.xml"/>
+
+    <yokes-visible type="bool">1</yokes-visible>
+
+    <multiplay>
+      <generic>
+        <short n="0" alias="/gear/gear[0]/steering-multiplay"/>
+		<float n="0" alias="/gear/gear[0]/compression-m"/>
+		<float n="1" alias="/gear/gear[1]/compression-m"/>
+		<float n="2" alias="/gear/gear[2]/compression-m"/>
+		<float n="3" alias="/gear/gear[1]/compression-m"/>
+		<float n="4" alias="/gear/gear[2]/compression-m"/>
+		<float n="5" alias="/surface-positions/speedbrake-norm"/>
+		<float n="6" alias="/surface-positions/reverser-norm"/>
+		<float n="7" alias="/controls/flight/aileron-left"/>
+		<float n="8" alias="/controls/flight/aileron-right"/>
+		<float n="9" alias="/controls/flight/elevator-left"/>
+		<float n="10" alias="/controls/flight/elevator-right"/>
+		<float n="11" alias="/controls/flight/rudder-sum"/>
+      </generic>
+    </multiplay>
+
+  </sim>
+
+  <consumables>
+    <fuel>
+      <tank n="0">
+        <level-lbs archive="y">8630</level-lbs>
+      </tank>
+      <tank n="1">
+        <level-lbs archive="y">8630</level-lbs>
+      </tank>
+      <tank n="2">
+        <level-lbs archive="y">9000</level-lbs>
+      </tank>
+      <tank n="3">
+        <hidden type="bool">1</hidden>
+      </tank>
+      <tank n="4">
+        <hidden type="bool">1</hidden>
+      </tank>
+    </fuel>
+  </consumables>
+
+  <engines>
+    <engine n="0">
+      <running>true</running>
+      <reverser-pos-norm type="double">0</reverser-pos-norm>
+    </engine>
+    <engine n="1">
+      <running>true</running>
+      <reverser-pos-norm type="double">0</reverser-pos-norm>
+    </engine>
+  </engines>
+
+  <input>
+    <keyboard>
+
+      <key n="4">
+        <name>ctrl+d</name>
+        <desc>Autopilot disconnect</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            autopilot737.apdsng_button_press();
+          </script>
+        </binding>
+      </key>
+
+      <key n="68">
+        <name>shift+d</name>
+        <desc>Autothrottle off</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            setprop("/autopilot/internal/SPD", 0);
+          </script>
+        </binding>
+      </key>
+
+      <key n="100">
+        <name>d</name>
+        <desc>TOGA button</desc>
+        <binding>
+          <command>nasal</command>
+          <script>autopilot737.toga_button();</script>
+        </binding>
+      </key>
+
+      <key n="71">
+        <name>G</name>
+        <desc>Gear Down Custom Binding</desc>
+        <binding>
+            <command>property-assign</command>
+            <property>/b737/controls/gear/lever</property>
+            <value>0</value>
+        </binding>
+      </key>
+
+      <key n="103">
+        <name>g</name>
+        <desc>Gear Up Custom Binding</desc>
+        <binding>
+            <command>property-assign</command>
+            <property>/b737/controls/gear/lever</property>
+            <value>1</value>
+        </binding>
+      </key>
+
+      <key n="106">
+        <name>j</name>
+        <desc>Decrease spoiler lever position</desc>
+        <binding>
+          <command>property-adjust</command>
+          <property>b737/controls/flight/spoilers-lever-pos</property>
+          <step type="double">-1</step>
+          <min type="double">0</min>
+          <max type="double">6</max>
+        </binding>
+      </key>
+
+      <key n="107">
+        <name>k</name>
+        <desc>Increase spoiler lever position</desc>
+        <binding>
+          <command>property-adjust</command>
+          <property>b737/controls/flight/spoilers-lever-pos</property>
+          <step type="double">1</step>
+          <min type="double">0</min>
+          <max type="double">6</max>
+        </binding>
+      </key>
+
+	  <key n="2">
+			<name>Ctrl-b</name>
+			<desc>Cycle speedbrake setting</desc>
+			<binding>
+				<command>property-assign</command>
+				<property>/controls/flight/autospeedbrake</property>
+				<value>0</value>
+			</binding>
+			<binding>
+				<command>property-cycle</command>
+				<property>/b737/controls/flight/spoilers-lever-pos</property>
+				<value>0</value>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+				<value>4</value>
+				<value>5</value>
+				<value>6</value>
+			</binding>
+		</key>
+
+      <key n="113">
+        <name>q</name>
+        <desc>Turn tiller left</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            boeing737.tiller_left();
+          </script>
+        </binding>
+      </key>
+
+      <key n="81">
+        <name>Q</name>
+        <desc>Turn tiller left small</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            boeing737.tiller_left_small();
+          </script>
+        </binding>
+      </key>
+
+      <key n="101">
+        <name>e</name>
+        <desc>Turn tiller right</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            boeing737.tiller_right();
+          </script>
+        </binding>
+      </key>
+
+      <key n="69">
+        <name>E</name>
+        <desc>Turn tiller right small</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            boeing737.tiller_right_small();
+          </script>
+        </binding>
+      </key>
+
+      <key n="119">
+        <name>w</name>
+        <desc>Turn tiller to center</desc>
+        <binding>
+          <command>nasal</command>
+          <script>
+            boeing737.tiller_center();
+          </script>
+        </binding>
+      </key>
+
+      <key n="127">
+        <name>Delete</name>
+        <desc>Thrust reversers toggle</desc>
+        <binding>
+          <condition>
+            <and>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[0]</property>
+                <value>0.03</value>
+              </less-than>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[1]</property>
+                <value>0.03</value>
+              </less-than>
+              <or>
+                <less-than>
+                  <property>/instrumentation/radar-altimeter[0]/radar-altitude-ft</property>
+                  <value>17.5</value>
+                </less-than>
+                <property>/b737/sensors/air-ground</property>
+              </or>
+              <equals>
+                <property>/engines/engine[0]/reverser-pos-norm</property>
+                <value>0</value>
+              </equals>
+            </and>
+          </condition>
+          <command>property-interpolate</command>
+          <property>/engines/engine[0]/reverser-pos-norm</property>
+          <value>1</value>
+          <time>2</time>
+        </binding>
+        <binding>
+          <condition>
+            <and>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[0]</property>
+                <value>0.03</value>
+              </less-than>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[1]</property>
+                <value>0.03</value>
+              </less-than>
+              <equals>
+                <property>/engines/engine[0]/reverser-pos-norm</property>
+                <value>1</value>
+              </equals>
+            </and>
+          </condition>
+          <command>property-interpolate</command>
+          <property>/engines/engine[0]/reverser-pos-norm</property>
+          <value>0</value>
+          <time>3</time>
+        </binding>
+        <binding>
+          <condition>
+            <and>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[0]</property>
+                <value>0.03</value>
+              </less-than>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[1]</property>
+                <value>0.03</value>
+              </less-than>
+              <or>
+                <less-than>
+                  <property>/instrumentation/radar-altimeter[0]/radar-altitude-ft</property>
+                  <value>17.5</value>
+                </less-than>
+                <property>/b737/sensors/air-ground</property>
+              </or>
+              <equals>
+                <property>/engines/engine[1]/reverser-pos-norm</property>
+                <value>0</value>
+              </equals>
+            </and>
+          </condition>
+          <command>property-interpolate</command>
+          <property>/engines/engine[1]/reverser-pos-norm</property>
+          <value>1</value>
+          <time>2</time>
+        </binding>
+        <binding>
+          <condition>
+            <and>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[0]</property>
+                <value>0.03</value>
+              </less-than>
+              <less-than>
+                <property>/autopilot/internal/servo-throttle[1]</property>
+                <value>0.03</value>
+              </less-than>
+              <equals>
+                <property>/engines/engine[1]/reverser-pos-norm</property>
+                <value>1</value>
+              </equals>
+            </and>
+          </condition>
+          <command>property-interpolate</command>
+          <property>/engines/engine[1]/reverser-pos-norm</property>
+          <value>0</value>
+          <time>3</time>
+        </binding>
+      </key>
+
+    </keyboard>
+  </input>
+
+<autopilot>
+    <!-- disable the built-in FMC delegate, we supply our own in fmc.nas -->
+    <route-manager>
+      <disable-fms type="bool">true</disable-fms>
+    </route-manager>
+
+    <settings>
+      <vertical-speed-knob type="int">0</vertical-speed-knob>
+      <target-altitude-mcp-ft type="double">3000</target-altitude-mcp-ft>
+      <target-speed-kt type="double">100</target-speed-kt>
+      <target-speed-kt-plus-20 type="double">120</target-speed-kt-plus-20>
+      <target-speed-mach type="double">.65</target-speed-mach>
+      <heading-bug-deg type="double">0</heading-bug-deg>
+      <true-heading-deg type="double">0</true-heading-deg>
+      <maximum-bank-limit type="double">30</maximum-bank-limit>
+      <min-lvlchg-vs type="double">-7800</min-lvlchg-vs>
+      <max-lvlchg-vs type="double">6000</max-lvlchg-vs>
+      <max-n1 type="double">95</max-n1>
+      <to-n1 type="double">106</to-n1>
+      <ga-n1 type="double">95</ga-n1>
+      <reduced-ga-n1-delta type="double">10</reduced-ga-n1-delta>
+      <alt-acq-target-alt type="double">0</alt-acq-target-alt>
+      <alt-hold-delta type="double">0</alt-hold-delta>
+
+      <fcca-target-roll-rate type="double">0</fcca-target-roll-rate>
+      <fcca-target-bank type="double">0</fcca-target-bank>
+      <fcca-target-pitch-deg type="double">0</fcca-target-pitch-deg>
+
+      <fccb-target-roll-rate type="double">0</fccb-target-roll-rate>
+      <fccb-target-bank type="double">0</fccb-target-bank>
+      <fccb-target-pitch-deg type="double">0</fccb-target-pitch-deg>
+   </settings>
+
+    <internal>
+      <CMDA type="bool">false</CMDA>
+      <CMDB type="bool">false</CMDB>
+      <ATArm type="bool">false</ATArm>
+      <IAS-SEL type="bool">true</IAS-SEL>
+      <LNAV type="bool">false</LNAV>
+      <LNAV-NAV type="bool">false</LNAV-NAV>
+      <LNAV-NAV-armed type="bool">false</LNAV-NAV-armed>
+      <LNAV-HDG type="bool">false</LNAV-HDG>
+
+      <VNAV type="bool">false</VNAV>
+      <VNAV-VS type="bool">false</VNAV-VS>
+      <VNAV-VS-armed type="bool">false</VNAV-VS-armed>
+      <VNAV-ALT type="bool">false</VNAV-ALT>
+      <VNAV-ALT-ACQ type="bool">false</VNAV-ALT-ACQ>
+      <VNAV-ALT-light type="bool">false</VNAV-ALT-light>
+      <VNAV-GS type="bool">false</VNAV-GS>
+      <VNAV-GS-armed type="bool">false</VNAV-GS-armed>
+      <VNAV-FLARE type="bool">false</VNAV-FLARE>
+      <VNAV-FLARE-armed type="bool">false</VNAV-FLARE-armed>
+
+      <LVLCHG type="bool">false</LVLCHG>
+      <TOGA type="bool">false</TOGA>
+      <GA type="bool">false</GA>
+      <GA-ROLL type="bool">false</GA-ROLL>
+
+      <SPD type="bool">false</SPD>
+      <SPD-SPEED type="bool">false</SPD-SPEED>
+      <SPD-N1 type="bool">false</SPD-N1>
+      <SPD-RETARD type="bool">false</SPD-RETARD>
+      <SPD-IAS type="bool">true</SPD-IAS>
+      <SPD-MACH type="bool">false</SPD-MACH>
+
+      <FCC-A-master type="bool">false</FCC-A-master>
+      <FCC-B-master type="bool">false</FCC-B-master>
+      <FCC-added type="string"></FCC-added>
+
+      <wp-change-check-period type="double">10</wp-change-check-period>
+
+      <stab-autotrim type="bool">1</stab-autotrim>
+      <elevator type="double">0</elevator>
+
+      <lnav-max-bank type="double">23</lnav-max-bank>
+    </internal>
+
+    <display>
+      <roll-mode type="string"></roll-mode>
+      <pitch-mode type="string"></pitch-mode>
+      <throttle-mode type="string"></throttle-mode>
+      <roll-mode-armed type="string"></roll-mode-armed>
+      <pitch-mode-armed type="string"></pitch-mode-armed>
+      <throttle-mode-armed type="string"></throttle-mode-armed>
+      <roll-mode-last-change type="double">0</roll-mode-last-change>
+      <pitch-mode-last-change type="double">0</pitch-mode-last-change>
+      <throttle-mode-last-change type="double">0</throttle-mode-last-change>
+      <roll-mode-rectangle type="bool">0</roll-mode-rectangle>
+      <pitch-mode-rectangle type="bool">0</pitch-mode-rectangle>
+      <throttle-mode-rectangle type="bool">0</throttle-mode-rectangle>
+      <localizer-expanded type="bool">0</localizer-expanded>
+      <afds-mode type="string" n="0"></afds-mode>
+      <afds-mode type="string" n="1"></afds-mode>
+      <afds-mode-rectangle type="bool" n="0">0</afds-mode-rectangle>
+      <afds-mode-rectangle type="bool" n="1">0</afds-mode-rectangle>
+      <afds-mode-last-change type="double" n="0">0</afds-mode-last-change>
+      <afds-mode-last-change type="double" n="1">0</afds-mode-last-change>
+    </display>
+
+    <buttons>
+      <speed type="bool">0</speed>
+      <speed-co type="bool">0</speed-co>
+      <cmda type="bool">0</cmda>
+      <cmdb type="bool">0</cmdb>
+      <cwsa type="bool">0</cwsa>
+      <cwsb type="bool">0</cwsb>
+      <n1 type="bool">0</n1>
+      <lvlchg type="bool">0</lvlchg>
+      <althld type="bool">0</althld>
+      <vs type="bool">0</vs>
+      <hdgsel type="bool">0</hdgsel>
+      <lnav type="bool">0</lnav>
+      <vnav type="bool">0</vnav>
+      <app type="bool">0</app>
+      <vorloc type="bool">0</vorloc>
+    </buttons>
+
+    <cstar>
+      <pitch-ki type="double">0.5</pitch-ki>
+      <pitch-kp type="double">1.5</pitch-kp>
+      <gload-compensated type="double">-1</gload-compensated>
+
+      <c-star type="double">0</c-star>
+    </cstar>
+
+  </autopilot>
+
+
+
+  <controls>
+
+    <gear>
+      <autobrakes type="int">0</autobrakes>
+      <!-- 0=off, 1=1, 2=2, 3=3, 4=MAX, -1=RTO -->
+    </gear>
+
+	<flight n="0">
+		<aileron-sum>0</aileron-sum>
+		<elevator-sum>0</elevator-sum>
+		<rudder-sum>0</rudder-sum>
+		<spoiler-1>0.0</spoiler-1>
+		<spoiler-2>0.0</spoiler-2>
+		<spoiler-3>0.0</spoiler-3>
+		<spoiler-4>0.0</spoiler-4>
+		<spoiler-5>0.0</spoiler-5>
+		<spoiler-6>0.0</spoiler-6>
+		<spoiler-l-sum>0.0</spoiler-l-sum>
+		<spoiler-7>0.0</spoiler-7>
+		<spoiler-8>0.0</spoiler-8>
+		<spoiler-9>0.0</spoiler-9>
+		<spoiler-10>0.0</spoiler-10>
+		<spoiler-11>0.0</spoiler-11>
+		<spoiler-12>0.0</spoiler-12>
+		<spoiler-r-sum>0.0</spoiler-r-sum>
+		<speedbrake-output>0.0</speedbrake-output>
+		<speedbrake-arm>0</speedbrake-arm>
+		<ground-spoilers-armed type="bool">0</ground-spoilers-armed>
+		<speedbrake-lever type="double">0</speedbrake-lever>
+	</flight>
+
+    <fuel>
+      <crossfeed type="bool">0</crossfeed>
+      <tank n="0">
+        <pump-fwd type="bool">0</pump-fwd>
+        <pump-aft type="bool">0</pump-aft>
+      </tank>
+      <tank n="1">
+        <pump-fwd type="bool">0</pump-fwd>
+        <pump-aft type="bool">0</pump-aft>
+      </tank>
+      <tank n="2">
+        <pump-left type="bool">0</pump-left>
+        <pump-right type="bool">0</pump-right>
+      </tank>
+    </fuel>
+  </controls>
+
+
+
+  <fdm>
+    <jsbsim>
+      <fcs>
+        <flap-lrs type="double">0</flap-lrs>
+        <slats-cmd type="double">0</slats-cmd>
+        <slats-pos type="double">0</slats-pos>
+        <stabilizer-pos-unit type="double">5</stabilizer-pos-unit>
+        <brake-left-cmd type="double">0</brake-left-cmd>
+        <brake-right-cmd type="double">0</brake-right-cmd>
+        <autobrake>
+          <autobrake-in-use type="bool">0</autobrake-in-use>
+          <autobrake-used type="bool">0</autobrake-used>
+          <target-decel-fps_sec2 type="double">0</target-decel-fps_sec2>
+          <start-time-sec type="double">0</start-time-sec>
+        </autobrake>
+        <stabilizer>
+          <stab-target>5</stab-target>
+          <trim-rate type="double">0</trim-rate>
+        </stabilizer>
+      </fcs>
+      <metrics>
+        <aerorp-mac type="double">0.30</aerorp-mac>
+        <lift type="double">0.0</lift>
+        <basic-moment type="double">-2.2</basic-moment>
+      </metrics>
+      <gear>
+        <unit n="0">
+          <compression-ft type="double">0</compression-ft>
+        </unit>
+        <unit n="1">
+          <compression-ft type="double">0</compression-ft>
+        </unit>
+        <unit n="2">
+          <compression-ft type="double">0</compression-ft>
+        </unit>
+      </gear>
+    </jsbsim>
+  </fdm>
+
+  <b737>
+    <controls>
+      <flight>
+        <spoilers-lever-pos type="double">0</spoilers-lever-pos>
+        <yaw-damper type="bool">1</yaw-damper>
+      </flight>
+    </controls>
+    <sensors>
+      <air-ground type="bool">1</air-ground>
+      <main-gear-spin type="bool">false</main-gear-spin>
+      <was-in-air type="bool">false</was-in-air>
+      <lift-off-time type="double">0</lift-off-time>
+      <landing-time type="double">0</landing-time>
+      <landing type="bool">true</landing>
+    </sensors>
+    <sound>
+      <apdisco type="bool">0</apdisco>
+      <spoiler-auto type="bool">0</spoiler-auto>
+      <stab-trim type="bool">0</stab-trim>
+      <mcp-last-change type="double">0</mcp-last-change>
+    </sound>
+    <ap-hide-helper type="bool">0</ap-hide-helper>
+    <at-helper type="bool">1</at-helper>
+    <warnings>
+      <altitude-alert-mode type="int">0</altitude-alert-mode> <!-- 0 - acq, 1 - deviation -->
+    </warnings>
+  </b737>
+
+  <systems>
+    <pitot n="1">
+      <serviceable type="bool">true</serviceable>
+    </pitot>
+    <pitot n="2">
+      <serviceable type="bool">true</serviceable>
+    </pitot>
+    <pitot n="3">
+      <serviceable type="bool">true</serviceable>
+    </pitot>
+    <static n="1">
+      <serviceable type="bool">true</serviceable>
+    </static>
+    <static n="2">
+      <serviceable type="bool">true</serviceable>
+    </static>
+    <static n="3">
+      <serviceable type="bool">true</serviceable>
+    </static>
+  </systems>
+
+  <nasal>
+
+    <boeing737>
+      <file>Aircraft/Generic/limits.nas</file>
+      <file>Aircraft/737-800/Models/Instruments/PFD/PFD.nas</file>
+      <file>Aircraft/737-800/Models/Instruments/EICAS/upperEICAS.nas</file>
+      <file>Aircraft/737-800/Models/Instruments/EICAS_Lower/lowerEICAS.nas</file>
+      <file>Aircraft/737-800/Nasal/autostart.nas</file>
+      <file>Aircraft/737-800/Nasal/air-ground.nas</file>
+      <file>Aircraft/737-800/Nasal/controls.nas</file>
+      <file>Aircraft/737-800/Nasal/warnings.nas</file>
+      <file>Aircraft/737-800/Nasal/electrical.nas</file>
+	  <file>Aircraft/737-800/Nasal/apu.nas</file>
+      <file>Aircraft/737-800/Nasal/friction.nas</file>
+      <file>Aircraft/737-800/Nasal/liveries.nas</file>
+      <file>Aircraft/737-800/Nasal/systems.nas</file>
+	  <file>Aircraft/737-800/Nasal/hydraulics.nas</file>
+      <file>Aircraft/737-800/Nasal/tire-smoke.nas</file>
+      <file>Aircraft/737-800/Nasal/v-speed.nas</file>
+      <file>Aircraft/737-800/Nasal/engine-fire.nas</file>
+      	<file>Aircraft/737-800/Nasal/fmc.nas</file>
+    </boeing737>
+
+    <autopilot737>
+      <file>Aircraft/737-800/Nasal/autopilot.nas</file>
+    </autopilot737>
+
+    <nd>
+      <file>Aircraft/737-800/Nasal/ND.nas</file>
+    </nd>
+
+    <isfd>
+      <file>Aircraft/Instruments-3d/ISFD/ISFDGenericController.nas</file>
+      <file>Aircraft/Instruments-3d/ISFD/ISFD.nas</file>
+      <file>Aircraft/737-800/Nasal/ISFD_install.nas</file>
+    </isfd>
+
+  <!-- ensure we load the CDU later than the core scripts above -->
+    <Boeing>
+      <file>Aircraft/Instruments-3d/cdu2/boeing.nas</file>
+    </Boeing>
+
+  </nasal>
+
+  <instrumentation>
+
+
+
+    <adf>
+      <volume-norm type="double">0.0</volume-norm>
+    </adf>
+
+    <adf n="1">
+      <volume-norm type="double">0.0</volume-norm>
+    </adf>
+
+    <comm>
+      <volume type="double">0.7</volume>
+      <power-btn type="bool">1</power-btn>
+      <power-good type="bool">1</power-good>
+    </comm>
+
+    <comm n="1">
+      <volume type="double">0.7</volume>
+      <power-btn type="bool">1</power-btn>
+      <power-good type="bool">1</power-good>
+    </comm>
+
+    <nav>
+      <volume type="double">0.0</volume>
+    </nav>
+
+    <nav n="1">
+      <volume type="double">0.0</volume>
+    </nav>
+
+    <dme>
+      <frequencies>
+        <source type="string">/instrumentation/nav[0]/frequencies/selected-mhz</source>
+      </frequencies>
+      <serviceable type="bool">true</serviceable>
+    </dme>
+
+    <dme n="1">
+      <frequencies>
+        <source type="string">/instrumentation/nav[1]/frequencies/selected-mhz</source>
+      </frequencies>
+      <serviceable type="bool">true</serviceable>
+    </dme>
+
+    <nav-compass>
+      <nav-display type="int">0</nav-display>
+      <nav-display n="1" type="int">0</nav-display>
+    </nav-compass>
+
+
+    <flightdirector>
+      <fd-left-on type="bool">0</fd-left-on>
+      <fd-right-on type="bool">0</fd-right-on>
+    </flightdirector>
+
+    <gps>
+      <config>
+        <over-flight-distance-nm type="double">1</over-flight-distance-nm>
+      </config>
+    </gps>
+
+    <transponder>
+      <id-code>1200</id-code>
+    </transponder>
+
+    <airspeed-indicator n="1">
+      <serviceable type="bool">true</serviceable>
+    </airspeed-indicator>
+
+    <airspeed-indicator n="2">
+      <serviceable type="bool">true</serviceable>
+    </airspeed-indicator>
+
+    <altimeter n="1">
+      <serviceable type="bool">true</serviceable>
+    </altimeter>
+
+    <altimeter n="2">
+      <serviceable type="bool">true</serviceable>
+    </altimeter>
+
+    <mk-viii>  <!-- mk-viii configuration, see: http://wiki.flightgear.org/index.php/GPWS -->
+      <serviceable>true</serviceable>     <!-- EGPWS_ENABLE -->
+      <configuration-module>
+        <category-1>  255 </category-1>
+        <category-3>   2 </category-3>  <!-- POSITION_INPUT_SELECT -->
+        <category-4>  13 </category-4>  <!-- ALTITUDE_CALLOUTS -->
+        <category-5>   0 </category-5>  <!-- AUDIO_MENU_SELECT -->
+        <category-6>   1 </category-6>  <!-- TERRAIN_DISPLAY_SELECT -->
+        <category-7> 124 </category-7>  <!-- OPTIONS_SELECT_GROUP_1 -->
+        <category-8>   4 </category-8>  <!-- RADIO_ALTITUDE_INPUT_SELECT-->
+        <category-9>   3 </category-9>  <!-- NAVIGATION_INPUT_SELECT -->
+        <category-10>  6 </category-10> <!-- ATTITUDE_INPUT_SELECT -->
+        <category-13>  7 </category-13> <!-- INPUT_OUTPUT_DISCRETE_TYPE_SELECT -->
+        <category-14>  0 </category-14> <!-- AUDIO_OUTPUT_LEVEL -->
+      </configuration-module>
+      <input-feeders>
+        <discretes>
+          <!-- disable the built-in input feeder -->
+          <landing-flaps type="bool">false</landing-flaps>
+        </discretes>
+      </input-feeders>
+      <inputs>                            <!-- Module I/O -->
+        <arinc429>
+          <decision-height-ncd> true </decision-height-ncd>
+          <decision-height> 200 </decision-height>
+        </arinc429>
+        <rs-232>
+          <present-status>
+            <landing-flaps type="double">0.5</landing-flaps>
+          </present-status>
+        </rs-232>
+      </inputs>
+      <speaker>                           <!-- Speaker Configuration -->
+        <max-dist type="double"> 200.0 </max-dist>        <!-- Max. distance where speaker is heard -->
+        <reference-dist type="double"> 2 </reference-dist> <!-- Distance to pilot -->
+        <volume type="double"> 1.0 </volume>          <!-- Volume at reference distance -->
+      </speaker>
+    </mk-viii>
+
+    <wxradar>
+      <serviceable>true</serviceable>
+      <range type="int" archive="y">40</range>
+      <minimized type="bool" archive="y">false</minimized>
+      <switch archive="y">on</switch>
+      <mode archive="y">wx</mode>
+      <lightning type="bool" archive="y">false</lightning>
+      <display-mode archive="y">arc</display-mode>
+    </wxradar>
+
+    <radar>
+      <range type="int" archive="y">40</range>
+    </radar>
+
+    <turn-indicator>
+      <serviceable type="bool">true</serviceable>
+      <spin type="double">1</spin>
+    </turn-indicator>
+
+    <cdu>
+      <serviceable type="bool">true</serviceable>
+      <brightness-norm type="float">1</brightness-norm>
+      <display-brightness-norm type="float">1</display-brightness-norm>
+      <settings>
+          <!-- pick display settings, use 'lcd' or 'crt' -->
+          <display type="string">lcd</display>
+          <page type="string">Systems/CDUPages/root.nas</page>
+          <page type="string" n="1">Systems/CDUPages/navdata.nas</page>
+          <page type="string" n="2">Systems/CDUPages/preflight.nas</page>
+          <page type="string" n="3">Systems/CDUPages/flight.nas</page>
+          <page type="string" n="4">Systems/CDUPages/legs.nas</page>
+          <page type="string" n="5">Systems/CDUPages/progress.nas</page>
+          <page type="string" n="6">Systems/CDUPages/performance.nas</page>
+          <page type="string" n="7">Systems/CDUPages/maintenance.nas</page>
+          <page type="string" n="8">Systems/CDUPages/departure-arrival.nas</page>
+          <page type="string" n="9">Systems/CDUPages/descent.nas</page>
+
+          <boot-page type="string">ident</boot-page>
+      </settings>
+    </cdu>
+
+    <fmc>
+      <settings>
+        <aircraft-model>737-800</aircraft-model>
+        <engine-rating>24K</engine-rating>
+        <nav-data-version>FGINTDB</nav-data-version>
+        <!-- -->
+        <nav-data-validity>JAN01DEC31/06</nav-data-validity>
+      </settings>
+      <to-flap type="double">5</to-flap>
+
+      <!-- baseline takeoff data -->
+      <derated-to n="0">
+          <title>24K</title>
+          <prompt>TO</prompt>
+          <n1-percent>98.5</n1-percent>
+          <climb-thrust-index>0</climb-thrust-index>
+          <short-title>24K N1</short-title> <!-- title for thrust limit / takeoff ref -->
+      </derated-to>
+
+      <derated-to n="1">
+          <title>22K DERATE</title>
+          <prompt>TO-1</prompt>
+          <n1-percent>95.5</n1-percent>
+          <climb-thrust-index>1</climb-thrust-index>
+          <short-title>22K N1</short-title> <!-- title for thrust limit / takeoff ref -->
+      </derated-to>
+
+      <derated-to n="2">
+          <title>20K DERATE</title>
+          <prompt>TO-2</prompt>
+          <n1-percent>92.5</n1-percent>
+          <climb-thrust-index>2</climb-thrust-index>
+          <short-title>20K N1</short-title> <!-- title for thrust limit / takeoff ref -->
+      </derated-to>
+
+      <derated-to n="3">
+          <title>24K BUMP</title>
+          <prompt>TO-B</prompt>
+          <n1-percent>101.0</n1-percent>
+          <climb-thrust-index>0</climb-thrust-index>
+          <short-title>24K BUMP N1</short-title> <!-- title for thrust limit / takeoff ref -->
+      </derated-to>
+
+      <takeoff>
+        <thr-red-alt-ft type="int">800</thr-red-alt-ft>
+        <thr-red-flaps type="int">5</thr-red-flaps>
+        <derate-index type="int">0</derate-index>
+      </takeoff>
+
+      <climb>
+        <!--
+        <target-speed-kt type="int">280</target-speed-kt>
+        <target-speed-mach>0.78</target-speed-mach> -->
+
+        <derate-index type="int">0</derate-index>
+      </climb>
+
+      <cruise>
+        <default-cg-percent type="double">26.2</default-cg-percent>
+        <margin-to-buffet-g type="double">1.25</margin-to-buffet-g>
+      </cruise>
+    </fmc>
+
+    <pfd>
+      <display-mach type="bool">false</display-mach>
+      <overspeed-kt type="double">340</overspeed-kt>
+    </pfd>
+
+  <radar-altimeter n="0">
+    <serviceable type="bool">true</serviceable>
+    <antenna>
+      <x-offset-m type="double">11.9359</x-offset-m> <!-- From MFEPD. Transmitter STA 430, receiver 450. -->
+      <y-offset-m type="double">0</y-offset-m>
+      <z-offset-m type="double">1.44804</z-offset-m> <!-- WL 148. From MFEPD. -->
+    </antenna>
+  </radar-altimeter>
+
+  <radar-altimeter n="1">
+    <serviceable type="bool">true</serviceable>
+    <antenna>
+      <x-offset-m type="double">12.9359</x-offset-m> <!-- From MFEPD. Transmitter STA 390, receiver 410. -->
+      <y-offset-m type="double">0</y-offset-m>
+      <z-offset-m type="double">1.44804</z-offset-m> <!-- WL 148. From MFEPD. -->
+    </antenna>
+  </radar-altimeter>
+
+    <efis n="0">
+      <inputs>
+        <range-knob type="int">3</range-knob>
+        <kpa-mode type="bool">1</kpa-mode>
+        <baro-knob type="double">0</baro-knob>
+        <baro-previous type="double">1013</baro-previous>
+        <baro-previous-show type="bool">0</baro-previous-show>
+      </inputs>
+    </efis>
+
+    <efis n="1">
+      <inputs>
+        <range-knob type="int">3</range-knob>
+        <kpa-mode type="bool">1</kpa-mode>
+        <baro-knob type="double">0</baro-knob>
+        <baro-previous type="double">1013</baro-previous>
+        <baro-previous-show type="bool">0</baro-previous-show>
+      </inputs>
+    </efis>
+
+    <slip-skid-ball>
+      <side-accel-filtered-norm type="double">0</side-accel-filtered-norm>
+    </slip-skid-ball>
+
+
+	<ddrmi n="0">
+		<vor-adf-1 type="int">1</vor-adf-1>
+		<vor-adf-2 type="int">1</vor-adf-2>
+	</ddrmi>
+
+  </instrumentation>
+
+</PropertyList>
