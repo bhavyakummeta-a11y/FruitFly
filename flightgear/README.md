@@ -1,5 +1,7 @@
 # FlightGear: Boeing 737-800 with fruit fly passengers
 
+**This is the project's default aircraft** (`738-flies`). `flightgear/launch.py` and `flight_simulator/launch_fg.py` both start it unless told otherwise. The C172 (`c172p`) is the fallback.
+
 ```
 python flightgear/setup_aircraft.py     # once: downloads the stock 737-800 (~40 MB) and installs our overlay
 python flightgear/launch.py             # starts fgfs at KSFO 28R with telnet 5500 + httpd 8080
@@ -37,6 +39,7 @@ The stock 737 has a cockpit but **no passenger cabin**. Its "Economy" views only
 | `/controls/engines/engine[0]/throttle` | 0..1 | Throttle. `fruitfly.nas` copies it to `engine[1]`, so code written for the single-engine C172 (`flight_simulator/protocols/flybrain-controls.xml`) drives both engines. Set `/fruitfly/mirror-throttle` to `false` to control the engines separately. |
 | `/fruitfly/autostart` | bool | Set to `true` to run the 737's own engine autostart, which takes about 30–60 s to spool up. It resets itself to `false`. |
 | `/fruitfly/passengers/activity` | 0..1 | How agitated the passengers are: wing flapping speed and amplitude, plus head turning. Drive it from a firing rate, such as normalised DNp09. |
+| `/fruitfly/keep-737-autopilot` | bool | By default the 737's own autopilot and autothrottle, which its in-air start switches on, are turned off about 7 s after spawning so the fly is the one flying. Set to `true` to keep them. |
 | `/controls/gear/brake-parking` | 0/1 | Release the parking brake before trying to roll. |
 | `/velocities/groundspeed-kt`, `/velocities/airspeed-kt` | read | Speed |
 

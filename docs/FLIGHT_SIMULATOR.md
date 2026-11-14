@@ -77,16 +77,22 @@ reproduction of every detail of the published model.
 
 ## Connect FlightGear
 
-FlightGear must be installed separately. These instructions target a conventional
-C172 in calm air, already airborne and trimmed. The adapter and its UDP exchange
+FlightGear must be installed separately. The project's default aircraft is the
+**Boeing 737-800 with fly passengers** (`738-flies`): run
+`python flightgear/setup_aircraft.py` once, see `flightgear/README.md`. The C172
+(`c172p`) still works as a lighter fallback with `--aircraft c172p`. The steps target
+an aircraft in calm air, already airborne and trimmed. The adapter and its UDP exchange
 are tested locally; live FlightGear aircraft behavior still needs validation and
 gain tuning on the teammate's machine.
 
 1. Copy `flight_simulator/protocols/flybrain-state.xml` and
    `flight_simulator/protocols/flybrain-controls.xml` into the FlightGear data
    directory's `Protocol/` folder (`$FG_ROOT/Protocol`).
-2. Start the C172 airborne, heading north, approximately 3,000 ft MSL and 100 kt,
-   with a running engine over flat terrain or water. Select calm weather. Disable
+2. Start the 737 airborne, heading north, approximately 3,000 ft MSL and 220 kt
+   (100 kt for the C172), with engines running over flat terrain or water.
+   `python -m flight_simulator.launch_fg --instance 0` does this for you.
+   The 737 auto-engages its own autopilot on an in-air start; our overlay
+   (`fruitfly.nas`) switches it back off after about 7 s. Select calm weather. Disable
    any aircraft autopilot and conflicting joystick/mouse control inputs. In the
    launcher, add these additional arguments:
 

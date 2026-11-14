@@ -56,4 +56,21 @@ setlistener("/controls/engines/engine[0]/throttle", func(n) {
     if (mirror.getBoolValue()) thr1.setDoubleValue(n.getValue() or 0);
 }, 0, 0);
 
+# The 737's in-air start (autostart.nas: inAirStart) engages its autopilot and
+# autothrottle about 5 s after spawning above 400 ft AGL. The fly must be the
+# one flying, so switch them back off shortly after.
+# Set /fruitfly/keep-737-autopilot true to leave them on.
+var hands_off = func {
+    if (getprop("/fruitfly/keep-737-autopilot")) return;
+    if ((getprop("/position/altitude-agl-ft") or 0) <= 400) return;
+    settimer(func {
+        autopilot737.ap_disengage();
+        foreach (var p; ["SPD", "SPD-SPEED", "SPD-N1", "SPD-RETARD", "LVLCHG"])
+            setprop("/autopilot/internal/" ~ p, 0);
+        print("FruitFly: 737 autopilot/autothrottle off - the fly is flying");
+    }, 7);
+};
+setlistener("/sim/signals/fdm-initialized", hands_off, 0, 0);
+setlistener("/sim/signals/reinit", hands_off, 0, 0);
+
 print("FruitFly: cabin loaded");

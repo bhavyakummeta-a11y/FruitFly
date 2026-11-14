@@ -104,7 +104,7 @@ Plan:
 ## Open questions
 
 - [ ] MSFS access: which version, and which machine runs it?
-- [x] Which aircraft? **Boeing 737-800**, decided 2026-11-14. We want a big airliner with a cabin we can fill with fly passengers. See [Aircraft](AIRCRAFT.md).
+- [x] Which aircraft? **Boeing 737-800** (`738-flies`), decided 2026-11-14 and now the default everywhere. We want a big airliner with a cabin we can fill with fly passengers. See [Aircraft](AIRCRAFT.md).
 - [ ] Phase switching: a simple rule-based selector based on altitude, airspeed and gear state?
 - [ ] Which descending neurons give a clean left/right and up/down? This is answered in milestone 3.
 - [ ] How do we show the result? A live MSFS view plus a neuron-activity panel?
