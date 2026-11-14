@@ -1,0 +1,94 @@
+    0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+    0.03 [WARN]:aircraft  C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\fg_init.cxx:455: Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+    0.03 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:481: Creating osgViewer::CompositeViewer
+    0.03 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:488: affinity=none
+    0.03 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:500: Calling composite_viewer->setUseConfigureAffinity() with flag=0
+    1.34 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    1.34 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    1.34 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\main.cxx:793: Enabling ATI/AMD viewport hack
+    1.36 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\fg_os_osgviewer.cxx:456: affinity=none
+    9.38 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+    9.38 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+   10.27 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   10.36 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   12.62 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+   12.69 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+   12.69 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+   12.69 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+   12.69 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+   13.37 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+   14.47 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage 5
+   14.47 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage e
+   16.94 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   17.80 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\mipmap.cxx:276: mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+   20.61 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+   20.82 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+   23.52 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\canvas\elements\CanvasElement.cxx:608: Canvas: invalid clip: 124, 1024, 1024, 0
+   23.88 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\canvas\elements\CanvasElement.cxx:608: Canvas: invalid clip: 124, 1024, 1024, 0
+   24.09 [ALRT]:flight    C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\FDM\fdm_shell.cxx:192: Failed to save initial FDM property state
+   30.85 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   35.13 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   39.77 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   46.14 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   51.15 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   55.24 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   59.26 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   64.01 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   68.64 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   72.80 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   77.03 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   81.61 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   86.08 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   90.84 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   95.44 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  100.16 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  104.98 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  109.62 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  115.00 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  119.71 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  124.48 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  129.71 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  134.92 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  139.54 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  144.10 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  149.10 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  153.63 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  158.03 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  162.46 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  166.81 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  171.37 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  174.97 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  179.43 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  184.53 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  189.00 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  193.26 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  197.52 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  202.28 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  207.90 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  212.82 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  216.35 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  219.49 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  222.66 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  225.72 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  229.09 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  232.24 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  235.65 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  238.84 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  242.27 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  245.85 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  249.16 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  252.03 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  254.95 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  257.80 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  260.76 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  263.80 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  266.90 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  269.79 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  272.65 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  275.83 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  278.88 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  281.95 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  284.71 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  287.72 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  290.48 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+  293.70 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'

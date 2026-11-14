@@ -1,0 +1,108 @@
+{
+  "run_id": "2026-11-14T175305Z_michael-taylor_fg-takeoff-fly-connectome-auto-handoff-brake-hold-e2c92bc",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 34.1
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the takeoff",
+      "detail": "run 2026-11-14T175336Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: sensory encoding of the aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 34.1,
+      "to_s": 211.8
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 211.8,
+      "to_s": 215.2
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 215.2,
+      "to_s": 298.5
+    }
+  ],
+  "name": "takeoff fly - CONNECTOME auto handoff + brake hold (e2c92bc)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 25636,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T17:53:05.407528+00:00",
+  "duration_s": 298,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 94
+  },
+  "airplane_samples": 132,
+  "controller_runs": {
+    "2026-11-14T175336Z_michael-taylor_flightgear-connectome": {
+      "fly": "Takeoff fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "takeoff",
+      "completed": false,
+      "time_s": 34.6,
+      "decisions": 4,
+      "max_centerline_m": 32.1,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": true,
+      "liftoff_x_m": null,
+      "rejected": false,
+      "agl_ft": 0,
+      "ias_kt": 129.8,
+      "stop_x_m": null,
+      "events": [],
+      "decision_timing": {
+        "applied": 4,
+        "skipped": 25,
+        "latency_mean_s": 7.685,
+        "latency_max_s": 9.55
+      },
+      "speed_up_resets": 0,
+      "exit_code": 2
+    },
+    "2026-11-14T175737Z_michael-taylor_demo-standin": {
+      "fly": "Takeoff fly",
+      "brain": "PROBE-TABLE STAND-IN (no connectome)",
+      "phase": "takeoff",
+      "completed": true,
+      "time_s": 61.3,
+      "decisions": 117,
+      "max_centerline_m": 0.7,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "liftoff_x_m": 1676,
+      "rejected": false,
+      "agl_ft": 1003,
+      "ias_kt": 172.8,
+      "stop_x_m": null,
+      "events": [
+        "31.1s JUMP: escape DNs 229 Hz",
+        "31.6s JUMP: escape DNs 361 Hz",
+        "32.1s JUMP: escape DNs 470 Hz",
+        "...",
+        "36.5s JUMP: escape DNs 683 Hz",
+        "37.1s JUMP: escape DNs 684 Hz",
+        "37.6s JUMP: escape DNs 684 Hz"
+      ],
+      "exit_code": 0
+    }
+  },
+  "code": {
+    "commit": "e2c92bced464f83735008eec8f4459d51fcffa59",
+    "branch": "main"
+  }
+}
