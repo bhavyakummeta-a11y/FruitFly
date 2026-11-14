@@ -193,7 +193,8 @@ def parse_cmdline(cmd):
             'httpd': int(httpd) if httpd else None,
             'telemetry_port': int(telemetry) if telemetry else None,
             'aircraft': find(r'--aircraft=(\S+)'),
-            'graphics': find(r'--prop:string:/fruitfly/graphics=(\w+)')}
+            'graphics': find(r'--prop:string:/fruitfly/graphics=(\w+)'),
+            'weather': find(r'--prop:string:/fruitfly/weather=(\w+)')}
 
 
 def sessions_dir():
@@ -362,6 +363,7 @@ class Session:
         telemetry = info['telemetry_port'] or 5501
         self.aircraft = info['aircraft']
         self.graphics = info.get('graphics') or 'not set (FlightGear defaults or launcher settings)'
+        self.weather = info.get('weather') or 'not set (FlightGear defaults or launcher settings)'
         self.who = runlog.git('config', 'user.name', check=False) or os.environ.get('USERNAME', 'unknown')
         self.stamp = datetime.fromtimestamp(self.started, timezone.utc).strftime('%Y-%m-%dT%H%M%SZ')
         self.id = self._run_id()
@@ -904,6 +906,7 @@ class Session:
                                       'from_s': round(g['since'] - self.started, 1),
                                       'to_s': round(g['until'] - self.started, 1)} for g in segments],
                 'name': self.name, 'aircraft': self.aircraft, 'graphics': self.graphics,
+                'weather': self.weather,
                 'fgfs_pid': self.a.pid, 'fgfs_exit_code': code,
                 'started_utc': datetime.fromtimestamp(self.started, timezone.utc).isoformat(),
                 'duration_s': duration, 'httpd_port': self.httpd,
@@ -917,6 +920,7 @@ class Session:
         rows = [('Outcome', f'{outcome} (exit {code})'),
                 ('Duration', f'{duration // 60} min {duration % 60} s'),
                 ('FlightGear', f"{self.fg_info.get('version', '?')}, {self.fg_info.get('aircraft', '?')}"),
+                ('Graphics / weather', f'{self.graphics} / {self.weather}'),
                 ('Airplane samples', f'{self.samples} at {1 / POLL_S:g} Hz'
                                      + ('' if self.samples else ' (property API never answered: launched without --httpd?)')),
                 ('Max altitude / IAS', f"{self.maxima['alt_ft'] and round(self.maxima['alt_ft'])} ft / "
