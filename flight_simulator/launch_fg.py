@@ -15,8 +15,8 @@ Takeoff / landing (docs/TAKEOFF_LANDING.md): --phase copies the runway
 protocols into FlightGear, starts the 737 at KSFO 28R (on the runway for
 takeoff, 3 nm out on final for landing) and prints the controller command:
 
-    python -m flight_simulator.launch_fg --phase takeoff
-    python -m flight_simulator.launch_fg --phase landing
+    python -m flight_simulator.launch_fg --phase takeoff --name "takeoff test"
+    python -m flight_simulator.launch_fg --phase landing --name "landing test"
 """
 import argparse
 import os
@@ -138,6 +138,8 @@ def main():
         args.instance = 0 if args.phase else 1
     if not 0 <= args.instance <= 50:
         parser.error('--instance must be 0..50')
+    if not args.print and not (args.name or '').strip():
+        parser.error('A FlightGear session needs a name: --name "what this session is testing"')
     cmd = command(args)
     # Refuse a --state the aircraft doesn't define (FlightGear would ignore it; issue #2).
     from .aircraft_states import check_command

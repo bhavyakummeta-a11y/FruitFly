@@ -106,7 +106,7 @@ The launcher does the setup for you: it copies `flybrain-runway-state.xml` and `
 **Takeoff:** the 737 starts on the runway with flaps 5, parking brake off, and the engines starting by themselves (737 autostart).
 
 ```sh
-python -m flight_simulator.launch_fg --phase takeoff           # terminal 1
+python -m flight_simulator.launch_fg --phase takeoff --name "takeoff test"   # terminal 1
 # wait ~1 min until both engines are at idle, then:
 python -m flight_simulator.takeoff_landing takeoff --brain standin --backend flightgear    # terminal 2
 ```
@@ -114,7 +114,7 @@ python -m flight_simulator.takeoff_landing takeoff --brain standin --backend fli
 **Landing:** the 737 starts 3 nm out on final at 1,000 ft and 145 kt with flaps 30 and gear down. The autopilot switches itself off a few seconds after spawning.
 
 ```sh
-python -m flight_simulator.launch_fg --phase landing           # terminal 1
+python -m flight_simulator.launch_fg --phase landing --name "landing test"   # terminal 1
 python -m flight_simulator.takeoff_landing landing --brain standin --backend flightgear    # terminal 2
 ```
 
