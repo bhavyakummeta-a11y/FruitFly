@@ -21,6 +21,8 @@ Let Claude write the code. This doc is the ideas, the gotchas, and where to get 
 | [`fly_brain_starter.ipynb`](fly_brain_starter.ipynb) | Hack-day starter notebook: load the brain, view a neuron, run the LIF simulator, poke it with sugar / bitter / looming. Opens in Colab. |
 | [`docs/Fly-Brain Handbook + Resources.docx`](docs/) | Original Word version of this handbook |
 | [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) | **Our project:** fly brains controlling Microsoft Flight Simulator (takeoff / cruise / landing flies, barrel roll, dopamine learning) |
+| [`docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md`](docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md) | Reference notes: neural mappings, flight phases, and controller approaches |
+| [`docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md`](docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md) | Reference notes: proposed package layout, example code, and implementation prompt |
 
 ---
 
