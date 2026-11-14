@@ -23,5 +23,6 @@ Run by Michael Taylor. Command: `python -m flight_simulator takeoff_live takeoff
 
 ## Notes
 
+- **Michael Taylor** (2026-11-14 13:28): Takeoff with numba brain (3d5a3c0) + vision (1f3063d), started via sim queue + launch_fg --fly. Decisions: 37 applied, 1 skipped, latency 0.22 s mean (2.8 s max). Held within +-3 m of centerline up to 104 kt (previous run had drifted 4 m by 86 kt). Lateral oscillation still grew above ~100 kt: -7.9 m @111 kt, -17.9 m @117 kt (max IAS 118, short of Vr), bitter at 24.4 s -> MN9 suppressed -> REJECT at 31.5 s, idle + max brakes, stopped at x=1213 m, 8.9 m off centerline, on the runway. Judged success (safe reject below V1) but no liftoff. Remaining blocker: steering gain at high speed (issue #6).
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
