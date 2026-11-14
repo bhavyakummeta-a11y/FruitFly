@@ -1,0 +1,4 @@
+wall_utc,sim_time_s,lat_deg,lon_deg,alt_ft,agl_ft,ias_kt,vs_fpm,heading_deg,pitch_deg,roll_deg,aileron,elevator,rudder,flaps,throttle,gear_down,paused,autopilot,in_control
+2026-11-14T22:21:35.827+00:00,0,37.613555,-122.357193,-9999,0,0,0,297.9,0.424,0,0,0,0,0.375,0,True,False,off,NOBODY
+2026-11-14T22:21:39.509+00:00,0,37.613555,-122.357193,-9999,0,0,0,297.9,0.424,0,0,0,0,0.375,0,True,False,off,NOBODY
+2026-11-14T22:22:09.191+00:00,4.6,37.61355,-122.357179,6.154541,7.948518,0,0.00011999999999999999,297.900012,-0.545464,0.025843,0,0,0,0.375,0,True,False,off,NOBODY

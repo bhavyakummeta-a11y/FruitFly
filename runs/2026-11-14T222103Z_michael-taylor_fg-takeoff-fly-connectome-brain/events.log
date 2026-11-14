@@ -1,0 +1,38 @@
+17:21:04 [session] Session 'takeoff fly, connectome brain' watching fgfs pid 22556 (738-flies)
+17:21:04 [session] Live log page: http://127.0.0.1:8765/
+17:21:05 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+17:21:05 [fgfs] 0.09 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+17:21:05 [fgfs] 0.10 [ALRT]:view      Creating osgViewer::CompositeViewer
+17:21:05 [fgfs] 0.10 [ALRT]:general   affinity=none
+17:21:05 [fgfs] 0.10 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+17:21:05 [fgfs] 1.35 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+17:21:05 [fgfs] 1.35 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+17:21:05 [fgfs] 1.36 [WARN]:general   Enabling ATI/AMD viewport hack
+17:21:05 [fgfs] 1.43 [ALRT]:view      affinity=none
+17:21:10 [session] Docked: Log / Fly brain panel right of FlightGear (left 75%)
+17:21:23 [fgfs] 19.32 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+17:21:23 [fgfs] 19.32 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+17:21:24 [fgfs] 21.26 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+17:21:24 [fgfs] 21.40 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+17:21:30 [fgfs] 27.22 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+17:21:30 [fgfs] 27.28 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+17:21:30 [fgfs] 27.29 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+17:21:30 [fgfs] 27.29 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+17:21:30 [fgfs] 27.29 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+17:21:30 [fgfs] 28.05 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+17:21:32 [fgfs] 29.71 [WARN]:input     Unhandled HID usage page:d with usage 5
+17:21:32 [fgfs] 29.71 [WARN]:input     Unhandled HID usage page:d with usage e
+17:21:35 [session] Connected to property API on :8080
+17:21:35 [fgfs] 32.96 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+17:21:39 [fgfs] 33.98 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+17:21:41 [session] Property API stopped answering
+17:21:41 [fgfs] 38.25 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+17:21:41 [fgfs] 38.55 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+17:21:47 [fgfs] 44.00 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+17:21:47 [fgfs] 44.72 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+17:21:47 [fgfs] 45.06 [ALRT]:flight    Failed to save initial FDM property state
+17:22:09 [session] Connected to property API on :8080
+17:22:09 [fgfs] 58.28 [WARN]:network   JsonUriHandler: requested node not found: 'fruitfly/no-screenshots'
+17:22:09 [fgfs] 65.62 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+17:22:14 [session] Property API stopped answering
+17:22:15 [session] FlightGear exited (code 1073741845) - crashed or force-closed
