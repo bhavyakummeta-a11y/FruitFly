@@ -1,5 +1,28 @@
 # FruitFly: rules for every agent and teammate
 
+## Ticket board: claim work before you start (mandatory)
+
+Several agents work in this checkout at once. `tickets.py` is a local board
+(`.tickets/board.db`, never committed) that makes sure two agents never work
+on the same thing, or edit the same files, at the same time.
+
+1. **Name yourself** once per shell: `$env:FRUITFLY_AGENT = "<session name>"`
+   (bash: `export FRUITFLY_AGENT=...`), or pass `--agent` on every call.
+2. **Before starting a task:** `python tickets.py list`, then either
+   `python tickets.py claim <id>` or
+   `python tickets.py start "<task>" --paths <files/dirs you will edit>`.
+   Exit code 3 (`BLOCKED`) means another agent holds it: pick other work or
+   ask the user. Never work around a block, and never `--force` without the
+   user's OK.
+3. **Before editing a file outside your claimed paths:**
+   `python tickets.py check <path>`; exit 1 means someone else holds it.
+4. **While working:** `python tickets.py renew` at least every 30 min (claims
+   go stale after 60 min without a renew, and another agent may take over).
+5. **When finished:** `python tickets.py done <id> --note "<commit/result>"`,
+   or `release <id>` if you stop without finishing.
+6. Still commit with explicit pathspecs only: the board prevents overlap, it
+   doesn't make `git add -A` safe.
+
 ## FlightGear sessions: named, logged, pushed (mandatory)
 
 1. **Every FlightGear session gets a name.** Launch only through the project
