@@ -846,10 +846,11 @@ class Session:
         crashed = code not in (0, None)
         self.event('session', f'FlightGear exited (code {code})' + (' - crashed or force-closed' if crashed else ''))
         self.status = 'FlightGear closed - saving log'
-        try:
-            self.finish(code, crashed)
-        finally:
-            self.lockfile.unlink(missing_ok=True)
+        # Drop the session lock BEFORE the final commit: the media recorder captures
+        # only sessions with a lock, so it stops writing into this folder first.
+        self.lockfile.unlink(missing_ok=True)
+        time.sleep(10)          # let an in-flight capture (a few seconds) land first
+        self.finish(code, crashed)
         self.status = 'FlightGear closed - log saved' + (' and pushed' if self.pushed else ' locally')
         self.event('session', self.status)
         time.sleep(15)            # let the open windows show the final status

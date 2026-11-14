@@ -197,6 +197,21 @@ def push(message=None, paths=(), quiet=False, attempts=4):
                 git('add', '--', *paths, cwd=wt)
                 if git('diff', '--cached', '--name-only', '--', *paths, cwd=wt):
                     git('commit', '-q', '-m', message or 'sim log', '--', *paths, cwd=wt)
+            # Files changed after their run was committed (e.g. a late media capture)
+            # would make `pull --rebase` refuse and block every push on this machine.
+            # Tracked files only exist in finished, committed runs, so commit them too.
+            late = git('diff', '--name-only', cwd=wt).splitlines()
+            if late:
+                runs = sorted({'/'.join(f.split('/')[:2]) for f in late if f.startswith(f'{RUNS}/')})
+                git('add', '--', *late, cwd=wt)
+                git('commit', '-q', '-m', 'sim log: late files for ' + (', '.join(runs) or 'finished runs'),
+                    '--', *late, cwd=wt)
+                late_untracked = [f for f in git('ls-files', '--others', '--exclude-standard', '--', *runs,
+                                                 cwd=wt).splitlines()] if runs else []
+                if late_untracked:   # new files in those same finished runs (e.g. the late .jpg)
+                    git('add', '--', *late_untracked, cwd=wt)
+                    git('commit', '-q', '-m', 'sim log: late files (new) for ' + ', '.join(runs),
+                        '--', *late_untracked, cwd=wt)
             for attempt in range(attempts):
                 if git('ls-remote', '--heads', 'origin', BRANCH, cwd=wt, timeout=30):
                     git('pull', '-q', '--rebase', 'origin', BRANCH, cwd=wt, timeout=60)
