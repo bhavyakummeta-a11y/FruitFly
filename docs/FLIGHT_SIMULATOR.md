@@ -342,8 +342,9 @@ goes there instead of the run folder.
 ### Graphics profile: light by default
 
 The project launchers start FlightGear with a **light** graphics profile
-(`flight_simulator/fg_graphics.py`): no trees, random objects, random buildings
-or 3D clouds; cheapest fog; no specular/horizon effects; a shorter full-detail
+(`flight_simulator/fg_graphics.py`): no trees, random objects or random
+buildings; 3D clouds only out to 8 km (the storm sky needs them; its visibility
+is 4 km); cheapest fog; no specular/horizon effects; a shorter full-detail
 range; and the frame rate capped at 30 fps. The fly's senses are computed from
 geometry, not pixels, so experiments lose nothing, and the 30 fps cap keeps
 FlightGear from taking CPU the fly brain and the loggers need.
