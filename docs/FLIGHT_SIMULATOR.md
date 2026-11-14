@@ -388,6 +388,25 @@ python -m flight_simulator.session status                # what is being logged 
   files are written but never committed, so they cannot ride along with someone
   else's push.
 
+#### Video of every session
+
+Every session is filmed by FlightGear's own recorder (`video-start`/`video-stop`)
+so we can show the fly in action:
+
+- **Automatic:** the session logger starts recording as soon as the scenery has
+  loaded. The video ends when FlightGear closes, or when you press **■ Stop** on
+  the log window. **● Record** starts a new file.
+- **Format:** H.264 in MKV, at the FlightGear window's size. MKV, because a file
+  cut short by a FlightGear crash still plays. It opens in VLC, Windows Media
+  Player / Films & TV, and Chrome.
+- **Where:** `%LOCALAPPDATA%\FruitFly\videos\<session id>\fgvideo-*.mkv` on the
+  machine that ran FlightGear. Videos are **not** pushed to `sim-logs` because
+  they're too big for git. `events.log`, `meta.json` (`videos`) and
+  `feedback.md` record the path and size.
+- **Opt out** for one session with `session watch --no-video`, or for everything
+  with `FRUITFLY_NO_VIDEO=1`. Encoding costs some CPU; if a run is short of frame
+  rate, try without.
+
 #### Who is flying: control attribution in every log
 
 Every log states what is controlling the airplane, so a fly-brain flight can't
@@ -604,3 +623,10 @@ sync passed its 26 relevant tests. These are not Windows FlightGear 737 flight v
 stand-in CLI smoke run correctly reported a go-around rather than success;
 automatic landing is not guaranteed. Re-test the actual 737 and inspect its new
 termination reason and decision timing before drawing conclusions about it.
+
+
+## Airport destination mission
+
+Use `python -m flight_simulator.launch_fg --route lax-burbank --fly connectome --name "LAX to Burbank"`
+for KLAX 25R to KBUR 08, including known obstacles and full-stop landing.
+The legacy launcher default remains KSFO. See [LAX to Burbank setup and validation](LAX_BURBANK.md).

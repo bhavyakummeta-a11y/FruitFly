@@ -476,6 +476,8 @@ def control_attribution(program, args):
                                     'controls, the behavioural-state gate (standing/flying), a fixed-gain '
                                     'pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, '
                                     'stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)'
+                                    + ('; airport waypoints, MSL/runway transforms, predictive obstacle heading selection, '
+                                       'and destination rollout braking are code rules (airport_route.py)' if getattr(args,'route',None) else '')
                                     + ('; takeoff_live holds the parking brake while the brain calibrates and '
                                        'releases it at the handover' if program == 'flight_simulator.takeoff_live' else ''),
                     'autopilot': AUTOPILOT_RULE}

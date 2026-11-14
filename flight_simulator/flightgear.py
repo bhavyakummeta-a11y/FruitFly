@@ -479,8 +479,10 @@ class RunwayFlightGear(FlightGear):
     before the threshold, e.g. FlightGear's --offset-distance).
     """
     def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0,
-                 runway=None, ahead_m=0.0):
+                 runway=None, ahead_m=0.0, elevation_ft=None):
         super().__init__(telemetry_port, control_port, timeout, engines=2)
+        self.elevation_ft = elevation_ft
+        self.terrain_agl_m = None
         self.runway = runway  # (lat, lon, true heading deg) or None
         # /position/altitude-agl-ft is the CG height: the 738 reads ~7.95 ft parked.
         # Measured from the first on-ground packet; this default covers airborne starts.
@@ -499,9 +501,11 @@ class RunwayFlightGear(FlightGear):
             values = [float(v) for v in packet.decode('ascii').strip().split(',')]
         except (ValueError, UnicodeError) as exc:
             raise ValueError('Malformed FlightGear telemetry') from exc
-        if len(values) not in (11, 13) or not all(math.isfinite(v) for v in values):
-            raise ValueError('Expected eleven finite runway telemetry fields')
-        n1 = values[11:13] if len(values) == 13 else (None, None)  # older protocol copies: no N1
+        if len(values) not in (11, 13, 14) or not all(math.isfinite(v) for v in values):
+            raise ValueError('Expected 11, 13 or 14 finite runway telemetry fields')
+        if self.elevation_ft is not None and len(values) != 14:
+            raise ValueError('Airport route needs MSL telemetry: reinstall flybrain-runway-state.xml through launch_fg')
+        n1 = values[11:13] if len(values) >= 13 else (None, None)  # older protocol copies: no N1
         clock, lat, lon, agl_ft, heading, roll, pitch, speed_kt, climb_fps, wow, frozen = values[:11]
         if not (-90 <= lat <= 90 and -180 <= lon <= 180 and -5 < speed_kt < 1000
                 and -180 <= roll <= 180 and -90 <= pitch <= 90 and frozen in (0, 1) and wow in (0, 1)):
@@ -528,10 +532,12 @@ class RunwayFlightGear(FlightGear):
         speed = max(0.0, speed_kt) * KT
         climb = climb_fps * 0.3048
         gamma = math.asin(max(-1.0, min(1.0, climb / speed))) if speed > 5 else 0.0
-        state = RunwayState(time=self.active_time, x=x, y=y, agl=max(0.0, (agl_ft - self.agl_offset_ft) * FT),
+        self.terrain_agl_m = max(0.0, (agl_ft-self.agl_offset_ft)*FT)
+        altitude = self.terrain_agl_m if self.elevation_ft is None else (values[13]-self.agl_offset_ft-self.elevation_ft)*FT
+        state = RunwayState(time=self.active_time, x=x, y=y, agl=altitude,
                             psi=wrap(math.radians(heading - rwy)), roll=math.radians(roll),
                             pitch=math.radians(pitch), gamma=gamma, speed=speed,
-                            on_ground=bool(wow), n1_left=n1[0], n1_right=n1[1])
+                            on_ground=bool(wow), n1_left=n1[0], n1_right=n1[1], terrain_agl=self.terrain_agl_m)
         if self.previous is not None and active and delta < 0.5:
             state.roll_rate = wrap(state.roll - self.previous.roll) / delta
             state.pitch_rate = (state.pitch - self.previous.pitch) / delta
