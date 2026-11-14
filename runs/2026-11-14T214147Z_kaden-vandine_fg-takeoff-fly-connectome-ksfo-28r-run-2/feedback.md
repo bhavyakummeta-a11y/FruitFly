@@ -30,5 +30,6 @@ Timeline (seconds from session start):
 -     88 to    124: **Nobody: no controller running and no control inputs**
 
 ## Notes
+- **Kaden VanDine** (2026-11-14 16:44): Session of takeoff run 2 (run 2026-11-14T214155Z): successful takeoff, stopped at ~1,400 ft on request. FG hung on exit; ended with SIGTERM by claude-run-check, so 'force-closed' here is that, not a flight crash. Before this, an obstacle-avoidance launch (launch_fg --fly connectome, no --phase -> instance 1) never loaded: FlightGear's Qt data-install dialog came up for the new FG_HOME and the data download failed; that FG was terminated.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
