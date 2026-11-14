@@ -222,3 +222,22 @@ class SessionLogHelpers(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class SceneTests(unittest.TestCase):
+    def test_latlon_inverts_flightgear_frame(self):
+        from flight_simulator.fg_scene import to_latlon
+        fg = FlightGear.__new__(FlightGear)
+        fg.origin, fg.previous, fg.previous_clock, fg.active_time, fg.frozen = None, None, None, 0.0, False
+        fg.parse(b'1,37.55,-122.75,3000,0,0,0,220,0,0')
+        lat, lon = to_latlon(fg.origin, 500.0, 3300.0)
+        state = fg.parse(f'2,{lat},{lon},3000,0,0,0,220,0,0'.encode())
+        self.assertAlmostEqual(state.east, 500.0, delta=0.01)
+        self.assertAlmostEqual(state.north, 3300.0, delta=0.01)
+
+    def test_model_load_is_last_and_models_exist(self):
+        from flight_simulator.fg_scene import model_props, MAX_OBSTACLES, MODEL_PATH
+        props = model_props(3)
+        self.assertTrue(props[-1][0].endswith('/load'))
+        models = ROOT / 'flightgear' / MODEL_PATH.format(i=MAX_OBSTACLES - 1)
+        self.assertTrue(models.exists(), models)

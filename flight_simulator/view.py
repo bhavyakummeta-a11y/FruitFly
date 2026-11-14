@@ -16,7 +16,7 @@ class View:
         self.fig.canvas.manager.set_window_title('Fly flight companion — obstacle course')
         self.fig.subplots_adjust(left=.06, right=.97, top=.82, bottom=.12, wspace=.22)
         self.status = self.fig.text(.04, .96, '', va='top', fontsize=11)
-        caption = ('Fixed scenery course — load its FlightGear scenery folder to see the same towers in the cockpit.' if scenery else 'Virtual obstacles only — no scenery overlay selected.')
+        caption = ('Fixed scenery course — load its FlightGear scenery folder to see the same towers in the cockpit.' if scenery else 'Virtual obstacles, drawn live as towers in FlightGear (no collision there).')
         self.fig.text(.04, .025, caption + ' Close window or Ctrl-C to stop.', fontsize=9)
         self.scene.set(title='Obstacle view', xlabel='East (m)', ylabel='North (m)', zlabel='Altitude MSL (m)')
         self.ax.set(title='Flight path — full course', xlabel='East (m)', ylabel='North (m)')

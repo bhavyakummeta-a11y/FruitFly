@@ -14,10 +14,25 @@ Start with --print to see the command without launching anything.
 import argparse
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
-DEFAULT_FG = Path(os.environ.get('FG_INSTALL', r'D:\FlightGear'))
+def default_fg():
+    """FG_INSTALL, else D:\\FlightGear, else fgfs on PATH, else the newest
+    ~/Downloads or ~/apps flightgear-*.AppImage (the official Linux build)."""
+    if os.environ.get('FG_INSTALL'):
+        return Path(os.environ['FG_INSTALL'])
+    if Path(r'D:\FlightGear').exists():
+        return Path(r'D:\FlightGear')
+    on_path = shutil.which('fgfs')
+    if on_path:
+        return Path(on_path)
+    images = sorted(p for d in ('Downloads', 'apps') for p in (Path.home() / d).glob('flightgear-*.AppImage'))
+    return images[-1] if images else Path(r'D:\FlightGear')
+
+
+DEFAULT_FG = default_fg()
 # Project default aircraft: 737-800 with fly passengers (run flightgear/setup_aircraft.py once).
 REPO_AIRCRAFT = Path(__file__).resolve().parent.parent / 'flightgear' / 'Aircraft'
 DEFAULT_AIRCRAFT = '738-flies'
@@ -33,8 +48,13 @@ def ports(instance):
 def command(args):
     p = ports(args.instance)
     fg = Path(args.fg)
-    return [str(fg / 'bin' / 'fgfs.exe' if os.name == 'nt' else fg / 'bin' / 'fgfs'),
-            f'--fg-root={fg / "data"}', f'--fg-aircraft={REPO_AIRCRAFT}', f'--aircraft={args.aircraft}',
+    if fg.is_file():
+        # An fgfs binary or the Linux AppImage: it finds its own data (fg-root).
+        exe = [str(fg)]
+    else:
+        exe = [str(fg / 'bin' / 'fgfs.exe' if os.name == 'nt' else fg / 'bin' / 'fgfs'),
+               f'--fg-root={fg / "data"}']
+    return [*exe, f'--fg-aircraft={REPO_AIRCRAFT}', f'--aircraft={args.aircraft}',
             f'--httpd={p["httpd"]}', f'--telnet={p["telnet"]}',
             '--lat=37.55', '--lon=-122.75', '--altitude=3000', '--heading=0', f'--vc={START_KT.get(args.aircraft, 220)}',
             '--in-air', '--state=cruise', '--disable-real-weather-fetch', '--wind=0@0',
@@ -48,7 +68,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--instance', type=int, default=1, help='0 = default ports, N = ports + 10*N')
     parser.add_argument('--aircraft', default=DEFAULT_AIRCRAFT, help='738-flies (default), 738 = stock 737, c172p')
-    parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir (or set FG_INSTALL)')
+    parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir, or an fgfs/AppImage file (or set FG_INSTALL)')
     parser.add_argument('--print', action='store_true', help='Only print the command')
     parser.add_argument('--no-log', action='store_true', help='Do not start the session log / live page')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
