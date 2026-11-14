@@ -19,7 +19,6 @@ from ctypes import wintypes
 import os
 from pathlib import Path
 import subprocess
-import sys
 import threading
 import time
 
@@ -28,7 +27,6 @@ dwmapi = ctypes.windll.dwmapi
 
 FG_SHARE = 0.75     # FlightGear gets the top 75% of the screen, the panel the rest
 PANEL_MIN_H = 160   # logical px (scaled by the monitor's DPI) if FlightGear is moved low
-PANEL_PAGE = Path(__file__).resolve().parent / 'session_panel.html'
 SWP_NOSIZE, SWP_NOMOVE, SWP_NOZORDER, SWP_NOACTIVATE = 0x1, 0x2, 0x4, 0x10
 SW_RESTORE, SW_SHOWMINNOACTIVE, SW_SHOWNOACTIVATE = 9, 7, 4
 HWND_TOP = 0
@@ -139,16 +137,6 @@ def open_app(url, profile, x=0, y=0, w=600, h=300):
                             creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
 
 
-def serve_panel_page():
-    """Make the session server answer /panel (same origin as /log and /brain, so the
-    panel can fit those pages to its short window). The server looks pages up in the
-    session module's PAGES dict per request; the module may be running as __main__."""
-    for name in ('flight_simulator.session', '__main__'):
-        pages = getattr(sys.modules.get(name), 'PAGES', None)
-        if isinstance(pages, dict) and '/log' in pages:
-            pages.setdefault('/panel', PANEL_PAGE)
-
-
 class Dock:
     """Open the Log / Fly brain panel and keep it glued under FlightGear until stop()."""
 
@@ -159,7 +147,6 @@ class Dock:
         self.brain_url = brain_url
         self.profile = profile
         self.hwnd = {'panel': None}
-        serve_panel_page()
         self.fg = None
         self.stopped = threading.Event()
         self.procs = []
