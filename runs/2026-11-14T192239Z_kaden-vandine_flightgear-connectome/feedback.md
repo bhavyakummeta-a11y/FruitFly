@@ -22,5 +22,6 @@ Run by Kaden VanDine. Command: `python -m flight_simulator takeoff_live landing 
 
 ## Notes
 
+- **Kaden VanDine** (2026-11-14 14:24): Landing test (Linux FG 2024.1.7, connectome, 3 nm final KSFO 28R): handover at ~990 ft / 144 kt (737 SPD autothrottle was still on and was forced off). The fly held ~1 deg nose-down, sank ~1,600 fpm (about 2x the glideslope rate) and sped up to 153 kt with throttle ~0.4-0.5; it drifted right. At 560 ft it was 53 m below the glideslope and 70 m right of the centreline -> unstable -> bitter -> MN9 to 0 -> GO-AROUND (the designed safe response, not a crash). Climbed away to ~1,100 ft; stopped by Ctrl-C (FG paused, acknowledged). No touchdown attempted. Next: the initial pitch/sink after handover (pitch zero / trim pitch) and the lateral drift.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
