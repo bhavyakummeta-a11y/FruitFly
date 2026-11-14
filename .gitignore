@@ -11,3 +11,8 @@ __pycache__/
 
 # Large downloaded data
 *.parquet
+
+# Local flight experiments and downloaded connectome data
+.venv/
+data/brain/
+runs/

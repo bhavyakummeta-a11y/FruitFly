@@ -26,6 +26,21 @@ Let Claude write the code. This doc is the ideas, the gotchas, and where to get 
 
 ---
 
+## Airborne obstacle avoidance experiment
+
+A local flight demo and FlightGear UDP adapter are available in
+[`flight_simulator/`](flight_simulator/). The controller maintains cruise and
+turns away from configured virtual obstacles. Choose the explicit non-neural
+baseline or the notebook-based connectome escape backend. Conventional code
+handles flight stability; this is an assisted experiment, not direct neural
+control of every flight surface.
+
+See [setup, FlightGear connection, and limitations](docs/FLIGHT_SIMULATOR.md).
+
+```sh
+python3 -m flight_simulator --brain reflex --seconds 180
+```
+
 ## Resources
 
 ### Data
