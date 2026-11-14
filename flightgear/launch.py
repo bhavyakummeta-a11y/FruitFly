@@ -35,6 +35,9 @@ def main():
     ap.add_argument("--httpd", type=int, default=8080)
     ap.add_argument("--name", required=True,
                     help="session name (required): what this FlightGear session is for")
+    sys.path.insert(0, os.path.dirname(HERE))
+    from flight_simulator.fg_graphics import add_argument as add_graphics_argument, profile_args
+    add_graphics_argument(ap)
     ap.add_argument("extra", nargs="*", help="extra fgfs args, after --")
     a = ap.parse_args()
 
@@ -47,7 +50,7 @@ def main():
     sys.path.insert(0, os.path.dirname(HERE))
     from flight_simulator.session import ensure_watchdog, name_arg
 
-    cmd = [fgfs, name_arg(a.name),
+    cmd = [fgfs, name_arg(a.name), *profile_args(a.graphics),
            "--fg-aircraft=" + os.path.join(HERE, "Aircraft"),
            "--aircraft=" + ("738" if a.stock else "738-flies"),
            f"--airport={a.airport}", f"--runway={a.runway}",

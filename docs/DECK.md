@@ -11,7 +11,7 @@ python -m flight_simulator.media deck        # rebuild the deck (pulls sim-logs 
 
 | What | How |
 |---|---|
-| FlightGear, automatically | The media recorder screenshots every live session every 20 s, plus on events (pause/resume, controller start/exit, crash, takeoff, landing). The session's live log page is captured every 90 s. `python -m flight_simulator.media ensure-recorder` starts it; one per machine. |
+| FlightGear, automatically | The media recorder screenshots every live session every 5 s, plus on events (pause/resume, controller start/exit, crash, takeoff, landing). The session's live log page is captured every 30 s. `python -m flight_simulator.media ensure-recorder` starts it; one per machine. |
 | FlightGear, a moment you care about | `python -m flight_simulator.media snap --caption "737 rotates at 150 kt"` |
 | The live log page | `python -m flight_simulator.media snap --page --caption "..."` |
 | An agent at work | `python -m flight_simulator.media snap --window "<terminal title>" --caption "agent finds the freeze bug"` (captures that window even when covered) |

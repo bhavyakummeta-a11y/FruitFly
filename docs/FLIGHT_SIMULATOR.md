@@ -306,6 +306,24 @@ python -m flight_simulator.runlog push                                         #
 up with the next run. Passing `--log path.csv` still works; the airplane log then
 goes there instead of the run folder.
 
+### Graphics profile: light by default
+
+The project launchers start FlightGear with a **light** graphics profile
+(`flight_simulator/fg_graphics.py`): no trees, random objects, random buildings
+or 3D clouds; cheapest fog; no specular/horizon effects; a shorter full-detail
+range; and the frame rate capped at 30 fps. The fly's senses are computed from
+geometry, not pixels, so experiments lose nothing, and the 30 fps cap keeps
+FlightGear from taking CPU the fly brain and the loggers need.
+
+```sh
+python -m flight_simulator.launch_fg --phase takeoff --name "..."                 # light
+python -m flight_simulator.launch_fg --phase takeoff --name "..." --graphics full # FlightGear defaults (demos, screenshots)
+python flightgear/launch.py --name "..." --graphics full
+```
+
+The profile is on fgfs's command line (`/fruitfly/graphics`) and recorded as
+`graphics` in each session's `meta.json`.
+
 ### FlightGear sessions: named, logged, pushed (mandatory)
 
 **Every FlightGear session must have a name, is logged automatically, and is

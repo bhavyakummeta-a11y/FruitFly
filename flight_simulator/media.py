@@ -4,8 +4,8 @@ captured as the project happens, annotated, and fed into the progress deck.
 Everything lands next to the run it belongs to, on the sim-logs branch:
 
     runs/<session id>/media/
-        fg-163015-001.jpg      FlightGear frame (every 20 s + on notable events)
-        page-163100-002.jpg    the session's live log page (every 90 s)
+        fg-163015-001.jpg      FlightGear frame (every 5 s + on notable events)
+        page-163100-002.jpg    the session's live log page (every 30 s)
         agent-163200-003.jpg   a snap of an agent's terminal / any window
         index.jsonl            one row per image (time, kind, telemetry, caption)
                                plus "note" rows that annotate an image later
@@ -47,9 +47,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 from . import runlog
 
-FG_EVERY_S = float(os.environ.get('FRUITFLY_MEDIA_FG_S', 20))
-PAGE_EVERY_S = float(os.environ.get('FRUITFLY_MEDIA_PAGE_S', 90))
-EVENT_GAP_S = 5            # min spacing between event-triggered frames
+FG_EVERY_S = float(os.environ.get('FRUITFLY_MEDIA_FG_S', 5))
+PAGE_EVERY_S = float(os.environ.get('FRUITFLY_MEDIA_PAGE_S', 30))
+EVENT_GAP_S = 2            # min spacing between event-triggered frames
 MAX_W = 1280               # stored frame width (JPEG q80, ~80-150 kB)
 RECORDER_PORT = 8763       # bound by the recorder: one per machine
 EVENT_WORDS = re.compile(r'paused|resumed|connected to property|controller run|crash|collision|\bstop\b|'
