@@ -111,12 +111,15 @@ class RunwayFlightGear(FlightGear):
     Converts FlightGear's lat/lon into the runway frame used by RunwayState:
     x metres along the runway from `origin` (threshold or brake-release point),
     y metres right of centerline, psi heading error. If no runway is given, the
-    first packet's position and heading define it (aircraft lined up for takeoff).
+    first packet's position and heading define it (aircraft lined up for takeoff),
+    moved `ahead_m` metres along that heading (aircraft placed on final that far
+    before the threshold, e.g. FlightGear's --offset-distance).
     """
     def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0,
-                 runway=None):
+                 runway=None, ahead_m=0.0):
         super().__init__(telemetry_port, control_port, timeout, engines=2)
         self.runway = runway  # (lat, lon, true heading deg) or None
+        self.ahead_m = ahead_m
         self.gear_down = True
         from .runway import AirlinerControls
         self.last_controls = AirlinerControls()
@@ -136,7 +139,10 @@ class RunwayFlightGear(FlightGear):
         if self.previous_clock is not None and clock < self.previous_clock:
             raise ValueError('FlightGear clock reset or out-of-order telemetry; restart controller')
         if self.runway is None:
-            self.runway = (lat, lon, heading)
+            h = math.radians(heading)
+            self.runway = (lat + math.degrees(self.ahead_m * math.cos(h) / 6371000),
+                           lon + math.degrees(self.ahead_m * math.sin(h) / (6371000 * math.cos(math.radians(lat)))),
+                           heading)
         lat0, lon0, rwy = self.runway
         east = 6371000 * wrap(math.radians(lon - lon0)) * math.cos(math.radians(lat0))
         north = 6371000 * math.radians(lat - lat0)

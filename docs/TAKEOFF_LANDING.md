@@ -99,28 +99,32 @@ See the table below (filled in from the connectome runs in `runs/connectome/`).
 
 ## FlightGear
 
-1. Copy `flight_simulator/protocols/flybrain-runway-state.xml` and `flybrain-runway-controls.xml` into `$FG_ROOT/Protocol/`.
-2. Start the 737 with the runway protocols. **Autopilot and autothrottle off.** Set flaps 5 for takeoff, or flaps 30 and gear down for landing.
+**Always pull first** (`git pull`), so you have the latest launcher, protocols and aircraft. Run `python flightgear/setup_aircraft.py` once.
 
-   ```
-   --generic=socket,out,20,127.0.0.1,5501,udp,flybrain-runway-state
-   --generic=socket,in,20,127.0.0.1,5502,udp,flybrain-runway-controls
-   ```
+The launcher does the setup for you: it copies `flybrain-runway-state.xml` and `flybrain-runway-controls.xml` into `$FG_ROOT/Protocol/`, starts the 737 at **KSFO 28R** with the runway data links, and prints the controller command. Use two terminals.
 
-3. **Takeoff:** line up on the runway with the engines running, then:
+**Takeoff:** the 737 starts on the runway with flaps 5, parking brake off, and the engines starting by themselves (737 autostart).
 
-   ```sh
-   .venv/bin/python -m flight_simulator.takeoff_landing takeoff --brain connectome --backend flightgear
-   ```
+```sh
+python -m flight_simulator.launch_fg --phase takeoff           # terminal 1
+# wait ~1 min until both engines are at idle, then:
+python -m flight_simulator.takeoff_landing takeoff --brain standin --backend flightgear    # terminal 2
+```
 
-   The first packet's position and heading define the runway frame.
+**Landing:** the 737 starts 3 nm out on final at 1,000 ft and 145 kt with flaps 30 and gear down. The autopilot switches itself off a few seconds after spawning.
 
-4. **Landing:** start on a stabilised 3° approach about 3 nm out at around 1,000 ft. You must give the threshold position and the runway's true heading:
+```sh
+python -m flight_simulator.launch_fg --phase landing           # terminal 1
+python -m flight_simulator.takeoff_landing landing --brain standin --backend flightgear    # terminal 2
+```
 
-   ```sh
-   .venv/bin/python -m flight_simulator.takeoff_landing landing --brain connectome --backend flightgear \
-       --runway LAT LON TRUE_HEADING --approach-throttle 0.55
-   ```
+For the real fly brain, replace `python` with `.venv/bin/python` (Windows: `.venv\Scripts\python`) and `--brain standin` with `--brain connectome`.
+
+Notes:
+
+- Landing works out the threshold from where FlightGear spawns the plane: 3 nm (`--final-nm`) ahead along its heading. For an exact threshold, pass `--runway LAT LON TRUE_HEADING` instead.
+- If FlightGear is installed somewhere unusual, add `--fg <install dir>` or set `FG_INSTALL`. If the protocols can't be copied (for example under `C:\Program Files` without admin rights, or with the Linux AppImage), the launcher prints a warning and the copy has to be done by hand.
+- `--instance 1` runs a second FlightGear on other ports. The launcher prints the matching `--telemetry-port/--control-port` flags.
 
 FlightGear is frozen (`/sim/freeze/master`) during every brain trial and resumed afterwards. **The FlightGear path has not been flown live yet** (FlightGear isn't installed on the dev machine): the parsing and wire format are unit-tested, but the gains were tuned on the reduced local model. Expect to retune `--approach-throttle`, the VS pitch gain, and the rudder gains against the JSBSim 737. Also check that rudder steers the nosewheel on the ground in the 738-flies model.
 

@@ -71,6 +71,18 @@ var hands_off = func {
     }, 7);
 };
 setlistener("/sim/signals/fdm-initialized", hands_off, 0, 0);
+
+# launch_fg --phase takeoff sets /fruitfly/ground-autostart so the engines are
+# running when the fly takes over on the runway.
+var ground_autostart = func {
+    if (!getprop("/fruitfly/ground-autostart")) return;
+    if ((getprop("/position/altitude-agl-ft") or 0) > 400) return;
+    settimer(func {
+        print("FruitFly: ground start - running 737 autostart");
+        boeing737.autostart();
+    }, 3);
+};
+setlistener("/sim/signals/fdm-initialized", ground_autostart, 0, 0);
 setlistener("/sim/signals/reinit", hands_off, 0, 0);
 
 print("FruitFly: cabin loaded");

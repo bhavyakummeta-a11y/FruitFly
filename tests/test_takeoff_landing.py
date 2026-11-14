@@ -200,6 +200,48 @@ class RunwayProtocolTests(unittest.TestCase):
         self.assertEqual(controls, ['aileron', 'elevator', 'rudder', 'throttle0', 'throttle1',
                                     'brake_left', 'brake_right', 'gear_down', 'frozen'])
 
+    def test_landing_threshold_from_final_start(self):
+        # Spawned 3 nm before the threshold of a 090 runway: the first packet is at x = -5556 m.
+        bridge = RunwayFlightGear(0, self.sink.getsockname()[1], timeout=.2, ahead_m=3 * 1852.0)
+        try:
+            s = bridge.parse(b'1,37.0,-122.0,1000,90,0,0,145,-12,0,0\n')
+            self.assertAlmostEqual(s.x, -5556, delta=5)
+            self.assertAlmostEqual(s.y, 0.0, delta=0.5)
+            self.assertAlmostEqual(bridge.runway[1], -122.0 + 5556 / (6371000 * math.cos(math.radians(37))) * 180 / math.pi, places=6)
+        finally:
+            bridge.close()
+
+
+class LaunchPhaseTests(unittest.TestCase):
+    def args(self, phase, instance=0, fg='/opt/FlightGear'):
+        import argparse
+        return argparse.Namespace(phase=phase, instance=instance, fg=fg, aircraft='738-flies', extra=[])
+
+    def test_takeoff_and_landing_commands(self):
+        from flight_simulator.launch_fg import command, controller_command
+        takeoff = command(self.args('takeoff'))
+        self.assertIn('--airport=KSFO', takeoff)
+        self.assertIn('--runway=28R', takeoff)
+        self.assertNotIn('--in-air', takeoff)
+        self.assertIn('--generic=socket,out,20,127.0.0.1,5501,udp,flybrain-runway-state', takeoff)
+        self.assertIn('--generic=socket,in,20,127.0.0.1,5502,udp,flybrain-runway-controls', takeoff)
+        landing = command(self.args('landing', instance=1))
+        self.assertIn('--in-air', landing)
+        self.assertIn('--offset-distance=3.0', landing)
+        self.assertIn('--generic=socket,out,20,127.0.0.1,5511,udp,flybrain-runway-state', landing)
+        self.assertIn('--telemetry-port 5511 --control-port 5512', controller_command(self.args('landing', 1)))
+        self.assertNotIn('--telemetry-port', controller_command(self.args('takeoff')))
+
+    def test_install_protocols(self):
+        import tempfile
+        from flight_simulator.launch_fg import install_protocols, RUNWAY_PROTOCOLS
+        fg = Path(tempfile.mkdtemp())
+        (fg / 'data' / 'Protocol').mkdir(parents=True)
+        self.assertIsNone(install_protocols(fg))
+        for name in RUNWAY_PROTOCOLS:
+            self.assertEqual((fg / 'data' / 'Protocol' / name).read_bytes(), (PROTOCOLS / name).read_bytes())
+        self.assertIn('Could not copy', install_protocols(fg / 'missing'))
+
 
 if __name__ == '__main__':
     unittest.main()

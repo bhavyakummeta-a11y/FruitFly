@@ -80,12 +80,11 @@ def run_demo(args, fly, log):
 def run_flightgear(args, fly, log):
     """Live FlightGear. The sim is frozen during every brain trial."""
     from .flightgear import RunwayFlightGear
-    runway = None
-    if args.runway:
-        runway = tuple(args.runway)
-    elif args.phase == 'landing':
-        raise ValueError('Landing needs --runway LAT LON TRUE_HEADING of the threshold')
-    bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway)
+    runway = tuple(args.runway) if args.runway else None
+    # Without --runway, landing assumes the launch_fg --phase landing start:
+    # on the extended centerline, --final-nm before the threshold.
+    ahead = args.final_nm * 1852.0 if args.phase == 'landing' else 0.0
+    bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
@@ -157,6 +156,8 @@ def main(argv=None):
     p.add_argument('--high-ft', type=float, default=0.0, help='Landing: start this far above the glideslope (demo)')
     p.add_argument('--runway', type=float, nargs=3, metavar=('LAT', 'LON', 'HDG'),
                    help='FlightGear: runway threshold/brake-release point and true heading')
+    p.add_argument('--final-nm', type=float, default=3.0,
+                   help='FlightGear landing without --runway: start distance before the threshold, nm')
     p.add_argument('--approach-throttle', type=float, default=0.55, help='FlightGear landing: approach power')
     p.add_argument('--telemetry-port', type=int, default=5501)
     p.add_argument('--control-port', type=int, default=5502)
