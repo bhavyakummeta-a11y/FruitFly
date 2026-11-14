@@ -252,24 +252,38 @@ python -m flight_simulator.runlog push                                         #
 up with the next run. Passing `--log path.csv` still works; the airplane log then
 goes there instead of the run folder.
 
-### FlightGear session log + live page
+### FlightGear sessions: named, logged, pushed (mandatory)
 
-Opening FlightGear through any project launcher also starts a session log and
-opens a **live log page** in your browser (`http://127.0.0.1:8765/`): airplane
-charts, fly-activity charts, and a running log of session events, FlightGear
-warnings/Nasal errors, and the output of any controller run started meanwhile.
-When FlightGear closes (or crashes, which is flagged), the session folder
-`runs/<time>_<who>_fg-session/` (`airplane.csv` at 2 Hz from the property API,
-`fly_activity.csv` with the cabin flies' activity, `events.log`,
-`fgfs_warnings.log`, `feedback.md` linking the controller runs) is pushed.
+**Every FlightGear session must have a name, is logged automatically, and is
+pushed to the `sim-logs` branch when it ends.** This applies to people and AI agents.
 
 ```sh
-python flightgear/launch.py                       # 737 + fly cabin  (--no-log to skip)
-python -m flight_simulator.launch_fg --instance 1 # extra instance   (--no-log to skip)
-python -m flight_simulator.session attach         # FlightGear opened another way (desktop shortcut)
+python flightgear/launch.py --name "737 cabin smoke test"            # --name is required
+python -m flight_simulator.launch_fg --instance 1 --name "obstacle course v2"
+python -m flight_simulator.session attach --name "..."   # name (or rename) a running session
+python -m flight_simulator.session status                # what is being logged right now
 ```
 
-Airplane charts need the property API (`--httpd=8080`, which the launchers set);
+- The launchers refuse to start without `--name`. The name rides on fgfs's own
+  command line (`--prop:string:/fruitfly/session/name=...`).
+- A watchdog (`python -m flight_simulator.session watchdog`, started by the
+  launchers; `install-autostart` runs it at every logon) attaches a logger to
+  **any** `fgfs.exe`, however it was started. Sessions opened without a name are
+  logged as `UNNAMED` and the live page asks for one.
+- While FlightGear is open, a **live log page** (`http://127.0.0.1:8765/`, next
+  free port per extra session) shows airplane charts, fly-activity charts and the
+  running log: session events, FlightGear warnings/Nasal errors, and the output of
+  controller runs.
+- When fgfs exits, `runs/<time>_<who>_fg-<name>/` is committed and pushed:
+  `airplane.csv` (2 Hz, property API), `fly_activity.csv`, `events.log`,
+  `fgfs_warnings.log`, `meta.json`, `feedback.md` (exit code, crash/force-close
+  flag, links to the controller runs).
+- All checkouts/worktrees on a machine share one `sim-logs` checkout (the main
+  checkout's `.sim-logs/`). Testing the logger itself? Set `FRUITFLY_NO_PUSH=1`:
+  files are written but never committed, so they cannot ride along with someone
+  else's push.
+
+Airplane charts need the property API (`--httpd`, which the launchers set);
 without it the session still records FlightGear's warnings and controller runs.
 
 ## Shared interface for teammates

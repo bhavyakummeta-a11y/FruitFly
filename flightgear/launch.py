@@ -33,7 +33,8 @@ def main():
     ap.add_argument("--stock", action="store_true", help="stock 737-800 without the cabin")
     ap.add_argument("--telnet", type=int, default=5500)
     ap.add_argument("--httpd", type=int, default=8080)
-    ap.add_argument("--no-log", action="store_true", help="do not start the session log / live page")
+    ap.add_argument("--name", required=True,
+                    help="session name (required): what this FlightGear session is for")
     ap.add_argument("extra", nargs="*", help="extra fgfs args, after --")
     a = ap.parse_args()
 
@@ -43,7 +44,10 @@ def main():
     if not os.path.exists(os.path.join(HERE, "Aircraft", "737-800", "738-flies-set.xml")):
         sys.exit("Run python flightgear/setup_aircraft.py first")
 
-    cmd = [fgfs,
+    sys.path.insert(0, os.path.dirname(HERE))
+    from flight_simulator.session import ensure_watchdog, name_arg
+
+    cmd = [fgfs, name_arg(a.name),
            "--fg-aircraft=" + os.path.join(HERE, "Aircraft"),
            "--aircraft=" + ("738" if a.stock else "738-flies"),
            f"--airport={a.airport}", f"--runway={a.runway}",
@@ -51,12 +55,10 @@ def main():
            "--timeofday=noon", "--disable-real-weather-fetch",
            *a.extra]
     print(" ".join(f'"{c}"' if " " in c else c for c in cmd))
-    proc = subprocess.Popen(cmd)
-    if not a.no_log:
-        # Session log + live page; pushed to the sim-logs branch when FlightGear closes.
-        sys.path.insert(0, os.path.dirname(HERE))
-        from flight_simulator.session import spawn
-        spawn(proc.pid, a.httpd, label="738" if a.stock else "738-flies")
+    # Every session is logged (live page) and pushed to sim-logs when FlightGear
+    # closes: the watchdog spots this fgfs and reads the name from its command line.
+    ensure_watchdog()
+    subprocess.Popen(cmd)
 
 
 if __name__ == "__main__":

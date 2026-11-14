@@ -57,7 +57,7 @@ def command(args):
     return [*exe, f'--fg-aircraft={REPO_AIRCRAFT}', f'--aircraft={args.aircraft}',
             f'--httpd={p["httpd"]}', f'--telnet={p["telnet"]}',
             '--lat=37.55', '--lon=-122.75', '--altitude=3000', '--heading=0', f'--vc={START_KT.get(args.aircraft, 220)}',
-            '--in-air', '--state=cruise', '--disable-real-weather-fetch', '--wind=0@0',
+            '--in-air', '--disable-real-weather-fetch', '--wind=0@0',
             '--timeofday=noon', '--disable-ai-traffic',
             f'--generic=socket,out,20,127.0.0.1,{p["telemetry"]},udp,flybrain-state',
             f'--generic=socket,in,20,127.0.0.1,{p["control"]},udp,flybrain-controls',
@@ -70,12 +70,20 @@ def main():
     parser.add_argument('--aircraft', default=DEFAULT_AIRCRAFT, help='738-flies (default), 738 = stock 737, c172p')
     parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir, or an fgfs/AppImage file (or set FG_INSTALL)')
     parser.add_argument('--print', action='store_true', help='Only print the command')
-    parser.add_argument('--no-log', action='store_true', help='Do not start the session log / live page')
+    parser.add_argument('--name', help='Session name (required to launch): what this session is for')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if not 0 <= args.instance <= 50:
         parser.error('--instance must be 0..50')
     cmd = command(args)
+    # Refuse a --state the aircraft doesn't define (FlightGear would ignore it; issue #2).
+    from .aircraft_states import check_command
+    try:
+        warning = check_command(cmd)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if warning:
+        print('Warning:', warning, file=sys.stderr)
     env = dict(os.environ)
     if args.instance:
         base = Path(os.environ.get('APPDATA', Path.home())) / f'flightgear.org-instance{args.instance}'
@@ -85,11 +93,11 @@ def main():
     p = ports(args.instance)
     print(f'Controller flags: --telemetry-port {p["telemetry"]} --control-port {p["control"]}')
     if not args.print:
-        proc = subprocess.Popen(cmd, env=env)
-        if not args.no_log:
-            from .session import spawn
-            spawn(proc.pid, p['httpd'], p['telemetry'], env.get('FG_HOME'),
-                  label=f'instance {args.instance}, {args.aircraft}')
+        # Every session is logged and pushed; the watchdog reads the name from fgfs's args.
+        from .session import ensure_watchdog, name_arg
+        cmd.insert(1, name_arg(args.name))
+        ensure_watchdog()
+        subprocess.Popen(cmd, env=env)
     return 0
 
 
