@@ -1,0 +1,36 @@
+14:09:51 [session] Session 'fly pilot holds the yoke: arms follow aileron/elevator (visual check + connectome takeoff)' watching fgfs pid 37935 (738-flies)
+14:09:51 [session] Live log page: http://127.0.0.1:8765/
+14:09:57 [session] Connected to property API on :8080
+14:10:16 [session] Property API stopped answering
+14:10:28 [session] Connected to property API on :8080
+14:10:29 [control] Declared controller: llm claude-run-check (visual check of the fly pilot's arms on the yoke: sim paused on the runway, setting /controls/flight/aileron and /elevator by hand, screenshots; no flying)
+14:10:30 [control] IN CONTROL: LLM agent: claude-run-check (visual check of the fly pilot's arms on the yoke: sim paused on the runway, setting /controls/flight/aileron and /elevator by hand, screenshots; no flying)
+14:10:30 [flightgear] Paused
+14:11:09 [session] Property API stopped answering
+14:11:13 [session] Connected to property API on :8080
+14:11:16 [session] Property API stopped answering
+14:11:19 [session] Connected to property API on :8080
+14:11:31 [control] Declared controller ended: llm claude-run-check
+14:11:32 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+14:11:32 [flightgear] Resumed
+14:11:37 [control] IN CONTROL: Nobody: no controller running and no control inputs
+14:11:39 [controller] Run started: 2026-11-14T191139Z_kaden-vandine_flightgear-connectome
+14:11:39 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T191139Z_kaden-vandine_flightgear-connectome
+14:11:39 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+14:11:39 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+14:11:39 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)
+14:11:39 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:11:40 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-14T191139Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py))
+14:11:40 [controller] CONNECTOME LIF (notebook model)
+14:11:43 [controller] === START: Takeoff fly (standing)  ===
+14:11:43 [controller]     adapted: steer zero -18.8 Hz
+14:11:43 [controller] Waiting for FlightGear runway telemetry on localhost...
+14:13:28 [session] Property API stopped answering
+14:13:32 [controller] === HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1005 ft, 189 kt ===
+14:13:32 [controller]     adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+14:13:32 [controller]  109.3s   leg -> crosswind
+14:14:43 [session] Connected to property API on :8080
+14:14:49 [session] Property API stopped answering
+14:14:54 [session] Connected to property API on :8080
+14:15:38 [session] Property API stopped answering
+14:15:38 [session] FlightGear exited (code None)
