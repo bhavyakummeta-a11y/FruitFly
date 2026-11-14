@@ -1,0 +1,45 @@
+{
+  "run_id": "2026-11-14T195842Z_michael-taylor_fg-obstacle-course-connectome-fly-brain-no-tornado-models-no-session-video-crash-isolation-retry",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 1.7,
+      "to_s": 43.8
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: CMDA, SPD; controller 2026-11-14T195931Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 43.8,
+      "to_s": 64.3
+    }
+  ],
+  "name": "obstacle course - CONNECTOME fly brain, no tornado models, no session video (crash isolation, retry)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 15144,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T19:58:42.613548+00:00",
+  "duration_s": 64,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 36
+  },
+  "airplane_samples": 7,
+  "controller_runs": {
+    "2026-11-14T195931Z_michael-taylor_flightgear-connectome": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "fbc99c318344687dcf53d7290a9efeafd22c1e12",
+    "branch": "main"
+  }
+}

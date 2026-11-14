@@ -1,0 +1,51 @@
+14:58:44 [session] Session 'obstacle course - CONNECTOME fly brain, no tornado models, no session video (crash isolation, retry)' watching fgfs pid 15144 (738-flies)
+14:58:44 [session] Live log page: http://127.0.0.1:8765/
+14:58:45 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+14:58:45 [fgfs] 0.07 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+14:58:45 [fgfs] 0.07 [ALRT]:view      Creating osgViewer::CompositeViewer
+14:58:45 [fgfs] 0.07 [ALRT]:general   affinity=none
+14:58:45 [fgfs] 0.07 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+14:58:45 [fgfs] 2.28 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:58:45 [fgfs] 2.28 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:58:45 [fgfs] 2.29 [WARN]:general   Enabling ATI/AMD viewport hack
+14:58:45 [fgfs] 2.34 [WARN]:osg       Warning: GraphicsWindowWin32::grabFocus() - Failed grabbing the focus
+14:58:45 [fgfs] 2.34 [ALRT]:view      affinity=none
+14:58:47 [session] Docked: Log / Fly brain panel right of FlightGear (left 75%)
+14:59:01 [fgfs] 19.27 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+14:59:01 [fgfs] 19.27 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+14:59:03 [fgfs] 21.10 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:59:03 [fgfs] 21.27 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:59:07 [fgfs] 25.39 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+14:59:07 [fgfs] 25.46 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+14:59:07 [fgfs] 25.46 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+14:59:07 [fgfs] 25.46 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+14:59:07 [fgfs] 25.46 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+14:59:07 [fgfs] 26.11 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+14:59:09 [fgfs] 27.81 [WARN]:input     Unhandled HID usage page:d with usage 5
+14:59:09 [fgfs] 27.81 [WARN]:input     Unhandled HID usage page:d with usage e
+14:59:12 [session] Connected to property API on :8080
+14:59:12 [fgfs] 30.83 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:59:14 [session] Property API stopped answering
+14:59:14 [fgfs] 31.41 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+14:59:15 [fgfs] 34.14 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:59:15 [fgfs] 34.44 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:59:20 [fgfs] 37.98 [ALRT]:nasal     Nasal runtime error: non-objects have no members
+14:59:20 [fgfs] 37.98 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 100
+14:59:20 [fgfs] 37.98 [ALRT]:nasal       called from: D:/FlightGear/data/Nasal/globals.nas, line 137
+14:59:20 [fgfs] 38.33 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:59:20 [fgfs] 38.74 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:59:20 [fgfs] 39.02 [ALRT]:flight    Failed to save initial FDM property state
+14:59:24 [session] Connected to property API on :8080
+14:59:26 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: CMDA, SPD)
+14:59:26 [fgfs] 45.27 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:59:29 [fgfs] 48.73 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:59:31 [controller] Run started: 2026-11-14T195931Z_michael-taylor_flightgear-connectome
+14:59:31 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T195931Z_michael-taylor_flightgear-connectome
+14:59:31 [controller] [control] FLY BRAIN (connectome) decides when to escape; code flies the airplane
+14:59:31 [controller] [control]   neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input
+14:59:31 [controller] [control]   code decides:   synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)
+14:59:31 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:59:34 [fgfs] 52.98 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:59:36 [session] Property API stopped answering
+14:59:36 [fgfs] 53.54 [WARN]:network   JsonUriHandler: requested node not found: 'fruitfly/no-screenshots'
+14:59:36 [session] FlightGear exited (code 3221225477) - crashed or force-closed
