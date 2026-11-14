@@ -1,0 +1,111 @@
+{
+  "run_id": "2026-11-14T211450Z_kaden-vandine_fg-takeoff-fly-connectome-ksfo-28r",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 41.9
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the takeoff",
+      "detail": "run 2026-11-14T211529Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 41.9,
+      "to_s": 248.8
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 248.8,
+      "to_s": 253.6
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 253.6,
+      "to_s": 409.0
+    }
+  ],
+  "name": "takeoff fly: connectome, KSFO 28R",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 61794,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T21:14:50.373521+00:00",
+  "duration_s": 409,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 192,
+  "controller_runs": {
+    "2026-11-14T211529Z_kaden-vandine_flightgear-connectome": {
+      "fly": "Takeoff fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "HANDOVER (1,000 ft)",
+      "completed": true,
+      "time_s": 200.0,
+      "decisions": 502,
+      "max_centerline_m": 5.4,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "liftoff_x_m": 1359,
+      "rejected": false,
+      "agl_ft": 3578,
+      "ias_kt": 168.5,
+      "stop_x_m": null,
+      "safe_reject": false,
+      "takeoff_achieved": true,
+      "outcome": "takeoff_achieved",
+      "events": [
+        "30.0s JUMP: escape DNs 199 Hz",
+        "30.8s JUMP: escape DNs 317 Hz",
+        "31.4s JUMP: escape DNs 475 Hz",
+        "...",
+        "33.4s JUMP: escape DNs 687 Hz",
+        "33.8s JUMP: escape DNs 687 Hz",
+        "34.2s JUMP: escape DNs 695 Hz"
+      ],
+      "termination_reason": "time_limit",
+      "decision_timing": {
+        "applied": 502,
+        "completed": 503,
+        "discarded": 1,
+        "skipped": 140,
+        "latency_mean_s": 0.258,
+        "latency_max_s": 2.617
+      },
+      "speed_up_resets": 0,
+      "requested_phase": "takeoff",
+      "backend": "flightgear",
+      "wall_s": 203.4,
+      "success": true,
+      "exit_code": 0
+    },
+    "2026-11-14T195529Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T200455Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T193710Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T195024Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T195736Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T195931Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T193453Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T193142Z_paula-sof-a-contreras-villavicencio_flightgear-connectome": null,
+    "2026-11-14T195535Z_paula-sof-a-contreras-villavicencio_flightgear-connectome": null,
+    "2026-11-14T194009Z_paula-sof-a-contreras-villavicencio_flightgear-connectome": null,
+    "2026-11-14T194814Z_paula-sof-a-contreras-villavicencio_flightgear-connectome": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "feaefd52d7682f58f8916dd2c3e0c48a87de3563",
+    "branch": "main"
+  }
+}

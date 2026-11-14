@@ -1,0 +1,578 @@
+16:14:50 [session] Session 'takeoff fly: connectome, KSFO 28R' watching fgfs pid 61794 (738-flies)
+16:14:50 [session] Live log page: http://127.0.0.1:8765/
+16:15:30 [session] Connected to property API on :8080
+16:15:30 [controller] Run started: 2026-11-14T211529Z_kaden-vandine_flightgear-connectome
+16:15:30 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T211529Z_kaden-vandine_flightgear-connectome
+16:15:30 [controller] [control] FLY BRAIN (connectome) flying the takeoff
+16:15:30 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+16:15:30 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+16:15:30 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+16:15:32 [control] IN CONTROL: FLY BRAIN (connectome) flying the takeoff (run 2026-11-14T211529Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+16:15:32 [controller] CONNECTOME LIF (notebook model)
+16:15:32 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+16:15:34 [session] Property API stopped answering
+16:15:34 [controller]   zero points: steer=-18.8
+16:15:34 [controller] Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+16:15:36 [controller] Parking brake released: the fly has the airplane.
+16:15:36 [controller] Waiting for FlightGear runway telemetry on localhost...
+16:15:37 [session] Connected to property API on :8080
+16:15:37 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+16:15:39 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+16:15:39 [controller]   decision applied 2.6s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:39 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:40 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:40 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.6deg thr=1.00
+16:15:40 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.6deg thr=1.00
+16:15:40 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=  0.2kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:42 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=  0.9kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:42 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=  1.3kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:42 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=  2.4kt agl=    0ft pitch=-0.5deg thr=1.00
+16:15:42 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=  5.1kt agl=    0ft pitch=-0.4deg thr=1.00
+16:15:42 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=  6.0kt agl=    0ft pitch=-0.4deg thr=1.00
+16:15:43 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 11.8kt agl=    0ft pitch=-0.4deg thr=1.00
+16:15:43 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 12.7kt agl=    0ft pitch=-0.4deg thr=1.00
+16:15:43 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 14.6kt agl=    0ft pitch=-0.4deg thr=1.00
+16:15:45 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 18.3kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:45 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 19.2kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:45 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 21.2kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:45 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 23.1kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:45 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 25.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:47 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 30.0kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:47 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 33.4kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:47 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 35.8kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:48 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 39.0kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:48 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 39.8kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:48 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 41.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:48 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 45.2kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:50 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 47.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:50 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 48.6kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:50 [controller]   decision applied 0.3s after its state  TAKEOFF ROLL   ias= 51.5kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:50 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 52.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:50 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 54.1kt agl=    0ft pitch=-0.3deg thr=0.99
+16:15:51 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 57.5kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:51 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 58.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:51 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 60.5kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:51 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 61.9kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:51 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 66.0kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:53 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 66.8kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:53 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 70.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:53 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 71.9kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:53 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 73.7kt agl=    0ft pitch=-0.3deg thr=1.00
+16:15:54 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 76.6kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:54 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 77.4kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:54 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 79.1kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:56 [controller]   decision applied 0.8s after its state  TAKEOFF ROLL   ias= 84.7kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:56 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 85.5kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:56 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 89.2kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:56 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias= 90.9kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:58 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 93.7kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:58 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 94.5kt agl=    0ft pitch=-0.2deg thr=0.99
+16:15:58 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias= 96.1kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:58 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias= 99.2kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:58 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=101.4kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:59 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=102.2kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:59 [controller]   decision applied 0.3s after its state  TAKEOFF ROLL   ias=104.7kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:59 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=105.8kt agl=    0ft pitch=-0.2deg thr=1.00
+16:15:59 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=107.4kt agl=    0ft pitch=-0.2deg thr=1.00
+16:16:01 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=110.0kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:01 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=110.7kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:01 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=112.7kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:01 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=113.9kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:01 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=117.4kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:02 [controller]   decision applied 0.2s after its state  TAKEOFF ROLL   ias=118.4kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:02 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=121.5kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:02 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=122.2kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:02 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=123.7kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:04 [controller]   decision applied 0.4s after its state  TAKEOFF ROLL   ias=126.6kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:04 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=127.3kt agl=    0ft pitch=-0.1deg thr=1.00
+16:16:04 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=128.8kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:04 [controller]   decision applied 0.8s after its state  TAKEOFF ROLL   ias=133.6kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:05 [controller]   decision applied 0.1s after its state  TAKEOFF ROLL   ias=134.3kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:05 [controller]   decision applied 0.1s after its state  V1             ias=137.2kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:05 [controller]   decision applied 0.1s after its state  V1             ias=138.7kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:07 [controller]   decision applied 0.4s after its state  V1             ias=141.4kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:07 [controller]   decision applied 0.2s after its state  V1             ias=142.4kt agl=    0ft pitch=-0.0deg thr=1.00
+16:16:07 [controller]   decision applied 0.3s after its state  V1             ias=144.4kt agl=    0ft pitch= 0.0deg thr=1.00
+16:16:07 [controller]   decision applied 0.8s after its state  V1             ias=148.2kt agl=    0ft pitch= 0.1deg thr=1.00
+16:16:08 [controller]   decision applied 0.6s after its state  V1             ias=151.1kt agl=    0ft pitch= 0.3deg thr=1.00
+16:16:08 [controller]   decision applied 0.3s after its state  V1             ias=152.7kt agl=    0ft pitch= 0.5deg thr=1.00
+16:16:08 [controller]   decision applied 0.4s after its state  V1             ias=154.4kt agl=    0ft pitch= 1.0deg thr=1.00
+16:16:10 [controller]   decision applied 0.4s after its state  ROTATE         ias=156.3kt agl=    0ft pitch= 1.8deg thr=1.00
+16:16:10 [controller]   decision applied 0.3s after its state  ROTATE         ias=157.9kt agl=    0ft pitch= 2.7deg thr=1.00
+16:16:10 [controller]   decision applied 0.6s after its state  ROTATE         ias=160.5kt agl=    1ft pitch= 4.3deg thr=1.00
+16:16:10 [controller]   decision applied 0.4s after its state  ROTATE         ias=162.3kt agl=    1ft pitch= 5.6deg thr=1.00
+16:16:11 [controller]   decision applied 0.3s after its state  ROTATE         ias=163.7kt agl=    1ft pitch= 6.5deg thr=1.00
+16:16:11 [controller]   decision applied 0.4s after its state  CLIMB          ias=165.3kt agl=    2ft pitch= 7.3deg thr=1.00
+16:16:11 [controller]   decision applied 0.1s after its state  CLIMB          ias=165.8kt agl=    2ft pitch= 7.5deg thr=1.00
+16:16:11 [controller]   decision applied 0.2s after its state  CLIMB          ias=167.2kt agl=    3ft pitch= 7.6deg thr=1.00
+16:16:13 [controller]   decision applied 0.5s after its state  CLIMB          ias=169.5kt agl=    7ft pitch= 7.9deg thr=1.00
+16:16:13 [controller]   decision applied 0.2s after its state  CLIMB          ias=170.3kt agl=    8ft pitch= 8.1deg thr=1.00
+16:16:13 [controller]   decision applied 0.2s after its state  CLIMB          ias=171.3kt agl=   11ft pitch= 8.5deg thr=1.00
+16:16:13 [controller]   decision applied 0.8s after its state  CLIMB          ias=174.2kt agl=   21ft pitch= 9.9deg thr=1.00
+16:16:15 [controller]   decision applied 0.2s after its state  CLIMB          ias=174.7kt agl=   24ft pitch=10.3deg thr=1.00
+16:16:15 [controller]   decision applied 0.2s after its state  CLIMB          ias=176.2kt agl=   34ft pitch=11.3deg thr=1.00
+16:16:15 [controller]   decision applied 0.2s after its state  CLIMB          ias=176.9kt agl=   40ft pitch=11.8deg thr=1.00
+16:16:16 [controller]   decision applied 0.4s after its state  CLIMB          ias=177.9kt agl=   52ft pitch=12.4deg thr=1.00
+16:16:16 [controller]   decision applied 0.1s after its state  CLIMB          ias=178.2kt agl=   56ft pitch=12.5deg thr=1.00
+16:16:16 [controller]   decision applied 0.2s after its state  CLIMB          ias=178.8kt agl=   66ft pitch=12.8deg thr=1.00
+16:16:16 [controller]   decision applied 0.8s after its state  CLIMB          ias=180.3kt agl=   95ft pitch=13.4deg thr=1.00
+16:16:16 [controller]   decision applied 0.2s after its state  CLIMB          ias=180.6kt agl=  102ft pitch=13.5deg thr=1.00
+16:16:18 [controller]   decision applied 0.3s after its state  CLIMB          ias=181.1kt agl=  117ft pitch=13.8deg thr=1.00
+16:16:18 [controller]   decision applied 0.1s after its state  CLIMB          ias=181.3kt agl=  122ft pitch=13.9deg thr=1.00
+16:16:18 [controller]   decision applied 0.2s after its state  CLIMB          ias=181.7kt agl=  137ft pitch=14.1deg thr=1.00
+16:16:18 [controller]   decision applied 0.1s after its state  CLIMB          ias=181.9kt agl=  147ft pitch=14.3deg thr=1.00
+16:16:19 [controller]   decision applied 0.1s after its state  CLIMB          ias=182.4kt agl=  164ft pitch=14.5deg thr=1.00
+16:16:19 [controller]   decision applied 0.1s after its state  CLIMB          ias=182.7kt agl=  178ft pitch=14.6deg thr=1.00
+16:16:19 [controller]   decision applied 0.1s after its state  CLIMB          ias=183.0kt agl=  192ft pitch=14.7deg thr=1.00
+16:16:19 [controller]   decision applied 0.4s after its state  CLIMB          ias=183.6kt agl=  225ft pitch=14.9deg thr=1.00
+16:16:19 [controller]   decision applied 0.1s after its state  CLIMB          ias=183.7kt agl=  232ft pitch=14.9deg thr=1.00
+16:16:21 [controller]   decision applied 0.5s after its state  CLIMB          ias=184.3kt agl=  266ft pitch=14.9deg thr=1.00
+16:16:21 [controller]   decision applied 0.2s after its state  CLIMB          ias=184.4kt agl=  277ft pitch=14.9deg thr=1.00
+16:16:21 [controller]   decision applied 0.2s after its state  CLIMB          ias=184.7kt agl=  293ft pitch=14.9deg thr=1.00
+16:16:22 [controller]   decision applied 0.4s after its state  CLIMB          ias=185.0kt agl=  321ft pitch=15.1deg thr=1.00
+16:16:22 [controller]   decision applied 0.1s after its state  CLIMB          ias=185.1kt agl=  328ft pitch=15.1deg thr=1.00
+16:16:22 [controller]   decision applied 0.2s after its state  CLIMB          ias=185.4kt agl=  349ft pitch=15.2deg thr=1.00
+16:16:22 [controller]   decision applied 0.8s after its state  CLIMB          ias=185.8kt agl=  400ft pitch=15.2deg thr=1.00
+16:16:22 [controller]   decision applied 0.1s after its state  CLIMB          ias=185.9kt agl=  408ft pitch=15.2deg thr=1.00
+16:16:24 [controller]   decision applied 0.1s after its state  CLIMB          ias=186.2kt agl=  444ft pitch=15.2deg thr=1.00
+16:16:24 [controller]   decision applied 0.1s after its state  CLIMB          ias=186.4kt agl=  461ft pitch=15.1deg thr=1.00
+16:16:24 [controller]   decision applied 0.4s after its state  CLIMB          ias=186.7kt agl=  495ft pitch=15.0deg thr=1.00
+16:16:26 [controller]   decision applied 0.2s after its state  CLIMB          ias=186.8kt agl=  507ft pitch=15.0deg thr=1.00
+16:16:26 [controller]   decision applied 0.2s after its state  CLIMB          ias=187.0kt agl=  525ft pitch=15.0deg thr=1.00
+16:16:26 [controller]   decision applied 0.4s after its state  CLIMB          ias=187.2kt agl=  556ft pitch=15.2deg thr=1.00
+16:16:26 [controller]   decision applied 0.4s after its state  CLIMB          ias=187.4kt agl=  580ft pitch=15.4deg thr=1.00
+16:16:26 [controller]   decision applied 0.2s after its state  CLIMB          ias=187.5kt agl=  592ft pitch=15.5deg thr=1.00
+16:16:27 [controller]   decision applied 0.3s after its state  CLIMB          ias=187.6kt agl=  617ft pitch=15.4deg thr=1.00
+16:16:27 [controller]   decision applied 0.1s after its state  CLIMB          ias=187.7kt agl=  625ft pitch=15.3deg thr=1.00
+16:16:27 [controller]   decision applied 0.1s after its state  CLIMB          ias=187.8kt agl=  644ft pitch=15.2deg thr=1.00
+16:16:27 [controller]   decision applied 0.1s after its state  CLIMB          ias=187.9kt agl=  663ft pitch=15.2deg thr=1.00
+16:16:27 [controller]   decision applied 0.1s after its state  CLIMB          ias=188.1kt agl=  688ft pitch=15.2deg thr=1.00
+16:16:29 [controller]   decision applied 0.1s after its state  CLIMB          ias=188.2kt agl=  707ft pitch=15.2deg thr=1.00
+16:16:29 [controller]   decision applied 0.2s after its state  CLIMB          ias=188.4kt agl=  730ft pitch=15.1deg thr=1.00
+16:16:29 [controller]   decision applied 0.2s after its state  CLIMB          ias=188.8kt agl=  793ft pitch=14.9deg thr=1.00
+16:16:30 [controller]   decision applied 0.2s after its state  CLIMB          ias=189.0kt agl=  830ft pitch=14.8deg thr=1.00
+16:16:30 [controller]   decision applied 0.1s after its state  CLIMB          ias=189.1kt agl=  845ft pitch=14.8deg thr=1.00
+16:16:30 [controller]   decision applied 0.4s after its state  CLIMB          ias=189.4kt agl=  880ft pitch=14.7deg thr=1.00
+16:16:32 [controller]   decision applied 0.1s after its state  CLIMB          ias=189.4kt agl=  889ft pitch=14.6deg thr=1.00
+16:16:32 [controller]   decision applied 0.1s after its state  CLIMB          ias=189.6kt agl=  907ft pitch=14.6deg thr=1.00
+16:16:32 [controller]   decision applied 0.1s after its state  CLIMB          ias=189.8kt agl=  926ft pitch=14.6deg thr=1.00
+16:16:32 [controller]   decision applied 0.4s after its state  CLIMB          ias=190.1kt agl=  967ft pitch=14.5deg thr=1.00
+16:16:32 [controller]   decision applied 0.1s after its state  CLIMB          ias=190.2kt agl=  975ft pitch=14.5deg thr=1.00
+16:16:33 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=190.6kt agl= 1016ft pitch=14.6deg thr=1.00
+16:16:33 [controller] HANDOVER (1,000 ft) reached in the air. No Cruise fly yet, so the Takeoff fly keeps flying: wings level, 10 deg climb, climb power. Press Ctrl-C to pause FlightGear and exit.
+16:16:33 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=190.7kt agl= 1024ft pitch=14.6deg thr=0.70
+16:16:33 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=190.4kt agl= 1042ft pitch=14.6deg thr=0.70
+16:16:35 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=189.1kt agl= 1077ft pitch=13.8deg thr=0.70
+16:16:35 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=188.8kt agl= 1085ft pitch=13.5deg thr=0.70
+16:16:35 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=188.1kt agl= 1106ft pitch=12.8deg thr=0.70
+16:16:35 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=186.4kt agl= 1155ft pitch=12.0deg thr=0.70
+16:16:35 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=186.2kt agl= 1162ft pitch=11.9deg thr=0.70
+16:16:36 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=185.2kt agl= 1194ft pitch=11.1deg thr=0.70
+16:16:36 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=184.9kt agl= 1208ft pitch=10.8deg thr=0.70
+16:16:36 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=184.3kt agl= 1229ft pitch=10.3deg thr=0.70
+16:16:38 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=184.1kt agl= 1237ft pitch=10.0deg thr=0.70
+16:16:38 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=183.9kt agl= 1246ft pitch= 9.8deg thr=0.70
+16:16:38 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=183.5kt agl= 1267ft pitch= 9.5deg thr=0.70
+16:16:38 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=183.2kt agl= 1280ft pitch= 9.3deg thr=0.70
+16:16:38 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=183.1kt agl= 1287ft pitch= 9.2deg thr=0.70
+16:16:39 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=182.8kt agl= 1307ft pitch= 9.1deg thr=0.70
+16:16:39 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=182.7kt agl= 1316ft pitch= 9.1deg thr=0.70
+16:16:39 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=182.6kt agl= 1329ft pitch= 8.9deg thr=0.70
+16:16:39 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.5kt agl= 1333ft pitch= 8.9deg thr=0.70
+16:16:41 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.4kt agl= 1340ft pitch= 8.7deg thr=0.70
+16:16:41 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=182.3kt agl= 1354ft pitch= 8.7deg thr=0.70
+16:16:41 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=182.2kt agl= 1363ft pitch= 8.7deg thr=0.70
+16:16:41 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.2kt agl= 1366ft pitch= 8.7deg thr=0.70
+16:16:42 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=182.1kt agl= 1376ft pitch= 8.7deg thr=0.70
+16:16:42 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.1kt agl= 1379ft pitch= 8.7deg thr=0.70
+16:16:42 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.1kt agl= 1385ft pitch= 8.7deg thr=0.70
+16:16:42 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=182.0kt agl= 1397ft pitch= 8.5deg thr=0.70
+16:16:42 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=182.0kt agl= 1401ft pitch= 8.4deg thr=0.70
+16:16:44 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.0kt agl= 1406ft pitch= 8.4deg thr=0.70
+16:16:44 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.0kt agl= 1412ft pitch= 8.4deg thr=0.70
+16:16:44 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=182.0kt agl= 1427ft pitch= 8.5deg thr=0.70
+16:16:44 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.0kt agl= 1429ft pitch= 8.6deg thr=0.70
+16:16:46 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=181.9kt agl= 1439ft pitch= 8.7deg thr=0.70
+16:16:46 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=181.9kt agl= 1443ft pitch= 8.7deg thr=0.70
+16:16:46 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=181.9kt agl= 1449ft pitch= 8.7deg thr=0.70
+16:16:46 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=181.8kt agl= 1455ft pitch= 8.6deg thr=0.70
+16:16:46 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=181.8kt agl= 1459ft pitch= 8.6deg thr=0.70
+16:16:47 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.8kt agl= 1462ft pitch= 8.7deg thr=0.70
+16:16:47 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=181.7kt agl= 1483ft pitch= 8.8deg thr=0.70
+16:16:47 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.7kt agl= 1486ft pitch= 8.8deg thr=0.70
+16:16:49 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=181.7kt agl= 1497ft pitch= 8.9deg thr=0.70
+16:16:49 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.7kt agl= 1499ft pitch= 8.9deg thr=0.70
+16:16:49 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.6kt agl= 1505ft pitch= 8.9deg thr=0.70
+16:16:49 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1516ft pitch= 8.7deg thr=0.70
+16:16:49 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1519ft pitch= 8.6deg thr=0.70
+16:16:50 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1524ft pitch= 8.7deg thr=0.70
+16:16:50 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1531ft pitch= 8.8deg thr=0.70
+16:16:50 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.4kt agl= 1548ft pitch= 9.2deg thr=0.70
+16:16:52 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.2kt agl= 1559ft pitch= 9.4deg thr=0.70
+16:16:52 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.1kt agl= 1564ft pitch= 9.5deg thr=0.70
+16:16:52 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=180.9kt agl= 1575ft pitch= 9.2deg thr=0.70
+16:16:52 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.9kt agl= 1578ft pitch= 9.1deg thr=0.70
+16:16:53 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.8kt agl= 1583ft pitch= 8.9deg thr=0.70
+16:16:53 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=180.7kt agl= 1593ft pitch= 9.0deg thr=0.70
+16:16:53 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=180.5kt agl= 1599ft pitch= 9.2deg thr=0.70
+16:16:53 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.5kt agl= 1601ft pitch= 9.2deg thr=0.70
+16:16:55 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=180.3kt agl= 1609ft pitch= 9.3deg thr=0.70
+16:16:55 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.3kt agl= 1611ft pitch= 9.3deg thr=0.70
+16:16:55 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=180.1kt agl= 1617ft pitch= 9.3deg thr=0.70
+16:16:55 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=180.0kt agl= 1627ft pitch= 9.3deg thr=0.70
+16:16:55 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.9kt agl= 1629ft pitch= 9.2deg thr=0.70
+16:16:57 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=179.8kt agl= 1637ft pitch= 9.2deg thr=0.70
+16:16:57 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=179.6kt agl= 1646ft pitch= 9.3deg thr=0.70
+16:16:57 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=179.5kt agl= 1653ft pitch= 9.4deg thr=0.70
+16:16:57 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.5kt agl= 1656ft pitch= 9.4deg thr=0.70
+16:16:57 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=179.3kt agl= 1666ft pitch= 9.4deg thr=0.70
+16:16:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.3kt agl= 1668ft pitch= 9.4deg thr=0.70
+16:16:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.2kt agl= 1675ft pitch= 9.4deg thr=0.70
+16:16:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.1kt agl= 1681ft pitch= 9.4deg thr=0.70
+16:16:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=178.9kt agl= 1689ft pitch= 9.4deg thr=0.70
+16:17:00 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=178.8kt agl= 1698ft pitch= 9.5deg thr=0.70
+16:17:00 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=178.7kt agl= 1702ft pitch= 9.6deg thr=0.70
+16:17:00 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=178.4kt agl= 1714ft pitch= 9.7deg thr=0.70
+16:17:00 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=178.3kt agl= 1716ft pitch= 9.7deg thr=0.70
+16:17:01 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=178.1kt agl= 1729ft pitch= 9.7deg thr=0.70
+16:17:01 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=178.0kt agl= 1733ft pitch= 9.7deg thr=0.70
+16:17:01 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=177.9kt agl= 1738ft pitch= 9.7deg thr=0.70
+16:17:01 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=177.6kt agl= 1748ft pitch= 9.7deg thr=0.70
+16:17:01 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=177.6kt agl= 1752ft pitch= 9.7deg thr=0.70
+16:17:03 [session] Property API stopped answering
+16:17:03 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=177.5kt agl= 1757ft pitch= 9.7deg thr=0.70
+16:17:03 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=177.2kt agl= 1776ft pitch= 9.8deg thr=0.70
+16:17:03 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=177.1kt agl= 1778ft pitch= 9.8deg thr=0.70
+16:17:07 [session] Connected to property API on :8080
+16:17:07 [controller]   decision stale 2.6s after its state  HANDOVER (1,000 ft) ias=176.0kt agl= 1861ft pitch= 8.9deg thr=0.70
+16:17:07 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1874ft pitch= 8.9deg thr=0.70
+16:17:07 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1880ft pitch= 8.9deg thr=0.70
+16:17:09 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1887ft pitch= 8.9deg thr=0.70
+16:17:09 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1896ft pitch= 8.9deg thr=0.70
+16:17:09 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1899ft pitch= 9.0deg thr=0.70
+16:17:09 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1901ft pitch= 9.0deg thr=0.70
+16:17:10 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1915ft pitch= 9.1deg thr=0.70
+16:17:10 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1918ft pitch= 9.2deg thr=0.70
+16:17:10 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=175.8kt agl= 1925ft pitch= 9.3deg thr=0.70
+16:17:10 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.8kt agl= 1927ft pitch= 9.3deg thr=0.70
+16:17:10 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.7kt agl= 1932ft pitch= 9.3deg thr=0.70
+16:17:12 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.7kt agl= 1937ft pitch= 9.3deg thr=0.70
+16:17:12 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.6kt agl= 1945ft pitch= 9.1deg thr=0.70
+16:17:12 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.6kt agl= 1950ft pitch= 9.1deg thr=0.70
+16:17:12 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.5kt agl= 1954ft pitch= 9.1deg thr=0.70
+16:17:13 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.5kt agl= 1968ft pitch= 9.2deg thr=0.70
+16:17:13 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.4kt agl= 1974ft pitch= 9.3deg thr=0.70
+16:17:13 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.3kt agl= 1977ft pitch= 9.3deg thr=0.70
+16:17:15 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.3kt agl= 1983ft pitch= 9.2deg thr=0.70
+16:17:15 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.2kt agl= 1984ft pitch= 9.1deg thr=0.70
+16:17:15 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.2kt agl= 1987ft pitch= 9.1deg thr=0.70
+16:17:16 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=175.1kt agl= 1997ft pitch= 9.3deg thr=0.70
+16:17:16 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.1kt agl= 1998ft pitch= 9.4deg thr=0.70
+16:17:16 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.0kt agl= 2004ft pitch= 9.5deg thr=0.70
+16:17:16 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.0kt agl= 2008ft pitch= 9.5deg thr=0.70
+16:17:18 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=174.9kt agl= 2013ft pitch= 9.4deg thr=0.70
+16:17:18 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=174.8kt agl= 2015ft pitch= 9.4deg thr=0.70
+16:17:18 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=174.8kt agl= 2018ft pitch= 9.3deg thr=0.70
+16:17:19 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=174.6kt agl= 2020ft pitch= 9.4deg thr=0.70
+16:17:19 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.6kt agl= 2023ft pitch= 9.5deg thr=0.70
+16:17:19 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=174.5kt agl= 2027ft pitch= 9.6deg thr=0.70
+16:17:19 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=174.5kt agl= 2027ft pitch= 9.6deg thr=0.70
+16:17:19 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=174.5kt agl= 2027ft pitch= 9.7deg thr=0.70
+16:17:21 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=174.3kt agl= 2037ft pitch= 9.7deg thr=0.70
+16:17:21 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.3kt agl= 2041ft pitch= 9.8deg thr=0.70
+16:17:21 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=174.2kt agl= 2047ft pitch= 9.8deg thr=0.70
+16:17:21 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.1kt agl= 2055ft pitch= 9.8deg thr=0.70
+16:17:23 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=173.8kt agl= 2076ft pitch= 9.9deg thr=0.70
+16:17:23 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=173.6kt agl= 2077ft pitch= 9.9deg thr=0.70
+16:17:23 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=173.5kt agl= 2077ft pitch= 9.9deg thr=0.70
+16:17:24 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=173.4kt agl= 2094ft pitch= 9.8deg thr=0.70
+16:17:24 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=173.3kt agl= 2101ft pitch= 9.5deg thr=0.70
+16:17:24 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=173.3kt agl= 2108ft pitch= 8.9deg thr=0.70
+16:17:26 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=173.3kt agl= 2136ft pitch= 7.2deg thr=0.70
+16:17:26 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=173.3kt agl= 2142ft pitch= 5.5deg thr=0.70
+16:17:26 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=173.7kt agl= 2150ft pitch= 1.8deg thr=0.70
+16:17:26 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.0kt agl= 2153ft pitch= 0.5deg thr=0.70
+16:17:26 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.5kt agl= 2155ft pitch= 0.2deg thr=0.70
+16:17:26 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.0kt agl= 2149ft pitch= 1.1deg thr=0.70
+16:17:27 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 2142ft pitch= 3.7deg thr=0.70
+16:17:27 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 2138ft pitch= 4.7deg thr=0.70
+16:17:27 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=176.7kt agl= 2132ft pitch= 6.0deg thr=0.70
+16:17:29 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=177.7kt agl= 2118ft pitch= 7.9deg thr=0.70
+16:17:29 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=178.0kt agl= 2113ft pitch= 9.1deg thr=0.70
+16:17:29 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=178.1kt agl= 2106ft pitch= 9.8deg thr=0.70
+16:17:30 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=178.0kt agl= 2095ft pitch=10.2deg thr=0.70
+16:17:30 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=178.0kt agl= 2093ft pitch=10.2deg thr=0.70
+16:17:30 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=177.9kt agl= 2089ft pitch=10.2deg thr=0.70
+16:17:32 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=177.5kt agl= 2075ft pitch=10.4deg thr=0.70
+16:17:32 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=177.5kt agl= 2084ft pitch=10.4deg thr=0.70
+16:17:32 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=177.2kt agl= 2114ft pitch=10.7deg thr=0.70
+16:17:32 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=177.0kt agl= 2119ft pitch=10.7deg thr=0.70
+16:17:32 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=176.8kt agl= 2123ft pitch=10.7deg thr=0.70
+16:17:34 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.4kt agl= 2124ft pitch=10.8deg thr=0.70
+16:17:34 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=176.3kt agl= 2124ft pitch=10.9deg thr=0.70
+16:17:34 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=176.1kt agl= 2126ft pitch=10.8deg thr=0.70
+16:17:34 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 2129ft pitch=10.7deg thr=0.70
+16:17:35 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=175.3kt agl= 2137ft pitch=10.7deg thr=0.70
+16:17:35 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=174.9kt agl= 2143ft pitch=10.7deg thr=0.70
+16:17:35 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.7kt agl= 2145ft pitch=10.7deg thr=0.70
+16:17:35 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.5kt agl= 2148ft pitch=10.7deg thr=0.70
+16:17:37 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=174.2kt agl= 2153ft pitch=10.6deg thr=0.70
+16:17:37 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=174.1kt agl= 2155ft pitch=10.5deg thr=0.70
+16:17:37 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=173.9kt agl= 2159ft pitch=10.4deg thr=0.70
+16:17:38 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=173.4kt agl= 2166ft pitch=10.0deg thr=0.70
+16:17:38 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=173.3kt agl= 2168ft pitch=10.0deg thr=0.70
+16:17:38 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=173.0kt agl= 2178ft pitch= 9.9deg thr=0.70
+16:17:38 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2185ft pitch= 9.8deg thr=0.70
+16:17:40 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=172.6kt agl= 2197ft pitch= 9.7deg thr=0.70
+16:17:40 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.5kt agl= 2201ft pitch= 9.6deg thr=0.70
+16:17:40 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.4kt agl= 2206ft pitch= 9.6deg thr=0.70
+16:17:40 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=172.1kt agl= 2190ft pitch= 9.2deg thr=0.70
+16:17:41 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.1kt agl= 2180ft pitch= 9.1deg thr=0.70
+16:17:41 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.0kt agl= 2155ft pitch= 8.9deg thr=0.70
+16:17:41 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.0kt agl= 2146ft pitch= 8.9deg thr=0.70
+16:17:43 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=171.9kt agl= 2149ft pitch= 8.9deg thr=0.70
+16:17:43 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=171.9kt agl= 2152ft pitch= 8.9deg thr=0.70
+16:17:43 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=171.9kt agl= 2161ft pitch= 8.9deg thr=0.70
+16:17:43 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=171.9kt agl= 2169ft pitch= 8.8deg thr=0.70
+16:17:44 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=171.9kt agl= 2190ft pitch= 8.5deg thr=0.70
+16:17:44 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=172.0kt agl= 2224ft pitch= 8.3deg thr=0.70
+16:17:44 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.0kt agl= 2232ft pitch= 8.2deg thr=0.70
+16:17:44 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.0kt agl= 2246ft pitch= 8.2deg thr=0.70
+16:17:46 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=172.1kt agl= 2245ft pitch= 8.3deg thr=0.70
+16:17:46 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.1kt agl= 2242ft pitch= 8.4deg thr=0.70
+16:17:46 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.2kt agl= 2235ft pitch= 8.4deg thr=0.70
+16:17:46 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=172.3kt agl= 2248ft pitch= 8.2deg thr=0.70
+16:17:47 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.3kt agl= 2261ft pitch= 8.1deg thr=0.70
+16:17:47 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.5kt agl= 2261ft pitch= 8.1deg thr=0.70
+16:17:47 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.5kt agl= 2244ft pitch= 8.2deg thr=0.70
+16:17:49 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=172.6kt agl= 2236ft pitch= 8.3deg thr=0.70
+16:17:49 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.6kt agl= 2236ft pitch= 8.4deg thr=0.70
+16:17:49 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.7kt agl= 2236ft pitch= 8.5deg thr=0.70
+16:17:49 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2234ft pitch= 8.6deg thr=0.70
+16:17:50 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2212ft pitch= 8.6deg thr=0.70
+16:17:50 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2170ft pitch= 8.7deg thr=0.70
+16:17:50 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2157ft pitch= 8.7deg thr=0.70
+16:17:50 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.9kt agl= 2129ft pitch= 8.7deg thr=0.70
+16:17:50 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.9kt agl= 2107ft pitch= 8.7deg thr=0.70
+16:17:52 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.9kt agl= 2137ft pitch= 8.7deg thr=0.70
+16:17:52 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.9kt agl= 2156ft pitch= 8.7deg thr=0.70
+16:17:52 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.9kt agl= 2174ft pitch= 8.8deg thr=0.70
+16:17:54 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.9kt agl= 2215ft pitch= 9.2deg thr=0.70
+16:17:54 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2198ft pitch= 9.3deg thr=0.70
+16:17:54 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2189ft pitch= 9.3deg thr=0.70
+16:17:55 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=172.8kt agl= 2246ft pitch= 9.2deg thr=0.70
+16:17:55 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.7kt agl= 2268ft pitch= 9.1deg thr=0.70
+16:17:55 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.7kt agl= 2294ft pitch= 9.1deg thr=0.70
+16:17:55 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=172.6kt agl= 2354ft pitch= 9.4deg thr=0.70
+16:17:55 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.6kt agl= 2348ft pitch= 9.5deg thr=0.70
+16:17:57 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=172.5kt agl= 2327ft pitch= 9.7deg thr=0.70
+16:17:57 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=172.5kt agl= 2316ft pitch= 9.7deg thr=0.70
+16:17:57 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.5kt agl= 2292ft pitch= 9.7deg thr=0.70
+16:17:57 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.4kt agl= 2261ft pitch= 9.7deg thr=0.70
+16:17:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.4kt agl= 2235ft pitch= 9.7deg thr=0.70
+16:17:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.3kt agl= 2219ft pitch= 9.7deg thr=0.70
+16:17:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=172.2kt agl= 2209ft pitch= 9.6deg thr=0.70
+16:17:58 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=172.0kt agl= 2190ft pitch= 9.8deg thr=0.70
+16:17:58 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=171.9kt agl= 2194ft pitch= 9.8deg thr=0.70
+16:18:00 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=171.7kt agl= 2202ft pitch=10.0deg thr=0.70
+16:18:00 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=171.6kt agl= 2207ft pitch=10.0deg thr=0.70
+16:18:00 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=171.5kt agl= 2212ft pitch=10.0deg thr=0.70
+16:18:01 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=171.2kt agl= 2225ft pitch= 9.9deg thr=0.70
+16:18:01 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=171.2kt agl= 2219ft pitch= 9.8deg thr=0.70
+16:18:01 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=171.1kt agl= 2204ft pitch= 9.7deg thr=0.70
+16:18:01 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=170.8kt agl= 2176ft pitch= 9.9deg thr=0.70
+16:18:01 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.8kt agl= 2174ft pitch= 9.9deg thr=0.70
+16:18:03 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.6kt agl= 2175ft pitch= 9.9deg thr=0.70
+16:18:03 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.6kt agl= 2181ft pitch= 9.9deg thr=0.70
+16:18:05 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=170.5kt agl= 2188ft pitch= 9.7deg thr=0.70
+16:18:05 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.4kt agl= 2191ft pitch= 9.6deg thr=0.70
+16:18:05 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.4kt agl= 2197ft pitch= 9.5deg thr=0.70
+16:18:05 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=170.3kt agl= 2217ft pitch= 9.5deg thr=0.70
+16:18:05 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=170.3kt agl= 2222ft pitch= 9.6deg thr=0.70
+16:18:05 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.2kt agl= 2227ft pitch= 9.7deg thr=0.70
+16:18:06 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=170.2kt agl= 2248ft pitch= 9.8deg thr=0.70
+16:18:06 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.2kt agl= 2253ft pitch= 9.8deg thr=0.70
+16:18:06 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=170.1kt agl= 2268ft pitch= 9.8deg thr=0.70
+16:18:06 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=170.0kt agl= 2277ft pitch= 9.8deg thr=0.70
+16:18:08 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.9kt agl= 2290ft pitch= 9.8deg thr=0.70
+16:18:08 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.9kt agl= 2298ft pitch= 9.8deg thr=0.70
+16:18:08 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.8kt agl= 2306ft pitch= 9.7deg thr=0.70
+16:18:08 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=169.6kt agl= 2324ft pitch= 9.8deg thr=0.70
+16:18:08 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.6kt agl= 2328ft pitch= 9.8deg thr=0.70
+16:18:09 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=169.5kt agl= 2342ft pitch= 9.7deg thr=0.70
+16:18:09 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.5kt agl= 2345ft pitch= 9.7deg thr=0.70
+16:18:09 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.4kt agl= 2350ft pitch= 9.7deg thr=0.70
+16:18:11 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=169.3kt agl= 2360ft pitch= 9.8deg thr=0.70
+16:18:11 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.3kt agl= 2362ft pitch= 9.9deg thr=0.70
+16:18:11 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=169.2kt agl= 2365ft pitch= 9.9deg thr=0.70
+16:18:11 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=169.0kt agl= 2378ft pitch= 9.9deg thr=0.70
+16:18:11 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=169.0kt agl= 2378ft pitch= 9.9deg thr=0.70
+16:18:12 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=168.9kt agl= 2374ft pitch= 9.9deg thr=0.70
+16:18:12 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.9kt agl= 2372ft pitch= 9.9deg thr=0.70
+16:18:12 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.8kt agl= 2370ft pitch= 9.9deg thr=0.70
+16:18:12 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.8kt agl= 2367ft pitch= 9.9deg thr=0.70
+16:18:14 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.7kt agl= 2368ft pitch= 9.9deg thr=0.70
+16:18:14 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.7kt agl= 2378ft pitch= 9.9deg thr=0.70
+16:18:14 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 2392ft pitch= 9.9deg thr=0.70
+16:18:14 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 2437ft pitch= 9.9deg thr=0.70
+16:18:14 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 2454ft pitch= 9.9deg thr=0.70
+16:18:15 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 2519ft pitch= 9.8deg thr=0.70
+16:18:15 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 2530ft pitch= 9.8deg thr=0.70
+16:18:15 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 2558ft pitch= 9.7deg thr=0.70
+16:18:17 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.2kt agl= 2615ft pitch= 9.7deg thr=0.70
+16:18:17 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.2kt agl= 2629ft pitch= 9.8deg thr=0.70
+16:18:17 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.1kt agl= 2662ft pitch= 9.8deg thr=0.70
+16:18:17 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 2776ft pitch= 9.8deg thr=0.70
+16:18:17 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 2783ft pitch= 9.7deg thr=0.70
+16:18:18 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 2811ft pitch= 9.7deg thr=0.70
+16:18:18 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 2823ft pitch= 9.7deg thr=0.70
+16:18:18 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 2844ft pitch= 9.7deg thr=0.70
+16:18:18 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 2853ft pitch= 9.7deg thr=0.70
+16:18:20 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 2866ft pitch= 9.6deg thr=0.70
+16:18:20 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 2876ft pitch= 9.5deg thr=0.70
+16:18:20 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 2885ft pitch= 9.5deg thr=0.70
+16:18:21 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 2960ft pitch= 9.4deg thr=0.70
+16:18:21 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3016ft pitch= 9.4deg thr=0.70
+16:18:21 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3043ft pitch= 9.4deg thr=0.70
+16:18:23 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3087ft pitch= 9.3deg thr=0.70
+16:18:23 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3097ft pitch= 9.3deg thr=0.70
+16:18:23 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3113ft pitch= 9.3deg thr=0.70
+16:18:23 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3136ft pitch= 9.3deg thr=0.70
+16:18:23 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3142ft pitch= 9.3deg thr=0.70
+16:18:23 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3144ft pitch= 9.3deg thr=0.70
+16:18:25 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3152ft pitch= 9.3deg thr=0.70
+16:18:25 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3157ft pitch= 9.4deg thr=0.70
+16:18:25 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3164ft pitch= 9.4deg thr=0.70
+16:18:26 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3166ft pitch= 9.4deg thr=0.70
+16:18:26 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3170ft pitch= 9.4deg thr=0.70
+16:18:26 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3178ft pitch= 9.5deg thr=0.70
+16:18:26 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3184ft pitch= 9.5deg thr=0.70
+16:18:26 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3186ft pitch= 9.5deg thr=0.70
+16:18:28 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3193ft pitch= 9.6deg thr=0.70
+16:18:28 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3195ft pitch= 9.6deg thr=0.70
+16:18:28 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3199ft pitch= 9.6deg thr=0.70
+16:18:28 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3204ft pitch= 9.5deg thr=0.70
+16:18:29 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3210ft pitch= 9.6deg thr=0.70
+16:18:29 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3214ft pitch= 9.6deg thr=0.70
+16:18:29 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3218ft pitch= 9.5deg thr=0.70
+16:18:29 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3227ft pitch= 9.6deg thr=0.70
+16:18:29 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3229ft pitch= 9.6deg thr=0.70
+16:18:31 [controller]   decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3239ft pitch= 9.6deg thr=0.70
+16:18:31 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3241ft pitch= 9.6deg thr=0.70
+16:18:31 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3245ft pitch= 9.6deg thr=0.70
+16:18:31 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3254ft pitch= 9.6deg thr=0.70
+16:18:32 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.0kt agl= 3256ft pitch= 9.6deg thr=0.70
+16:18:32 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3260ft pitch= 9.7deg thr=0.70
+16:18:32 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=167.7kt agl= 3274ft pitch= 9.5deg thr=0.70
+16:18:32 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.7kt agl= 3276ft pitch= 9.4deg thr=0.70
+16:18:34 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.6kt agl= 3285ft pitch= 9.3deg thr=0.70
+16:18:34 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.5kt agl= 3289ft pitch= 9.3deg thr=0.70
+16:18:34 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3298ft pitch= 9.2deg thr=0.70
+16:18:34 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3299ft pitch= 9.2deg thr=0.70
+16:18:36 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3304ft pitch= 9.1deg thr=0.70
+16:18:36 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3316ft pitch= 9.2deg thr=0.70
+16:18:36 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3318ft pitch= 9.2deg thr=0.70
+16:18:37 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3324ft pitch= 9.2deg thr=0.70
+16:18:37 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3326ft pitch= 9.3deg thr=0.70
+16:18:37 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.4kt agl= 3330ft pitch= 9.3deg thr=0.70
+16:18:37 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.5kt agl= 3337ft pitch= 9.3deg thr=0.70
+16:18:37 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.5kt agl= 3340ft pitch= 9.3deg thr=0.70
+16:18:39 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.5kt agl= 3344ft pitch= 9.3deg thr=0.70
+16:18:39 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.5kt agl= 3348ft pitch= 9.3deg thr=0.70
+16:18:39 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.5kt agl= 3361ft pitch= 9.1deg thr=0.70
+16:18:40 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.6kt agl= 3368ft pitch= 8.9deg thr=0.70
+16:18:40 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.6kt agl= 3371ft pitch= 8.9deg thr=0.70
+16:18:40 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=167.6kt agl= 3378ft pitch= 8.9deg thr=0.70
+16:18:42 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.6kt agl= 3381ft pitch= 9.0deg thr=0.70
+16:18:42 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.6kt agl= 3384ft pitch= 9.0deg thr=0.70
+16:18:42 [controller]   decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=167.7kt agl= 3395ft pitch= 8.9deg thr=0.70
+16:18:42 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.7kt agl= 3397ft pitch= 8.9deg thr=0.70
+16:18:43 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3402ft pitch= 8.8deg thr=0.70
+16:18:43 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3404ft pitch= 8.8deg thr=0.70
+16:18:43 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3407ft pitch= 8.8deg thr=0.70
+16:18:43 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=167.8kt agl= 3411ft pitch= 8.9deg thr=0.70
+16:18:43 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3417ft pitch= 8.9deg thr=0.70
+16:18:45 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3420ft pitch= 9.0deg thr=0.70
+16:18:45 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=167.9kt agl= 3423ft pitch= 9.0deg thr=0.70
+16:18:45 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.1kt agl= 3435ft pitch= 9.0deg thr=0.70
+16:18:46 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.1kt agl= 3441ft pitch= 8.9deg thr=0.70
+16:18:46 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.2kt agl= 3445ft pitch= 8.9deg thr=0.70
+16:18:46 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.2kt agl= 3451ft pitch= 8.9deg thr=0.70
+16:18:48 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.2kt agl= 3454ft pitch= 8.9deg thr=0.70
+16:18:48 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 3457ft pitch= 9.0deg thr=0.70
+16:18:48 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 3463ft pitch= 9.1deg thr=0.70
+16:18:48 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 3468ft pitch= 9.0deg thr=0.70
+16:18:48 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.3kt agl= 3470ft pitch= 9.0deg thr=0.70
+16:18:49 [controller]   decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=168.4kt agl= 3475ft pitch= 9.0deg thr=0.70
+16:18:49 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.4kt agl= 3478ft pitch= 9.0deg thr=0.70
+16:18:49 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.4kt agl= 3481ft pitch= 9.1deg thr=0.70
+16:18:49 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3487ft pitch= 9.1deg thr=0.70
+16:18:49 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3490ft pitch= 9.2deg thr=0.70
+16:18:51 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3493ft pitch= 9.2deg thr=0.70
+16:18:51 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3497ft pitch= 9.2deg thr=0.70
+16:18:51 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3510ft pitch= 9.2deg thr=0.70
+16:18:53 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3518ft pitch= 9.2deg thr=0.70
+16:18:53 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3522ft pitch= 9.2deg thr=0.70
+16:18:53 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 3528ft pitch= 9.2deg thr=0.70
+16:18:54 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 3531ft pitch= 9.3deg thr=0.70
+16:18:54 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 3534ft pitch= 9.3deg thr=0.70
+16:18:54 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 3542ft pitch= 9.4deg thr=0.70
+16:18:54 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3547ft pitch= 9.5deg thr=0.70
+16:18:54 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3550ft pitch= 9.5deg thr=0.70
+16:18:56 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3558ft pitch= 9.6deg thr=0.70
+16:18:56 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 3562ft pitch= 9.6deg thr=0.70
+16:18:56 [controller]   decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=168.6kt agl= 3570ft pitch= 9.6deg thr=0.70
+16:18:56 [controller]   decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3573ft pitch= 9.6deg thr=0.70
+16:18:57 [flightgear] Paused
+16:18:57 [controller]   decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=168.5kt agl= 3576ft pitch= 9.6deg thr=0.70
+16:18:57 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+16:18:57 [controller] {
+16:18:57 [controller]   "fly": "Takeoff fly",
+16:18:57 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+16:18:57 [controller]   "phase": "HANDOVER (1,000 ft)",
+16:18:57 [controller]   "completed": true,
+16:18:57 [controller]   "time_s": 200.0,
+16:18:57 [controller]   "decisions": 502,
+16:18:57 [controller]   "max_centerline_m": 5.4,
+16:18:57 [controller]   "tail_strike": false,
+16:18:57 [controller]   "stall": false,
+16:18:57 [controller]   "left_runway": false,
+16:18:57 [controller]   "liftoff_x_m": 1359,
+16:18:57 [controller]   "rejected": false,
+16:18:57 [controller]   "agl_ft": 3578,
+16:18:57 [controller]   "ias_kt": 168.5,
+16:18:57 [controller]   "stop_x_m": null,
+16:18:57 [controller]   "safe_reject": false,
+16:18:57 [controller]   "takeoff_achieved": true,
+16:18:57 [controller]   "outcome": "takeoff_achieved",
+16:18:57 [controller]   "events": [
+16:18:57 [controller]     "30.0s JUMP: escape DNs 199 Hz",
+16:18:57 [controller]     "30.8s JUMP: escape DNs 317 Hz",
+16:18:57 [controller]     "31.4s JUMP: escape DNs 475 Hz",
+16:18:57 [controller]     "...",
+16:18:57 [controller]     "33.4s JUMP: escape DNs 687 Hz",
+16:18:57 [controller]     "33.8s JUMP: escape DNs 687 Hz",
+16:18:57 [controller]     "34.2s JUMP: escape DNs 695 Hz"
+16:18:57 [controller]   ],
+16:18:57 [controller]   "termination_reason": "time_limit",
+16:18:57 [controller]   "decision_timing": {
+16:18:57 [controller]     "applied": 502,
+16:18:57 [controller]     "completed": 503,
+16:18:57 [controller]     "discarded": 1,
+16:18:57 [controller]     "skipped": 140,
+16:18:57 [controller]     "latency_mean_s": 0.258,
+16:18:57 [controller]     "latency_max_s": 2.617
+16:18:57 [controller]   },
+16:18:57 [controller]   "speed_up_resets": 0,
+16:18:57 [controller]   "requested_phase": "takeoff",
+16:18:57 [controller]   "backend": "flightgear",
+16:18:57 [controller]   "wall_s": 203.4,
+16:18:57 [controller]   "success": true
+16:18:57 [controller] }
+16:18:57 [controller] Run finished: 2026-11-14T211529Z_kaden-vandine_flightgear-connectome exit=0
+16:18:59 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+16:19:04 [control] IN CONTROL: Nobody: no controller running and no control inputs
+16:19:13 [session] Property API stopped answering
+16:19:32 [session] Connected to property API on :8080
+16:20:55 [session] Property API stopped answering
+16:21:29 [session] FlightGear exited (code None)
