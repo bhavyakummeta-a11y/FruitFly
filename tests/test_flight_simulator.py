@@ -58,11 +58,38 @@ class FlightTests(unittest.TestCase):
         stimulus = sense(s, [Obstacle('ahead', 0, 400, 100)])
         c.update(s, stimulus, 0)
         self.assertEqual(c.phase, 'CRUISE')
+        s.time = .05
         self.assertGreater(c.update(s, stimulus, 1).aileron, 0)
         self.assertEqual(c.phase, 'AVOID')
-        s.time = 3
+        s.time = 20
+        s.north = 1000
         c.update(s, sense(s, []), 0)
         self.assertEqual(c.phase, 'CRUISE')
+
+    def test_persistent_escape_cannot_accumulate_full_turns(self):
+        sim = DemoSimulator()
+        controller = FlightController()
+        obstacle = Obstacle('ahead', 0, 1300, 150)
+        stimulus = sense(sim.state, [obstacle])
+        headings = []
+        for _ in range(3600):
+            s = sim.state
+            controls = controller.update(s, stimulus, 100)
+            sim.step(controls, .05)
+            headings.append(abs(s.heading))
+        self.assertLess(max(headings), math.radians(40))
+        self.assertGreater(sim.state.north, 7500)
+        self.assertEqual(controller.activations, 1)
+        self.assertAlmostEqual(sim.state.heading, 0, delta=.01)
+
+    def test_no_forward_progress_stops_instead_of_circling(self):
+        controller = FlightController()
+        s = State()
+        stimulus = sense(s, [Obstacle('ahead', 0, 400, 100)])
+        controller.update(s, stimulus, 100)
+        s.time = 91
+        with self.assertRaisesRegex(RuntimeError, 'forward progress'):
+            controller.update(s, stimulus, 100)
 
     def test_commands_bounded_and_finite(self):
         self.assertEqual(Controls(8, -4, 2, 3).bounded(), Controls(1, -1, 1, 1))
@@ -107,6 +134,21 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual([float(v) for v in data.decode().split(',')], [.1, -.2, .3, .7, 1])
         self.sink.sendto(b'1,37,-122,3000,0,0,0,100,0,0\n', self.bridge.rx.getsockname())
         self.assertAlmostEqual(self.bridge.read().altitude, 914.4)
+
+    def test_queued_telemetry_uses_latest_state(self):
+        for clock in [1, 2, 3]:
+            self.sink.sendto(f'{clock},37,-122,3000,0,0,0,100,0,0\n'.encode(), self.bridge.rx.getsockname())
+        self.bridge.read()
+        self.assertEqual(self.bridge.previous_clock, 3)
+
+    def test_twin_engine_protocol_drives_both_engines(self):
+        self.bridge.engines = 2
+        self.bridge.send(Controls(throttle=.72))
+        data, _ = self.sink.recvfrom(8192)
+        self.assertEqual([float(v) for v in data.decode().split(',')], [0, 0, 0, .72, .72, 0])
+        chunks = ET.parse(ROOT / 'flight_simulator/protocols/flybrain-controls-twin.xml').findall('./generic/input/chunk')
+        self.assertEqual(chunks[4].findtext('node'), '/controls/engines/engine[1]/throttle')
+        self.assertEqual(len(chunks), 6)
 
     def test_freeze_requires_ack(self):
         def reply():

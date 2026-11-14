@@ -61,6 +61,9 @@ class Stimulus:
     turn: int = 1          # +1 right, -1 left; geometric decoder, NOT a learned output
     obstacle: str = ''
     clearance: float = math.inf
+    east: float = 0.0
+    north: float = 0.0
+    radius: float = 0.0
 
 
 def sense(state, obstacles, horizon=25.0, margin=180.0):
@@ -90,6 +93,7 @@ def sense(state, obstacles, horizon=25.0, margin=180.0):
             best.looming_hz = hz
             best.turn = -1 if right > 0 else 1
             best.obstacle = obstacle.name
+            best.east, best.north, best.radius = obstacle.east, obstacle.north, obstacle.radius
     return best
 
 
@@ -98,37 +102,65 @@ class FlightController:
 
     This is an assisted autopilot, not evidence of direct neural stabilization.
     """
-    def __init__(self, altitude=900.0, heading=0.0, speed=50.0):
+    def __init__(self, altitude=900.0, heading=0.0, speed=50.0, pitch=0.0):
         self.altitude, self.heading, self.speed = altitude, heading, speed
-        self.avoid_until = -1.0
-        self.turn = 1
+        self.trim_pitch = pitch
         self.phase = 'CRUISE'
         self.activations = 0
+        self.target_heading = heading
+        self.target_bank = 0.0
+        self.active_obstacle = None
+        self.started = 0.0
+        self.last_time = None
+        self.last_controls = Controls()
 
     def update(self, state, stimulus, escape_hz):
-        if escape_hz > 0 and stimulus.looming_hz > 0:
-            if state.time >= self.avoid_until:
-                self.turn = stimulus.turn
-                self.activations += 1
-            self.avoid_until = state.time + 2.5
-        if state.time < self.avoid_until:
+        dt = .05 if self.last_time is None else clip(state.time - self.last_time, 0, .2)
+        self.last_time = state.time
+        # Latch a bounded heading offset, not a continuously renewed bank command.
+        # Hold that heading until the obstacle is behind the nominal flight path.
+        if self.active_obstacle is not None:
+            east, north, radius = self.active_obstacle
+            ahead = ((east - state.east) * math.sin(self.heading)
+                     + (north - state.north) * math.cos(self.heading))
+            if ahead < -radius - 200:
+                self.active_obstacle = None
+                self.target_heading = self.heading
+                self.phase = 'RECOVER'
+            elif state.time - self.started > 90:
+                raise RuntimeError('Avoidance made no forward progress for 90 s; stopping instead of circling.')
+        threat_ahead = ((stimulus.east-state.east)*math.sin(self.heading)
+                        + (stimulus.north-state.north)*math.cos(self.heading))
+        if (self.active_obstacle is None and escape_hz > 0 and stimulus.looming_hz > 0
+                and threat_ahead >= -stimulus.radius):
+            self.active_obstacle = (stimulus.east, stimulus.north, stimulus.radius)
+            self.target_heading = wrap(self.heading + stimulus.turn * math.radians(35))
+            self.started = state.time
             self.phase = 'AVOID'
-            target_bank = self.turn * math.radians(27)
-        else:
-            self.phase = 'CRUISE'
-            target_bank = clip(1.4 * wrap(self.heading - state.heading),
-                               -math.radians(22), math.radians(22))
-        # Reduce bank if slow. These gains are a starting point for FG C172 tuning.
-        if state.speed < 35:
-            target_bank = clip(target_bank, -0.15, 0.15)
-        desired_climb = clip(0.08 * (self.altitude - state.altitude), -4, 4)
-        target_pitch = clip(desired_climb / max(state.speed, 25), -0.10, 0.12)
-        elevator = -2.5 * (target_pitch - state.pitch) + 0.7 * state.pitch_rate
-        throttle = 0.65 + 0.05 * (self.speed - state.speed) + 0.02 * desired_climb
-        return Controls(
-            2.0 * (target_bank - state.roll) - 0.65 * state.roll_rate,
-            elevator, 0.0, throttle,
+            self.activations += 1
+        heading_error = wrap(self.target_heading - state.heading)
+        if self.active_obstacle is None:
+            self.phase = 'CRUISE' if abs(heading_error) < math.radians(3) else 'RECOVER'
+        desired_bank = clip(.65 * heading_error, -math.radians(18), math.radians(18))
+        if state.speed < .8 * self.speed:
+            desired_bank = clip(desired_bank, -.10, .10)
+        # Slew bank target and surfaces to prevent abrupt swiveling.
+        self.target_bank += clip(desired_bank - self.target_bank, -math.radians(6)*dt, math.radians(6)*dt)
+        desired_climb = clip(.05 * (self.altitude - state.altitude), -3, 3)
+        target_pitch = clip(self.trim_pitch + desired_climb / max(state.speed, 25)
+                            + .025 * abs(state.roll), -.10, .15)
+        raw = Controls(
+            clip(.85 * (self.target_bank - state.roll) - .55 * state.roll_rate, -.35, .35),
+            clip(-1.4 * (target_pitch - state.pitch) + .65 * state.pitch_rate, -.30, .30),
+            0.0, clip(.65 + .035 * (self.speed - state.speed) + .02 * desired_climb, .2, 1),
+        )
+        old = self.last_controls
+        self.last_controls = Controls(
+            old.aileron + clip(raw.aileron-old.aileron, -.35*dt, .35*dt),
+            old.elevator + clip(raw.elevator-old.elevator, -.20*dt, .20*dt),
+            0.0, old.throttle + clip(raw.throttle-old.throttle, -.10*dt, .10*dt),
         ).bounded()
+        return self.last_controls
 
 
 class DemoSimulator:
