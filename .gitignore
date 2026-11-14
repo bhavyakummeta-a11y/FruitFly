@@ -1,0 +1,4 @@
+# local runtime files of the session logger (flight_simulator/session.py)
+.sessions/
+.watcher.log
+.watchdog.log
