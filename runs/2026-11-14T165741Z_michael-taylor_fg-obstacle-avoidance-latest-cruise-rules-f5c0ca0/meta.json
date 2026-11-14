@@ -1,0 +1,28 @@
+{
+  "run_id": "2026-11-14T165741Z_michael-taylor_fg-obstacle-avoidance-latest-cruise-rules-f5c0ca0",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "obstacle avoidance - latest cruise rules (f5c0ca0)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 21204,
+  "fgfs_exit_code": 1,
+  "started_utc": "2026-11-14T16:57:41.115760+00:00",
+  "duration_s": 113,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 30
+  },
+  "airplane_samples": 54,
+  "controller_runs": {
+    "2026-11-14T165815Z_michael-taylor_flightgear-reflex": {
+      "exit_code": 1
+    }
+  },
+  "code": {
+    "commit": "e8355dc5deca7f154c0308534045dae9c6550aac",
+    "branch": "main"
+  }
+}
