@@ -23,5 +23,6 @@ Run by Michael Taylor. Command: `python -m flight_simulator takeoff_live takeoff
 
 ## Notes
 
+- **Michael Taylor** (2026-11-14 13:54): Best takeoff yet (latest main, numba brain, clear weather). 37 decisions, 0.26 s mean latency. Centerline within +-9 m up to 151 kt (oscillation still present but bounded: +2.1@96, -4.3@111, +7.3@127, -6.4@131, +9.1@141 kt). Past V1, so no bitter reject. Rotation: looming -> JUMP, escape DNs 159 -> 378 -> 537 -> 615 Hz at 35.5-39.2 s, pitch -0.1 -> +4.7 deg, IAS 160 kt, agl 0.7-1 ft (nose up, mains about to leave). At rotation the lateral swing blew out: +2.7 m @151 kt -> +27 m @157 kt -> 37.9 m, left_runway at 40.3 s. Remaining blocker unchanged: high-speed steering gain/damping (issue #6), worst exactly when the nosewheel unloads at rotation.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
