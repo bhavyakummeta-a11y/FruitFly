@@ -1,0 +1,10 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T164342Z_michael-taylor_flightgear-reflex
+REFLEX BASELINE (no connectome)
+Waiting for airborne FlightGear telemetry on localhost...
+FlightGear connected. Initial altitude/heading/speed are the hold targets.
+Placed 3 obstacle towers in FlightGear (telnet 5500).
+   0.0s CRUISE altitude=  596.7m speed=112.1m/s escape=  0.0Hz clearance= 6382.8m
+  10.0s RECOVER altitude=  545.2m speed=116.5m/s escape=  0.0Hz clearance= 5209.8m
+  20.1s RECOVER altitude=  475.0m speed=120.1m/s escape=  0.0Hz clearance= 3979.9m
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: Flight departed the test envelope (heading, bank, pitch, speed or altitude); pausing. Check aircraft controls and trim.
