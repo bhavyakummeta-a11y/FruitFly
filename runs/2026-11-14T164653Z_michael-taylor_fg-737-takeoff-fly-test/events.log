@@ -1,0 +1,37 @@
+11:46:54 [session] Session '737 takeoff fly test' watching fgfs pid 20472 (738-flies)
+11:46:54 [session] Live log page: http://127.0.0.1:8765/
+11:46:56 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+11:46:56 [fgfs] 0.04 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+11:46:56 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+11:46:56 [fgfs] 0.04 [ALRT]:general   affinity=none
+11:46:56 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+11:46:56 [fgfs] 1.49 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+11:46:56 [fgfs] 1.49 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+11:46:56 [fgfs] 1.50 [WARN]:general   Enabling ATI/AMD viewport hack
+11:46:56 [fgfs] 1.54 [ALRT]:view      affinity=none
+11:47:02 [fgfs] 8.32 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+11:47:02 [fgfs] 8.32 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+11:47:02 [fgfs] 9.05 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+11:47:02 [fgfs] 9.12 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+11:47:05 [fgfs] 10.98 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+11:47:05 [fgfs] 11.01 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+11:47:05 [fgfs] 11.01 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+11:47:05 [fgfs] 11.01 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+11:47:05 [fgfs] 11.01 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+11:47:05 [fgfs] 11.37 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+11:47:05 [fgfs] 12.27 [WARN]:input     Unhandled HID usage page:d with usage 5
+11:47:05 [fgfs] 12.27 [WARN]:input     Unhandled HID usage page:d with usage e
+11:47:09 [session] Connected to property API on :8080
+11:47:09 [fgfs] 15.55 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+11:47:12 [session] Property API stopped answering
+11:47:12 [fgfs] 18.73 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+11:47:12 [fgfs] 18.93 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+11:47:15 [fgfs] 21.18 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+11:47:15 [fgfs] 21.54 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+11:47:15 [fgfs] 21.73 [ALRT]:flight    Failed to save initial FDM property state
+11:47:22 [session] Connected to property API on :8080
+11:48:50 [fgfs] 117.31 [WARN]:io        mipmapping: texture size not a power-of-two: C:/Users/micha/FlightGear/Downloads/TerraSync/Models/Military/nike_launcher_metal.png
+11:48:52 [fgfs] 117.37 [WARN]:io        mipmapping: texture size not a power-of-two: C:/Users/micha/FlightGear/Downloads/TerraSync/Models/Military/nike_missile_white.jpg
+11:48:52 [fgfs] 117.37 [WARN]:io        mipmapping: texture size not a power-of-two: C:/Users/micha/FlightGear/Downloads/TerraSync/Models/Military/nike_missile_black.jpg
+11:49:32 [session] Property API stopped answering
+11:49:40 [session] FlightGear exited (code 3221226356) - crashed or force-closed

@@ -1,0 +1,24 @@
+{
+  "run_id": "2026-11-14T164653Z_michael-taylor_fg-737-takeoff-fly-test",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "737 takeoff fly test",
+  "aircraft": "738-flies",
+  "fgfs_pid": 20472,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T16:46:53.669014+00:00",
+  "duration_s": 167,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 30
+  },
+  "airplane_samples": 56,
+  "controller_runs": {},
+  "code": {
+    "commit": "161336b402bc0f7f2305cde1d4931abf6f8e8164",
+    "branch": "main"
+  }
+}
