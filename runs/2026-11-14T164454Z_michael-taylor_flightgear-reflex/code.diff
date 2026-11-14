@@ -1,0 +1,26 @@
+diff --git a/flight_simulator/core.py b/flight_simulator/core.py
+index fb56215..f707ace 100644
+--- a/flight_simulator/core.py
++++ b/flight_simulator/core.py
+@@ -113,6 +113,9 @@ class FlightController:
+         self.started = 0.0
+         self.last_time = None
+         self.last_controls = Controls()
++        # Integral elevator trim: a heavy jet (737) needs a large steady
++        # up-elevator that a proportional-only pitch loop never reaches.
++        self.elevator_trim = 0.0
+ 
+     def update(self, state, stimulus, escape_hz):
+         dt = .05 if self.last_time is None else clip(state.time - self.last_time, 0, .2)
+@@ -149,9 +152,10 @@ class FlightController:
+         desired_climb = clip(.05 * (self.altitude - state.altitude), -3, 3)
+         target_pitch = clip(self.trim_pitch + desired_climb / max(state.speed, 25)
+                             + .025 * abs(state.roll), -.10, .15)
++        self.elevator_trim = clip(self.elevator_trim - .6 * (target_pitch - state.pitch) * dt, -.35, .35)
+         raw = Controls(
+             clip(.85 * (self.target_bank - state.roll) - .55 * state.roll_rate, -.35, .35),
+-            clip(-1.4 * (target_pitch - state.pitch) + .65 * state.pitch_rate, -.30, .30),
++            clip(-1.4 * (target_pitch - state.pitch) + .65 * state.pitch_rate + self.elevator_trim, -.45, .45),
+             0.0, clip(.65 + .035 * (self.speed - state.speed) + .02 * desired_climb, .2, 1),
+         )
+         old = self.last_controls

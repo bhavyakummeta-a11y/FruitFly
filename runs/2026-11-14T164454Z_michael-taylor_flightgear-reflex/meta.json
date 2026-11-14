@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-11-14T164454Z_michael-taylor_flightgear-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:44:54.904150+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain reflex --seconds 180 --no-plot --note 'eval 2: reflex, controller + integral elevator auto-trim (uncommitted core.py change)'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "reflex",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": true,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "no_scene": false,
+    "note": "eval 2: reflex, controller + integral elevator auto-trim (uncommitted core.py change)",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "c86158de183ddbcc19323956c3145f9f98247e66",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/core.py"
+    ],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "fg_sessions": [
+    {
+      "name": "737 obstacle avoidance evals",
+      "run_id": "2026-11-14T164255Z_michael-taylor_fg-737-obstacle-avoidance-evals"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 30
+  },
+  "finished_utc": "2026-11-14T16:45:05.737464+00:00",
+  "exit_code": 1
+}
