@@ -269,7 +269,7 @@ def main(argv=None):
             print('Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...', flush=True)
             cal = fly.calibrate()
             print('  zero points: ' + ', '.join(f'{k}={v:.1f}' for k, v in cal.items()), flush=True)
-        print(f'{fly.name}: ' + ('standing fly, looming -> jump = rotation' if args.phase == 'takeoff'
+        print(f'{fly.name}: ' + ('standing fly, looming stimulus presented at Vr -> jump = rotation' if args.phase == 'takeoff'
                                  else 'flying fly, looming -> DNp07 = flare'), flush=True)
         log = []
         start = time.monotonic()

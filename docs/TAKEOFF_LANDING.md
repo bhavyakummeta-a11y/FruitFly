@@ -8,6 +8,7 @@ Both are the **same FlyWire 783 connectome** running Shiu's LIF model unchanged,
 |---|---|---|
 | State | **standing** fly | **flying** fly |
 | Looming means… | jump → **rotation** (DNp02/04/11, DNp01) | extend the legs → **flare** (DNp07) |
+| Where the looming comes from | **a stimulus we present at Vr**, like the looming disk a lab shows a standing fly. Nothing on a runway actually looms at Vr | **real geometry:** the runway expanding in view, time-to-contact τ = height ÷ sink rate |
 | Nerve-cord gate | escape DNs act only on the wheels; past V1 the throttle is committed | DNp07 acts only below 100 ft; DNp01 (jump) is decoupled and only logged |
 
 ## Quick start
@@ -85,7 +86,7 @@ Corrections to the plan that came out of the probe:
 |---|---|---|---|
 | sugar 200 Hz | "go" | MN9 | throttle (before V1); TOGA after V1 (committed) |
 | bitter 200 Hz | fault or > 8 m off centerline, below V1 only | suppresses MN9 | MN9 < 10 Hz for 2 trials → **reject**: idle + max brakes |
-| looming 0→200 Hz | IAS from Vr−5 to Vr+5 kt, on the wheels | DNp02+DNp04+DNp11 | nose-up rate, up to 3°/s: **the jump** |
+| looming 0→200 Hz | **presented stimulus, not seen:** ramps with IAS from Vr−5 to Vr+5 kt, on the wheels | DNp02+DNp04+DNp11 | nose-up rate, up to 3°/s: **the jump** |
 | VS L/R | pitch error (target 0° on the wheels, 15° airborne), roll | DNp20 sum / difference | pitch rate / aileron |
 | HS L/R | heading error + centerline offset + yaw rate | DNp15+DNa02, L−R | rudder and nosewheel (aileron in the air) |
 
@@ -181,3 +182,4 @@ FlightGear is frozen (`/sim/freeze/master`) during every brain trial and resumed
 - The `standin` brain is a lookup of the probe table, labelled as not a fly everywhere. It exists for fast tests and as a baseline.
 - The decoder gains and zero points are hand-set from the probe table, not fitted. The haltere reflex is a fixed PI loop on pitch rate. It executes the brain's commands but doesn't choose them.
 - The brain only sees the world through 7 sensory channels, at 2–4 decisions per second.
+- **The takeoff fly's rotation cue is presented, not seen.** On a runway nothing looms at Vr, so the stimulator rig shows the fly a looming stimulus timed by airspeed, the way lab experiments trigger the escape jump with a looming disk. The rig decides *when* to rotate; the connectome's escape circuit decides *how hard*. Real visual cues don't work here: the runway end does loom, but at Vr it is about 2 km away (τ ≈ 28 s), and escape only fires near τ ≈ 8 s, about 600 m before the end. Translational optic flow (LPC1/LLPC1) grows with speed, but in the probe it drives DNp07 and MDN, not the escape neurons. The Landing fly is different: its looming is the real runway expanding as the plane descends.

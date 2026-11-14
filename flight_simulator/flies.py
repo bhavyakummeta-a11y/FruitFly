@@ -202,8 +202,13 @@ class PhaseFly:
 
 
 class TakeoffFly(PhaseFly):
-    """A STANDING fly: something looms as the plane nears Vr, the fly jumps,
-    and the jump is the rotation."""
+    """A STANDING fly: as the plane nears Vr we present a looming stimulus, the fly
+    jumps, and the jump is the rotation.
+
+    The looming is presented, not seen: nothing on a runway looms at Vr, so it is
+    timed by airspeed, like the looming disk a lab shows a standing fly. The rig
+    decides when; the escape circuit decides how hard. (The Landing fly's looming
+    is real geometry.)"""
     neutral_sugar = 200.0
     name = 'Takeoff fly'
 
@@ -221,7 +226,7 @@ class TakeoffFly(PhaseFly):
         fault = self.fault_at is not None and s.speed >= self.fault_at
         off_centerline = abs(s.y) > 8.0
         bitter = 200.0 if (s.speed < V1 and not airborne and (fault or off_centerline)) else 0.0
-        # Looming ramps over the last few knots around Vr, only while on the wheels.
+        # Presented looming stimulus (not a visual cue): ramps over Vr-5..Vr+5 kt, wheels only.
         looming = 0.0 if airborne else clip(200 * (s.speed - (VR - 5 * KT)) / (10 * KT), 0, 200)
         # VS: hold the nose level on the wheels (the jump alone rotates), 15 deg once flying.
         pitch_target = HOLD_PITCH if self.hold else (15.0 if airborne else 0.0)

@@ -25,8 +25,8 @@ That's Ache et al. 2019 (*Nat Neurosci*, "State-dependent decoupling of sensory 
 
 That gives us our two brains:
 
-- **Takeoff fly = a standing fly.** As the plane nears Vr, something looms, the fly jumps, and the plane rotates.
-- **Landing fly = a flying fly.** The runway rushes up, the fly extends its legs, and the plane flares.
+- **Takeoff fly = a standing fly.** As the plane nears Vr, we present a looming stimulus (nothing on the runway really looms), the fly jumps, and the plane rotates.
+- **Landing fly = a flying fly.** The runway really rushes up (real geometry), the fly extends its legs, and the plane flares.
 
 They get the same stimulus and do opposite things, depending on the brain's state. That's the headline of the demo.
 
@@ -80,7 +80,7 @@ The fly's real takeoff circuit does the plane's takeoff.
 | Airspeed progress, `IAS / Vr` (Vr ≈ 145 KIAS at flaps 5, weight-dependent) | **sugar** LB3c, 0–200 Hz | "good, keep going" (MVP path) |
 | Centerline offset + yaw rate | **HS cells** L vs R, push-pull | yaw optic flow |
 | Pitch error vs target attitude (0° on the ground, ~15° initial climb after liftoff) | **VS cells** (+ ocelli) | pitch optic flow / horizon |
-| `IAS` from V1 to Vr (about the last 10 kt) | **LC4/LPLC2 looming**, ramping rate | *the stimulus that makes a standing fly jump* |
+| `IAS` from V1 to Vr (about the last 10 kt) | **LC4/LPLC2 looming**, ramping rate | *the stimulus that makes a standing fly jump.* Presented, not seen: like a lab looming disk, timed by airspeed. See "Honest limits" in [TAKEOFF_LANDING.md](TAKEOFF_LANDING.md) |
 | Reject conditions below V1 (off centerline > 5 m, engine N1 low or unequal) | **bitter** | bad, back off |
 | Pitch near tail-strike attitude (> 9° while on the wheels) | **bitter** | bad: an extra brake on over-rotation |
 

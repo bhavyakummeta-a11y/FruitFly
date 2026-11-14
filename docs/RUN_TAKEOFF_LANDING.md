@@ -116,7 +116,7 @@ What happens:
 
 1. The fly adapts (about 70 s), then releases the brakes at full power.
 2. FlightGear runs in **real time (1x) and is never paused** for a brain trial. Each trial runs in the background and the plane flies on the last decision until the next is ready, so decisions arrive a few seconds late. If that crashes the plane, the crash is data.
-3. Near 145 kt the runway "looms", the fly "jumps", and the plane rotates and lifts off. Gear comes up when it's climbing.
+3. Near 145 kt the rig shows the fly a looming stimulus (presented, like a lab looming disk: nothing on the runway really looms), the fly "jumps", and the plane rotates and lifts off. Gear comes up when it's climbing.
 4. At 1,000 ft the terminal prints **HANDOVER**. **The fly keeps flying** (wings level, 10° climb) because there's no Cruise fly yet.
 5. **Press Ctrl-C** to stop. The fly centres the controls and pauses FlightGear. You should see `FlightGear paused (acknowledged)`.
 
