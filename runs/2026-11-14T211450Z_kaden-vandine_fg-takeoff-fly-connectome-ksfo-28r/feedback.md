@@ -30,5 +30,6 @@ Timeline (seconds from session start):
 -    254 to    409: **Nobody: no controller running and no control inputs**
 
 ## Notes
+- **Kaden VanDine** (2026-11-14 16:21): Session after a successful takeoff (see run 2026-11-14T211529Z). FG was paused by the controller at the end; about 2 min later FlightGear stopped answering HTTP/telnet (0% CPU, threads asleep) and did not act on 'run exit'; ended with SIGTERM by claude-run-check. A hang, not a crash; same symptom as the 19:30 UTC landing session.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
