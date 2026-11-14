@@ -1,0 +1,34 @@
+{
+  "run_id": "2026-11-14T182352Z_michael-taylor_fg-graphics-benchmark-full-profile-ksfo-runway-no-controller",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 1.1,
+      "to_s": 160.4
+    }
+  ],
+  "name": "graphics benchmark: full profile, KSFO runway, no controller",
+  "aircraft": "738-flies",
+  "graphics": "full",
+  "fgfs_pid": 19336,
+  "fgfs_exit_code": 15,
+  "started_utc": "2026-11-14T18:23:52.689505+00:00",
+  "duration_s": 160,
+  "httpd_port": 8090,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org-instance1\\fgfs.log",
+    "warning_lines": 57
+  },
+  "airplane_samples": 58,
+  "controller_runs": {},
+  "code": {
+    "commit": "4f63127e6d1f73cab0285e0e97d024610258add9",
+    "branch": "main"
+  }
+}

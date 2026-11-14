@@ -1,0 +1,78 @@
+13:23:53 [session] Session 'graphics benchmark: full profile, KSFO runway, no controller' watching fgfs pid 19336 (738-flies)
+13:23:53 [session] Live log page: http://127.0.0.1:8765/
+13:23:54 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+13:23:54 [fgfs] 0.03 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+13:23:54 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+13:23:54 [fgfs] 0.04 [ALRT]:general   affinity=none
+13:23:54 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+13:23:54 [fgfs] 1.33 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+13:23:54 [fgfs] 1.33 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+13:23:54 [fgfs] 1.33 [WARN]:general   Enabling ATI/AMD viewport hack
+13:23:54 [fgfs] 1.37 [ALRT]:view      affinity=none
+13:23:58 [session] Docked: log below and fly brain right of FlightGear
+13:24:00 [fgfs] 9.48 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+13:24:00 [fgfs] 9.48 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+13:24:01 [fgfs] 10.51 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+13:24:01 [fgfs] 10.61 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+13:24:04 [fgfs] 13.01 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+13:24:04 [fgfs] 13.05 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+13:24:04 [fgfs] 13.05 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+13:24:04 [fgfs] 13.05 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+13:24:04 [fgfs] 13.05 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+13:24:04 [fgfs] 13.68 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+13:24:08 [session] Connected to property API on :8090
+13:24:08 [fgfs] 14.99 [WARN]:input     Unhandled HID usage page:d with usage 5
+13:24:08 [fgfs] 14.99 [WARN]:input     Unhandled HID usage page:d with usage e
+13:24:08 [fgfs] 17.89 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:11 [fgfs] 18.79 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+13:24:12 [session] Property API stopped answering
+13:24:12 [fgfs] 21.70 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+13:24:12 [fgfs] 21.92 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+13:24:16 [fgfs] 25.24 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+13:24:16 [fgfs] 25.68 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+13:24:17 [fgfs] 25.96 [ALRT]:flight    Failed to save initial FDM property state
+13:24:22 [session] Connected to property API on :8090
+13:24:22 [fgfs] 31.87 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:26 [fgfs] 36.03 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:30 [fgfs] 39.98 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:34 [fgfs] 43.53 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:37 [fgfs] 46.80 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:41 [fgfs] 51.07 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:45 [session] Property API stopped answering
+13:24:45 [session] Viewer camera -> Cabin: aisle, looking forward (display only; the fly pilot is unaffected)
+13:24:47 [session] Connected to property API on :8090
+13:24:47 [fgfs] 55.71 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:49 [session] Viewer camera -> Cabin: follow the snack cart (display only; the fly pilot is unaffected)
+13:24:49 [fgfs] 58.80 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:52 [fgfs] 61.95 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:52 [session] Viewer camera -> Cockpit: fly pilot (display only; the fly pilot is unaffected)
+13:24:53 [session] Viewer camera -> Cockpit View (display only; the fly pilot is unaffected)
+13:24:55 [fgfs] 65.31 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:24:57 [session] Viewer camera -> Cabin: front, facing the passengers (display only; the fly pilot is unaffected)
+13:24:59 [fgfs] 69.42 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:00 [session] Viewer camera -> Chase View (display only; the fly pilot is unaffected)
+13:25:03 [fgfs] 72.82 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:03 [session] Viewer camera -> Cabin: front, facing the passengers (display only; the fly pilot is unaffected)
+13:25:06 [fgfs] 75.92 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:07 [session] Viewer camera -> Cabin: follow the snack cart (display only; the fly pilot is unaffected)
+13:25:09 [fgfs] 79.03 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:12 [session] Viewer camera -> Cockpit: fly pilot (display only; the fly pilot is unaffected)
+13:25:12 [fgfs] 82.35 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:15 [fgfs] 85.45 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:19 [fgfs] 88.61 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:22 [fgfs] 92.08 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:26 [fgfs] 95.90 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:29 [fgfs] 99.03 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:32 [fgfs] 102.17 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:35 [fgfs] 105.32 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:38 [fgfs] 108.49 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:42 [fgfs] 111.65 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:45 [fgfs] 115.10 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:48 [fgfs] 118.41 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:52 [session] Property API stopped answering
+13:25:54 [session] Connected to property API on :8090
+13:25:54 [fgfs] 123.92 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:25:58 [fgfs] 127.55 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:26:01 [fgfs] 130.70 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:26:02 [session] Property API stopped answering
+13:26:33 [session] FlightGear exited (code 15) - crashed or force-closed
