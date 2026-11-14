@@ -79,6 +79,133 @@ class SilentBrain:
         return 0.0
 
 
+# Notebook LIF equations and Shiu et al. 2024 parameters. Shared by both kernels below.
+DT, V0, VTH, TM, TS, REF = 0.1, -52.0, -45.0, 20.0, 5.0, 2.2
+WSYN, KICK, DELAY = 0.275, 250 * 0.275, int(1.8 / 0.1)
+
+
+def lif_trial_reference(w, active, rng, ms):
+    """The starter notebook's loop, unchanged: every neuron is updated every 0.1 ms.
+
+    Kept as the definition of the model. lif_trial() must return the same spike
+    counts (tests/test_brain_speed.py). w: CSR weights (row = presynaptic);
+    active: [(neuron indices, Hz)]; returns spike counts per neuron."""
+    import numpy as np
+    n = w.shape[0]
+    v, g = np.full(n, V0), np.zeros(n)
+    last, counts = np.full(n, -1e9), np.zeros(n, int)
+    driven = np.zeros(n, bool)
+    for idx, _ in active:
+        driven[idx] = True
+    ring = np.zeros((DELAY, n))
+    decay = np.exp(-DT / TS)
+    for k in range(int(ms / DT)):
+        t, slot = k * DT, k % DELAY
+        g += ring[slot]
+        ring[slot] = 0
+        free = ((t - last) > REF) | driven
+        v[free] += DT * (V0 - v[free] + g[free]) / TM
+        g[free] *= decay
+        for idx, hz in active:
+            v[idx[rng.random(len(idx)) < hz * DT / 1000]] += KICK
+        spikes = np.flatnonzero(v > VTH)
+        v[spikes], g[spikes], last[spikes] = V0, 0.0, t
+        counts[spikes] += 1
+        if len(spikes):
+            ring[slot] += np.asarray(w[spikes].sum(0)).ravel() * WSYN
+    return counts
+
+
+def lif_trial(w, active, rng, ms):
+    """Same model, same arithmetic, same random stream as lif_trial_reference(), about
+    6-8x faster. It is not an approximation: spike counts are identical.
+
+    What it skips is work that cannot change anything:
+    - A neuron that has never received input sits exactly at rest (v = V0, g = 0) and its
+      update is exactly zero. Only neurons that have been stimulated or have received a
+      synaptic input are simulated ("touched"; about half the brain by the end of a trial).
+      They are kept in compact arrays in the order they were first touched.
+    - Refractory neurons are a handful per step. Everything is updated in one pass and
+      the refractory ones are put back, instead of masking every array every step.
+    - Synaptic input is summed straight from the CSR rows of the spiking neurons
+      (same order as the reference) instead of building a sparse sub-matrix per step.
+    """
+    import numpy as np
+    n = w.shape[0]
+    indptr, indices, data = w.indptr, w.indices, w.data
+    local = np.full(n, -1, np.int64)      # neuron index -> slot in the compact arrays
+    glob = np.empty(n, np.int64)          # slot -> neuron index
+    v, g, last = np.full(n, V0), np.zeros(n), np.full(n, -1e9)
+    driven = np.zeros(n, bool)
+    counts = np.zeros(n, int)
+    tmp = np.empty(n)
+    size = 0
+
+    def touch(idx):
+        nonlocal size
+        new = np.unique(idx[local[idx] < 0])
+        local[new] = np.arange(size, size + len(new))
+        glob[size:size + len(new)] = new
+        size += len(new)
+
+    groups = []
+    for idx, hz in active:
+        touch(idx)
+        driven[local[idx]] = True
+        groups.append((local[idx], hz * DT / 1000))
+    decay = np.exp(-DT / TS)
+    ring = [None] * DELAY                 # per delay slot: summed input for the first len() slots
+    recent = []                           # (step, slots) that spiked lately and are not driven
+    hold = int(REF / DT) + 2
+    frozen = ()
+    for k in range(int(ms / DT)):
+        t, slot = k * DT, k % DELAY
+        arriving = ring[slot]
+        if arriving is not None:
+            g[:len(arriving)] += arriving
+            ring[slot] = None
+        while recent and k - recent[0][0] > hold:
+            recent.pop(0)
+        if recent:
+            candidates = np.concatenate([s for _, s in recent]) if len(recent) > 1 else recent[0][1]
+            frozen = candidates[~((t - last[candidates]) > REF)]
+            keep_v, keep_g = v[frozen], g[frozen]
+        va, ga, step = v[:size], g[:size], tmp[:size]
+        np.subtract(V0, va, out=step)     # DT * (V0 - v + g) / TM, operation for operation
+        step += ga
+        step *= DT
+        step /= TM
+        va += step
+        ga *= decay
+        if recent and len(frozen):
+            v[frozen], g[frozen] = keep_v, keep_g
+        for idx, p in groups:
+            v[idx[rng.random(len(idx)) < p]] += KICK
+        spikes = np.flatnonzero(va > VTH)
+        if not len(spikes):
+            continue
+        va[spikes], ga[spikes] = V0, 0.0
+        last[spikes] = t
+        quiet = spikes[~driven[spikes]]
+        if len(quiet):
+            recent.append((k, quiet))
+        firing = np.sort(glob[spikes])    # the reference delivers in ascending neuron order
+        counts[firing] += 1
+        if len(firing) == 1:
+            lo, hi = indptr[firing[0]], indptr[firing[0] + 1]
+            targets, weights = indices[lo:hi], data[lo:hi]
+        else:
+            targets = np.concatenate([indices[indptr[s]:indptr[s + 1]] for s in firing])
+            weights = np.concatenate([data[indptr[s]:indptr[s + 1]] for s in firing])
+        if len(targets):
+            slots = local[targets]
+            if slots.min() < 0:
+                touch(targets)
+                slots = local[targets]
+            ring[slot] = np.bincount(slots, weights=weights, minlength=size) * WSYN
+    return counts
+
+
 class ConnectomeBrain:
     """Shiu whole-brain LIF on FlyWire 783.
 
@@ -151,6 +278,10 @@ class ConnectomeBrain:
         self.name = 'CONNECTOME LIF (notebook model)' + (
             f' | silenced: {", ".join(self.silenced)}' if self.silenced else '')
 
+    # The LIF kernel. lif_trial is the fast, bit-identical one; set this to
+    # lif_trial_reference to run the notebook loop as written.
+    trial = staticmethod(lif_trial)
+
     def run(self, inputs, readouts=None):
         """Fresh 200 ms trial from rest. inputs: {group: Hz} -> {readout: Hz}."""
         import numpy as np
@@ -168,31 +299,9 @@ class ConnectomeBrain:
             self.last_counts.fill(0)
             self.last_seconds = time.monotonic() - start
             return self._record(inputs, {name: 0.0 for name in readouts})
-        dt, v0, vth, tm, ts, ref = 0.1, -52.0, -45.0, 20.0, 5.0, 2.2
-        wsyn, kick, delay = 0.275, 250 * 0.275, int(1.8 / 0.1)
         rng = np.random.default_rng(self.seed + self.calls)
         self.calls += 1
-        v, g = np.full(self.n, v0), np.zeros(self.n)
-        last, counts = np.full(self.n, -1e9), np.zeros(self.n, int)
-        driven = np.zeros(self.n, bool)
-        for idx, _ in active:
-            driven[idx] = True
-        ring = np.zeros((delay, self.n))
-        decay = np.exp(-dt / ts)
-        for k in range(int(self.ms / dt)):
-            t, slot = k * dt, k % delay
-            g += ring[slot]
-            ring[slot] = 0
-            free = ((t - last) > ref) | driven
-            v[free] += dt * (v0 - v[free] + g[free]) / tm
-            g[free] *= decay
-            for idx, hz in active:
-                v[idx[rng.random(len(idx)) < hz * dt / 1000]] += kick
-            spikes = np.flatnonzero(v > vth)
-            v[spikes], g[spikes], last[spikes] = v0, 0.0, t
-            counts[spikes] += 1
-            if len(spikes):
-                ring[slot] += np.asarray(self.w[spikes].sum(0)).ravel() * wsyn
+        counts = self.trial(self.w, active, rng, self.ms)
         self.last_counts = counts
         self.last_seconds = time.monotonic() - start
         seconds = self.ms / 1000
