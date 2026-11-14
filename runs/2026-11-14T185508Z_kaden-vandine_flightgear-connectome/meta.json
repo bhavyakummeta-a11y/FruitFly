@@ -41,5 +41,7 @@
       "name": "liftoff check of 77ee8da (teammate steering + async mission), connectome",
       "run_id": "2026-11-14T185446Z_kaden-vandine_fg-liftoff-check-of-77ee8da-teammate-steering-async-mission-connectome"
     }
-  ]
+  ],
+  "finished_utc": "2026-11-14T19:01:05.049115+00:00",
+  "exit_code": 2
 }
