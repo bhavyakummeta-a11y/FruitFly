@@ -1,0 +1,45 @@
+{
+  "run_id": "2026-11-14T185508Z_kaden-vandine_flightgear-connectome",
+  "who": "Kaden VanDine",
+  "started_utc": "2026-11-14T18:55:08.289818+00:00",
+  "command": "python -m flight_simulator mission --brain connectome --backend flightgear --log runs/fg-mission5.csv --plot runs/fg-mission5.png",
+  "args": {
+    "brain": "connectome",
+    "backend": "flightgear",
+    "data": "data/brain",
+    "seed": 0,
+    "noise_seed": null,
+    "period": 0.25,
+    "no_calibrate": false,
+    "seconds": 1500,
+    "vision_port": 5601,
+    "vision_obstacles": null,
+    "log": "runs/fg-mission5.csv",
+    "plot": "runs/fg-mission5.png",
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "body_port": 5600,
+    "no_fly_body": false
+  },
+  "code": {
+    "commit": "77ee8da3cfa52fd4a65affe6994646ea75c4f243",
+    "branch": "main",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.14.4",
+  "platform": "Linux 7.0.0-43-generic",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "liftoff check of 77ee8da (teammate steering + async mission), connectome",
+      "run_id": "2026-11-14T185446Z_kaden-vandine_fg-liftoff-check-of-77ee8da-teammate-steering-async-mission-connectome"
+    }
+  ]
+}
