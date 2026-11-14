@@ -1,0 +1,93 @@
+{
+  "run_id": "2026-11-14T183145Z_michael-taylor_fg-obstacle-avoidance-connectome-numba-brain-vision-bcfa42e",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.7,
+      "to_s": 26.1
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: CMDA, SPD; controller 2026-11-14T183529Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 26.1,
+      "to_s": 237.2
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+      "detail": "run 2026-11-14T183529Z_michael-taylor_flightgear-connectome. Neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input. Code decides: synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+      "from_s": 237.2,
+      "to_s": 243.7
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 243.7,
+      "to_s": 246.8
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 246.8,
+      "to_s": 271.9
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+      "detail": "run 2026-11-14T183613Z_michael-taylor_flightgear-connectome. Neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input. Code decides: synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+      "from_s": 271.9,
+      "to_s": 397.7
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 397.7,
+      "to_s": 402.2
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 402.2,
+      "to_s": 467.3
+    }
+  ],
+  "name": "obstacle avoidance - CONNECTOME (numba brain + vision, bcfa42e)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "fgfs_pid": 22920,
+  "fgfs_exit_code": 4294967295,
+  "started_utc": "2026-11-14T18:31:45.369009+00:00",
+  "duration_s": 467,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 156
+  },
+  "airplane_samples": 243,
+  "controller_runs": {
+    "2026-11-14T183208Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    },
+    "2026-11-14T183529Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    },
+    "2026-11-14T183613Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    }
+  },
+  "code": {
+    "commit": "bcfa42e5a8db000ebe01a6f104004decd180a476",
+    "branch": "main"
+  }
+}
