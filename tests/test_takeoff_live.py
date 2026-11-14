@@ -68,13 +68,13 @@ class TakeoffLiveTests(unittest.TestCase):
         class FakeRunLog:
             dir = Path(tempfile.mkdtemp())
         stage = takeoff_live.Stage(FakeRunLog())
-        calls = []
+        calls, real_replace = [], os.replace
 
         def flaky_replace(src, dst):
             calls.append(1)
             if len(calls) < 3:
                 raise PermissionError(5, 'Access is denied')
-            os.replace(src, dst)
+            real_replace(src, dst)
         with mock.patch.object(takeoff_live.os, 'replace', side_effect=flaky_replace),                 mock.patch.object(takeoff_live.time, 'sleep'):
             stage.set('calibrating', done=1)
         self.assertEqual(len(calls), 3)
