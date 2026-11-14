@@ -1,0 +1,24 @@
+diff --git a/flight_simulator/launch_fg.py b/flight_simulator/launch_fg.py
+index 5984a3c..c1f8045 100644
+--- a/flight_simulator/launch_fg.py
++++ b/flight_simulator/launch_fg.py
+@@ -118,7 +118,8 @@ def command(args):
+     common = [*exe, f'--fg-aircraft={REPO_AIRCRAFT}', f'--aircraft={args.aircraft}',
+               f'--httpd={p["httpd"]}', f'--telnet={p["telnet"]}']
+     if getattr(args, 'phase', None):
+-        airport, runway = ('KLAX', '25R') if getattr(args,'route',None) else (AIRPORT,RUNWAY)
++        airport, runway = ('KLAX', '25R') if getattr(args,'route',None) else (
++            getattr(args, 'airport', None) or AIRPORT, getattr(args, 'runway', None) or RUNWAY)
+         return [*common, f'--airport={airport}', f'--runway={runway}', *PHASE_ARGS[args.phase],
+                 *(['--prop:/controls/gear/brake-parking=1'] if getattr(args,'route',None) else []),
+                 '--disable-real-weather-fetch', '--wind=0@0', '--timeofday=noon', '--disable-ai-traffic',
+@@ -168,6 +169,9 @@ def fly_command(args):
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
++    parser.add_argument('--airport', help=f'With --phase: ICAO airport (default {AIRPORT}), e.g. KLAX')
++    parser.add_argument('--runway', help=f'With --phase: runway (default {RUNWAY}), e.g. 25R. Landing works out '
++                        'the threshold from the spawn point, so any runway works')
+     parser.add_argument('--route', choices=['lax-burbank'], help='Start at KLAX 25R and fly to KBUR 08 (implies --phase takeoff)')
+     parser.add_argument('--phase', choices=list(PHASE_ARGS),
+                         help='Takeoff/landing test at KSFO 28R with the runway protocols')
