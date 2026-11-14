@@ -1,0 +1,22 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T171630Z_michael-taylor_flightgear-reflex
+REFLEX BASELINE (no connectome)
+Waiting for airborne FlightGear telemetry on localhost...
+Waiting for the 737 autopilot to settle into steady flight before taking over...
+FlightGear connected. Initial altitude/heading/speed are the hold targets.
+Placed 3 obstacle towers in FlightGear (telnet 5500).
+Handover sent: the 737 autopilot (if any) switches off, the controller flies.
+   3.0s AVOID  altitude=  928.8m speed=113.6m/s escape=  0.0Hz clearance= 6555.3m
+  13.0s AVOID  altitude=  932.8m speed=115.0m/s escape=  0.0Hz clearance= 5345.5m
+  23.0s AVOID  altitude=  929.8m speed=114.8m/s escape=  0.0Hz clearance= 4133.1m
+  33.0s AVOID  altitude=  925.0m speed=114.0m/s escape=  0.0Hz clearance= 2934.2m
+  43.0s AVOID  altitude=  925.1m speed=113.3m/s escape=  0.0Hz clearance= 1761.3m
+  53.0s RECOVER altitude=  927.6m speed=113.1m/s escape=  0.0Hz clearance=  660.8m
+  63.0s RECOVER altitude=  929.1m speed=113.4m/s escape=  0.0Hz clearance=  512.7m
+  73.0s RECOVER altitude=  930.1m speed=113.6m/s escape=  0.0Hz clearance= 1576.1m
+  83.0s RECOVER altitude=  930.8m speed=113.7m/s escape=  0.0Hz clearance= 2732.5m
+  93.0s RECOVER altitude=  930.0m speed=113.7m/s escape=  0.0Hz clearance= 3911.8m
+ 103.1s RECOVER altitude=  928.4m speed=113.7m/s escape=  0.0Hz clearance= 4946.7m
+ 113.1s RECOVER altitude=  927.8m speed=113.6m/s escape=  0.0Hz clearance= 3765.1m
+ 123.1s RECOVER altitude=  928.8m speed=113.5m/s escape=  0.0Hz clearance= 2588.0m
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: No FlightGear telemetry; check UDP flags and protocol XML.
