@@ -1,0 +1,85 @@
+[runlog] /Users/Bhavya_1/FruitFly/.sim-logs/runs/2026-11-14T185909Z_bhavya-shree-reddy-kummeta_demo-connectome
+[control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+
+=== START: Takeoff fly (standing)  ===
+    adapted: steer zero -18.8 Hz
+0s Takeoff fly: TAKEOFF ROLL MSL=94ft
+30s Takeoff fly: V1 MSL=94ft
+
+=== HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1004 ft, 176 kt ===
+    adapted: steer zero -23.5 Hz
+60s Circuit fly: ROUTE: LAX departure MSL=1273ft
+90s Circuit fly: ROUTE: LAX departure MSL=2023ft
+120s Circuit fly: ROUTE: LAX departure MSL=2748ft
+150s Circuit fly: ROUTE: northbound MSL=3471ft
+180s Circuit fly: ROUTE: northbound MSL=4207ft
+210s Circuit fly: ROUTE: northbound MSL=4902ft
+240s Circuit fly: AVOID: northbound MSL=4994ft
+270s Circuit fly: AVOID: northbound MSL=4975ft
+300s Circuit fly: ROUTE: northbound MSL=5011ft
+330s Circuit fly: ROUTE: northbound MSL=4992ft
+360s Circuit fly: AVOID: northbound MSL=4995ft
+390s Circuit fly: AVOID: northbound MSL=4986ft
+420s Circuit fly: ROUTE: northbound MSL=4990ft
+450s Circuit fly: ROUTE: northbound MSL=5002ft
+480s Circuit fly: ROUTE: Burbank intercept MSL=4611ft
+510s Circuit fly: ROUTE: Burbank intercept MSL=3850ft
+540s Circuit fly: ROUTE: Burbank intercept MSL=3487ft
+570s Circuit fly: ROUTE: final MSL=3343ft
+600s Circuit fly: ROUTE: final MSL=3002ft
+630s Circuit fly: ROUTE: final MSL=2594ft
+660s Circuit fly: ROUTE: final MSL=2241ft
+
+=== HANDOVER: Circuit fly (cruising) -> Landing fly (flying) at 1130 ft, 146 kt ===
+    adapted: steer zero -26.2 Hz
+690s Landing fly: APPROACH MSL=1843ft
+720s Landing fly: APPROACH MSL=1364ft
+751s Landing fly: APPROACH MSL=931ft
+781s Landing fly: ROLLOUT MSL=727ft
+Log written to /tmp/lax-bur-connectome.csv (15835 rows)
+{
+  "departure": "KLAX 25R",
+  "destination": "KBUR 08",
+  "route": "lax-burbank",
+  "minimum_clearance_m": 348.4,
+  "avoidance_count": 2,
+  "success": true,
+  "outcome": "landing_completed",
+  "termination_reason": "landing_completed",
+  "touchdown_x_m": 574.5364071637914,
+  "touchdown_sink_fpm": 262.82353120621957,
+  "stop_x_m": 1249.8790727058988,
+  "time_s": 791.7499999998277,
+  "handovers": [
+    {
+      "time": 0.0,
+      "to": "Takeoff fly",
+      "state": "standing",
+      "agl_ft": 0,
+      "ias_kt": 0,
+      "zero_steer": -18.75
+    },
+    {
+      "time": 56.5,
+      "to": "Circuit fly",
+      "state": "cruising",
+      "agl_ft": 1004,
+      "ias_kt": 176,
+      "zero_steer": -23.5
+    },
+    {
+      "time": 689.3,
+      "to": "Landing fly",
+      "state": "flying",
+      "agl_ft": 1130,
+      "ias_kt": 146,
+      "zero_steer": -26.25
+    }
+  ],
+  "ended_in": "Landing fly: ROLLOUT",
+  "wall_s": 486.5
+}

@@ -1,0 +1,56 @@
+{
+  "run_id": "2026-11-14T190555Z_bhavya-shree-reddy-kummeta_demo-standin",
+  "who": "Bhavya Shree Reddy Kummeta",
+  "started_utc": "2026-11-14T19:05:55.222237+00:00",
+  "command": "python -m flight_simulator mission --route lax-burbank --brain standin --noise-seed 1 --vision-port 0 --log /tmp/lax-bur-noisy.csv",
+  "args": {
+    "brain": "standin",
+    "route": "lax-burbank",
+    "backend": "demo",
+    "data": "data/brain",
+    "seed": 0,
+    "noise_seed": 1,
+    "period": 0.25,
+    "no_calibrate": false,
+    "seconds": 1500,
+    "vision_port": 0,
+    "vision_obstacles": null,
+    "log": "/tmp/lax-bur-noisy.csv",
+    "plot": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "body_port": 5600,
+    "no_fly_body": false
+  },
+  "code": {
+    "commit": "36c3b04c7431e0951596c24c83140a1a67e992f1",
+    "branch": "main",
+    "dirty": [
+      "M docs/FLIGHT_SIMULATOR.md",
+      " M flight_simulator/flightgear.py",
+      " M flight_simulator/launch_fg.py",
+      " M flight_simulator/mission.py",
+      " M flight_simulator/protocols/flybrain-runway-state.xml",
+      " M flight_simulator/runlog.py",
+      " M flight_simulator/runway.py",
+      " M flight_simulator/vision.py",
+      " M tests/test_takeoff_landing.py"
+    ],
+    "untracked": [
+      "docs/LAX_BURBANK.md",
+      "flight_simulator/airport_route.py",
+      "tests/test_airport_route.py"
+    ]
+  },
+  "python": "3.10.6",
+  "platform": "Darwin 25.6.0",
+  "control": {
+    "kind": "NO_FLY_BRAIN",
+    "label": "NO FLY BRAIN: probe-table stand-in flying the full mission (takeoff, circuit, landing)",
+    "neurons_decide": "nothing (no connectome is simulated in this run)",
+    "code_decides": "everything: a lookup table of DN rates measured earlier from the connectome",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "finished_utc": "2026-11-14T19:06:28.780205+00:00",
+  "exit_code": 0
+}

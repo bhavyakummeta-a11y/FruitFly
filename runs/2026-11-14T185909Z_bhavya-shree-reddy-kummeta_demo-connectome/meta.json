@@ -1,0 +1,52 @@
+{
+  "run_id": "2026-11-14T185909Z_bhavya-shree-reddy-kummeta_demo-connectome",
+  "who": "Bhavya Shree Reddy Kummeta",
+  "started_utc": "2026-11-14T18:59:09.400537+00:00",
+  "command": "python -m flight_simulator mission --route lax-burbank --brain connectome --vision-port 0 --seconds 1500 --log /tmp/lax-bur-connectome.csv",
+  "args": {
+    "brain": "connectome",
+    "route": "lax-burbank",
+    "backend": "demo",
+    "data": "data/brain",
+    "seed": 0,
+    "noise_seed": null,
+    "period": 0.25,
+    "no_calibrate": false,
+    "seconds": 1500.0,
+    "vision_port": 0,
+    "vision_obstacles": null,
+    "log": "/tmp/lax-bur-connectome.csv",
+    "plot": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "body_port": 5600,
+    "no_fly_body": false
+  },
+  "code": {
+    "commit": "77ee8da3cfa52fd4a65affe6994646ea75c4f243",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/flightgear.py",
+      " M flight_simulator/launch_fg.py",
+      " M flight_simulator/mission.py",
+      " M flight_simulator/protocols/flybrain-runway-state.xml",
+      " M flight_simulator/runlog.py",
+      " M flight_simulator/runway.py",
+      " M flight_simulator/vision.py"
+    ],
+    "untracked": [
+      "flight_simulator/airport_route.py"
+    ]
+  },
+  "python": "3.10.6",
+  "platform": "Darwin 25.6.0",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "finished_utc": "2026-11-14T19:07:22.710509+00:00",
+  "exit_code": 0
+}
