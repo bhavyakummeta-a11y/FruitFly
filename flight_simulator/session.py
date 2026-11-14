@@ -1,30 +1,40 @@
-"""FlightGear session log: starts with FlightGear, shows a live log page, pushes on exit.
+"""FlightGear session log. Every FlightGear session is NAMED, LOGGED and PUSHED.
 
-The launchers start this automatically right after fgfs:
-    python flightgear/launch.py            (737 + fly cabin)
-    python -m flight_simulator.launch_fg   (extra instances)
-    flightgear_api/launch_fg.ps1           (C172 / obstacle mode)
+Rules (they apply to people and to AI agents alike):
+  1. Every FlightGear launch carries a session name. The project launchers refuse
+     to start without --name; the name travels on fgfs's own command line as
+     --prop:string:/fruitfly/session/name=<name>, so it cannot get separated.
+  2. Logging starts automatically. A background watchdog (installed to run at logon
+     with `install-autostart`) notices ANY fgfs.exe, however it was started, and
+     attaches a session logger. FlightGear opened without a name (desktop shortcut,
+     a bare fgfs call) is logged as UNNAMED and the live page asks for a name.
+  3. When fgfs exits, the session folder is committed and pushed to the sim-logs branch.
 
-For FlightGear opened another way (desktop shortcut, Qt launcher):
-    python -m flight_simulator.session attach            # finds the running fgfs.exe
+    python flightgear/launch.py --name "737 cabin smoke test"
+    python -m flight_simulator.launch_fg --instance 1 --name "obstacle course v2"
+    python -m flight_simulator.session attach --name "..."   # name/attach a running fgfs now
+    python -m flight_simulator.session status                # watchdog + live sessions
+    python -m flight_simulator.session install-autostart     # once per machine
 
-It writes runs/<UTC time>_<who>_fg-session/ on the sim-logs branch:
+Each session writes runs/<UTC time>_<who>_fg-<name>/ on the sim-logs branch:
     airplane.csv        aircraft state + controls, 2 Hz, from the HTTP property API
     fly_activity.csv    fly-side signals in FlightGear (cabin fly activity; more to come)
     events.log          the running log: session events, FlightGear warnings, controller output
     fgfs_warnings.log   WARN/ALERT/Nasal lines from fgfs.log
     meta.json, feedback.md
 
-Controller runs (python -m flight_simulator) during the session keep their own
-folders (airplane.csv + fly_activity.csv); the live page streams them too and
-the session's feedback.md links them. When fgfs exits, the folder is committed
-and pushed (see runlog.py; FRUITFLY_NO_PUSH=1 to keep it local).
+A live page (http://127.0.0.1:8765/, next free port for more sessions) shows the
+airplane and fly-activity charts and the running log while FlightGear is open.
+Controller runs (python -m flight_simulator) keep their own folders, are streamed
+on the page, and are linked from the session's feedback.md.
 """
 import argparse
 import csv
 from datetime import datetime, timezone
 import json
 import os
+import re
+import socket
 from pathlib import Path
 import subprocess
 import sys
@@ -40,6 +50,9 @@ HERE = Path(__file__).resolve().parent
 VIEW = HERE / 'session_view.html'
 POLL_S = 0.5
 HISTORY = 1200            # points kept for the live charts (10 min at 2 Hz)
+NAME_PROP = '/fruitfly/session/name'
+WATCHDOG_PORT = 8764      # bound by the watchdog: one per machine
+UNNAMED = 'UNNAMED'
 
 # column -> (property path, scale)
 AIRPLANE = {
@@ -95,22 +108,161 @@ def find_fgfs():
     return pids
 
 
-def spawn(pid, httpd=8080, telemetry_port=5501, fg_home=None, label='', open_browser=True):
-    """Start the watcher detached from the launcher; returns immediately."""
-    cmd = [sys.executable, '-m', 'flight_simulator.session', 'watch', '--pid', str(pid),
-           '--httpd', str(httpd), '--telemetry-port', str(telemetry_port), '--label', label]
-    if fg_home:
-        cmd += ['--fg-home', str(fg_home)]
-    if not open_browser:
-        cmd.append('--no-browser')
+def name_arg(name):
+    """fgfs argument carrying the session name. Launchers must refuse to start without one."""
+    name = (name or '').strip()
+    if not name:
+        raise SystemExit('A FlightGear session needs a name: --name "what this session is testing"')
+    return f'--prop:string:{NAME_PROP}={name}'
+
+
+def fgfs_cmdline(pid):
+    if os.name != 'nt':
+        try:
+            return Path(f'/proc/{pid}/cmdline').read_bytes().replace(b'\0', b' ').decode()
+        except OSError:
+            return ''
+    ps = f'(Get-CimInstance Win32_Process -Filter "ProcessId={int(pid)}").CommandLine'
+    out = subprocess.run(['powershell', '-NoProfile', '-Command', ps], capture_output=True, text=True,
+                         creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    return out.stdout.strip()
+
+
+def parse_cmdline(cmd):
+    """Session name, ports and aircraft from an fgfs command line."""
+    def find(pattern):
+        m = re.search(pattern, cmd)
+        return m.group(1) if m else None
+    name = find(r'--prop:(?:string:)?' + re.escape(NAME_PROP) + r'=(.*?)(?:"|\s--|$)')
+    httpd = find(r'--httpd=(\d+)')
+    telemetry = find(r'--generic=socket,out,\d+,[^,]*,(\d+),udp')
+    return {'name': name.strip() if name and name.strip() else None,
+            'httpd': int(httpd) if httpd else None,
+            'telemetry_port': int(telemetry) if telemetry else None,
+            'aircraft': find(r'--aircraft=(\S+)')}
+
+
+def sessions_dir():
+    d = runlog.ensure_worktree() / '.sessions'
+    d.mkdir(exist_ok=True)
+    return d
+
+
+def pid_alive(pid):
+    try:
+        return Process(int(pid)).alive()
+    except (ProcessLookupError, ValueError, TypeError, OSError):
+        return False
+
+
+def read_lock(path):
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+
+
+def detached(cmd, log_name):
     flags = 0
     if os.name == 'nt':
         flags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
-    log = open(runlog.ensure_worktree() / '.watcher.log', 'a')
-    subprocess.Popen(cmd, cwd=runlog.ROOT, stdout=log, stderr=log, stdin=subprocess.DEVNULL,
-                     creationflags=flags, close_fds=True)
-    print('Session log starting: a live log page will open in your browser '
-          '(it is pushed to the sim-logs branch when FlightGear closes).')
+    log = open(runlog.ensure_worktree() / log_name, 'a')
+    return subprocess.Popen(cmd, cwd=runlog.ROOT, stdout=log, stderr=log, stdin=subprocess.DEVNULL,
+                            creationflags=flags, close_fds=True)
+
+
+def spawn(pid, name=None, open_browser=True):
+    """Start a session logger for one fgfs pid (no-op if one is already attached)."""
+    cmd = [sys.executable, '-m', 'flight_simulator.session', 'watch', '--pid', str(pid)]
+    if name:
+        cmd += ['--name', name]
+    if not open_browser:
+        cmd.append('--no-browser')
+    detached(cmd, '.watcher.log')
+
+
+def watchdog_running():
+    with socket.socket() as sock:
+        sock.settimeout(0.5)
+        return sock.connect_ex(('127.0.0.1', WATCHDOG_PORT)) == 0
+
+
+def ensure_watchdog(quiet=False):
+    """Make sure the FlightGear watchdog runs; launchers call this before starting fgfs."""
+    if watchdog_running():
+        return
+    detached([sys.executable, '-m', 'flight_simulator.session', 'watchdog'], '.watchdog.log')
+    for _ in range(20):
+        if watchdog_running():
+            break
+        time.sleep(0.25)
+    if not quiet:
+        print('[session] FlightGear watchdog started: every fgfs session will be logged and pushed.')
+
+
+def watchdog():
+    """Attach a session logger to every fgfs.exe that appears. One per machine."""
+    guard = socket.socket()
+    try:
+        guard.bind(('127.0.0.1', WATCHDOG_PORT))
+    except OSError:
+        print('watchdog already running')
+        return
+    guard.listen(8)
+    threading.Thread(target=lambda: [guard.accept()[0].close() for _ in iter(int, 1)], daemon=True).start()
+    print(f'{datetime.now():%H:%M:%S} watchdog up (pid {os.getpid()})', flush=True)
+    spawned = {}
+    while True:
+        try:
+            locks = sessions_dir()
+            for pid in find_fgfs():
+                info = read_lock(locks / f'{pid}.lock')
+                if info and pid_alive(info.get('watcher_pid')):
+                    continue
+                if time.time() - spawned.get(pid, 0) < 30:
+                    continue      # a logger is starting up for it
+                spawned[pid] = time.time()
+                print(f'{datetime.now():%H:%M:%S} fgfs pid {pid} has no logger; attaching', flush=True)
+                spawn(pid)
+            for lock in locks.glob('*.lock'):   # loggers that died without cleaning up
+                info = read_lock(lock)
+                if info and not pid_alive(info.get('watcher_pid')) and not pid_alive(info.get('fgfs_pid')):
+                    lock.unlink(missing_ok=True)
+        except Exception as exc:  # keep watching no matter what
+            print(f'{datetime.now():%H:%M:%S} watchdog error: {exc!r}', flush=True)
+        time.sleep(2)
+
+
+STARTUP = Path(os.environ.get('APPDATA', '')) / 'Microsoft/Windows/Start Menu/Programs/Startup'
+SHORTCUT = STARTUP / 'FruitFly FlightGear session logger.lnk'
+
+
+def install_autostart():
+    pythonw = Path(sys.executable).with_name('pythonw.exe')
+    alias = Path(os.environ.get('LOCALAPPDATA', '')) / 'Microsoft/WindowsApps/pythonw.exe'
+    target = alias if alias.exists() else pythonw
+    ps = ("$s = (New-Object -ComObject WScript.Shell).CreateShortcut($env:SC); "
+          "$s.TargetPath = $env:TGT; $s.Arguments = '-m flight_simulator.session watchdog'; "
+          "$s.WorkingDirectory = $env:WD; $s.WindowStyle = 7; "
+          "$s.Description = 'Logs and pushes every FlightGear session (FruitFly)'; $s.Save()")
+    env = {**os.environ, 'SC': str(SHORTCUT), 'TGT': str(target), 'WD': str(runlog.main_root())}
+    subprocess.run(['powershell', '-NoProfile', '-Command', ps], env=env, check=True)
+    print(f'Installed {SHORTCUT}')
+    ensure_watchdog()
+
+
+def status():
+    print('watchdog:', 'running' if watchdog_running() else 'NOT running',
+          '| autostart:', 'installed' if SHORTCUT.exists() else 'not installed')
+    pids = find_fgfs()
+    for pid in pids:
+        info = read_lock(sessions_dir() / f'{pid}.lock')
+        if info and pid_alive(info.get('watcher_pid')):
+            print(f"fgfs {pid}: logging as {info.get('name') or UNNAMED!r}  {info.get('url', '')}")
+        else:
+            print(f'fgfs {pid}: NOT logged yet')
+    if not pids:
+        print('FlightGear is not running.')
 
 
 class Session:
@@ -118,8 +270,15 @@ class Session:
         self.a = a
         self.proc = Process(a.pid)
         self.started = time.time()
+        self.lockfile = self._take_lock()
+        info = parse_cmdline(fgfs_cmdline(a.pid))
+        self.name = a.name or info['name']
+        self.httpd = a.httpd or info['httpd'] or 8080
+        telemetry = info['telemetry_port'] or 5501
+        self.aircraft = info['aircraft']
         self.who = runlog.git('config', 'user.name', check=False) or os.environ.get('USERNAME', 'unknown')
-        self.id = runlog.run_id('fg', 'session', self.who)
+        self.stamp = datetime.fromtimestamp(self.started, timezone.utc).strftime('%Y-%m-%dT%H%M%SZ')
+        self.id = self._run_id()
         base = runlog.ensure_worktree()
         self.base = base
         self.dir = base / runlog.RUNS / self.id
@@ -132,7 +291,7 @@ class Session:
         self.paused = None
         self.status = 'FlightGear starting'
         self.fg_info, self.fg_kept = {}, []
-        self.fg_log = (Path(a.fg_home) if a.fg_home else runlog.fg_home(a.telemetry_port)) / 'fgfs.log'
+        self.fg_log = (Path(a.fg_home) if a.fg_home else runlog.fg_home(telemetry)) / 'fgfs.log'
         self.fg_offset = 0
         self.controller = {}      # run id -> {'console_offset', 'fly_offset', 'result'}
         self.fly_ctrl = []        # recent controller fly rows for the page
@@ -146,9 +305,56 @@ class Session:
         self._fly = open(self.dir / 'fly_activity.csv', 'w', newline='', encoding='utf-8')
         self._fw = csv.writer(self._fly)
         self._fw.writerow(['wall_utc', 'sim_time_s', 'source', *FLY])
+        self._airplane.flush()
+        self._fly.flush()
         self._events = open(self.dir / 'events.log', 'w', encoding='utf-8')
-        self.event('session', f'Session {self.id} watching fgfs pid {a.pid}'
-                   + (f' ({a.label})' if a.label else ''))
+        self.url = ''
+        self._write_lock()
+        self.event('session', f'Session {self.name or UNNAMED!r} watching fgfs pid {a.pid}'
+                   + (f' ({self.aircraft})' if self.aircraft else ''))
+        if not self.name:
+            self.event('session', 'This session has NO NAME - enter one on the live page '
+                                  '(or: python -m flight_simulator.session attach --name "...")')
+
+    # ---- naming + lock -------------------------------------------------
+    def _run_id(self):
+        return f'{self.stamp}_{runlog.slug(self.who)}_fg-{runlog.slug(self.name) if self.name else UNNAMED}'
+
+    def _take_lock(self):
+        """One logger per fgfs process, however many launchers/watchdogs try."""
+        path = sessions_dir() / f'{self.a.pid}.lock'
+        for _ in range(2):
+            try:
+                fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+                os.close(fd)
+                return path
+            except FileExistsError:
+                info = read_lock(path)
+                if info is None and time.time() - path.stat().st_mtime < 10:
+                    raise SystemExit(f'fgfs {self.a.pid}: another logger is starting')
+                if info and pid_alive(info.get('watcher_pid')):
+                    if self.a.name and info.get('url'):   # just (re)name the running session
+                        req = urllib.request.Request(info['url'] + 'api/name', method='POST',
+                                                     data=json.dumps({'name': self.a.name}).encode())
+                        urllib.request.urlopen(req, timeout=3).read()
+                        raise SystemExit(f"fgfs {self.a.pid}: already logged; renamed to {self.a.name!r}")
+                    raise SystemExit(f"fgfs {self.a.pid}: already logged as {info.get('name')!r}")
+                path.unlink(missing_ok=True)
+        raise SystemExit('could not take the session lock')
+
+    def _write_lock(self):
+        data = {'fgfs_pid': self.a.pid, 'watcher_pid': os.getpid(), 'name': self.name,
+                'run_id': self.id, 'url': self.url, 'started': self.started}
+        self.lockfile.write_text(json.dumps(data), encoding='utf-8')
+
+    def set_name(self, name):
+        name = (name or '').strip()[:120]
+        if not name:
+            return False
+        old, self.name = self.name, name
+        self._write_lock()
+        self.event('session', f'Session named {name!r}' + (f' (was {old!r})' if old else ''))
+        return True
 
     # ---- logging -------------------------------------------------------
     def event(self, source, text):
@@ -163,7 +369,7 @@ class Session:
 
     # ---- FlightGear property API ----------------------------------------
     def _get(self, path):
-        url = f'http://127.0.0.1:{self.a.httpd}/json{path}'
+        url = f'http://127.0.0.1:{self.httpd}/json{path}'
         with urllib.request.urlopen(url, timeout=1.0) as r:
             return json.loads(r.read() or b'{}').get('value')
 
@@ -179,7 +385,7 @@ class Session:
         if not self.connected:
             self.connected = True
             self.status = 'FlightGear running'
-            self.event('session', f'Connected to property API on :{self.a.httpd}')
+            self.event('session', f'Connected to property API on :{self.httpd}')
         for k, (_, scale) in AIRPLANE.items():
             if isinstance(row[k], (int, float)) and not isinstance(row[k], bool) and scale != 1:
                 row[k] = row[k] * scale
@@ -240,7 +446,7 @@ class Session:
     def tail_controller(self):
         runs = self.base / runlog.RUNS
         for d in runs.iterdir() if runs.exists() else []:
-            if d.name == self.id or 'fg-session' in d.name or not d.is_dir():
+            if d.name == self.id or '_fg-' in d.name or not d.is_dir():   # skip FG sessions
                 continue
             st = self.controller.get(d.name)
             if st is None:
@@ -267,9 +473,10 @@ class Session:
                     with self.lock:
                         self.fly_ctrl.extend(rows)
                         del self.fly_ctrl[:-HISTORY]
-                        if 'header' not in st and p.exists():
-                            st['header'] = p.read_text(encoding='utf-8').splitlines()[0]
-                            self.fly_header = st['header']
+                        if 'header' not in st:
+                            lines = p.read_text(encoding='utf-8').splitlines()
+                            if lines:
+                                st['header'] = self.fly_header = lines[0]
             if (d / 'result.json').exists():
                 st['done'] = True
                 st['result'] = json.loads((d / 'result.json').read_text())
@@ -279,7 +486,7 @@ class Session:
     def snapshot(self, since):
         with self.lock:
             return {
-                'id': self.id, 'label': self.a.label, 'status': self.status,
+                'id': self.id, 'name': self.name, 'status': self.status,
                 'connected': self.connected, 'paused': self.paused,
                 'elapsed_s': round(time.time() - self.started),
                 'flightgear': self.fg_info, 'latest': self.latest,
@@ -299,6 +506,20 @@ class Session:
         class Handler(BaseHTTPRequestHandler):
             def log_message(self, *args):
                 pass
+
+            def do_POST(self):
+                if self.path != '/api/name':
+                    self.send_error(404)
+                    return
+                try:
+                    body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
+                    ok = session.set_name(str(body.get('name', '')))
+                except ValueError:
+                    ok = False
+                self.send_response(200 if ok else 400)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'ok': ok, 'name': session.name}).encode())
 
             def do_GET(self):
                 if self.path.startswith('/api/state'):
@@ -326,6 +547,7 @@ class Session:
             raise OSError('No free port for the live log page')
         self.url = f'http://127.0.0.1:{self.server.server_port}/'
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
+        self._write_lock()
         self.event('session', f'Live log page: {self.url}')
 
     # ---- main loop and wrap-up -----------------------------------------
@@ -335,42 +557,61 @@ class Session:
             webbrowser.open(self.url)
         next_slow = 0
         while self.proc.alive():
-            self.poll()
+            try:
+                self.poll()
+            except Exception as exc:
+                self.event('session', f'poll skipped: {exc!r}')
             if time.time() >= next_slow:
-                self.tail_fg_log()
-                self.tail_controller()
+                self._tails()
                 next_slow = time.time() + 1
             time.sleep(POLL_S)
-        self.tail_fg_log()
-        self.tail_controller()
+        self._tails()
         code = self.proc.code
         crashed = code not in (0, None)
-        self.event('session', f'FlightGear exited (code {code})' + (' - looks like a crash' if crashed else ''))
+        self.event('session', f'FlightGear exited (code {code})' + (' - crashed or force-closed' if crashed else ''))
         self.status = 'FlightGear closed - saving log'
-        self.finish(code, crashed)
+        try:
+            self.finish(code, crashed)
+        finally:
+            self.lockfile.unlink(missing_ok=True)
         self.status = 'FlightGear closed - log saved' + (' and pushed' if self.pushed else ' locally')
         self.event('session', self.status)
         time.sleep(15)            # let the open page show the final status
         self.server.shutdown()
 
+    def _tails(self):
+        """Side streams must never take the logger down; the session log matters more."""
+        for tail in (self.tail_fg_log, self.tail_controller):
+            try:
+                tail()
+            except Exception as exc:
+                self.event('session', f'{tail.__name__} skipped: {exc!r}')
+
     def finish(self, code, crashed):
         self._airplane.close()
         self._fly.close()
+        self._events.close()
+        final = self._run_id()          # the name may have been set during the session
+        if final != self.id:
+            target = self.dir.with_name(final)
+            os.replace(self.dir, target)
+            self.id, self.dir = final, target
         (self.dir / 'fgfs_warnings.log').write_text(
             '\n'.join(runlog.filter_fg_log(self.fg_kept)) + '\n', encoding='utf-8')
         duration = round(time.time() - self.started)
         controller = {k: v.get('result') for k, v in self.controller.items()}
         meta = {'run_id': self.id, 'who': self.who, 'kind': 'flightgear-session',
-                'label': self.a.label, 'fgfs_pid': self.a.pid, 'fgfs_exit_code': code,
+                'name': self.name, 'aircraft': self.aircraft,
+                'fgfs_pid': self.a.pid, 'fgfs_exit_code': code,
                 'started_utc': datetime.fromtimestamp(self.started, timezone.utc).isoformat(),
-                'duration_s': duration, 'httpd_port': self.a.httpd,
+                'duration_s': duration, 'httpd_port': self.httpd,
                 'flightgear': {**self.fg_info, 'fgfs_log': str(self.fg_log),
                                'warning_lines': len(self.fg_kept)},
                 'airplane_samples': self.samples, 'controller_runs': controller,
                 'code': {'commit': runlog.git('rev-parse', 'HEAD', check=False),
                          'branch': runlog.git('rev-parse', '--abbrev-ref', 'HEAD', check=False)}}
         (self.dir / 'meta.json').write_text(json.dumps(meta, indent=2, default=str) + '\n', encoding='utf-8')
-        outcome = 'FlightGear CRASHED' if crashed else 'closed normally'
+        outcome = 'FlightGear crashed or was force-closed' if crashed else 'closed normally'
         rows = [('Outcome', f'{outcome} (exit {code})'),
                 ('Duration', f'{duration // 60} min {duration % 60} s'),
                 ('FlightGear', f"{self.fg_info.get('version', '?')}, {self.fg_info.get('aircraft', '?')}"),
@@ -380,37 +621,62 @@ class Session:
                                        f"{self.maxima['ias_kt'] and round(self.maxima['ias_kt'])} kt"),
                 ('FlightGear warnings', f'{len(self.fg_kept)} lines (fgfs_warnings.log)'),
                 ('Controller runs', ', '.join(f'[{k}](../{k}/feedback.md)' for k in controller) or 'none')]
-        text = (f'# {self.id}\n\nFlightGear session by {self.who}'
-                + (f' ({self.a.label})' if self.a.label else '') + '.\n\n'
-                '| | |\n|---|---|\n' + ''.join(f'| {k} | {v} |\n' for k, v in rows)
+        title = self.name or 'UNNAMED SESSION'
+        text = (f'# {title}\n\n`{self.id}`, FlightGear session by {self.who}.\n\n'
+                + ('' if self.name else '> **This session was never named.** Name sessions with '
+                   '`--name` on the launcher or on the live page.\n\n')
+                + '| | |\n|---|---|\n' + ''.join(f'| {k} | {v} |\n' for k, v in rows)
                 + '\n## Notes\n\n<!-- add feedback: python -m flight_simulator.runlog note "..." -->\n')
         (self.dir / 'feedback.md').write_text(text, encoding='utf-8')
-        self._events.close()
-        message = f'sim log: FlightGear session {outcome}, {duration // 60} min ({self.who})'
+        message = f'sim log: FlightGear session "{title}" {outcome}, {duration // 60} min ({self.who})'
         self.pushed = runlog.push(message, [f'{runlog.RUNS}/{self.id}'])
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd', required=True)
-    for name in ('watch', 'attach'):
-        p = sub.add_parser(name)
-        p.add_argument('--pid', type=int, required=(name == 'watch'))
-        p.add_argument('--httpd', type=int, default=8080)
-        p.add_argument('--telemetry-port', type=int, default=5501, help='picks the FG_HOME of that instance')
-        p.add_argument('--fg-home', help='FlightGear home holding fgfs.log')
-        p.add_argument('--label', default='')
-        p.add_argument('--no-browser', action='store_true')
+    w = sub.add_parser('watch', help='(internal) log one fgfs process until it exits')
+    w.add_argument('--pid', type=int, required=True)
+    w.add_argument('--name')
+    w.add_argument('--httpd', type=int, help='default: from the fgfs command line, else 8080')
+    w.add_argument('--fg-home', help='FlightGear home holding fgfs.log')
+    w.add_argument('--no-browser', action='store_true')
+    at = sub.add_parser('attach', help='log (or name) an already running fgfs now')
+    at.add_argument('--pid', type=int)
+    at.add_argument('--name')
+    at.add_argument('--no-browser', action='store_true')
+    sub.add_parser('watchdog', help='(internal) attach a logger to every fgfs that appears')
+    sub.add_parser('ensure-watchdog', help='start the watchdog if it is not running')
+    sub.add_parser('install-autostart', help='run the watchdog at every Windows logon')
+    sub.add_parser('status', help='watchdog state and which FlightGear sessions are logged')
     a = ap.parse_args(argv)
-    if a.cmd == 'attach':
-        if not a.pid:
-            pids = find_fgfs()
-            if len(pids) != 1:
-                sys.exit(f'Found {len(pids)} fgfs.exe processes; pass --pid.' if pids else 'FlightGear is not running.')
-            a.pid = pids[0]
-        spawn(a.pid, a.httpd, a.telemetry_port, a.fg_home, a.label or 'attached', not a.no_browser)
-        return 0
-    Session(a).run()
+    if a.cmd == 'watch':
+        Session(a).run()
+    elif a.cmd == 'attach':
+        pids = [a.pid] if a.pid else find_fgfs()
+        if len(pids) != 1:
+            sys.exit(f'Found {len(pids)} fgfs.exe processes; pass --pid.' if pids else 'FlightGear is not running.')
+        ensure_watchdog(quiet=True)
+        info = read_lock(sessions_dir() / f'{pids[0]}.lock')
+        if info and pid_alive(info.get('watcher_pid')):
+            if a.name:
+                req = urllib.request.Request(info['url'] + 'api/name', method='POST',
+                                             data=json.dumps({'name': a.name}).encode())
+                urllib.request.urlopen(req, timeout=3).read()
+                print(f'Session renamed to {a.name!r}. Live page: {info["url"]}')
+            else:
+                print(f"Already logged as {info.get('name') or UNNAMED!r}. Live page: {info.get('url')}")
+        else:
+            spawn(pids[0], a.name, not a.no_browser)
+            print('Session logger attached; live page opening.')
+    elif a.cmd == 'watchdog':
+        watchdog()
+    elif a.cmd == 'ensure-watchdog':
+        ensure_watchdog()
+    elif a.cmd == 'install-autostart':
+        install_autostart()
+    elif a.cmd == 'status':
+        status()
     return 0
 
 

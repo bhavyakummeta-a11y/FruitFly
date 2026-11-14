@@ -53,15 +53,27 @@ h2 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2p
 table.now { border-collapse: collapse; font-size: 12px; width: 100%; margin-top: 10px; }
 table.now td { padding: 2px 6px 2px 0; color: var(--text-2); }
 table.now td.v { color: var(--text); font-variant-numeric: tabular-nums; text-align: right; }
+#name-form { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  padding: 8px 10px; border: 1px solid var(--warn); border-radius: 6px; font-weight: 600; }
+#name-form[hidden] { display: none; }
+#name-form input { flex: 1 1 240px; min-width: 0; font: inherit; font-weight: 400; padding: 5px 8px;
+  border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); }
+#name-form button { font: inherit; padding: 5px 12px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--text); color: var(--surface); cursor: pointer; }
 .tip { position: fixed; pointer-events: none; background: var(--text); color: var(--surface);
   font-size: 12px; padding: 3px 7px; border-radius: 4px; display: none; z-index: 5; }
 </style>
 </head>
 <body>
 <header>
-  <h1>FruitFly sim log</h1>
+  <h1 id="title">FruitFly sim log</h1>
   <span id="status" class="status wait">Connecting…</span>
   <span id="meta" class="meta"></span>
+  <form id="name-form" hidden>
+    <label for="name-input">This session has no name. Name it:</label>
+    <input id="name-input" maxlength="120" placeholder="what is this session testing?" required>
+    <button type="submit">Save name</button>
+  </form>
 </header>
 <main>
   <section>
@@ -149,8 +161,12 @@ function render(d) {
   st.textContent = d.paused ? 'FlightGear paused' : d.status;
   st.className = 'status ' + (d.status.startsWith('FlightGear closed') ? 'done' : d.connected ? 'ok' : 'wait');
   const fg = d.flightgear || {};
+  document.getElementById('title').textContent = d.name || 'Unnamed FlightGear session';
+  document.title = (d.name || 'UNNAMED') + ' · FruitFly sim log';
+  const form = document.getElementById('name-form');
+  if (form.hidden === !!d.name) form.hidden = !!d.name;
   document.getElementById('meta').textContent =
-    [d.id, fg.version && `FlightGear ${fg.version}`, fg.aircraft, `${timeLabel(d.elapsed_s)} elapsed`].filter(Boolean).join('  ·  ');
+    [fg.version && `FlightGear ${fg.version}`, fg.aircraft, `${timeLabel(d.elapsed_s)} elapsed`, d.id].filter(Boolean).join('  ·  ');
 
   const s = d.series, xs = s.t.map(timeLabel);
   const ac = document.getElementById('airplane-charts');
@@ -200,6 +216,13 @@ function render(d) {
 document.querySelectorAll('input[data-src]').forEach(cb => cb.addEventListener('change', () => {
   document.querySelectorAll(`#log .row[data-src="${cb.dataset.src}"]`).forEach(r => r.hidden = !cb.checked);
 }));
+
+document.getElementById('name-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = document.getElementById('name-input').value.trim();
+  if (!name) return;
+  await fetch('/api/name', {method: 'POST', body: JSON.stringify({name})});
+});
 
 async function tick() {
   try {
