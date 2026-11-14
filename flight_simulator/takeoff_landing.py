@@ -88,6 +88,10 @@ def run_flightgear(args, fly, log):
     # on the extended centerline, --final-nm before the threshold.
     ahead = args.final_nm * 1852.0 if args.phase == 'landing' else 0.0
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
+    if args.phase == 'landing':
+        # Landing configuration (scripted). Without this the bridge's default, flaps 5,
+        # would retract the flaps on final.
+        bridge.flaps = 0.875
     pilot = None
     ap_guard = None
     speed_lock = None
@@ -294,17 +298,28 @@ def main(argv=None):
                                  else 'flying fly, looming -> DNp07 = flare'), flush=True)
         log = []
         start = time.monotonic()
-        result = (run_demo if args.backend == 'demo' else run_flightgear)(args, fly, log)
+        # A terminated controller must still pause FlightGear and save its log: treat
+        # SIGTERM/SIGHUP like Ctrl-C (FlightGear keeps the last controls it received).
+        import signal
+        def _stop(signum, frame):
+            raise KeyboardInterrupt
+        for sig in (signal.SIGTERM, getattr(signal, 'SIGHUP', None)):
+            if sig is not None:
+                signal.signal(sig, _stop)
+        try:
+            result = (run_demo if args.backend == 'demo' else run_flightgear)(args, fly, log)
+        finally:
+            if args.log and log:  # always, even if the run is stopped mid-flight
+                Path(args.log).parent.mkdir(parents=True, exist_ok=True)
+                fields = sorted({k for r in log for k in r}, key=lambda k: (k.startswith(('in_', 'dn_')), k))
+                with open(args.log, 'w', newline='') as f:
+                    w = csv.DictWriter(f, fields)
+                    w.writeheader()
+                    w.writerows(log)
+                print(f'Log written to {args.log} ({len(log)} rows)', flush=True)
         result['backend'] = args.backend
         result['wall_s'] = round(time.monotonic() - start, 1)
         result['success'] = judge(args.phase, result)
-        if args.log and log:
-            Path(args.log).parent.mkdir(parents=True, exist_ok=True)
-            fields = sorted({k for r in log for k in r}, key=lambda k: (k.startswith(('in_', 'dn_')), k))
-            with open(args.log, 'w', newline='') as f:
-                w = csv.DictWriter(f, fields)
-                w.writeheader()
-                w.writerows(log)
         if args.plot and log:
             from .plot_run import plot
             title = f'{fly.name}, {brain.name} ({args.backend}): ' + ('success' if result['success'] else 'FAILED')

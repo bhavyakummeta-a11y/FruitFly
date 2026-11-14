@@ -374,8 +374,16 @@ class LandingFly(PhaseFly):
     def unstable(self, s):
         # Judged between 1,000 and 100 ft; below 100 ft the pilot flies the flare by eye.
         return (100 * FT < s.agl < 1000 * FT and not s.on_ground and
-                (self.off_glideslope(s) or abs(s.y) > 40
+                (self.off_glideslope(s) or self.off_localizer(s)
                  or not -8 * KT <= s.speed - VREF <= 15 * KT))
+
+    @staticmethod
+    def off_localizer(s):
+        """More than ~1 localizer dot (0.6 deg seen from the far end of the runway), and never
+        stricter than 40 m. A flat 40 m sent a live FlightGear approach around: it started
+        31.7 m off the centerline at 3 nm."""
+        distance = max(3600.0 - s.x, 1.0)  # localizer antenna ~ far end of the runway
+        return abs(s.y) > max(40.0, distance * math.tan(math.radians(0.6)))
 
     @staticmethod
     def off_glideslope(s):
