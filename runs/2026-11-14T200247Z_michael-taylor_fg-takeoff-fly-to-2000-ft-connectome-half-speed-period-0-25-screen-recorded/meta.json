@@ -1,0 +1,36 @@
+{
+  "run_id": "2026-11-14T200247Z_michael-taylor_fg-takeoff-fly-to-2000-ft-connectome-half-speed-period-0-25-screen-recorded",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 1.4,
+      "to_s": 41.4
+    }
+  ],
+  "name": "takeoff fly to 2000 ft - CONNECTOME, HALF SPEED, period 0.25, screen-recorded",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 21876,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T20:02:47.953745+00:00",
+  "duration_s": 41,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 25
+  },
+  "airplane_samples": 3,
+  "controller_runs": {},
+  "videos": [],
+  "code": {
+    "commit": "cbb98ebeef73dcd1c1d67e22d7ccd8afc90021e7",
+    "branch": "main"
+  }
+}
