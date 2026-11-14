@@ -15,5 +15,6 @@ Run by Michael Taylor. Command: `python -m flight_simulator --brain reflex --sec
 ## Notes
 
 - smoke test of runlog
+- **Michael Taylor** (2026-11-14 11:16): second note test
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
