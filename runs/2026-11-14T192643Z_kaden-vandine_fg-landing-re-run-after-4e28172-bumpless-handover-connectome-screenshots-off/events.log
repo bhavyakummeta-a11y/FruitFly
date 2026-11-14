@@ -1,0 +1,237 @@
+14:26:43 [session] Session 'landing re-run after 4e28172 (bumpless handover), connectome, screenshots off' watching fgfs pid 47009 (738-flies)
+14:26:43 [session] Live log page: http://127.0.0.1:8765/
+14:26:50 [session] Connected to property API on :8080
+14:26:51 [session] Video start failed: FlightGear did not answer (HTTP Error 404: Not Found)
+14:26:53 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: SPD)
+14:26:53 [controller] Run started: 2026-11-14T192652Z_kaden-vandine_flightgear-connectome
+14:26:53 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T192652Z_kaden-vandine_flightgear-connectome
+14:26:53 [controller] [control] FLY BRAIN (connectome) flying the landing
+14:26:53 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+14:26:53 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+14:26:53 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:26:55 [session] Property API stopped answering
+14:26:55 [controller] CONNECTOME LIF (notebook model)
+14:26:55 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+14:26:56 [controller]   zero points: steer=-17.5
+14:26:56 [controller] Landing fly: flying fly, looming -> DNp07 = flare
+14:26:56 [controller] Waiting for FlightGear runway telemetry on localhost...
+14:26:59 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+14:26:59 [controller] Error: timed out
+14:26:59 [controller] Run finished: 2026-11-14T192652Z_kaden-vandine_flightgear-connectome exit=1
+14:27:07 [session] Connected to property API on :8080
+14:27:19 [session] Property API stopped answering
+14:27:25 [session] Connected to property API on :8080
+14:27:31 [session] Property API stopped answering
+14:27:44 [session] Connected to property API on :8080
+14:27:47 [session] Property API stopped answering
+14:27:54 [controller] Run started: 2026-11-14T192754Z_kaden-vandine_flightgear-connectome
+14:27:54 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T192754Z_kaden-vandine_flightgear-connectome
+14:27:54 [controller] [control] FLY BRAIN (connectome) flying the landing
+14:27:54 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+14:27:54 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+14:27:54 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:27:56 [controller] CONNECTOME LIF (notebook model)
+14:27:56 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+14:27:57 [controller]   zero points: steer=-17.5
+14:27:57 [controller] Landing fly: flying fly, looming -> DNp07 = flare
+14:27:57 [controller] Waiting for FlightGear runway telemetry on localhost...
+14:28:02 [session] Connected to property API on :8080
+14:28:02 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+14:28:03 [controller] Landing handover: throttle 0.55, elevator +0.00, reference attitude 1.5 deg (plane at 0.4 deg, +110 fpm)
+14:28:18 [session] Property API stopped answering
+14:28:19 [session] Connected to property API on :8080
+14:28:21 [control] IN CONTROL: FLY BRAIN (connectome) flying the landing (run 2026-11-14T192754Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+14:28:21 [flightgear] Resumed
+14:28:21 [controller] NO-AUTOPILOT RULE: autopilot was still on after handover (/autopilot/internal/SPD); forced off.
+14:28:21 [controller] FlightGear resumes with the fly's first controls: the fly has the approach.
+14:28:21 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+14:28:21 [controller]   decision applied 0.0s after its state  APPROACH       ias=144.3kt agl=  993ft pitch= 0.4deg thr=0.53
+14:28:21 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.5kt agl=  992ft pitch= 0.5deg thr=0.55
+14:28:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.4kt agl=  990ft pitch= 0.6deg thr=0.55
+14:28:22 [controller]   decision applied 0.4s after its state  APPROACH       ias=143.5kt agl=  983ft pitch= 0.6deg thr=0.51
+14:28:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.6kt agl=  981ft pitch= 0.6deg thr=0.61
+14:28:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.9kt agl=  977ft pitch= 0.5deg thr=0.59
+14:28:24 [controller]   decision applied 0.8s after its state  APPROACH       ias=145.2kt agl=  960ft pitch= 0.4deg thr=0.61
+14:28:24 [controller]   decision applied 0.1s after its state  APPROACH       ias=145.4kt agl=  958ft pitch= 0.4deg thr=0.57
+14:28:24 [controller]   decision applied 0.5s after its state  APPROACH       ias=146.3kt agl=  944ft pitch= 0.3deg thr=0.56
+14:28:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.4kt agl=  941ft pitch= 0.2deg thr=0.52
+14:28:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.7kt agl=  934ft pitch= 0.2deg thr=0.50
+14:28:25 [controller]   decision applied 0.4s after its state  APPROACH       ias=147.3kt agl=  922ft pitch= 0.2deg thr=0.42
+14:28:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.3kt agl=  919ft pitch= 0.2deg thr=0.49
+14:28:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.6kt agl=  912ft pitch= 0.2deg thr=0.44
+14:28:27 [controller]   decision applied 0.8s after its state  APPROACH       ias=148.2kt agl=  889ft pitch= 0.3deg thr=0.47
+14:28:27 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.2kt agl=  886ft pitch= 0.4deg thr=0.42
+14:28:29 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.5kt agl=  870ft pitch= 0.7deg thr=0.50
+14:28:29 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.7kt agl=  863ft pitch= 0.8deg thr=0.52
+14:28:29 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.1kt agl=  851ft pitch= 1.0deg thr=0.56
+14:28:29 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  849ft pitch= 1.0deg thr=0.51
+14:28:29 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.4kt agl=  841ft pitch= 1.2deg thr=0.50
+14:28:30 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.7kt agl=  829ft pitch= 1.3deg thr=0.49
+14:28:30 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.9kt agl=  821ft pitch= 1.4deg thr=0.52
+14:28:30 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.0kt agl=  818ft pitch= 1.4deg thr=0.47
+14:28:30 [controller]   decision applied 0.3s after its state  APPROACH       ias=150.1kt agl=  809ft pitch= 1.5deg thr=0.49
+14:28:30 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.2kt agl=  805ft pitch= 1.5deg thr=0.47
+14:28:32 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  800ft pitch= 1.6deg thr=0.41
+14:28:32 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  795ft pitch= 1.6deg thr=0.39
+14:28:32 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  787ft pitch= 1.7deg thr=0.45
+14:28:32 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.1kt agl=  782ft pitch= 1.8deg thr=0.42
+14:28:33 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.1kt agl=  776ft pitch= 1.8deg thr=0.44
+14:28:33 [controller]   decision applied 0.4s after its state  APPROACH       ias=150.0kt agl=  764ft pitch= 2.0deg thr=0.48
+14:28:33 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.0kt agl=  762ft pitch= 2.1deg thr=0.52
+14:28:33 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.1kt agl=  757ft pitch= 2.2deg thr=0.50
+14:28:33 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  749ft pitch= 2.3deg thr=0.41
+14:28:35 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.1kt agl=  744ft pitch= 2.4deg thr=0.46
+14:28:35 [controller]   decision applied 0.4s after its state  APPROACH       ias=150.0kt agl=  735ft pitch= 2.6deg thr=0.48
+14:28:35 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.0kt agl=  733ft pitch= 2.6deg thr=0.51
+14:28:35 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.0kt agl=  729ft pitch= 2.7deg thr=0.57
+14:28:37 [session] Property API stopped answering
+14:28:37 [controller]   decision applied 0.8s after its state  APPROACH       ias=150.3kt agl=  715ft pitch= 3.1deg thr=0.52
+14:28:37 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.3kt agl=  714ft pitch= 3.2deg thr=0.49
+14:28:39 [controller]   decision stale 1.1s after its state  APPROACH       ias=150.2kt agl=  706ft pitch= 3.3deg thr=0.49
+14:28:43 [controller] Landing fly: approach path re-anchored at 2.7 deg from 667 ft, 4306 m out
+14:28:43 [controller]   decision stale 4.0s after its state  APPROACH       ias=148.5kt agl=  667ft pitch= 4.0deg thr=0.49
+14:28:43 [controller]   decision applied 0.3s after its state  APPROACH       ias=147.9kt agl=  657ft pitch= 4.2deg thr=0.49
+14:28:43 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.8kt agl=  655ft pitch= 4.2deg thr=0.50
+14:28:44 [controller]   decision stale 1.1s after its state  APPROACH       ias=147.7kt agl=  653ft pitch= 4.1deg thr=0.50
+14:28:48 [controller]   decision stale 4.0s after its state  APPROACH       ias=148.0kt agl=  605ft pitch=-0.1deg thr=0.50
+14:28:51 [session] Connected to property API on :8080
+14:28:51 [controller]   decision stale 3.2s after its state  APPROACH       ias=156.9kt agl=  447ft pitch=-13.1deg thr=0.50
+14:28:51 [controller]   decision applied 0.4s after its state  APPROACH       ias=158.7kt agl=  419ft pitch=-15.0deg thr=0.36
+14:28:51 [controller]   decision applied 0.3s after its state  APPROACH       ias=159.9kt agl=  399ft pitch=-16.4deg thr=0.29
+14:28:53 [controller]   decision applied 0.3s after its state  APPROACH       ias=161.2kt agl=  374ft pitch=-17.7deg thr=0.26
+14:28:53 [controller]   decision applied 0.4s after its state  APPROACH       ias=163.2kt agl=  334ft pitch=-18.4deg thr=0.24
+14:28:53 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=164.9kt agl=  298ft pitch=-18.4deg thr=1.00
+14:28:53 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=167.0kt agl=  252ft pitch=-18.1deg thr=1.00
+14:28:54 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=169.1kt agl=  207ft pitch=-17.7deg thr=1.00
+14:28:54 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=170.0kt agl=  188ft pitch=-17.6deg thr=1.00
+14:28:54 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=171.5kt agl=  161ft pitch=-17.3deg thr=1.00
+14:28:54 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=176.3kt agl=   87ft pitch=-16.6deg thr=1.00
+14:28:54 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=177.9kt agl=   66ft pitch=-16.3deg thr=1.00
+14:28:56 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=179.8kt agl=   41ft pitch=-15.9deg thr=1.00
+14:28:56 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=168.6kt agl=    1ft pitch=-10.5deg thr=1.00
+14:28:56 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=159.4kt agl=    0ft pitch= 7.3deg thr=1.00
+14:28:56 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=160.6kt agl=    0ft pitch= 4.3deg thr=1.00
+14:28:56 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.9kt agl=    0ft pitch= 3.7deg thr=1.00
+14:28:57 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.3kt agl=    2ft pitch= 2.2deg thr=1.00
+14:28:57 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.3kt agl=    4ft pitch= 2.1deg thr=1.00
+14:28:57 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=164.5kt agl=    6ft pitch= 2.1deg thr=1.00
+14:28:57 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=166.0kt agl=    9ft pitch= 2.1deg thr=1.00
+14:28:59 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=166.8kt agl=   10ft pitch= 2.1deg thr=1.00
+14:28:59 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=167.7kt agl=   12ft pitch= 2.2deg thr=1.00
+14:28:59 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.2kt agl=   14ft pitch= 2.5deg thr=1.00
+14:28:59 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=170.5kt agl=   17ft pitch= 2.8deg thr=1.00
+14:28:59 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=171.0kt agl=   19ft pitch= 2.9deg thr=1.00
+14:29:00 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=172.2kt agl=   22ft pitch= 3.2deg thr=1.00
+14:29:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=172.8kt agl=   23ft pitch= 3.5deg thr=1.00
+14:29:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=173.7kt agl=   26ft pitch= 3.8deg thr=1.00
+14:29:00 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=175.6kt agl=   32ft pitch= 4.3deg thr=1.00
+14:29:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=176.2kt agl=   34ft pitch= 4.5deg thr=1.00
+14:29:02 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=177.8kt agl=   41ft pitch= 5.1deg thr=1.00
+14:29:02 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=178.7kt agl=   46ft pitch= 5.5deg thr=1.00
+14:29:02 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=179.1kt agl=   49ft pitch= 5.6deg thr=1.00
+14:29:03 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=180.3kt agl=   58ft pitch= 5.9deg thr=1.00
+14:29:03 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.7kt agl=   63ft pitch= 6.1deg thr=1.00
+14:29:03 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=181.6kt agl=   75ft pitch= 6.5deg thr=1.00
+14:29:03 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=181.9kt agl=   79ft pitch= 6.6deg thr=1.00
+14:29:03 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=182.1kt agl=   83ft pitch= 6.8deg thr=1.00
+14:29:05 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=182.5kt agl=   91ft pitch= 7.1deg thr=1.00
+14:29:05 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=183.1kt agl=  111ft pitch= 7.8deg thr=1.00
+14:29:05 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=183.3kt agl=  116ft pitch= 8.0deg thr=1.00
+14:29:05 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=183.6kt agl=  130ft pitch= 8.3deg thr=1.00
+14:29:06 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=183.7kt agl=  136ft pitch= 8.4deg thr=1.00
+14:29:06 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=183.8kt agl=  143ft pitch= 8.6deg thr=1.00
+14:29:06 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=184.1kt agl=  166ft pitch= 9.0deg thr=1.00
+14:29:06 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=184.2kt agl=  173ft pitch= 9.1deg thr=1.00
+14:29:06 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=184.3kt agl=  182ft pitch= 9.3deg thr=1.00
+14:29:08 [session] Property API stopped answering
+14:29:08 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=184.4kt agl=  194ft pitch= 9.6deg thr=1.00
+14:29:15 [session] Connected to property API on :8080
+14:29:15 [controller]   decision stale 2.7s after its state  GO-AROUND      ias=176.7kt agl=  627ft pitch=20.0deg thr=1.00
+14:29:15 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=175.7kt agl=  662ft pitch=20.8deg thr=1.00
+14:29:15 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=175.1kt agl=  680ft pitch=21.6deg thr=1.00
+14:29:15 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=174.4kt agl=  702ft pitch=22.6deg thr=1.00
+14:29:16 [session] Property API stopped answering
+14:29:16 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=172.4kt agl=  756ft pitch=23.5deg thr=1.00
+14:29:16 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=171.9kt agl=  769ft pitch=23.5deg thr=1.00
+14:29:18 [controller]   decision stale 1.0s after its state  GO-AROUND      ias=171.0kt agl=  796ft pitch=23.5deg thr=1.00
+14:29:21 [session] Connected to property API on :8080
+14:29:21 [controller]   decision stale 4.0s after its state  GO-AROUND      ias=157.4kt agl= 1194ft pitch=24.1deg thr=1.00
+14:29:21 [controller] GO-AROUND reached in the air. No Cruise fly yet, so the Landing fly keeps flying: wings level, 10 deg climb, climb power. Press Ctrl-C to pause FlightGear and exit.
+14:29:21 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=153.2kt agl= 1323ft pitch=23.7deg thr=0.70
+14:29:21 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=152.7kt agl= 1338ft pitch=23.5deg thr=0.70
+14:29:21 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=151.1kt agl= 1364ft pitch=22.6deg thr=0.70
+14:29:23 [session] Property API stopped answering
+14:29:23 [controller]   decision applied 0.8s after its state  GO-AROUND      ias=146.5kt agl= 1440ft pitch=18.0deg thr=0.70
+14:29:25 [controller]   decision stale 1.1s after its state  GO-AROUND      ias=145.8kt agl= 1452ft pitch=17.1deg thr=0.70
+14:29:28 [controller]   decision stale 4.0s after its state  GO-AROUND      ias=140.7kt agl= 1588ft pitch= 3.0deg thr=0.70
+14:29:31 [session] Connected to property API on :8080
+14:29:31 [controller]   decision stale 3.2s after its state  GO-AROUND      ias=155.2kt agl= 1456ft pitch=-28.4deg thr=0.70
+14:29:31 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=158.7kt agl= 1412ft pitch=-32.7deg thr=0.70
+14:29:31 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=160.3kt agl= 1390ft pitch=-34.4deg thr=0.70
+14:29:31 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=162.7kt agl= 1359ft pitch=-36.2deg thr=0.70
+14:29:31 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=164.6kt agl= 1333ft pitch=-36.9deg thr=0.70
+14:29:33 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.7kt agl= 1263ft pitch=-35.8deg thr=0.70
+14:29:33 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=172.2kt agl= 1228ft pitch=-34.5deg thr=0.70
+14:29:33 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=176.6kt agl= 1163ft pitch=-33.3deg thr=0.70
+14:29:35 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=182.8kt agl= 1068ft pitch=-34.3deg thr=0.70
+14:29:35 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=185.5kt agl= 1028ft pitch=-35.3deg thr=0.70
+14:29:35 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=192.3kt agl=  918ft pitch=-34.8deg thr=0.70
+14:29:35 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=194.2kt agl=  887ft pitch=-33.9deg thr=0.70
+14:29:35 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=196.7kt agl=  843ft pitch=-32.6deg thr=0.70
+14:29:36 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=205.0kt agl=  693ft pitch=-33.2deg thr=0.70
+14:29:36 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=206.7kt agl=  662ft pitch=-34.1deg thr=0.70
+14:29:36 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=215.7kt agl=  498ft pitch=-32.9deg thr=0.70
+14:29:36 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=216.7kt agl=  478ft pitch=-31.6deg thr=0.70
+14:29:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=219.5kt agl=  418ft pitch=-26.8deg thr=0.70
+14:29:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=223.6kt agl=  305ft pitch=-21.5deg thr=0.70
+14:29:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=225.8kt agl=  249ft pitch=-23.8deg thr=0.70
+14:29:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=228.2kt agl=  200ft pitch=-26.0deg thr=0.70
+14:29:39 [flightgear] Paused
+14:29:39 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=231.8kt agl=  123ft pitch=-24.7deg thr=0.70
+14:29:39 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=234.7kt agl=   53ft pitch=-19.1deg thr=0.70
+14:29:39 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=235.6kt agl=   27ft pitch=-17.6deg thr=0.70
+14:29:39 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+14:29:39 [controller] {
+14:29:39 [controller]   "fly": "Landing fly",
+14:29:39 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+14:29:39 [controller]   "phase": "GO-AROUND",
+14:29:39 [controller]   "completed": true,
+14:29:39 [controller]   "time_s": 78.4,
+14:29:39 [controller]   "decisions": 123,
+14:29:39 [controller]   "max_centerline_m": 2269.9,
+14:29:39 [controller]   "tail_strike": false,
+14:29:39 [controller]   "stall": false,
+14:29:39 [controller]   "left_runway": true,
+14:29:39 [controller]   "touchdown_x_m": 215,
+14:29:39 [controller]   "touchdown_sink_fpm": 6518,
+14:29:39 [controller]   "touchdown_pitch_deg": -6.7,
+14:29:39 [controller]   "go_around": true,
+14:29:39 [controller]   "flare_decisions": 0,
+14:29:39 [controller]   "safe_reject": false,
+14:29:39 [controller]   "takeoff_achieved": false,
+14:29:39 [controller]   "outcome": "runway_departure",
+14:29:39 [controller]   "events": [
+14:29:39 [controller]     "31.7s GO-AROUND: bitter suppressed MN9"
+14:29:39 [controller]   ],
+14:29:39 [controller]   "termination_reason": "runway_departure",
+14:29:39 [controller]   "decision_timing": {
+14:29:39 [controller]     "applied": 123,
+14:29:39 [controller]     "completed": 134,
+14:29:39 [controller]     "discarded": 11,
+14:29:39 [controller]     "skipped": 33,
+14:29:39 [controller]     "latency_mean_s": 0.23,
+14:29:39 [controller]     "latency_max_s": 0.842
+14:29:39 [controller]   },
+14:29:39 [controller]   "speed_up_resets": 0,
+14:29:39 [controller]   "requested_phase": "landing",
+14:29:39 [controller]   "backend": "flightgear",
+14:29:39 [controller]   "wall_s": 102.1,
+14:29:39 [controller]   "success": false
+14:29:39 [controller] }
+14:29:39 [controller] Run finished: 2026-11-14T192754Z_kaden-vandine_flightgear-connectome exit=2
+14:29:41 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+14:29:47 [control] IN CONTROL: Nobody: no controller running and no control inputs
+14:30:01 [session] Property API stopped answering
+14:30:04 [session] Connected to property API on :8080
+14:30:05 [session] Property API stopped answering
+14:31:40 [session] FlightGear exited (code None)

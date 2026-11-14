@@ -1,0 +1,104 @@
+{
+  "run_id": "2026-11-14T192643Z_kaden-vandine_fg-landing-re-run-after-4e28172-bumpless-handover-connectome-screenshots-off",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 9.6
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: SPD; controller 2026-11-14T192754Z_kaden-vandine_flightgear-connectome is running",
+      "from_s": 9.6,
+      "to_s": 97.5
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the landing",
+      "detail": "run 2026-11-14T192754Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 97.5,
+      "to_s": 177.7
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 177.7,
+      "to_s": 183.9
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 183.9,
+      "to_s": 306.9
+    }
+  ],
+  "name": "landing re-run after 4e28172 (bumpless handover), connectome, screenshots off",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 47009,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T19:26:43.905729+00:00",
+  "duration_s": 307,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 69,
+  "controller_runs": {
+    "2026-11-14T192652Z_kaden-vandine_flightgear-connectome": {
+      "exit_code": 1
+    },
+    "2026-11-14T192754Z_kaden-vandine_flightgear-connectome": {
+      "fly": "Landing fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "GO-AROUND",
+      "completed": true,
+      "time_s": 78.4,
+      "decisions": 123,
+      "max_centerline_m": 2269.9,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": true,
+      "touchdown_x_m": 215,
+      "touchdown_sink_fpm": 6518,
+      "touchdown_pitch_deg": -6.7,
+      "go_around": true,
+      "flare_decisions": 0,
+      "safe_reject": false,
+      "takeoff_achieved": false,
+      "outcome": "runway_departure",
+      "events": [
+        "31.7s GO-AROUND: bitter suppressed MN9"
+      ],
+      "termination_reason": "runway_departure",
+      "decision_timing": {
+        "applied": 123,
+        "completed": 134,
+        "discarded": 11,
+        "skipped": 33,
+        "latency_mean_s": 0.23,
+        "latency_max_s": 0.842
+      },
+      "speed_up_resets": 0,
+      "requested_phase": "landing",
+      "backend": "flightgear",
+      "wall_s": 102.1,
+      "success": false,
+      "exit_code": 2
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "c7865019e5ccc4af645510924fd1841b39f8a40b",
+    "branch": "main"
+  }
+}
