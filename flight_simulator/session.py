@@ -102,8 +102,11 @@ class Process:
 
 
 def find_fgfs():
+    # CREATE_NO_WINDOW: the watchdog runs windowless and polls every 2 s; without it
+    # each tasklist call pops up a new console window.
     out = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq fgfs.exe', '/FO', 'CSV', '/NH'],
-                         capture_output=True, text=True).stdout
+                         capture_output=True, text=True,
+                         creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)).stdout
     pids = [int(line.split('","')[1]) for line in out.splitlines() if line.startswith('"fgfs.exe"')]
     return pids
 
