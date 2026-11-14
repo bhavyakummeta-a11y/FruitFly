@@ -429,15 +429,17 @@ be confused with code, the autopilot or a person:
      program, not the fly brain).
   5. `NOBODY`: no controller and no inputs.
 
-#### Companion windows: log below, fly brain to the right (Windows)
+#### Companion panel under FlightGear: Log / Fly brain (Windows)
 
-When FlightGear's window appears, the session logger makes room on that monitor
-and opens two chromeless windows glued to it (they follow when you move, resize,
-minimise or raise FlightGear):
+When FlightGear's window appears, the session logger gives FlightGear the top 75%
+of that monitor and opens **one** chromeless, scrollable panel glued under it (it
+follows when you move, resize, minimise or raise FlightGear). The panel's **Log** /
+**Fly brain** buttons (keys **1** / **2**) switch between:
 
-- **Log** (below): session name/status, altitude, speed, attitude, throttle, and
-  the running log (session events, FlightGear warnings, controller output).
-- **Fly brain** (right): all 138,639 FlyWire neurons drawn at their real positions
+- **Log**: session name/status, altitude, speed, attitude, throttle, the camera
+  buttons, the video **Record/Stop** button, and the running log (session events,
+  FlightGear warnings, controller output).
+- **Fly brain**: all 138,639 FlyWire neurons drawn at their real positions
   (frontal view); neurons that fired in the latest 200 ms connectome trial light
   up (brightness = spike count), plus the descending-neuron rates. It states
   plainly when no fly brain is flying (no controller, or a reflex/silent baseline).

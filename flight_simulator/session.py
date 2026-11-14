@@ -50,7 +50,8 @@ from . import runlog
 
 HERE = Path(__file__).resolve().parent
 VIEW = HERE / 'session_view.html'
-PAGES = {'/log': HERE / 'session_log.html', '/brain': HERE / 'session_brain.html'}
+PAGES = {'/log': HERE / 'session_log.html', '/brain': HERE / 'session_brain.html',
+         '/panel': HERE / 'session_panel.html'}   # the docked Log / Fly brain panel (dock.py)
 POLL_S = 0.5
 HISTORY = 1200            # points kept for the live charts (10 min at 2 Hz)
 NAME_PROP = '/fruitfly/session/name'
