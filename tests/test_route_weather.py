@@ -50,7 +50,7 @@ class LooksOnly(unittest.TestCase):
         allowed = ('/environment/metar/data', '/environment/params/metar-updates-environment',
                    '/environment/realwx/enabled', '/environment/turbulence/magnitude-norm',
                    '/sim/rendering/precipitation-enable', '/fruitfly/storm/enabled', '/fruitfly/weather',
-                   '/sim/messages/atc')
+                   '/sim/messages/atc', W.FILTERING, *W.LOOK)
         for stage in W.STAGES:
             for path, value in W.stage_props(stage, 2, 'brief'):
                 ok = path in allowed or re.fullmatch(r'/fruitfly/obstacles/obstacle\[\d+\]/visible', path)
@@ -62,6 +62,24 @@ class LooksOnly(unittest.TestCase):
         self.assertIn('--turbulence=0.0', args)
         self.assertIn(f'--metar={W.CLEAR_METAR}', args)
         self.assertIn('--prop:bool:/fruitfly/storm/enabled=false', args)
+
+
+class Look(unittest.TestCase):
+    def test_storm_look_matches_fg_weather_and_clear_resets_it(self):
+        from flight_simulator import fg_weather
+        storm = dict(W.look_props(1.0))
+        for arg in fg_weather.STORM_LOOK:
+            if arg.startswith('--prop:') and '=' in arg:
+                path, value = arg.split(':', 2)[-1].split('=', 1) if arg.count(':') > 1 else arg[7:].split('=', 1)
+                self.assertIn(path, storm, path)
+                if value not in ('true', 'false'):
+                    self.assertAlmostEqual(float(storm[path]), float(value), places=3, msg=path)
+        clear = dict(W.look_props(0.0))
+        self.assertEqual(clear[W.FILTERING], 'false')
+        self.assertEqual(float(clear['/environment/air-pollution-norm']), 0.0)
+        self.assertEqual(W.BY_NAME['storm'].look, 1.0)
+        self.assertEqual((W.BY_NAME['clear'].look, W.BY_NAME['burbank'].look), (0.0, 0.0))
+        self.assertTrue(any(a.startswith('--prop:/environment/air-pollution-norm=0.000') for a in W.launch_args()))
 
 
 class Story(unittest.TestCase):

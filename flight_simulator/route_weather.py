@@ -38,6 +38,22 @@ STORM_LEAD_M = 8000      # storm and tornadoes appear this far before the first 
 DARK_LEAD_M = 12000      # the sky starts to darken this far before it
 CLEAR_AFTER_M = 4000     # the storm eases this far past the last tornado
 
+# The storm "look" (micha-68's fg_weather.STORM_LOOK / CLEAR_LOOK): haze, patchy fog,
+# thick 3D cloud and a darker, greyer picture. Rendering only. Each stage blends
+# between the clear value (look 0) and the storm value (look 1).
+LOOK = {'/sim/rendering/clouds3d-density': (0.25, 1.0),
+        '/environment/air-pollution-norm': (0.0, 0.7),
+        '/environment/fog-structure': (0.0, 0.6),
+        '/environment/ground-haze-thickness-m': (2000.0, 3500.0),
+        '/sim/rendering/als-filters/brightness': (1.0, 0.8),
+        '/sim/rendering/als-filters/grey-factor': (0.0, 0.35)}
+FILTERING = '/sim/rendering/als-filters/use-filtering'
+
+
+def look_props(level):
+    pairs = [(path, f'{a + (b - a) * level:.3f}') for path, (a, b) in LOOK.items()]
+    return pairs + [(FILTERING, 'true' if level > 0 else 'false')]
+
 
 @dataclass(frozen=True)
 class Stage:
@@ -47,6 +63,7 @@ class Stage:
     lightning: bool          # storm.nas: lightning, thunder, roar
     tornadoes: bool          # tornado models visible
     message: str             # shown on FlightGear's screen (ATC message line)
+    look: float = 0.0        # 0 clear .. 1 full storm look (LOOK)
     briefing: bool = False   # this stage gives the Burbank runway briefing
 
 
@@ -54,11 +71,11 @@ STAGES = (
     Stage('clear', CLEAR_METAR, False, False, False,
           'LAX: clear skies, wind calm. Cleared for takeoff runway 25R.'),
     Stage('darkening', DARK_METAR, True, False, False,
-          'SIGMET: severe thunderstorms and tornadoes reported ahead on your route.'),
+          'SIGMET: severe thunderstorms and tornadoes reported ahead on your route.', look=0.5),
     Stage('storm', STORM_METAR, True, True, True,
-          'WARNING: tornadoes ahead. Thunderstorm, heavy rain.'),
+          'WARNING: tornadoes ahead. Thunderstorm, heavy rain.', look=1.0),
     Stage('clearing', CLEARING_METAR, True, False, True,
-          'The storm is behind you. Rain easing.'),
+          'The storm is behind you. Rain easing.', look=0.35),
     Stage('burbank', ARRIVAL_METAR, False, False, True, '', briefing=True),
 )
 BY_NAME = {s.name: s for s in STAGES}
@@ -146,7 +163,8 @@ def stage_props(stage, tornado_count, message=None):
              ('/environment/turbulence/magnitude-norm', '0'),
              ('/sim/rendering/precipitation-enable', 'true' if stage.rain else 'false'),
              ('/fruitfly/storm/enabled', 'true' if stage.lightning else 'false'),
-             ('/fruitfly/weather', f'lax-burbank story: {stage.name}')]
+             ('/fruitfly/weather', f'lax-burbank story: {stage.name}'),
+             *look_props(stage.look)]
     pairs += [(f'/fruitfly/obstacles/obstacle[{i}]/visible', 'true' if stage.tornadoes else 'false')
               for i in range(tornado_count)]
     if text:
@@ -160,7 +178,9 @@ def launch_args():
     return ['--prop:string:/fruitfly/weather=lax-burbank story: clear', f'--metar={CLEAR_METAR}',
             '--prop:bool:/sim/rendering/precipitation-gui-enable=true',
             '--prop:bool:/sim/rendering/precipitation-enable=false',
-            '--prop:bool:/fruitfly/storm/enabled=false', '--turbulence=0.0']
+            '--prop:bool:/fruitfly/storm/enabled=false', '--turbulence=0.0',
+            '--enable-clouds3d',      # so the storm's cumulonimbus are real 3D clouds
+            *(f'--prop:{path}={value}' for path, value in look_props(0.0))]
 
 
 class SkyDirector:
