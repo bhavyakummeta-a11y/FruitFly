@@ -29,5 +29,6 @@ Timeline (seconds from session start):
 -     32 to    231: **FLY BRAIN (connectome) flying the landing** (run 2026-11-14T215622Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
 
 ## Notes
+- **Kaden VanDine** (2026-11-14 17:00): Successful landing (run 2026-11-14T2156-ish: touchdown 617 m, 452 fpm, 5.8 deg, max 13.3 m off centre). 'Closed normally' is not quite right: on 'run exit' FlightGear segfaulted while shutting down (kernel 16:59:55, same fgfs+0x8e98ba fault as earlier today). The flight itself was complete before that.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
