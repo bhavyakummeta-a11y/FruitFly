@@ -75,6 +75,17 @@ var update_pilot = func {
 var pilot_timer = maketimer(DT, update_pilot);
 pilot_timer.start();
 
+# Clear view: in "Cockpit: fly pilot" the overhead panel and centre windshield post are
+# hidden (select animation in 738-flies.xml) for a wide view outside.
+var clear_view = func {
+    var n = getprop("/sim/current-view/view-number");
+    var name = "";
+    if (n != nil and view.views != nil and n >= 0 and n < size(view.views))
+        name = view.views[n].getNode("name", 1).getValue() or "";
+    setprop("/fruitfly/pilot/clear-view", name == "Cockpit: fly pilot");
+};
+setlistener("/sim/current-view/view-number", clear_view, 1, 0);
+
 var pilot_view = func {
     if (!getprop("/fruitfly/pilot/start-view")) return;
     var i = view.indexof("Cockpit: fly pilot");
@@ -161,7 +172,13 @@ var ground_autostart = func {
     settimer(func {
         print("FruitFly: ground start - running 737 autostart");
         boeing737.autostart();
-    }, 3);
+        # The 737's controls.nas sets the parking brake at init, which held the plane on the
+        # runway at full thrust. The fly brakes with the toe brakes, so release it.
+        settimer(func {
+            setprop("/controls/gear/brake-parking", 0);
+            print("FruitFly: parking brake released for the takeoff");
+        }, 1);
+    }, 1);
 };
 setlistener("/sim/signals/fdm-initialized", ground_autostart, 0, 0);
 setlistener("/sim/signals/reinit", hands_off, 0, 0);

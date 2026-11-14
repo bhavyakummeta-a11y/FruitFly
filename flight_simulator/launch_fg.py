@@ -52,7 +52,10 @@ ALL_PROTOCOLS = ('flybrain-state.xml', 'flybrain-controls.xml', 'flybrain-contro
 # Takeoff/landing start. 737 flap detents are 0.125 apart: flaps 5 = 0.375, flaps 30 = 0.875.
 AIRPORT, RUNWAY, FINAL_NM = 'KSFO', '28R', 3.0
 PHASE_ARGS = {
+    # Engines already running at spawn (JSBSim starts them at init), so the 737 autostart
+    # only switches systems on: no ~1 min spool-up before the fly can take off.
     'takeoff': ['--prop:/controls/flight/flaps=0.375', '--prop:/controls/gear/brake-parking=0',
+                '--prop:bool:/sim/presets/running=true',
                 '--prop:bool:/fruitfly/ground-autostart=true'],
     'landing': [f'--offset-distance={FINAL_NM}', '--altitude=1000', '--vc=145', '--in-air',
                 '--prop:/controls/flight/flaps=0.875', '--prop:bool:/controls/gear/gear-down=true'],
@@ -124,6 +127,27 @@ def command(args):
             *args.extra]
 
 
+def wait_ready(telnet_port, timeout=600):
+    """Block until FlightGear has loaded its scenery (telnet answers /sim/sceneryloaded)."""
+    from .flightgear import telnet_get
+    import time
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if telnet_get(telnet_port, '/sim/sceneryloaded', timeout=2) == 'true':
+            return True
+        time.sleep(1)
+    return False
+
+
+def fly_command(args):
+    p = ports(args.instance)
+    cmd = [sys.executable, '-m', 'flight_simulator.takeoff_landing', args.phase, '--brain', args.fly,
+           '--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
+    if not args.no_smooth:
+        cmd += ['--smooth', '--period', '1.0', '--speed-up', f'{args.speed:g}']
+    return cmd
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--phase', choices=list(PHASE_ARGS),
@@ -134,6 +158,13 @@ def main():
     parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir, or an fgfs/AppImage file (or set FG_INSTALL)')
     parser.add_argument('--print', action='store_true', help='Only print the command')
     parser.add_argument('--name', help='Session name (required to launch): what this session is for')
+    parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
+                        help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
+                             '(default brain: connectome)')
+    parser.add_argument('--speed', type=float, default=1.0,
+                        help='With --fly: sim speed (1 = real time); the brain decides as fast as it can')
+    parser.add_argument('--no-smooth', action='store_true',
+                        help='With --fly: pause FlightGear for every brain trial instead of slow motion')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if args.instance is None:
@@ -162,11 +193,12 @@ def main():
             print('WARNING:', problem)
     print(' '.join(cmd))
     p = ports(args.instance)
-    if args.phase:
-        wait = ('Wait until both engines are at idle (~1 min; the launcher runs the 737 autostart)'
-                if args.phase == 'takeoff' else 'Wait until the sim is flying (autopilot switches off by itself)')
-        print(f'\n{wait}, then in a second terminal run:\n\n    {controller_command(args)}\n\n'
-              'For the real fly brain use --brain connectome (see docs/TAKEOFF_LANDING.md).')
+    if args.phase and not args.fly:
+        wait = ('The engines start already running; once the 737 is on the runway'
+                if args.phase == 'takeoff' else 'Once the sim is flying (the controller hands over the autopilot)')
+        print(f'\n{wait}, in a second terminal run:\n\n    {controller_command(args)}\n\n'
+              'For the real fly brain use --brain connectome (see docs/TAKEOFF_LANDING.md), '
+              'or relaunch with --fly to start it automatically.')
     else:
         print(f'Controller flags: --telemetry-port {p["telemetry"]} --control-port {p["control"]}')
     if not args.print:
@@ -175,6 +207,14 @@ def main():
         cmd.insert(1, name_arg(args.name))
         ensure_watchdog()
         subprocess.Popen(cmd, env=env)
+        if args.phase and args.fly:
+            print('Waiting for FlightGear to load, then the fly brain takes the controls...', flush=True)
+            if not wait_ready(p['telnet']):
+                print('FlightGear did not finish loading; start the controller by hand:\n    '
+                      + ' '.join(fly_command(args)))
+                return 1
+            print(' '.join(fly_command(args)), flush=True)
+            return subprocess.call(fly_command(args))
     return 0
 
 
