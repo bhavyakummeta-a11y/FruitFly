@@ -57,7 +57,7 @@ def command(args):
     return [*exe, f'--fg-aircraft={REPO_AIRCRAFT}', f'--aircraft={args.aircraft}',
             f'--httpd={p["httpd"]}', f'--telnet={p["telnet"]}',
             '--lat=37.55', '--lon=-122.75', '--altitude=3000', '--heading=0', f'--vc={START_KT.get(args.aircraft, 220)}',
-            '--in-air', '--state=cruise', '--disable-real-weather-fetch', '--wind=0@0',
+            '--in-air', '--disable-real-weather-fetch', '--wind=0@0',
             '--timeofday=noon', '--disable-ai-traffic',
             f'--generic=socket,out,20,127.0.0.1,{p["telemetry"]},udp,flybrain-state',
             f'--generic=socket,in,20,127.0.0.1,{p["control"]},udp,flybrain-controls',
@@ -76,6 +76,14 @@ def main():
     if not 0 <= args.instance <= 50:
         parser.error('--instance must be 0..50')
     cmd = command(args)
+    # Refuse a --state the aircraft doesn't define (FlightGear would ignore it; issue #2).
+    from .aircraft_states import check_command
+    try:
+        warning = check_command(cmd)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if warning:
+        print('Warning:', warning, file=sys.stderr)
     env = dict(os.environ)
     if args.instance:
         base = Path(os.environ.get('APPDATA', Path.home())) / f'flightgear.org-instance{args.instance}'
