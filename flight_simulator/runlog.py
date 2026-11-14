@@ -8,6 +8,7 @@ Every `python -m flight_simulator ...` run creates one folder:
         console.log          everything the run printed
         airplane.csv         per-step aircraft state + controls (.csv.gz if large)
         fly_activity.csv     every brain decision: looming input, escape output, neuron-group rates
+        fly_spikes.jsonl     connectome mode: per brain trial, every neuron that fired + its spike count
         result.json          summary: collision, min clearance, exit code...
         fgfs_warnings.log    FlightGear backend only: WARN/ALERT/Nasal lines from fgfs.log
         feedback.md          summary + your notes
@@ -115,6 +116,16 @@ def ensure_worktree():
     found = shared_worktree()
     if found:
         return found
+    # Parallel first runs on a fresh machine would race to create it: serialise.
+    common = Path(git('rev-parse', '--path-format=absolute', '--git-common-dir'))
+    with _Lock(common / 'fruitfly-sim-logs.lock', timeout=180):
+        found = shared_worktree()
+        if found:
+            return found
+        return _create_worktree()
+
+
+def _create_worktree():
     git('worktree', 'prune', check=False)
     target = main_root() / '.sim-logs'
     git('fetch', '-q', 'origin', BRANCH, check=False, timeout=30)
@@ -132,8 +143,44 @@ def ensure_worktree():
     return target
 
 
-def push(message=None, paths=(), quiet=False):
-    """Commit the given run folders (if any) and push the branch. Never raises."""
+class _Lock:
+    """Cross-process lock for the shared sim-logs checkout.
+
+    Several loggers on one machine (parallel FlightGear sessions, controller runs,
+    worktrees) commit in the same checkout; git allows one index writer at a time."""
+
+    def __init__(self, path, timeout=120, stale=300):
+        self.path, self.timeout, self.stale = Path(path), timeout, stale
+
+    def __enter__(self):
+        deadline = time.time() + self.timeout
+        while True:
+            try:
+                fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+                os.write(fd, str(os.getpid()).encode())
+                os.close(fd)
+                return self
+            except FileExistsError:
+                try:
+                    if time.time() - self.path.stat().st_mtime > self.stale:
+                        self.path.unlink(missing_ok=True)   # holder died
+                        continue
+                except FileNotFoundError:
+                    continue
+                if time.time() > deadline:
+                    raise RuntimeError(f'sim-logs checkout busy ({self.path} held too long)')
+                time.sleep(0.2)
+
+    def __exit__(self, *exc):
+        self.path.unlink(missing_ok=True)
+
+
+def push(message=None, paths=(), quiet=False, attempts=4):
+    """Commit the given run folders (if any) and push the branch. Never raises.
+
+    Safe in parallel: on one machine a lock serialises commits and each commit
+    contains only its own paths; across machines (teammates pushing at the same
+    time) a rejected push is rebased onto the new remote state and retried."""
     say = (lambda *a: None) if quiet else (lambda *a: print(*a, file=sys.__stdout__, flush=True))
     try:
         wt = ensure_worktree()
@@ -143,13 +190,23 @@ def push(message=None, paths=(), quiet=False):
             # someone else's next push. The files stay on disk, untracked.
             say(f'[runlog] FRUITFLY_NO_PUSH set; saved on disk only (not committed): {", ".join(paths)}')
             return True
-        if paths:
-            git('add', '--', *paths, cwd=wt)
-            if git('diff', '--cached', '--name-only', cwd=wt):
-                git('commit', '-q', '-m', message or 'sim log', cwd=wt)
-        if git('ls-remote', '--heads', 'origin', BRANCH, cwd=wt, timeout=30):
-            git('pull', '-q', '--rebase', 'origin', BRANCH, cwd=wt, timeout=60)
-        git('push', '-q', '-u', 'origin', BRANCH, cwd=wt, timeout=90)
+        sessions = wt / '.sessions'
+        sessions.mkdir(exist_ok=True)
+        with _Lock(sessions / 'git.lock'):
+            if paths:
+                git('add', '--', *paths, cwd=wt)
+                if git('diff', '--cached', '--name-only', '--', *paths, cwd=wt):
+                    git('commit', '-q', '-m', message or 'sim log', '--', *paths, cwd=wt)
+            for attempt in range(attempts):
+                if git('ls-remote', '--heads', 'origin', BRANCH, cwd=wt, timeout=30):
+                    git('pull', '-q', '--rebase', 'origin', BRANCH, cwd=wt, timeout=60)
+                try:
+                    git('push', '-q', '-u', 'origin', BRANCH, cwd=wt, timeout=90)
+                    break
+                except RuntimeError as exc:
+                    if attempt == attempts - 1 or 'rejected' not in str(exc) and 'fetch first' not in str(exc):
+                        raise
+                    time.sleep(1 + attempt * 2)   # someone else pushed meanwhile: rebase and retry
         url = git('remote', 'get-url', 'origin', check=False).removesuffix('.git')
         say(f'[runlog] pushed -> {url}/tree/{BRANCH}' if url.startswith('https://github.com')
             else '[runlog] pushed')
@@ -184,6 +241,7 @@ class RunLog:
         self.args, self.argv, self.auto_push = args, list(argv), auto_push
         self.result = None
         self._fly = None
+        self._spikes = None
         self.started = time.time()
         who = git('config', 'user.name', check=False) or os.environ.get('USERNAME', 'unknown')
         self.id = run_id(args.backend, args.brain, who)
@@ -194,8 +252,16 @@ class RunLog:
             print('!' * 70 + f'\n[runlog] WARNING: sim-logs checkout unavailable ({exc}).\n'
                   '[runlog] This run is saved to runs/ ONLY and will NOT be pushed.\n' + '!' * 70)
             self.base, self.auto_push = ROOT, False
+        (self.base / RUNS).mkdir(parents=True, exist_ok=True)
+        for n in range(1, 100):   # same person, same second, same brain: keep runs apart
+            candidate = self.id if n == 1 else f'{self.id}-{n}'
+            try:
+                (self.base / RUNS / candidate).mkdir()
+                self.id = candidate
+                break
+            except FileExistsError:
+                continue
         self.dir = self.base / RUNS / self.id
-        self.dir.mkdir(parents=True, exist_ok=True)
         self._console = open(self.dir / 'console.log', 'w', encoding='utf-8')
         self._saved = sys.stdout, sys.stderr
         sys.stdout, sys.stderr = Tee(sys.stdout, self._console), Tee(sys.stderr, self._console)
@@ -255,9 +321,29 @@ class RunLog:
             self._fly_writer.writeheader()
         self._fly_writer.writerow(row)
         self._fly.flush()
+        # Observe (read-only) the brain object of the caller for this trial's spike
+        # counts. This deliberately does not touch the pilot code (brain.py /
+        # __main__.py belong to the flight-behaviour team): ConnectomeBrain already
+        # publishes last_counts after every trial; we only read it.
+        try:
+            brain = sys._getframe(1).f_locals.get('brain')
+        except (AttributeError, ValueError):
+            brain = None
+        counts = getattr(brain, 'last_counts', None)
+        if counts is not None and hasattr(counts, 'nonzero'):
+            self._spike_row(row.get('time'), counts, getattr(brain, 'ms', None))
+
+    def _spike_row(self, sim_time, counts, trial_ms):
+        fired = counts.nonzero()[0]
+        if self._spikes is None:
+            self._spikes = open(self.dir / 'fly_spikes.jsonl', 'w', encoding='utf-8')
+        self._spikes.write(json.dumps({'time': sim_time, 'ms': trial_ms,
+                                       'idx': fired.tolist(), 'count': counts[fired].tolist()},
+                                      separators=(',', ':')) + '\n')
+        self._spikes.flush()
 
     def _compress_logs(self):
-        for name in ('airplane.csv', 'fly_activity.csv'):
+        for name in ('airplane.csv', 'fly_activity.csv', 'fly_spikes.jsonl'):
             path = self.dir / name
             if path.exists() and path.stat().st_size > GZIP_OVER:
                 with open(path, 'rb') as src, gzip.open(str(path) + '.gz', 'wb') as dst:
@@ -301,6 +387,8 @@ class RunLog:
         self._dump('result.json', {**(self.result or {}), 'exit_code': code})
         if self._fly:
             self._fly.close()
+        if self._spikes:
+            self._spikes.close()
         self._compress_logs()
         outcome = self._feedback(code, fg)
         if self.base == ROOT:
@@ -317,11 +405,14 @@ def active_sessions(base):
     """FlightGear sessions currently being logged (see session.py lock files)."""
     found = []
     for lock in (Path(base) / '.sessions').glob('*.lock'):
+        if not lock.stem.isdigit():          # <fgfs pid>.lock only (git.lock is the push lock)
+            continue
         try:
             info = json.loads(lock.read_text(encoding='utf-8'))
-            found.append({'name': info.get('name'), 'run_id': info.get('run_id')})
         except (OSError, ValueError):
-            pass
+            continue
+        if isinstance(info, dict):
+            found.append({'name': info.get('name'), 'run_id': info.get('run_id')})
     return found
 
 

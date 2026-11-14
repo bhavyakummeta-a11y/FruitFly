@@ -51,10 +51,12 @@ class RouteGuidance:
             if clearance < self.margin:
                 continue
             if i==0:
-                desired_safe=True
+                desired_safe=clearance >= self.margin+100
             end_cross=(path[-1][0]-self.origin[0])*cs-(path[-1][1]-self.origin[1])*sn
             score=(abs(wrap(target-desired)) + .15*abs(wrap(target-previous))
                    + .10*abs(end_cross)/max(800,state.speed*18))
+            # Prefer extra tracking room; the hard margin remains a last-resort bound.
+            score += max(0.0, self.margin+100-clearance)/100
             if preferred_turn and preferred_turn*wrap(target-self.heading)<0:
                 score += .05  # Neural preference can break ties, never waive clearance.
             options.append((score,target,clearance,path))

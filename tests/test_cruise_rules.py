@@ -27,7 +27,7 @@ class CruiseRulesTests(unittest.TestCase):
             level.update(State(time=i*.05),sense(State(),[]),0)
             s=State(time=i*.05,climb=-4)
             sinking=sink.update(s,sense(s,[]),0)
-        self.assertLess(sinking.elevator,level.last_controls.elevator-.1)
+        self.assertLess(sinking.elevator,level.last_controls.elevator-.02)
         self.assertGreater(sinking.throttle,level.last_controls.throttle)
 
     def test_multiple_obstacles_return_to_route_even_without_neural_escape(self):
@@ -56,6 +56,32 @@ class CruiseRulesTests(unittest.TestCase):
             self.assertTrue(avoid)
             self.assertGreater(target*turn,0)
             self.assertGreaterEqual(guide.clearance,guide.margin)
+
+    def test_pitch_target_slews_and_rate_feedback_opposes_motion(self):
+        level=FlightController(); rising=FlightController()
+        s=State(altitude=890, climb=-3)
+        first=level.update(s,sense(s,[]),0)
+        self.assertLessEqual(abs(level.target_pitch),math.radians(2)*.05)
+        s.pitch_rate=.1
+        damped=rising.update(s,sense(s,[]),0)
+        self.assertGreater(damped.elevator,first.elevator)
+
+    def test_slow_companion_drops_frames_without_blocking_controls(self):
+        from flight_simulator.companion import Companion
+        from queue import Queue
+        from threading import Event
+        from unittest.mock import Mock
+        viewer=Companion.__new__(Companion)
+        viewer.frames=Queue(maxsize=1)
+        viewer.stop=Event()
+        viewer.process=Mock()
+        viewer.process.is_alive.return_value=True
+        state=State()
+        viewer.update(state)
+        state.altitude=123
+        viewer.update(state)  # Full queue: this must return rather than wait.
+        args,kwargs=viewer.frames.get_nowait()
+        self.assertEqual(args[0].altitude,900)  # Snapshots do not mutate with the sim.
 
     def test_large_descent_reduces_bank_budget(self):
         c=FlightController();s=State(altitude=880,climb=-4)

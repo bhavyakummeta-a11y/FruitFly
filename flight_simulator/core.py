@@ -133,7 +133,7 @@ class FlightController:
         self.next_plan = 0.0
 
     def update(self, state, stimulus, escape_hz):
-        dt = .05 if self.last_time is None else clip(state.time-self.last_time,0,.2)
+        dt = .05 if self.last_time is None else clip(state.time-self.last_time,0,.5)
         self.last_time = state.time
         if not self.initialized:
             # Nose attitude alone is not level-flight trim: subtract flight-path
@@ -144,19 +144,20 @@ class FlightController:
         if stimulus.obstacle and not any(o.name==stimulus.obstacle for o in self.obstacles):
             self.obstacles.append(Obstacle(stimulus.obstacle,stimulus.east,stimulus.north,stimulus.radius))
         altitude_error=self.altitude-state.altitude
-        # Strong vertical-speed feedback acts before a large altitude error builds.
-        self.desired_climb=clip(.12*altitude_error,-2.0,3.0)
+        # Damped vertical-speed feedback acts before a large altitude error builds.
+        self.desired_climb=clip(.06*altitude_error,-1.5,2.0)
         vertical_error=self.desired_climb-state.climb
-        self.pitch_integral=clip(self.pitch_integral+.0025*vertical_error*dt,-.06,.10)
+        self.pitch_integral=clip(self.pitch_integral+.001*vertical_error*dt,-.06,.10)
         bank_lift=self.trim_pitch*(1/max(math.cos(state.roll),.75)-1)
-        self.target_pitch=clip(self.trim_pitch+math.atan2(self.desired_climb,max(state.speed,25))
-                               +.018*vertical_error+self.pitch_integral+bank_lift,-.10,.22)
+        pitch_demand=clip(self.trim_pitch+math.atan2(self.desired_climb,max(state.speed,25))
+                               +.006*vertical_error+self.pitch_integral+bank_lift,-.10,.22)
+        self.target_pitch+=clip(pitch_demand-self.target_pitch,-math.radians(2)*dt,math.radians(2)*dt)
         pitch_error=self.target_pitch-state.pitch
         # Integral trim removes persistent airframe/control bias. Anti-windup:
         # integrate only when the resulting elevator has room to move.
-        elevator=-2.2*pitch_error+.8*state.pitch_rate+self.trim_elevator
+        elevator=-1.2*pitch_error+1.6*state.pitch_rate+self.trim_elevator
         if abs(elevator)<.65:
-            self.trim_elevator=clip(self.trim_elevator-.16*pitch_error*dt,-.35,.35)
+            self.trim_elevator=clip(self.trim_elevator-.06*pitch_error*dt,-.35,.35)
         speed_error=self.speed-state.speed
         self.speed_integral=clip(self.speed_integral+.004*speed_error*dt,-.25,.25)
         throttle=self.trim_throttle+.035*speed_error+self.speed_integral+.025*max(self.desired_climb,0)

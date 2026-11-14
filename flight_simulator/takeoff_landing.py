@@ -101,6 +101,11 @@ def run_flightgear(args, fly, log):
                       flush=True)
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
+        body = None
+        if not args.no_fly_body:
+            # Live 3D fly window (python -m flight_simulator.fly_body); display only.
+            from .fly_body import BodyLink
+            body = BodyLink(args.body_port)
         while True:
             # Never stop sending while airborne: FlightGear keeps the last controls
             # it received, so an exit mid-air flies the plane on frozen surfaces.
@@ -125,6 +130,10 @@ def run_flightgear(args, fly, log):
             if isinstance(fly, TakeoffFly) and not s.on_ground and s.climb > 1 and s.agl > 10:
                 bridge.gear_down = False  # scripted checklist: gear up at positive climb
             log.append(row(fly, s, controls))
+            if body:
+                last = fly.decisions[-1] if fly.decisions else None
+                rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
+                body.send(s, fly.status.phase, args.brain, (rates or {}).get('DNp01_hz', 0.0), rates)
             bridge.send(controls)
             previous = s.time
             was_ground = s.on_ground
@@ -188,6 +197,8 @@ def main(argv=None):
     p.add_argument('--telemetry-port', type=int, default=5501)
     p.add_argument('--control-port', type=int, default=5502)
     p.add_argument('--log', help='CSV of every sim step, incl. sensory inputs and DN rates')
+    p.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window')
+    p.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
     p.add_argument('--plot', help='PNG of sugar input, brain activity, altitude and airspeed (needs matplotlib)')
     args = p.parse_args(argv)
     if not math.isfinite(args.seconds) or args.seconds <= 0 or args.period <= 0:

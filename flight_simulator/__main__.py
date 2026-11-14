@@ -64,14 +64,14 @@ def run(args, runlog=None):
                 raise ValueError('Start FlightGear in stable flight, at least 35 m/s and wings near level.')
             if course_origin is not None and math.hypot(state.east, state.north) > 20000:
                 raise ValueError('Aircraft is over 20 km from the scenery course. Use the course launch position.')
+            # Pause before scenery/display setup; the autopilot still holds trim.
+            state = bridge.freeze(True)
+            clock_paused = telnet_get(args.telnet_port or args.telemetry_port - 1, "/sim/freeze/clock")
+            if clock_paused is not None and clock_paused.lower() in ("false", "0"):
+                raise RuntimeError("Outdated cruise pause protocol: reinstall flybrain-state and flybrain-controls "
+                                   "from flight_simulator/protocols and restart FlightGear.")
             controller = FlightController(state.altitude, state.heading, state.speed, state.pitch)
             print('FlightGear connected. Initial altitude/heading/speed are the hold targets.', flush=True)
-            from .flightgear import hand_over
-            if hand_over(args.telnet_port or args.telemetry_port - 1):
-                print('Handover sent: the 737 autopilot (if any) switches off, the controller flies.', flush=True)
-            else:
-                print('WARNING: no telnet handover. A 737 started in the air keeps its own autopilot on '
-                      'and will fight the controller; launch with --telnet (launch_fg does).', flush=True)
         else:
             sim = DemoSimulator()
             state = sim.state
@@ -85,8 +85,8 @@ def run(args, runlog=None):
             # need more space to turn; custom obstacle files remain local ENU.
             scale = max(1.0, (state.speed / 50.0)**2)
             sn, cs = math.sin(state.heading), math.cos(state.heading)
-            obstacles = [replace(o, east=o.east*cs + o.north*scale*sn,
-                                 north=-o.east*sn + o.north*scale*cs,
+            obstacles = [replace(o, east=state.east + o.east*cs + o.north*scale*sn,
+                                 north=state.north - o.east*sn + o.north*scale*cs,
                                  top=max(o.top, state.altitude+500)) for o in obstacles]
         controller.configure_course(obstacles, origin=(state.east, state.north))
         if bridge and not args.no_scene and not course.get('scenery'):
@@ -101,8 +101,8 @@ def run(args, runlog=None):
                 scene = None
                 print(f'Obstacles not shown in FlightGear (telnet: {exc}); start it with --telnet=5500.', flush=True)
         if args.plot or (args.backend == 'flightgear' and not args.no_plot):
-            from .view import View
-            view = View(obstacles, scenery=bool(course.get('scenery')))
+            from .companion import Companion
+            view = Companion(obstacles, scenery=bool(course.get('scenery')))
         if args.log:
             Path(args.log).parent.mkdir(parents=True, exist_ok=True)
             log_file = open(args.log, 'w', newline='')
@@ -113,6 +113,14 @@ def run(args, runlog=None):
                       'cross_track', 'predicted_clearance', 'decision_source']
             writer = csv.DictWriter(log_file, fields)
             writer.writeheader()
+        if bridge:
+            from .flightgear import hand_over
+            if hand_over(args.telnet_port or args.telemetry_port - 1):
+                print('Handover sent: the 737 autopilot (if any) switches off, the controller flies.', flush=True)
+            else:
+                print('WARNING: no telnet handover. A 737 started in the air keeps its own autopilot on '
+                      'and will fight the controller; launch with --telnet (launch_fg does).', flush=True)
+            state = bridge.freeze(False)
         next_brain, next_display, next_print = 0.0, 0.0, 0.0
         escape, controls = 0.0, Controls()
         minimum = math.inf
@@ -231,6 +239,8 @@ def run(args, runlog=None):
                     bridge.close()
                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
             finally:
+                if view:
+                    view.close()
                 if args.learn:
                     brain.plasticity.save(args.save_learning)
                     print(f'Learning checkpoint saved locally: {args.save_learning}', flush=True)

@@ -23,3 +23,6 @@ flightgear/downloads/
 
 # Local checkout of the sim-logs branch (flight_simulator/runlog.py)
 .sim-logs/
+
+# Local ticket board shared by agents on this machine (tickets.py)
+.tickets/

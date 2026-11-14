@@ -18,13 +18,15 @@ The ordinary default JSON remains a virtual-only course.
 ## Cruise rules and companion view (2026-11-14)
 
 Mandatory rules now run alongside the brain. Every half second the controller
-checks candidate turns against **all configured obstacles**, with 150 m predicted
-clearance. It rejoins the original course after avoidance, including cross-track
+checks candidate turns against **all configured obstacles**, with a 150 m minimum predicted
+clearance and a preference for 250 m to allow tracking error. It rejoins the original course after avoidance, including cross-track
 correction. Neural escape activity can prefer a safe turn side; it cannot disable
 obstacle protection. Silent mode also receives these rules.
 
-Altitude hold uses vertical-speed feedback, integral trim and bank lift
-compensation. A sinking aircraft retains power even if its airspeed increases.
+Altitude hold uses damped vertical-speed feedback, slower integral trim and bank lift
+compensation. Pitch demands slew at at most 2 degrees/second to avoid abrupt
+up/down corrections. Pitch-rate damping remains active across telemetry gaps up
+to 2 seconds. A sinking aircraft retains power even if its airspeed increases.
 Bank targets are limited to 18 degrees, reduced to 10 degrees during altitude
 recovery and 5 degrees at low speed. Surface and bank demands are rate-limited.
 If no predicted route meets the constraints, the run stops and requests a
@@ -36,7 +38,8 @@ full flight path on the right**, including all configured obstacles, the predict
 route and the original cruise direction. An altitude chart below compares actual
 altitude with the held target. It opens by
 default with `--backend flightgear`; use `--no-plot` to disable it. For the local
-demo, use `--plot --realtime`. It is a separate window, not embedded in FlightGear.
+demo, use `--plot --realtime`. It is a separate window/process, not embedded in FlightGear. Slow rendering drops
+display frames instead of delaying aircraft controls.
 
 ```sh
 .venv/bin/python -m flight_simulator --brain reflex --plot --realtime --seconds 180
@@ -334,22 +337,51 @@ with `--obstacles path.json`. Logs include aircraft state, input rate, measured
 escape rate, phase, controls, and obstacle clearance. Use matched scenarios and
 seeds for baseline/connectome comparisons.
 
+## Windows 737 oscillation and pause update
+
+See [the shared-log diagnosis and damping tests](notes/CRUISE_DAMPING_2026-11-14.md).
+After pulling this update, **restart FlightGear through the updated launcher** so
+it installs the new cruise protocols. For the default Windows installation:
+
+```sh
+python -m flight_simulator.launch_fg --instance 0 --name "737 damped cruise check"
+python -m flight_simulator --backend flightgear --brain reflex --seconds 360 --note "damped cruise and independent companion"
+```
+
+Use `--fg` or `FG_INSTALL` if FlightGear is installed elsewhere. Existing manual
+launches must copy `flybrain-state.xml` and the chosen `flybrain-controls*.xml`
+from `flight_simulator/protocols` to FlightGear's `Protocol` directory and restart.
+The shared pause fix sends both `/sim/freeze/master` and `/sim/freeze/clock`;
+cruise acknowledgements now read the actual clock freeze, because the
+shared FlightGear 2024 report found `/sim/freeze/master` insufficient. Control
+packets now have one additional clock-freeze field, so reinstalling is required. The startup check reports an outdated protocol when
+telnet confirms that a purported pause did not freeze the clock. The teammate’s pause fix also updates takeoff/landing control packets; the
+launcher refreshes all protocols together.
+
+Scenery setup happens while paused, before autopilot handover. Connectome mode
+still pauses during neural calculations by design; reflex mode does not. The
+40 m altitude abort remains in place. A stopped flight prints its reason: do not
+interpret a safety abort or a synchronous brain calculation as obstacle avoidance.
+The brain requests avoidance; conventional rules still stabilize the airplane.
+
 ## Cruise-rule validation
 
-See [the log analysis and C172 validation](notes/CRUISE_RULES_2026-11-14.md).
+See [the original log analysis](notes/CRUISE_RULES_2026-11-14.md) and
+[the current damped-control results](notes/CRUISE_DAMPING_2026-11-14.md).
 To reproduce the aerodynamic checks without opening FlightGear:
 
 ```sh
 .venv/bin/pip install -r requirements-validation.txt
 .venv/bin/python -m flight_simulator.validate_cruise --seconds 240
 .venv/bin/python -m flight_simulator.validate_cruise --seconds 240 --disturbance --output runs/jsbsim-disturbance.csv
+.venv/bin/python -m flight_simulator.validate_cruise --model 737 --control-period .3 --seconds 360 --disturbance --output runs/737-damped.csv
 ```
 
 The companion opens by default on a FlightGear controller run. Start with an
 already airborne aircraft, running engine, sufficient speed and the matching
 project launcher/protocol. Target altitude is captured when the controller starts;
-it is MSL hold, not terrain following. These checks use JSBSim's C172P model, not
-the installed FlightGear aircraft or the team's Boeing. Wind, engine failure and
+it is MSL hold, not terrain following. These checks use JSBSim's bundled C172P and 737 models, not
+the installed FlightGear aircraft or the team's custom 738-flies model. Wind, engine failure and
 unmapped scenery obstacles are not covered. No exact-altitude or universal
 collision-avoidance guarantee follows from these results.
 

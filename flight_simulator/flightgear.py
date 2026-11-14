@@ -110,7 +110,7 @@ class FlightGear:
         state = State(self.active_time, east, north, alt_ft * 0.3048,
                       math.radians(heading), math.radians(roll), math.radians(pitch),
                       speed_kt * 0.514444, climb_fps * 0.3048)
-        if self.previous is not None and active and delta < 0.5:
+        if self.previous is not None and active and delta <= 2.0:
             state.roll_rate = wrap(state.roll - self.previous.roll) / delta
             state.pitch_rate = (state.pitch - self.previous.pitch) / delta
         self.previous, self.previous_clock, self.frozen = state, clock, bool(frozen)
@@ -137,10 +137,12 @@ class FlightGear:
         raise TimeoutError('No local FlightGear telemetry')
 
     def send(self, controls, frozen=False):
+        # 'frozen' goes out twice: /sim/freeze/master and /sim/freeze/clock. Setting
+        # master alone does not stop the flight model in FlightGear 2024.
         c = controls.bounded()
         self.last_controls = c
         throttles = ','.join([f'{c.throttle:.7f}'] * self.engines)
-        data = f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{throttles},{int(frozen)}\n'
+        data = f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{throttles},{int(frozen)},{int(frozen)}\n'
         self.tx.sendto(data.encode('ascii'), self.address)
 
     def freeze(self, frozen):
@@ -237,7 +239,7 @@ class RunwayFlightGear(FlightGear):
         self.last_controls = c
         brake = getattr(c, 'brake', 0.0)
         data = (f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{c.throttle:.7f},{c.throttle:.7f},'
-                f'{brake:.7f},{brake:.7f},{int(self.gear_down)},{int(frozen)}\n')
+                f'{brake:.7f},{brake:.7f},{int(self.gear_down)},{int(frozen)},{int(frozen)}\n')
         self.tx.sendto(data.encode('ascii'), self.address)
 
     def close(self):
