@@ -172,5 +172,29 @@ class ProtocolTests(unittest.TestCase):
                          ['aileron', 'elevator', 'rudder', 'throttle', 'frozen'])
 
 
+
+class RunLogHelpers(unittest.TestCase):
+    """Pure helpers only; nothing here touches git or the network."""
+
+    def test_run_id_is_sortable_and_safe(self):
+        from datetime import datetime, timezone
+        from flight_simulator.runlog import run_id
+        rid = run_id('flightgear', 'reflex', 'Ada Lovelace!', datetime(2026, 1, 2, 3, 4, 5, tzinfo=timezone.utc))
+        self.assertEqual(rid, '2026-01-02T030405Z_ada-lovelace_flightgear-reflex')
+
+    def test_fg_log_filter_drops_info_keeps_problems(self):
+        from flight_simulator.runlog import filter_fg_log
+        lines = ['1.0 [INFO]:terrasync Removing dirindex.txt',
+                 '2.0 [WARN]:aircraft missing state node for:cruise',
+                 '3.0 [ALRT]:nasal Nasal runtime error: nil used in numeric context']
+        self.assertEqual(filter_fg_log(lines), lines[1:])
+        self.assertEqual(len(filter_fg_log(['[WARN] x'] * 50, cap=10)), 11)
+
+    def test_fg_home_follows_instance_ports(self):
+        from flight_simulator.runlog import fg_home
+        self.assertTrue(str(fg_home(5511)).endswith('flightgear.org-instance1'))
+        self.assertFalse(str(fg_home(5501)).endswith('instance0'))
+
+
 if __name__ == '__main__':
     unittest.main()

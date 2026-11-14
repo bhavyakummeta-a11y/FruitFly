@@ -130,16 +130,22 @@ reproduction of every detail of the published model.
 
 ## Connect FlightGear
 
-FlightGear must be installed separately. These instructions target a conventional
-C172 in calm air, already airborne and trimmed. The adapter and its UDP exchange
+FlightGear must be installed separately. The project's default aircraft is the
+**Boeing 737-800 with fly passengers** (`738-flies`): run
+`python flightgear/setup_aircraft.py` once, see `flightgear/README.md`. The C172
+(`c172p`) still works as a lighter fallback with `--aircraft c172p`. The steps target
+an aircraft in calm air, already airborne and trimmed. The adapter and its UDP exchange
 are tested locally; live FlightGear aircraft behavior still needs validation and
 gain tuning on the teammate's machine.
 
 1. Copy `flight_simulator/protocols/flybrain-state.xml` and
    `flight_simulator/protocols/flybrain-controls.xml` into the FlightGear data
    directory's `Protocol/` folder (`$FG_ROOT/Protocol`).
-2. Start the C172 airborne, heading north, approximately 3,000 ft MSL and 100 kt,
-   with a running engine over flat terrain or water. Select calm weather. Disable
+2. Start the 737 airborne, heading north, approximately 3,000 ft MSL and 220 kt
+   (100 kt for the C172), with engines running over flat terrain or water.
+   `python -m flight_simulator.launch_fg --instance 0` does this for you.
+   The 737 auto-engages its own autopilot on an in-air start; our overlay
+   (`fruitfly.nas`) switches it back off after about 7 s. Select calm weather. Disable
    any aircraft autopilot and conflicting joystick/mouse control inputs. In the
    launcher, add these additional arguments:
 
@@ -178,6 +184,37 @@ sends a pause request. UDP delivery is not guaranteed; verify pause in FlightGea
 No automatic resume occurs after exit. Resume manually when taking back control.
 Pause/resume acknowledgements are required for connectome trials. A process crash
 or broken socket cannot provide a reliable remote watchdog.
+
+## Run logs and feedback (automatic)
+
+Every `python -m flight_simulator ...` run is logged and pushed to the
+[`sim-logs` branch](https://github.com/bhavyakummeta-a11y/FruitFly/tree/sim-logs)
+with no extra steps. `main` and your working tree are never touched; the branch
+is checked out separately at `.sim-logs/` (git-ignored).
+
+Each run gets `runs/<UTC time>_<who>_<backend>-<brain>/` containing:
+
+| File | What |
+|---|---|
+| `feedback.md` | Outcome table + notes. Start here. |
+| `meta.json` | Exact command, args, code commit, dirty/untracked files, Python, FlightGear version |
+| `code.diff` | Uncommitted changes at run time, so anyone can reproduce the run |
+| `telemetry.csv` | Every control step (gzipped if over 5 MB) |
+| `console.log`, `result.json` | Printed output and the summary |
+| `fgfs_warnings.log` | FlightGear backend: WARN/ALERT/Nasal lines from `fgfs.log`, terrasync noise removed |
+
+```sh
+python -m flight_simulator --backend flightgear --brain reflex --note "first try with new gains"
+python -m flight_simulator.runlog note "overshot heading after 2nd obstacle"   # feedback on latest run
+python -m flight_simulator.runlog note --run <run id> "..."                    # feedback on any run
+python -m flight_simulator.runlog list                                         # recent runs
+python -m flight_simulator.runlog push                                         # retry if offline
+```
+
+`--no-push` logs and commits locally only (or set `FRUITFLY_NO_PUSH=1`);
+`--no-runlog` skips logging. A failed push keeps the commit locally, and it goes
+up with the next run. Passing `--log path.csv` still works; the telemetry then
+goes there instead of the run folder.
 
 ## Shared interface for teammates
 

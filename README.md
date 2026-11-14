@@ -24,7 +24,9 @@ Let Claude write the code. This doc is the ideas, the gotchas, and where to get 
 |---|---|
 | [`fly_brain_starter.ipynb`](fly_brain_starter.ipynb) | Hack-day starter notebook: load the brain, view a neuron, run the LIF simulator, poke it with sugar / bitter / looming. Opens in Colab. |
 | [`docs/Fly-Brain Handbook + Resources.docx`](docs/) | Original Word version of this handbook |
+| [`docs/FLIGHTGEAR.md`](docs/FLIGHTGEAR.md) | FlightGear 2024.1.4: install on Windows / Linux / macOS, command-line options, telnet & HTTP property servers, key properties, Python client |
 | [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) | **Our project:** fly brains controlling Microsoft Flight Simulator (takeoff / cruise / landing flies, barrel roll, dopamine learning) |
+| [`docs/TAKEOFF_LANDING_PLAN.md`](docs/TAKEOFF_LANDING_PLAN.md) | Takeoff fly vs Landing fly: 3 plans each, scored, with the pick (escape-jump takeoff, looming-flare landing) |
 | [`docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md`](docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md) | Reference notes: neural mappings, flight phases, and controller approaches |
 | [`docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md`](docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md) | Reference notes: proposed package layout, example code, and implementation prompt |
 | [`docs/MT_Proposed_Plan.pptx`](docs/MT_Proposed_Plan.pptx) | MT proposed plan deck: goals, architecture, one slide per milestone (goal / plan / done when / risk) |
