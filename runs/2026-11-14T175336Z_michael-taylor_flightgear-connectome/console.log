@@ -1,0 +1,46 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T175336Z_michael-taylor_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the takeoff
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   sensory encoding of the aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-18.8
+Takeoff fly: standing fly, looming -> jump = rotation
+Parking brake released: the fly has the airplane.
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 9.6s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 7.1s after its state  TAKEOFF ROLL   ias= 28.7kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 6.9s after its state  TAKEOFF ROLL   ias= 71.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 7.2s after its state  TAKEOFF ROLL   ias=112.8kt agl=    0ft pitch=-0.1deg thr=1.00
+FlightGear paused (acknowledged), ailerons and rudder centred.
+{
+  "fly": "Takeoff fly",
+  "brain": "CONNECTOME LIF (notebook model)",
+  "phase": "TAKEOFF ROLL",
+  "completed": false,
+  "time_s": 34.6,
+  "decisions": 4,
+  "max_centerline_m": 32.1,
+  "tail_strike": false,
+  "stall": false,
+  "left_runway": true,
+  "liftoff_x_m": null,
+  "rejected": false,
+  "agl_ft": 0,
+  "ias_kt": 129.8,
+  "stop_x_m": null,
+  "events": [],
+  "decision_timing": {
+    "applied": 4,
+    "skipped": 25,
+    "latency_mean_s": 7.685,
+    "latency_max_s": 9.55
+  },
+  "speed_up_resets": 0,
+  "backend": "flightgear",
+  "wall_s": 35.6,
+  "success": false
+}
