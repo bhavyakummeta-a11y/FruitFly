@@ -22,5 +22,6 @@ Run by Michael Taylor. Command: `python -m flight_simulator takeoff_live takeoff
 
 ## Notes
 
+- **Michael Taylor** (2026-11-14 13:18): Takeoff with new synthetic vision (1f3063d) + faster brain (caaa108), launch_fg --fly. Decisions: 20 applied, 1 skipped, latency 0.73 s mean (was 7.7 s). Vision inputs reached the brain and steering went the right way every time (HS asymmetry -> DNp15/DNa02 on the correcting side -> rudder). But the steering loop oscillated with growing amplitude: offset +2.1 m @14 s (rudder -0.30), -4.1 m @19.5 s (rudder +0.59), +2.4 m @21.6 s, then +11/+18/+29 m @22.6-24.3 s at 99-105 kt with rudder -0.60..-0.97 (HS saturated 200/0). Centerline >8 m -> bitter 200 Hz -> MN9 0 -> throttle cut (reject behaviour), but the run ended left_runway at 24.5 s / 104.6 kt before the stop. Likely the fixed DN->rudder gain is too high at speed (rudder/nosewheel authority grows with v^2) plus ~0.7 s delay; needs speed-scheduled steering gain or more yaw-rate damping. Other session's full-graphics benchmark FG was running concurrently.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
