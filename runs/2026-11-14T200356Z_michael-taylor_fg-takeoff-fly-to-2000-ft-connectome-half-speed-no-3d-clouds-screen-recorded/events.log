@@ -1,0 +1,60 @@
+15:03:57 [session] Session 'takeoff fly to 2000 ft - CONNECTOME, HALF SPEED, no 3D clouds, screen-recorded' watching fgfs pid 21668 (738-flies)
+15:03:57 [session] Live log page: http://127.0.0.1:8765/
+15:03:58 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+15:03:58 [fgfs] 0.07 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+15:03:58 [fgfs] 0.08 [ALRT]:view      Creating osgViewer::CompositeViewer
+15:03:58 [fgfs] 0.08 [ALRT]:general   affinity=none
+15:03:58 [fgfs] 0.08 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+15:03:58 [fgfs] 1.58 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+15:03:58 [fgfs] 1.58 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+15:03:58 [fgfs] 1.59 [WARN]:general   Enabling ATI/AMD viewport hack
+15:03:58 [fgfs] 1.62 [WARN]:osg       Warning: GraphicsWindowWin32::grabFocus() - Failed grabbing the focus
+15:03:58 [fgfs] 1.62 [ALRT]:view      affinity=none
+15:03:59 [session] Docked: Log / Fly brain panel right of FlightGear (left 75%)
+15:04:13 [fgfs] 17.82 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+15:04:13 [fgfs] 17.82 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+15:04:14 [fgfs] 19.57 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+15:04:14 [fgfs] 19.74 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+15:04:19 [fgfs] 24.07 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+15:04:19 [fgfs] 24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+15:04:19 [fgfs] 24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+15:04:19 [fgfs] 24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+15:04:19 [fgfs] 24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+15:04:19 [fgfs] 24.80 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+15:04:20 [fgfs] 26.43 [WARN]:input     Unhandled HID usage page:d with usage 5
+15:04:20 [fgfs] 26.43 [WARN]:input     Unhandled HID usage page:d with usage e
+15:04:24 [session] Connected to property API on :8080
+15:04:24 [fgfs] 29.44 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+15:04:26 [fgfs] 31.72 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+15:04:29 [fgfs] 35.02 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+15:04:32 [session] Property API stopped answering
+15:04:32 [fgfs] 36.09 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+15:04:32 [fgfs] 36.74 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+15:04:37 [fgfs] 42.03 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+15:04:37 [fgfs] 42.76 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+15:04:37 [fgfs] 43.11 [ALRT]:flight    Failed to save initial FDM property state
+15:04:37 [fgfs] 43.14 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+15:04:37 [fgfs] 43.15 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.nas, line 1022
+15:04:37 [fgfs] 43.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.nas, line 149
+15:04:45 [session] Connected to property API on :8080
+15:04:49 [session] Recording video (automatic, every session): fgvideo-738-flies-20261114-150447.mkv (local, not pushed; moved to C:\Users\micha\AppData\Local\FruitFly\videos when FlightGear closes)
+15:04:52 [fgfs] 51.49 [WARN]:network   JsonUriHandler: requested node not found: 'sim/video/is-encoding'
+15:04:52 [fgfs] 52.89 [ALRT]:general   FGViewMgr::video_start(): name_in= codec_in= quality=-1 speed=-1 bitrate=0
+15:04:52 [fgfs] 52.89 [WARN]:io        failed to make file writeable prior to remove:Path "fgvideo-738-flies.mkv"
+15:04:52 [fgfs] 52.89 [WARN]:io        file remove failed: (Path "fgvideo-738-flies.mkv")  reason: No such file or directory
+15:04:52 [fgfs] 52.90 [ALRT]:systems   Failed to create link fgvideo-738-flies.mkv => fgvideo-738-flies-20261114-150447.mkv
+15:04:52 [fgfs] 52.90 [ALRT]:systems   Video encoding starting. codec=libx264 quality=0.6 speed=1 bitrate=0 path=Path "fgvideo-738-flies-20261114-150447.mkv" path_link=Path "fgvideo-738-flies.mkv"
+15:04:52 [fgfs] 52.96 [ALRT]:general   crf m_quality=0.6 => 13.200000
+15:04:52 [fgfs] 52.96 [ALRT]:general   dictionary 2:
+15:04:52 [fgfs] 52.96 [ALRT]:general       crf=13.200000
+15:04:52 [fgfs] 52.96 [ALRT]:general       preset=ultrafast
+15:04:52 [fgfs] 57.60 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+15:04:56 [session] Property API stopped answering
+15:04:56 [controller] Run started: 2026-11-14T200455Z_michael-taylor_flightgear-connectome
+15:04:56 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T200455Z_michael-taylor_flightgear-connectome
+15:04:56 [controller] [control] FLY BRAIN (connectome) flying the takeoff
+15:04:56 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+15:04:56 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+15:04:56 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+15:04:57 [controller] Screen recording -> C:\Users\micha\FruitFly\runs\videos\screen_20261114T200456Z_takeoff-connectome.mp4
+15:04:57 [session] FlightGear exited (code 1073741845) - crashed or force-closed

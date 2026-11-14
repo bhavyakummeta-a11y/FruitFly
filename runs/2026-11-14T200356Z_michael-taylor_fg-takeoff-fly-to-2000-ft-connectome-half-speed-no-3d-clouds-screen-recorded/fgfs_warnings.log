@@ -1,0 +1,44 @@
+    0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+    0.07 [WARN]:aircraft  C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\fg_init.cxx:455: Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+    0.08 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:481: Creating osgViewer::CompositeViewer
+    0.08 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:488: affinity=none
+    0.08 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:500: Calling composite_viewer->setUseConfigureAffinity() with flag=0
+    1.58 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    1.58 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    1.59 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\main.cxx:793: Enabling ATI/AMD viewport hack
+    1.62 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: Warning: GraphicsWindowWin32::grabFocus() - Failed grabbing the focus
+    1.62 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\fg_os_osgviewer.cxx:456: affinity=none
+   17.82 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+   17.82 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+   19.57 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   19.74 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   24.07 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+   24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+   24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+   24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+   24.12 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+   24.80 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+   26.43 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage 5
+   26.43 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage e
+   29.44 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   31.72 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\mipmap.cxx:276: mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+   35.02 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   36.09 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+   36.74 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+   42.03 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\canvas\elements\CanvasElement.cxx:608: Canvas: invalid clip: 124, 1024, 1024, 0
+   42.76 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\canvas\elements\CanvasElement.cxx:608: Canvas: invalid clip: 124, 1024, 1024, 0
+   43.11 [ALRT]:flight    C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\FDM\fdm_shell.cxx:192: Failed to save initial FDM property state
+   43.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   43.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.nas, line 1022
+   43.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.nas, line 149
+   51.49 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'sim/video/is-encoding'
+   52.89 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\viewmgr.cxx:378: FGViewMgr::video_start(): name_in= codec_in= quality=-1 speed=-1 bitrate=0
+   52.89 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\misc\sg_path.cxx:854: failed to make file writeable prior to remove:Path "fgvideo-738-flies.mkv"
+   52.89 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\misc\sg_path.cxx:865: file remove failed: (Path "fgvideo-738-flies.mkv")  reason: No such file or directory
+   52.90 [ALRT]:systems   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\viewmgr.cxx:427: Failed to create link fgvideo-738-flies.mkv => fgvideo-738-flies-20261114-150447.mkv
+   52.90 [ALRT]:systems   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\viewmgr.cxx:463: Video encoding starting. codec=libx264 quality=0.6 speed=1 bitrate=0 path=Path "fgvideo-738-flies-20261114-150447.mkv" path_link=Path "fgvideo-738-flies.mkv"
+   52.96 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\screen\video-encoder-internal.hxx:299: crf m_quality=0.6 => 13.200000
+   52.96 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\screen\video-encoder-internal.hxx:359: dictionary 2:
+   52.96 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\screen\video-encoder-internal.hxx:365:     crf=13.200000
+   52.96 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\screen\video-encoder-internal.hxx:365:     preset=ultrafast
+   57.60 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
