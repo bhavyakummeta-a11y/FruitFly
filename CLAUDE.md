@@ -2,9 +2,12 @@
 
 ## Ticket board: claim work before you start (mandatory)
 
-Several agents work in this checkout at once. `tickets.py` is a local board
-(`.tickets/board.db`, never committed) that makes sure two agents never work
-on the same thing, or edit the same files, at the same time.
+Several agents work in this repo at once, across checkouts and worktrees
+(`FruitFly`, `FruitFly-obst`, ...). `tickets.py` keeps ONE machine-wide board
+(`%LOCALAPPDATA%\FruitFly\board.db`, never committed) that makes sure two
+agents never work on the same thing, or edit the same files, at the same time.
+From a checkout whose branch predates `tickets.py`, run the main copy:
+`python C:\Users\micha\FruitFly\tickets.py ...`.
 
 1. **Name yourself** once per shell: `$env:FRUITFLY_AGENT = "<session name>"`
    (bash: `export FRUITFLY_AGENT=...`), or pass `--agent` on every call.

@@ -111,6 +111,13 @@ class Board(unittest.TestCase):
             started = [w for w in pool.map(_race_start, [str(self.db)] * 8, [f'b{i}' for i in range(8)]) if w]
         self.assertEqual(len(started), 1, started)
 
+    def test_default_board_is_shared_outside_any_checkout(self):
+        """Every checkout/worktree must hit the same board, so it can't live in the repo."""
+        self.assertFalse(T.DEFAULT_DB.resolve().is_relative_to(ROOT.resolve()), T.DEFAULT_DB)
+        t = T.start(self.con, 'Where am I', 'alice')
+        self.assertEqual(T.get(self.con, t)['site'], T._where())
+        self.assertIn('@', T._where())
+
     def test_cli_exit_codes(self):
         env = {**os.environ, 'FRUITFLY_TICKETS_DB': str(self.db)}
         def run(*args, agent='alice'):

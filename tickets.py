@@ -1,7 +1,9 @@
-"""Local ticket board so two agents never work on the same thing at once.
+r"""Local ticket board so two agents never work on the same thing at once.
 
-Every agent (Claude session or person) on this machine shares one SQLite board
-at .tickets/board.db (git-ignored). Claims are atomic: if two agents claim the
+Every agent (Claude session or person) on this machine shares ONE SQLite board,
+whichever checkout or worktree it runs from (FruitFly, FruitFly-obst, ...):
+%LOCALAPPDATA%\FruitFly\board.db (~/.local/share/fruitfly/board.db elsewhere).
+Paths are repo-relative, so they mean the same files in every checkout. Claims are atomic: if two agents claim the
 same ticket, or tickets that lock overlapping paths, exactly one wins.
 Claims are leases: an agent that stops renewing (crashed/closed session) loses
 the claim after --lease minutes (default 60) and the ticket can be taken over.
@@ -30,7 +32,26 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_DB = ROOT / '.tickets' / 'board.db'
+def _default_db():
+    base = os.environ.get('LOCALAPPDATA')
+    base = Path(base) / 'FruitFly' if base else Path.home() / '.local' / 'share' / 'fruitfly'
+    return base / 'board.db'
+
+
+DEFAULT_DB = _default_db()
+
+
+def _where():
+    """'<checkout folder>@<branch>' so the board shows where a claim was made."""
+    head = ROOT / '.git'
+    try:
+        if head.is_file():  # worktree: .git is a 'gitdir: ...' pointer file
+            head = Path(head.read_text().split(':', 1)[1].strip())
+        ref = (head / 'HEAD').read_text().strip()
+        branch = ref.rsplit('/', 1)[-1] if ref.startswith('ref:') else ref[:7]
+    except (OSError, IndexError):
+        branch = '?'
+    return f'{ROOT.name}@{branch}'
 DEFAULT_LEASE_MIN = 60.0
 
 SCHEMA = """
@@ -70,6 +91,11 @@ def connect(db=None):
     con.row_factory = sqlite3.Row
     con.execute('PRAGMA journal_mode=WAL')
     con.executescript(SCHEMA)
+    if 'site' not in {r[1] for r in con.execute('PRAGMA table_info(tickets)')}:
+        try:
+            con.execute("ALTER TABLE tickets ADD COLUMN site TEXT NOT NULL DEFAULT ''")
+        except sqlite3.OperationalError:
+            pass  # another process added it first
     return con
 
 
@@ -176,8 +202,8 @@ def claim(con, tid, agent, lease_min=DEFAULT_LEASE_MIN):
                            + ', '.join(f'{p} ~ {q}' for p, q in hit))
         takeover = row['status'] == 'claimed' and row['agent'] != agent
         now = time.time()
-        con.execute("UPDATE tickets SET status='claimed', agent=?, heartbeat=?, lease_min=?, updated=? WHERE id=?",
-                    (agent, now, lease_min, now, tid))
+        con.execute("UPDATE tickets SET status='claimed', agent=?, heartbeat=?, lease_min=?, updated=?, site=? WHERE id=?",
+                    (agent, now, lease_min, now, _where(), tid))
         _event(con, tid, agent, 'takeover' if takeover else 'claim',
                f"from stale {row['agent']}" if takeover else '')
         _renew_all(con, agent, now)
@@ -194,9 +220,9 @@ def start(con, title, agent, paths=(), notes='', lease_min=DEFAULT_LEASE_MIN):
             raise Conflict(f"paths held by {r['agent']} on #{r['id']} \"{r['title']}\": "
                            + ', '.join(f'{p} ~ {q}' for p, q in hit))
         now = time.time()
-        cur = con.execute("INSERT INTO tickets (title, notes, paths, status, agent, heartbeat, lease_min, created, updated)"
-                          " VALUES (?,?,?,'claimed',?,?,?,?,?)",
-                          (title.strip(), notes, json.dumps(paths), agent, now, lease_min, now, now))
+        cur = con.execute("INSERT INTO tickets (title, notes, paths, status, agent, heartbeat, lease_min, created, updated, site)"
+                          " VALUES (?,?,?,'claimed',?,?,?,?,?,?)",
+                          (title.strip(), notes, json.dumps(paths), agent, now, lease_min, now, now, _where()))
         _event(con, cur.lastrowid, agent, 'start', title.strip())
         _renew_all(con, agent, now)
     return cur.lastrowid
@@ -270,6 +296,8 @@ def _age(t):
 def _fmt(row):
     paths = json.loads(row['paths'])
     who = f" {row['agent']}" if row['agent'] and row['status'] != 'open' else ''
+    if who and row['site']:
+        who += f" ({row['site']})"
     age = f" ({_age(row['heartbeat'])} ago)" if row['status'] == 'claimed' else ''
     p = f"  [{', '.join(paths)}]" if paths else ''
     return f"#{row['id']:<4} {state(row):7}{who}{age}  {row['title']}{p}"
@@ -278,7 +306,7 @@ def _fmt(row):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--agent', default=os.environ.get('FRUITFLY_AGENT'), help='your name (default $FRUITFLY_AGENT)')
-    ap.add_argument('--db', help='board file (default .tickets/board.db or $FRUITFLY_TICKETS_DB)')
+    ap.add_argument('--db', help=f'board file (default {DEFAULT_DB} or $FRUITFLY_TICKETS_DB)')
     sub = ap.add_subparsers(dest='cmd', required=True)
     s = sub.add_parser('list', help='open/claimed tickets (--all includes done)')
     s.add_argument('--all', action='store_true')
@@ -345,9 +373,9 @@ def main(argv=None):
             for e in con.execute('SELECT * FROM events WHERE ticket=? ORDER BY id', (a.id,)):
                 print(f"  {time.strftime('%m-%d %H:%M', time.localtime(e['at']))} {e['agent'] or '?':12} {e['action']} {e['detail']}")
         elif a.cmd == 'board':
-            print('| # | State | Agent | Title | Paths |\n|---|---|---|---|---|')
+            print('| # | State | Agent | Where | Title | Paths |\n|---|---|---|---|---|---|')
             for r in con.execute("SELECT * FROM tickets WHERE status != 'done' ORDER BY id"):
-                print(f"| {r['id']} | {state(r)} | {r['agent'] or ''} | {r['title']} | {', '.join(json.loads(r['paths']))} |")
+                print(f"| {r['id']} | {state(r)} | {r['agent'] or ''} | {r['site']} | {r['title']} | {', '.join(json.loads(r['paths']))} |")
         return 0
     except Conflict as exc:
         print(f'BLOCKED: {exc}', file=sys.stderr)
