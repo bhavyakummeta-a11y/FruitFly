@@ -1,0 +1,109 @@
+[runlog] /home/pau-_/flyhack/FruitFly/.sim-logs/runs/2026-11-14T195535Z_paula-sof-a-contreras-villavicencio_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the landing
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-17.5
+Landing fly: flying fly, looming -> DNp07 = flare
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Landing handover: throttle 0.55, elevator -0.22, reference attitude 3.7 deg (plane at 0.4 deg, +110 fpm)
+NO-AUTOPILOT RULE: autopilot was still on after handover (/autopilot/internal/SPD); forced off.
+FlightGear resumes with the fly's first controls: the fly has the approach.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 0.0s after its state  APPROACH       ias=144.3kt agl=  993ft pitch= 0.4deg thr=0.50
+  decision stale 3.3s after its state  APPROACH       ias=142.9kt agl=  964ft pitch= 7.0deg thr=0.50
+  decision applied 0.7s after its state  APPROACH       ias=142.2kt agl=  958ft pitch= 7.5deg thr=0.51
+  decision stale 1.7s after its state  APPROACH       ias=141.1kt agl=  951ft pitch= 7.3deg thr=0.51
+  decision applied 0.7s after its state  APPROACH       ias=140.6kt agl=  949ft pitch= 7.7deg thr=0.57
+  decision stale 1.3s after its state  APPROACH       ias=139.8kt agl=  947ft pitch= 8.5deg thr=0.57
+  decision stale 2.4s after its state  APPROACH       ias=138.5kt agl=  946ft pitch= 5.8deg thr=0.57
+  decision applied 1.0s after its state  APPROACH       ias=138.5kt agl=  942ft pitch= 4.3deg thr=0.58
+  decision stale 2.1s after its state  APPROACH       ias=140.1kt agl=  921ft pitch=-0.2deg thr=0.58
+  decision applied 1.0s after its state  APPROACH       ias=141.7kt agl=  902ft pitch=-2.6deg thr=0.63
+  decision stale 2.3s after its state  APPROACH       ias=147.9kt agl=  828ft pitch=-5.5deg thr=0.63
+  decision applied 1.0s after its state  APPROACH       ias=150.9kt agl=  790ft pitch=-6.8deg thr=0.53
+  decision stale 2.0s after its state  APPROACH       ias=156.9kt agl=  690ft pitch=-5.4deg thr=0.53
+Landing fly: approach path re-anchored at 2.6 deg from 654 ft, 4325 m out
+  decision applied 0.8s after its state  APPROACH       ias=158.7kt agl=  654ft pitch=-4.7deg thr=0.43
+  decision stale 1.1s after its state  APPROACH       ias=160.5kt agl=  605ft pitch=-3.3deg thr=0.43
+  decision stale 2.0s after its state  APPROACH       ias=161.3kt agl=  535ft pitch= 3.0deg thr=0.43
+  decision applied 0.7s after its state  APPROACH       ias=160.5kt agl=  513ft pitch= 5.6deg thr=0.33
+  decision stale 1.3s after its state  APPROACH       ias=158.6kt agl=  498ft pitch= 5.4deg thr=0.33
+  decision stale 2.1s after its state  APPROACH       ias=154.0kt agl=  491ft pitch= 9.7deg thr=0.33
+  decision applied 0.8s after its state  APPROACH       ias=151.5kt agl=  497ft pitch=11.4deg thr=0.28
+  decision stale 1.3s after its state  APPROACH       ias=147.7kt agl=  511ft pitch=11.0deg thr=0.28
+  decision stale 2.4s after its state  APPROACH       ias=141.1kt agl=  537ft pitch= 6.0deg thr=0.28
+  decision applied 0.8s after its state  APPROACH       ias=139.5kt agl=  536ft pitch= 3.0deg thr=0.25
+  decision stale 2.5s after its state  APPROACH       ias=139.2kt agl=  485ft pitch=-5.0deg thr=0.25
+  decision applied 0.7s after its state  APPROACH       ias=140.6kt agl=  449ft pitch=-8.8deg thr=0.24
+  decision stale 1.1s after its state  APPROACH       ias=143.3kt agl=  390ft pitch=-11.8deg thr=0.24
+  decision stale 2.0s after its state  APPROACH       ias=150.7kt agl=  233ft pitch=-12.7deg thr=0.24
+  decision stale 2.0s after its state  FLARE          ias=157.2kt agl=   64ft pitch=-7.5deg thr=0.24
+  decision stale 2.1s after its state  FLARE          ias=136.5kt agl=    0ft pitch= 2.2deg thr=0.24
+  decision applied 0.7s after its state  FLARE          ias=133.1kt agl=    0ft pitch= 3.2deg thr=0.42
+  decision stale 3.0s after its state  FLARE          ias=109.8kt agl=    0ft pitch= 0.7deg thr=0.42
+  decision stale 2.5s after its state  FLARE          ias= 78.9kt agl=    0ft pitch= 0.8deg thr=0.42
+  decision stale 2.3s after its state  FLARE          ias= 42.3kt agl=    0ft pitch= 0.9deg thr=0.42
+  decision stale 1.3s after its state  FLARE          ias= 22.6kt agl=    0ft pitch= 0.9deg thr=0.42
+  decision stale 1.9s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.42
+  decision stale 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.42
+  decision applied 0.7s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.62
+  decision stale 1.7s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.62
+  decision applied 0.9s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.67
+  decision applied 0.8s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.69
+  decision applied 0.7s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.71
+  decision stale 1.1s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.71
+  decision applied 0.8s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision applied 0.9s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.73
+  decision stale 1.9s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.73
+  decision stale 1.2s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.73
+  decision stale 1.1s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.73
+  decision stale 1.7s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.73
+  decision stale 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.73
+  decision applied 0.8s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.77
+  decision stale 1.8s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.77
+  decision stale 1.2s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.77
+  decision stale 1.3s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.77
+  decision stale 1.4s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.77
+  decision applied 0.9s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 2.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision applied 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision applied 1.0s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 2.2s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.1s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.2s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.6s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.2s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.2s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision stale 1.5s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision applied 0.8s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision stale 1.2s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision stale 2.0s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision stale 1.1s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision stale 1.1s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision stale 1.2s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision applied 0.9s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.72
+  decision applied 0.9s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.9s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.0s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.2s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.6s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.2s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision applied 0.7s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 2.1s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.2s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.2s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.7s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.1s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision applied 0.9s after its state  FLARE          ias=  0.2kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision stale 1.7s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.75
+  decision applied 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision stale 1.0s after its state  FLARE          ias=  0.0kt agl=    0ft pitch= 0.7deg thr=0.74
+  decision applied 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.71
+  decision stale 1.0s after its state  FLARE          ias=  0.1kt agl=    0ft pitch= 0.7deg thr=0.71
+WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: it keeps the last controls it received.
+Error: No FlightGear telemetry; check UDP flags and protocol XML.
