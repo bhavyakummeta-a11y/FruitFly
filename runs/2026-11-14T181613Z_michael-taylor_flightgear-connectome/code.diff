@@ -1,0 +1,643 @@
+diff --git a/flight_simulator/brain.py b/flight_simulator/brain.py
+index 9199ddf..3c428ca 100644
+--- a/flight_simulator/brain.py
++++ b/flight_simulator/brain.py
+@@ -206,6 +206,153 @@ def lif_trial(w, active, rng, ms):
+     return counts
+ 
+ 
++_compiled = None
++
++
++def _numba_kernel():
++    """Compile (once; cached on disk by numba) the loop used by lif_trial_numba()."""
++    global _compiled
++    if _compiled is not None:
++        return _compiled
++    import numba
++    import numpy as np
++
++    @numba.njit(cache=True)  # no fastmath: floating-point results must not change
++    def kernel(indptr, indices, data, group_idx, group_ptr, group_p, rand, steps):
++        # A spike reaches its targets DELAY steps later, so within a block of DELAY steps
++        # no neuron can influence another. Each neuron is therefore advanced a whole block
++        # at a time, with its state in registers, instead of sweeping every array every
++        # step. The arithmetic per neuron and step is the reference's, in the same order.
++        n = indptr.shape[0] - 1
++        local = np.full(n, -1, np.int64)     # neuron index -> slot in the compact arrays
++        glob = np.empty(n, np.int64)         # slot -> neuron index
++        v, g, last = np.full(n, V0), np.zeros(n), np.full(n, -1e9)
++        counts = np.zeros(n, np.int64)
++        now = np.zeros((n, DELAY))           # summed weights arriving in this block, per step
++        later = np.zeros((n, DELAY))         # ... in the next block
++        mask = np.zeros(n, np.uint32)        # bit j set: fired at step j of this block
++        size = 0
++        members = group_idx.shape[0]
++        for j in range(members):
++            i = group_idx[j]
++            if local[i] < 0:
++                local[i] = size
++                glob[size] = i
++                size += 1
++        ndriven = size                       # stimulated neurons occupy slots 0..ndriven-1
++        # Per stimulated neuron: its Poisson draws (offset into a step's random numbers and
++        # probability), in group order like the reference.
++        kick_ptr = np.zeros(ndriven + 1, np.int64)
++        for j in range(members):
++            kick_ptr[local[group_idx[j]] + 1] += 1
++        for i in range(ndriven):
++            kick_ptr[i + 1] += kick_ptr[i]
++        kick_off = np.empty(members, np.int64)
++        kick_p = np.empty(members)
++        fill = kick_ptr[:ndriven].copy()
++        for gi in range(group_p.shape[0]):
++            for j in range(group_ptr[gi], group_ptr[gi + 1]):
++                i = local[group_idx[j]]
++                kick_off[fill[i]] = j
++                kick_p[fill[i]] = group_p[gi]
++                fill[i] += 1
++        decay = np.exp(-DT / TS)
++        CHUNK = 128
++        fired = np.empty(n, np.int64)
++        for base in range(0, steps, DELAY):
++            length = min(DELAY, steps - base)
++            block_size = size                # neurons touched during this block start next block
++            # Chunks of CHUNK neurons, step by step: the chunk's state stays in the L1 cache
++            # and neighbouring neurons overlap in the CPU pipeline (one neuron's 18 steps
++            # in a row would be a single long dependency chain).
++            for c0 in range(0, block_size, CHUNK):
++                c1 = min(c0 + CHUNK, block_size)
++                for i in range(c0, c1):
++                    mask[i] = 0
++                for j in range(length):
++                    k = base + j
++                    t = k * DT
++                    bit = np.uint32(1 << j)
++                    row = k * members
++                    for i in range(c0, c1):
++                        gi_ = g[i] + now[i, j] * WSYN
++                        now[i, j] = 0.0
++                        vi = v[i]
++                        if i < ndriven:
++                            vi += DT * (V0 - vi + gi_) / TM
++                            gi_ *= decay
++                            for q in range(kick_ptr[i], kick_ptr[i + 1]):
++                                if rand[row + kick_off[q]] < kick_p[q]:
++                                    vi += KICK
++                        elif (t - last[i]) > REF:
++                            vi += DT * (V0 - vi + gi_) / TM
++                            gi_ *= decay
++                        if vi > VTH:
++                            vi, gi_ = V0, 0.0
++                            last[i] = t
++                            mask[i] |= bit
++                        v[i], g[i] = vi, gi_
++            nfired = 0
++            for i in range(block_size):
++                if mask[i] != 0:
++                    fired[nfired] = glob[i]
++                    nfired += 1
++            if nfired:
++                firing = np.sort(fired[:nfired])   # the reference delivers in ascending neuron order
++                for j in range(length):
++                    bit = np.uint32(1 << j)
++                    for q in range(nfired):
++                        s = firing[q]
++                        if mask[local[s]] & bit:
++                            counts[s] += 1
++                            for e in range(indptr[s], indptr[s + 1]):
++                                target = local[indices[e]]
++                                if target < 0:
++                                    target = size
++                                    local[indices[e]] = size
++                                    glob[size] = indices[e]
++                                    size += 1
++                                later[target, j] += data[e]
++            now, later = later, now
++        return counts
++
++    _compiled = kernel
++    return kernel
++
++
++def lif_trial_numba(w, active, rng, ms):
++    """lif_trial() compiled with numba: same model, same arithmetic, same random stream,
++    identical spike counts (tests/test_brain_speed.py). Needs the optional numba package."""
++    import numpy as np
++    steps = int(ms / DT)
++    group_idx = np.concatenate([np.asarray(idx, np.int64) for idx, _ in active])
++    group_ptr = np.cumsum([0] + [len(idx) for idx, _ in active]).astype(np.int64)
++    group_p = np.array([hz * DT / 1000 for _, hz in active])
++    # One draw for the whole trial: the same numbers, in the same order, as the
++    # reference's rng.random(len(idx)) per step and group.
++    rand = rng.random(steps * len(group_idx))
++    return _numba_kernel()(w.indptr, w.indices, w.data, group_idx, group_ptr, group_p, rand, steps)
++
++
++KERNELS = {'reference': lif_trial_reference, 'numpy': lif_trial, 'numba': lif_trial_numba}
++
++
++def best_kernel():
++    """(name, function) of the fastest kernel available. All three give identical spikes.
++    FRUITFLY_BRAIN_KERNEL=reference|numpy|numba forces one."""
++    import os
++    forced = os.environ.get('FRUITFLY_BRAIN_KERNEL')
++    if forced:
++        if forced not in KERNELS:
++            raise ValueError(f'FRUITFLY_BRAIN_KERNEL must be one of {", ".join(KERNELS)}')
++        return forced, KERNELS[forced]
++    try:
++        import numba  # noqa: F401
++    except ImportError:
++        return 'numpy', lif_trial
++    return 'numba', lif_trial_numba
++
++
+ class ConnectomeBrain:
+     """Shiu whole-brain LIF on FlyWire 783.
+ 
+@@ -277,10 +424,15 @@ class ConnectomeBrain:
+         self.last_seconds = 0.0
+         self.name = 'CONNECTOME LIF (notebook model)' + (
+             f' | silenced: {", ".join(self.silenced)}' if self.silenced else '')
+-
+-    # The LIF kernel. lif_trial is the fast, bit-identical one; set this to
+-    # lif_trial_reference to run the notebook loop as written.
+-    trial = staticmethod(lif_trial)
++        # The LIF kernel: numba if installed, else numpy. Both reproduce the notebook loop
++        # (lif_trial_reference) spike for spike.
++        self.kernel, self.trial = best_kernel()
++        if self.kernel == 'numba':
++            # Compile (or load from numba's cache) now, not during the first decision.
++            tiny = sp.csr_matrix(([self.w.data[0]], ([0], [1])), shape=(2, 2), dtype=self.w.dtype)
++            tiny.indices, tiny.indptr = (tiny.indices.astype(self.w.indices.dtype),
++                                         tiny.indptr.astype(self.w.indptr.dtype))
++            self.trial(tiny, [(np.array([0]), 200.0)], np.random.default_rng(0), 1)
+ 
+     def run(self, inputs, readouts=None):
+         """Fresh 200 ms trial from rest. inputs: {group: Hz} -> {readout: Hz}."""
+diff --git a/flight_simulator/session.py b/flight_simulator/session.py
+index 54c397a..41418be 100644
+--- a/flight_simulator/session.py
++++ b/flight_simulator/session.py
+@@ -55,6 +55,18 @@ HISTORY = 1200            # points kept for the live charts (10 min at 2 Hz)
+ NAME_PROP = '/fruitfly/session/name'
+ WATCHDOG_PORT = 8764      # bound by the watchdog: one per machine
+ UNNAMED = 'UNNAMED'
++# View buttons on the log page: button label -> FlightGear view name. Pressing one writes
++# the name to VIEW_PROP and the aircraft's cabin_show.nas switches the camera. It changes
++# only what the person watching sees; the fly pilot never uses the camera.
++VIEW_PROP = '/fruitfly/view-request'
++VIEW_BUTTONS = {
++    'Fly pilot': 'Cockpit: fly pilot',
++    'Captain seat': 'Cockpit View',
++    'Snack cart': 'Cabin: follow the snack cart',
++    'Cabin aisle': 'Cabin: aisle, looking forward',
++    'Cabin front': 'Cabin: front, facing the passengers',
++    'Outside': 'Chase View',
++}
+ 
+ # column -> (property path, scale)
+ AIRPLANE = {
+@@ -451,6 +463,24 @@ class Session:
+             self._events.flush()
+ 
+     # ---- FlightGear property API ----------------------------------------
++    def set_view(self, label):
++        """Switch the FlightGear camera for whoever is watching (log page button).
++
++        Only names in VIEW_BUTTONS; writes VIEW_PROP, cabin_show.nas does the switch.
++        Display only: no flight control, and the fly pilot doesn't see the camera."""
++        name = VIEW_BUTTONS.get(label)
++        if not name:
++            return False
++        req = urllib.request.Request(f'http://127.0.0.1:{self.httpd}/json{VIEW_PROP}',
++                                     json.dumps({'value': name}).encode(), method='POST')
++        try:
++            urllib.request.urlopen(req, timeout=2).read()
++        except OSError as exc:
++            self.event('session', f'View button {label!r}: FlightGear did not answer ({exc})')
++            return False
++        self.event('session', f'Viewer camera -> {name} (display only; the fly pilot is unaffected)')
++        return True
++
+     def _get(self, path):
+         url = f'http://127.0.0.1:{self.httpd}/json{path}'
+         with urllib.request.urlopen(url, timeout=1.0) as r:
+@@ -721,12 +751,14 @@ class Session:
+                 pass
+ 
+             def do_POST(self):
+-                if self.path not in ('/api/name', '/api/control'):
++                if self.path not in ('/api/name', '/api/control', '/api/view'):
+                     self.send_error(404)
+                     return
+                 try:
+                     body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
+-                    if self.path == '/api/control':
++                    if self.path == '/api/view':
++                        ok = session.set_view(str(body.get('view', '')))
++                    elif self.path == '/api/control':
+                         ok = body.get('by') in ('llm', 'human', 'script', 'end') and session.declare(
+                             body['by'], str(body.get('who', ''))[:120], str(body.get('note', ''))[:300])
+                     else:
+@@ -760,6 +792,8 @@ class Session:
+                                 'fly_header': session.fly_header,
+                                 'fly_controller': session.fly_ctrl[-120:]}
+                     body, ctype = json.dumps(data).encode(), 'application/json'
++                elif self.path.startswith('/api/views'):
++                    body, ctype = json.dumps({'views': list(VIEW_BUTTONS)}).encode(), 'application/json'
+                 elif self.path.split('?')[0] in PAGES:
+                     html = PAGES[self.path.split('?')[0]].read_text(encoding='utf-8')
+                     body = html.replace('{{TAG}}', str(session.a.pid)).encode()
+diff --git a/flight_simulator/session_log.html b/flight_simulator/session_log.html
+index 769736b..07944c7 100644
+--- a/flight_simulator/session_log.html
++++ b/flight_simulator/session_log.html
+@@ -41,6 +41,13 @@ form[hidden] { display: none; }
+ form input { font: inherit; padding: 3px 6px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); }
+ form button { font: inherit; padding: 3px 6px; border-radius: 4px; border: 0; background: var(--text); color: var(--surface); cursor: pointer; }
+ main { display: flex; flex-direction: column; min-width: 0; }
++.views small { display: block; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; margin-bottom: 3px; }
++.views div { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
++.views button { font: inherit; padding: 3px 4px; border-radius: 4px; border: 1px solid var(--border);
++  background: var(--panel); color: var(--text); cursor: pointer; }
++.views button:hover { border-color: var(--text-2); }
++.views button.on { border-color: var(--fly); box-shadow: inset 0 0 0 1px var(--fly); }
++.views button:disabled { opacity: .5; cursor: default; }
+ .toolbar { display: flex; gap: 10px; padding: 4px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); }
+ .toolbar label { display: flex; gap: 3px; align-items: center; }
+ #log { flex: 1; overflow: auto; padding: 4px 10px; font: 11.5px/1.45 ui-monospace, Consolas, monospace; }
+@@ -61,6 +68,10 @@ main { display: flex; flex-direction: column; min-width: 0; }
+     <button type="submit">Save name</button>
+   </form>
+   <dl id="now"></dl>
++  <div class="views" title="Changes what you see in FlightGear. The fly pilot does not use the camera.">
++    <small>Camera (your view only)</small>
++    <div id="views"></div>
++  </div>
+ </aside>
+ <main>
+   <div class="toolbar">
+@@ -119,6 +130,25 @@ document.getElementById('name-form').addEventListener('submit', async e => {
+   const name = document.getElementById('name-input').value.trim();
+   if (name) await fetch('/api/name', {method: 'POST', body: JSON.stringify({name})});
+ });
++async function views() {
++  const box = document.getElementById('views');
++  try {
++    const {views} = await (await fetch('/api/views', {cache: 'no-store'})).json();
++    for (const label of views) {
++      const b = document.createElement('button');
++      b.type = 'button'; b.textContent = label;
++      b.addEventListener('click', async () => {
++        b.disabled = true;
++        try {
++          const r = await fetch('/api/view', {method: 'POST', body: JSON.stringify({view: label})});
++          if (r.ok) box.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
++        } finally { b.disabled = false; }
++      });
++      box.appendChild(b);
++    }
++  } catch (e) { /* older logger without view buttons */ }
++}
++views();
+ async function tick() {
+   try { render(await (await fetch(`/api/state?since=${since}`, {cache: 'no-store'})).json()); }
+   catch (e) {
+diff --git a/flightgear/Aircraft/737-800/738-flies-set.xml b/flightgear/Aircraft/737-800/738-flies-set.xml
+index 6fd0ad1..e7b3c9a 100644
+--- a/flightgear/Aircraft/737-800/738-flies-set.xml
++++ b/flightgear/Aircraft/737-800/738-flies-set.xml
+@@ -64,6 +64,23 @@
+         <z-offset-m archive="y">-16.75</z-offset-m>
+       </config>
+     </view>
++    <!-- Running gag: rides along the aisle with the fly flight attendant's snack cart
++         (cabin_show.nas moves it with the cart), looking forward at her. -->
++    <view n="133">
++      <name>Cabin: follow the snack cart</name>
++      <type>lookfrom</type>
++      <internal archive="y">true</internal>
++      <config>
++        <from-model type="bool">true</from-model>
++        <from-model-idx type="int">0</from-model-idx>
++        <default-field-of-view-deg type="double">65</default-field-of-view-deg>
++        <pitch-offset-deg>-14</pitch-offset-deg>
++        <heading-offset-deg>0</heading-offset-deg>
++        <x-offset-m archive="y">0.0</x-offset-m>
++        <y-offset-m archive="y">1.60</y-offset-m>
++        <z-offset-m archive="y">-10.5</z-offset-m>
++      </config>
++    </view>
+   </sim>
+ 
+   <fruitfly>
+@@ -88,11 +105,30 @@
+       <group n="1"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>
+       <group n="2"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>
+     </passengers>
++    <!-- The session log page's view buttons write a view name here (cabin_show.nas).
++         Changes only what the viewer sees, never the fly pilot. -->
++    <view-request type="string"></view-request>
++    <!-- Running gag: the fly flight attendant (cabin_show.nas). Display only. -->
++    <cabin>
++      <attendant>
++        <x-m type="double">-13.1</x-m>
++        <bob-m type="double">0</bob-m>
++        <turn-deg type="double">180</turn-deg>
++        <stride-deg type="double">0</stride-deg>
++        <flap-norm type="double">0</flap-norm>
++        <serve-m type="double">0</serve-m>
++        <item type="int">0</item>
++      </attendant>
++    </cabin>
+   </fruitfly>
+ 
+   <nasal>
+     <fruitfly>
+       <file>Aircraft/FlyCabin/Nasal/fruitfly.nas</file>
+     </fruitfly>
++    <fruitfly_cabin>
++      <file>Aircraft/FlyCabin/Nasal/cabin_rows.nas</file>
++      <file>Aircraft/FlyCabin/Nasal/cabin_show.nas</file>
++    </fruitfly_cabin>
+   </nasal>
+ </PropertyList>
+diff --git a/flightgear/Aircraft/FlyCabin/Models/738-flies.xml b/flightgear/Aircraft/FlyCabin/Models/738-flies.xml
+index 678703e..03dab2b 100644
+--- a/flightgear/Aircraft/FlyCabin/Models/738-flies.xml
++++ b/flightgear/Aircraft/FlyCabin/Models/738-flies.xml
+@@ -262,4 +262,7 @@
+   <model><name>fly163</name><path>Aircraft/FlyCabin/Models/fly-group1.xml</path><offsets><x-m>9.870</x-m><y-m>0.490</y-m><z-m>0.520</z-m><heading-deg>3.0</heading-deg></offsets></model>
+   <model><name>fly164</name><path>Aircraft/FlyCabin/Models/fly-group2.xml</path><offsets><x-m>9.870</x-m><y-m>0.950</y-m><z-m>0.520</z-m><heading-deg>-5.9</heading-deg></offsets></model>
+   <model><name>fly165</name><path>Aircraft/FlyCabin/Models/fly-group2.xml</path><offsets><x-m>9.870</x-m><y-m>1.410</y-m><z-m>0.520</z-m><heading-deg>-2.2</heading-deg></offsets></model>
++
++  <!-- Running gag: the fly flight attendant and her snack cart (cabin_show.nas). -->
++  <model><name>attendant</name><path>Aircraft/FlyCabin/Models/attendant.xml</path><offsets><x-m>0</x-m><y-m>0</y-m><z-m>0.100</z-m></offsets></model>
+ </PropertyList>
+diff --git a/flightgear/overlay/738-flies-set.xml b/flightgear/overlay/738-flies-set.xml
+index 6fd0ad1..e7b3c9a 100644
+--- a/flightgear/overlay/738-flies-set.xml
++++ b/flightgear/overlay/738-flies-set.xml
+@@ -64,6 +64,23 @@
+         <z-offset-m archive="y">-16.75</z-offset-m>
+       </config>
+     </view>
++    <!-- Running gag: rides along the aisle with the fly flight attendant's snack cart
++         (cabin_show.nas moves it with the cart), looking forward at her. -->
++    <view n="133">
++      <name>Cabin: follow the snack cart</name>
++      <type>lookfrom</type>
++      <internal archive="y">true</internal>
++      <config>
++        <from-model type="bool">true</from-model>
++        <from-model-idx type="int">0</from-model-idx>
++        <default-field-of-view-deg type="double">65</default-field-of-view-deg>
++        <pitch-offset-deg>-14</pitch-offset-deg>
++        <heading-offset-deg>0</heading-offset-deg>
++        <x-offset-m archive="y">0.0</x-offset-m>
++        <y-offset-m archive="y">1.60</y-offset-m>
++        <z-offset-m archive="y">-10.5</z-offset-m>
++      </config>
++    </view>
+   </sim>
+ 
+   <fruitfly>
+@@ -88,11 +105,30 @@
+       <group n="1"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>
+       <group n="2"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>
+     </passengers>
++    <!-- The session log page's view buttons write a view name here (cabin_show.nas).
++         Changes only what the viewer sees, never the fly pilot. -->
++    <view-request type="string"></view-request>
++    <!-- Running gag: the fly flight attendant (cabin_show.nas). Display only. -->
++    <cabin>
++      <attendant>
++        <x-m type="double">-13.1</x-m>
++        <bob-m type="double">0</bob-m>
++        <turn-deg type="double">180</turn-deg>
++        <stride-deg type="double">0</stride-deg>
++        <flap-norm type="double">0</flap-norm>
++        <serve-m type="double">0</serve-m>
++        <item type="int">0</item>
++      </attendant>
++    </cabin>
+   </fruitfly>
+ 
+   <nasal>
+     <fruitfly>
+       <file>Aircraft/FlyCabin/Nasal/fruitfly.nas</file>
+     </fruitfly>
++    <fruitfly_cabin>
++      <file>Aircraft/FlyCabin/Nasal/cabin_rows.nas</file>
++      <file>Aircraft/FlyCabin/Nasal/cabin_show.nas</file>
++    </fruitfly_cabin>
+   </nasal>
+ </PropertyList>
+diff --git a/flightgear/tools/make_cabin.py b/flightgear/tools/make_cabin.py
+index 7eb80f8..be0f050 100644
+--- a/flightgear/tools/make_cabin.py
++++ b/flightgear/tools/make_cabin.py
+@@ -8,6 +8,8 @@ Writes into flightgear/Aircraft/FlyCabin/Models/:
+                    /fruitfly/passengers/group[n]/... (three groups so the
+                    cabin doesn't move in lockstep)
+   738-flies.xml    top-level aircraft model: the stock 737-800 + cabin + flies
++  attendant.ac/.xml  the fly flight attendant + snack cart (running gag, no brain)
++  ../Nasal/cabin_rows.nas  row positions for the attendant script (cabin_show.nas)
+ 
+ Run:  python flightgear/tools/make_cabin.py
+ Re-run after changing any constant below. The outputs are committed so
+@@ -234,7 +236,7 @@ def build_cabin():
+                  ("seatframe", (0.25, 0.25, 0.27), 0), ("seatcloth", (0.10, 0.22, 0.55), 0)]
+     write_ac(os.path.join(OUT, "cabin.ac"), materials,
+              [floor, wall, ceil, bins, seats, cushions])
+-    return seat_pos
++    return seat_pos, rows
+ 
+ 
+ # ---- fly -------------------------------------------------------------------
+@@ -284,6 +286,155 @@ def build_fly():
+              [body, abd_band, eyes, legs, head] + wings)
+ 
+ 
++# ---- flight attendant + snack cart (running gag, display only) ----------------
++# A fly flight attendant walks the aisle pushing a cart and hands each row water,
++# poop or a slice of rotten banana. No brain: cabin_show.nas scripts it. Local frame:
++# origin on the cabin floor at the aisle centre, the attendant faces -x (forward)
++# before cabin_show.nas turns her; the cart sits on her +x side.
++ATT_START_X = X_FRONT + 0.30            # parked by the front galley between passes
++ATT_SERVE_OFFSET = -0.05                # she stands this far (x) from a row's seat centre
++CART_X, CART_LEN, CART_W, CART_H = 0.55, 0.60, 0.32, 0.86
++HAND = (-0.34, 0.0, 1.08)               # where a handed-out item starts
++HIP_Z = 0.72
++
++
++def build_attendant():
++    m = {k: Mesh(n, mat) for k, n, mat in (
++        ("body", "AttBody", "chitin"), ("bands", "AttBands", "band"), ("eyes", "AttEyes", "eye"),
++        ("head", "AttHead", "chitin"), ("uniform", "AttUniform", "uniform"),
++        ("scarf", "AttScarf", "scarf"), ("apron", "AttApron", "apron"), ("hat", "AttHat", "uniform"),
++        ("arms", "AttArms", "leg"), ("legsA", "AttLegsA", "leg"), ("legsB", "AttLegsB", "leg"),
++        ("wingR", "AttWingR", "wing"), ("wingL", "AttWingL", "wing"),
++        ("cup", "ItemWaterCup", "cup"), ("water", "ItemWater", "water"),
++        ("poop", "ItemPoop", "poop"), ("banana", "ItemBanana", "banana"), ("rot", "ItemBananaRot", "poop"),
++        ("cart", "Cart", "cart"), ("cartTrim", "CartTrim", "scarf"), ("wheels", "CartWheels", "leg"),
++        ("stock", "CartStock", "cup"), ("stockWater", "CartStockWater", "water"),
++        ("stockPoop", "CartStockPoop", "poop"), ("stockBanana", "CartStockBanana", "banana"))}
++
++    # standing fly, upright like a person; navy jacket over the thorax, apron, red scarf, pillbox hat
++    m["body"].ellipsoid((0.03, 0, 0.92), (0.15, 0.16, 0.24), pitch_deg=-8)          # abdomen
++    for k, zb in enumerate((0.80, 0.90, 1.00)):
++        m["bands"].ellipsoid((0.04, 0, zb), (0.152, 0.163, 0.03), seg=10, rings=4)
++    m["apron"].box(-0.15, 0, 0.88, 0.03, 0.22, 0.32)
++    m["uniform"].ellipsoid((0.0, 0, 1.25), (0.16, 0.17, 0.16))                       # jacket = thorax
++    m["scarf"].ellipsoid((-0.02, 0, 1.39), (0.12, 0.13, 0.04), seg=10, rings=4)
++    m["head"].ellipsoid((-0.04, 0, 1.51), (0.10, 0.13, 0.10))
++    m["hat"].ellipsoid((0.0, 0, 1.63), (0.08, 0.08, 0.035), seg=10, rings=4)
++    for s in (-1, 1):
++        m["eyes"].ellipsoid((-0.07, s * 0.10, 1.53), (0.07, 0.055, 0.08))
++        m["head"].box(-0.13, s * 0.04, 1.60, 0.03, 0.02, 0.09)                    # antennae
++        # front legs = arms, reaching forward to hold the item
++        shoulder, elbow, hand = (-0.06, s * 0.12, 1.22), (-0.22, s * 0.15, 1.02), (HAND[0] + 0.04, s * 0.06, HAND[2])
++        m["arms"].segment(shoulder, elbow, 0.022)
++        m["arms"].segment(elbow, hand, 0.018)
++        # mid and hind legs stand on the floor; A/B alternate when she walks
++        for k, (hx, kx, fx) in enumerate(((0.0, -0.12, -0.06), (0.06, 0.14, 0.10))):
++            group = "legsA" if (s > 0) == (k == 0) else "legsB"
++            hip, knee, foot = (hx, s * 0.10, HIP_Z), (kx, s * 0.18, 0.38), (fx, s * 0.16, 0.0)
++            m[group].segment(hip, knee, 0.025)
++            m[group].segment(knee, foot, 0.02)
++    for s, key in ((1, "wingR"), (-1, "wingL")):                                    # folded down her back
++        pts = []
++        for k in range(12):
++            t = 2 * math.pi * k / 12
++            u = 0.22 + 0.22 * math.cos(t)
++            v = 0.07 * math.sin(t)
++            pts.append((0.14 + 0.05 * u / 0.44 + v, s * (0.07 + 0.08 * u), 1.32 - 0.9 * u))
++        m[key].poly(pts)
++
++    # the items she hands out (one shown at a time, at HAND)
++    hx, hy, hz = HAND
++    m["cup"].box(hx, hy, hz + 0.02, 0.07, 0.07, 0.10)
++    m["water"].box(hx, hy, hz + 0.07, 0.072, 0.072, 0.01)
++    for dz, r, h in ((0.0, 0.07, 0.035), (0.04, 0.05, 0.03), (0.075, 0.03, 0.025)):  # the classic swirl
++        m["poop"].ellipsoid((hx, hy, hz + dz), (r, r, h), seg=10, rings=5)
++    m["banana"].ellipsoid((hx, hy, hz + 0.02), (0.035, 0.12, 0.03), seg=10, rings=5)
++    for dy in (-0.06, 0.0, 0.05):
++        m["rot"].ellipsoid((hx - 0.03, hy + dy, hz + 0.03), (0.012, 0.018, 0.012), seg=6, rings=3)
++
++    # the cart, stocked on top
++    cx, ch = CART_X, CART_H
++    m["cart"].box(cx, 0, 0.06 + ch / 2, CART_LEN, CART_W, ch)
++    for z in (0.30, 0.55):
++        m["cartTrim"].box(cx, 0, z, CART_LEN + 0.01, CART_W + 0.01, 0.03)
++    for dx in (-0.24, 0.24):
++        for dy in (-0.12, 0.12):
++            m["wheels"].box(cx + dx, dy, 0.03, 0.07, 0.03, 0.06)
++    top = 0.06 + ch
++    for i, dx in enumerate((-0.22, -0.13, -0.04)):
++        for dy in (-0.08, 0.08):
++            m["stock"].box(cx + dx, dy, top + 0.05, 0.07, 0.07, 0.10)
++            m["stockWater"].box(cx + dx, dy, top + 0.10, 0.072, 0.072, 0.01)
++    for dx, dy in ((0.07, -0.08), (0.07, 0.08), (0.16, 0.0)):
++        for dz, r, h in ((0.0, 0.06, 0.03), (0.035, 0.042, 0.025), (0.065, 0.025, 0.02)):
++            m["stockPoop"].ellipsoid((cx + dx, dy, top + 0.03 + dz), (r, r, h), seg=8, rings=4)
++    m["stockBanana"].ellipsoid((cx + 0.24, 0, top + 0.03), (0.03, 0.11, 0.03), seg=8, rings=4)
++
++    materials = [("chitin", (0.72, 0.55, 0.30), 0), ("band", (0.22, 0.15, 0.10), 0),
++                 ("eye", (0.78, 0.06, 0.04), 0), ("leg", (0.30, 0.22, 0.14), 0),
++                 ("wing", (0.85, 0.90, 0.95), 0.55), ("uniform", (0.08, 0.12, 0.32), 0),
++                 ("scarf", (0.80, 0.10, 0.12), 0), ("apron", (0.95, 0.95, 0.92), 0),
++                 ("cup", (0.97, 0.97, 0.97), 0), ("water", (0.25, 0.55, 0.95), 0.25),
++                 ("poop", (0.36, 0.22, 0.10), 0), ("banana", (0.85, 0.72, 0.20), 0),
++                 ("cart", (0.72, 0.74, 0.76), 0)]
++    write_ac(os.path.join(OUT, "attendant.ac"), materials, list(m.values()))
++    return {k: v.name for k, v in m.items()}
++
++
++def attendant_xml(names):
++    obj = lambda keys: "".join(f"<object-name>{names[k]}</object-name>" for k in keys)
++    cart = ["cart", "cartTrim", "wheels", "stock", "stockWater", "stockPoop", "stockBanana"]
++    items = ["cup", "water", "poop", "banana", "rot"]
++    fly = ["body", "bands", "eyes", "head", "uniform", "scarf", "apron", "hat", "arms",
++           "legsA", "legsB", "wingR", "wingL"]
++    p = "/fruitfly/cabin/attendant/"
++    # FlightGear nests animations in the order listed: the first is the outermost transform.
++    return f"""<?xml version="1.0"?>
++<!-- Generated by flightgear/tools/make_cabin.py - edit the generator, not this file.
++     Running gag: the fly flight attendant and her snack cart. No brain; cabin_show.nas
++     scripts the properties under {p}. Display only. -->
++<PropertyList>
++  <path>attendant.ac</path>
++  <animation><type>translate</type>{obj(fly + items + cart)}
++    <property>{p}x-m</property><axis><x>1</x><y>0</y><z>0</z></axis></animation>
++  <animation><type>translate</type>{obj(fly + items)}
++    <property>{p}bob-m</property><axis><x>0</x><y>0</y><z>1</z></axis></animation>
++  <animation><type>rotate</type>{obj(fly + items)}
++    <property>{p}turn-deg</property>
++    <center><x-m>0</x-m><y-m>0</y-m><z-m>0</z-m></center><axis><x>0</x><y>0</y><z>1</z></axis></animation>
++  <animation><type>rotate</type>{obj(["legsA"])}
++    <property>{p}stride-deg</property>
++    <center><x-m>0</x-m><y-m>0</y-m><z-m>{HIP_Z}</z-m></center><axis><x>0</x><y>1</y><z>0</z></axis></animation>
++  <animation><type>rotate</type>{obj(["legsB"])}
++    <property>{p}stride-deg</property><factor>-1</factor>
++    <center><x-m>0</x-m><y-m>0</y-m><z-m>{HIP_Z}</z-m></center><axis><x>0</x><y>1</y><z>0</z></axis></animation>
++  <animation><type>rotate</type>{obj(["wingR"])}
++    <property>{p}flap-norm</property><factor>-60</factor>
++    <center><x-m>0.14</x-m><y-m>0.07</y-m><z-m>1.32</z-m></center><axis><x>1</x><y>0</y><z>0</z></axis></animation>
++  <animation><type>rotate</type>{obj(["wingL"])}
++    <property>{p}flap-norm</property><factor>60</factor>
++    <center><x-m>0.14</x-m><y-m>-0.07</y-m><z-m>1.32</z-m></center><axis><x>1</x><y>0</y><z>0</z></axis></animation>
++  <animation><type>translate</type>{obj(items)}
++    <property>{p}serve-m</property><axis><x>-1</x><y>0</y><z>0</z></axis></animation>
++  <!-- item: 0 hands empty, 1 water, 2 poop, 3 rotten banana -->
++  <animation><type>select</type>{obj(["cup", "water"])}
++    <condition><equals><property>{p}item</property><value>1</value></equals></condition></animation>
++  <animation><type>select</type>{obj(["poop"])}
++    <condition><equals><property>{p}item</property><value>2</value></equals></condition></animation>
++  <animation><type>select</type>{obj(["banana", "rot"])}
++    <condition><equals><property>{p}item</property><value>3</value></equals></condition></animation>
++</PropertyList>
++"""
++
++
++ROWS_NAS = """# Generated by flightgear/tools/make_cabin.py - edit the generator, not this file.
++# Cabin layout for cabin_show.nas (FlightGear model x, metres, + = toward the tail).
++var ROWS = [{rows}];
++var START_X = {start:.3f};
++var SERVE_OFFSET = {offset:.3f};
++"""
++
++
+ FLY_XML = """<?xml version="1.0"?>
+ <!-- Generated by flightgear/tools/make_cabin.py - edit the generator, not this file. -->
+ <PropertyList>
+@@ -432,8 +583,15 @@ TOP_XML_HEAD = """<?xml version="1.0"?>
+ 
+ def main():
+     os.makedirs(OUT, exist_ok=True)
+-    seats = build_cabin()
++    seats, rows = build_cabin()
+     build_fly()
++    att_names = build_attendant()
++    with open(os.path.join(OUT, "attendant.xml"), "w", newline="\n") as f:
++        f.write(attendant_xml(att_names))
++    nas_dir = os.path.join(OUT, "..", "Nasal")
++    with open(os.path.join(nas_dir, "cabin_rows.nas"), "w", newline="\n") as f:
++        f.write(ROWS_NAS.format(rows=", ".join(f"{x:.3f}" for x in rows),
++                                start=ATT_START_X, offset=ATT_SERVE_OFFSET))
+     for g in range(3):
+         with open(os.path.join(OUT, f"fly-group{g}.xml"), "w", newline="\n") as f:
+             f.write(FLY_XML.format(g=g, rx=WING_ROOT[0], ry=WING_ROOT_Y, rz=WING_ROOT[1]))
+@@ -452,6 +610,10 @@ def main():
+             f"<offsets><x-m>{x:.3f}</x-m><y-m>{y:.3f}</y-m><z-m>{z:.3f}</z-m>"
+             f"<heading-deg>{rng.uniform(-6, 6):.1f}</heading-deg></offsets></model>\n")
+         n += 1
++    parts.append(
++        "\n  <!-- Running gag: the fly flight attendant and her snack cart (cabin_show.nas). -->\n"
++        f"  <model><name>attendant</name><path>Aircraft/FlyCabin/Models/attendant.xml</path>"
++        f"<offsets><x-m>0</x-m><y-m>0</y-m><z-m>{Z_FLOOR:.3f}</z-m></offsets></model>\n")
+     parts.append("</PropertyList>\n")
+     with open(os.path.join(OUT, "738-flies.xml"), "w", newline="\n") as f:
+         f.write("".join(parts))

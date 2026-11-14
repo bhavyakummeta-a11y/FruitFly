@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-11-14T181613Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T18:16:13.119914+00:00",
+  "command": "python -m flight_simulator takeoff_live takeoff --brain connectome --backend flightgear --telemetry-port 5501 --control-port 5502 --period 1.0",
+  "args": {
+    "phase": "takeoff",
+    "brain": "connectome",
+    "backend": "flightgear",
+    "telemetry_port": 5501
+  },
+  "code": {
+    "commit": "b6b746b5061b4fabec9f7410f6e2ef9ffb8e3291",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/brain.py",
+      " M flight_simulator/session.py",
+      " M flight_simulator/session_log.html",
+      " M flightgear/Aircraft/737-800/738-flies-set.xml",
+      " M flightgear/Aircraft/FlyCabin/Models/738-flies.xml",
+      " M flightgear/overlay/738-flies-set.xml",
+      " M flightgear/tools/make_cabin.py"
+    ],
+    "untracked": [
+      "flightgear/Aircraft/FlyCabin/Models/attendant.ac",
+      "flightgear/Aircraft/FlyCabin/Models/attendant.xml",
+      "flightgear/Aircraft/FlyCabin/Nasal/cabin_rows.nas",
+      "flightgear/Aircraft/FlyCabin/Nasal/cabin_show.nas",
+      "tests/test_cabin_gag.py"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the takeoff",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "takeoff fly - CONNECTOME + new fly vision + faster brain (b6b746b)",
+      "run_id": "2026-11-14T181522Z_michael-taylor_fg-takeoff-fly-connectome-new-fly-vision-faster-brain-b6b746b"
+    },
+    {
+      "name": "graphics benchmark: full profile, KSFO runway, no controller",
+      "run_id": "2026-11-14T181508Z_michael-taylor_fg-graphics-benchmark-full-profile-ksfo-runway-no-controller"
+    }
+  ],
+  "finished_utc": "2026-11-14T18:17:02.676115+00:00",
+  "exit_code": 2
+}
