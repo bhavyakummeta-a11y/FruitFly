@@ -1,5 +1,7 @@
 # Takeoff fly and Landing fly: how they work and how to run them
 
+See [Synthetic fly sensory view](FLY_VISION.md) for live obstacle/runway projections, path-deviation cues and the inputs sent to the brain.
+
 This is the implementation of the picks in [TAKEOFF_LANDING_PLAN.md](TAKEOFF_LANDING_PLAN.md): the **escape-jump Takeoff fly** (T-C) and the **flying-fly Landing fly** (L-C), flying the Boeing 737-800.
 
 Both are the **same FlyWire 783 connectome** running Shiu's LIF model unchanged, configured as two brains in different behavioural states:

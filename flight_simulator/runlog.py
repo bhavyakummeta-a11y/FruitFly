@@ -450,7 +450,7 @@ def control_attribution(program, args):
             return {'kind': 'FLY_BRAIN', 'label': f'FLY BRAIN (connectome) flying the {what.strip()}',
                     'neurons_decide': 'pitch (jump/rotation, flare), steering and roll through descending-neuron '
                                       'rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)',
-                    'code_decides': 'sensory encoding of the aircraft state, the fixed decoder from DN rates to '
+                    'code_decides': 'synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to '
                                     'controls, the behavioural-state gate (standing/flying), a fixed-gain '
                                     'pitch-rate reflex (haltere stand-in), and phase handover (flies.py)'
                                     + ('; takeoff_live holds the parking brake while the brain calibrates and '
@@ -463,8 +463,8 @@ def control_attribution(program, args):
     # obstacle avoidance: python -m flight_simulator
     if brain == 'connectome':
         return {'kind': 'FLY_BRAIN', 'label': 'FLY BRAIN (connectome) decides when to escape; code flies the airplane',
-                'neurons_decide': 'when to avoid: the Giant Fibre (DNp01) rate in response to looming',
-                'code_decides': 'turn direction (from obstacle geometry), holding altitude, speed and heading, '
+                'neurons_decide': 'escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input',
+                'code_decides': 'synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, '
                                 'and flying the avoidance turn (conventional FlightController)',
                 'autopilot': AUTOPILOT_RULE}
     if brain == 'reflex':

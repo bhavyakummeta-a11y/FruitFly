@@ -1,5 +1,7 @@
 # Airborne obstacle avoidance
 
+See [Synthetic fly sensory view](FLY_VISION.md) for live obstacle/runway projections, path-deviation cues and the inputs sent to the brain.
+
 This experiment starts in flight, maintains a cruise target, turns away from
 configured obstacles, and resumes the original heading. It has a local demo and
 a FlightGear UDP adapter using the same controller. No takeoff/landing or MSFS

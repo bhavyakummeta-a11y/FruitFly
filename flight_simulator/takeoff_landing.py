@@ -238,6 +238,8 @@ def main(argv=None):
     p.add_argument('--approach-throttle', type=float, default=0.55, help='FlightGear landing: approach power')
     p.add_argument('--telemetry-port', type=int, default=5501)
     p.add_argument('--control-port', type=int, default=5502)
+    p.add_argument('--vision-port',type=int,default=5601,help='Synthetic fly-view UDP port; 0 disables display stream')
+    p.add_argument('--vision-obstacles',help='Known obstacles JSON in runway coordinates: east=right, north=along; heights above runway')
     p.add_argument('--log', help='CSV of every sim step, incl. sensory inputs and DN rates')
     p.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window')
     p.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
@@ -249,6 +251,7 @@ def main(argv=None):
     args = p.parse_args(argv)
     if not math.isfinite(args.seconds) or args.seconds <= 0 or args.period <= 0:
         p.error('--seconds and --period must be positive')
+    vision = None
     try:
         brain = make_brain(args)
         print(brain.name, flush=True)
@@ -256,6 +259,12 @@ def main(argv=None):
             fly = TakeoffFly(brain, args.period, fault_at_kt=args.fault_at_kt)
         else:
             fly = LandingFly(brain, args.period)
+        from .vision import VisionPublisher
+        vision = VisionPublisher(args.vision_port)
+        fly.vision_sink = vision
+        if args.vision_obstacles:
+            from .__main__ import load_obstacles
+            fly.vision_obstacles = load_obstacles(args.vision_obstacles)
         if not args.no_calibrate:
             print('Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...', flush=True)
             cal = fly.calibrate()
@@ -289,6 +298,9 @@ def main(argv=None):
     except (OSError, ValueError, RuntimeError, ImportError, KeyError) as exc:
         print(f'Error: {exc}', file=sys.stderr)
         return 1
+    finally:
+        if vision:
+            vision.close()
 
 
 if __name__ == '__main__':
