@@ -41,6 +41,7 @@ import sys
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -49,7 +50,8 @@ from . import runlog
 
 HERE = Path(__file__).resolve().parent
 VIEW = HERE / 'session_view.html'
-PAGES = {'/log': HERE / 'session_log.html', '/brain': HERE / 'session_brain.html'}
+PAGES = {'/log': HERE / 'session_log.html', '/brain': HERE / 'session_brain.html',
+         '/panel': HERE / 'session_panel.html'}   # the docked Log / Fly brain panel (dock.py)
 POLL_S = 0.5
 HISTORY = 1200            # points kept for the live charts (10 min at 2 Hz)
 NAME_PROP = '/fruitfly/session/name'
@@ -59,6 +61,14 @@ UNNAMED = 'UNNAMED'
 # the name to VIEW_PROP and the aircraft's cabin_show.nas switches the camera. It changes
 # only what the person watching sees; the fly pilot never uses the camera.
 VIEW_PROP = '/fruitfly/view-request'
+# Video: FlightGear's own recorder (video-start/video-stop) films every session from the
+# moment the scenery has loaded. H.264 in MKV, because an MKV cut short by a FlightGear
+# crash still plays (an MP4 doesn't). Videos are big, so they stay on this machine and
+# are NOT pushed to sim-logs; the session log records where they are.
+# Opt out: `session watch --no-video` or FRUITFLY_NO_VIDEO=1.
+VIDEO_ROOT = Path(os.environ.get('LOCALAPPDATA') or Path.home()) / 'FruitFly' / 'videos'
+VIDEO_SETTINGS = {'/sim/video/codec': 'libx264', '/sim/video/container': 'mkv',
+                  '/sim/video/quality': 0.6, '/sim/video/speed': 1.0, '/sim/video/bitrate': 0}
 VIEW_BUTTONS = {
     'Fly pilot': 'Cockpit: fly pilot',
     'Captain seat': 'Cockpit View',
@@ -395,6 +405,10 @@ class Session:
         self.control_log = []            # closed segments
         self.brain_trial = {}
         self.dock = None
+        self.want_video = not (getattr(a, 'no_video', False) or os.environ.get('FRUITFLY_NO_VIDEO'))
+        self.video_auto_done = False
+        self.video = {'recording': False, 'path': '', 'error': ''}
+        self.videos = []                 # every file this session recorded
         self.maxima = {'alt_ft': None, 'ias_kt': None}
         self._airplane = open(self.dir / 'airplane.csv', 'w', newline='', encoding='utf-8')
         self._aw = csv.writer(self._airplane)
@@ -482,6 +496,75 @@ class Session:
             return False
         self.event('session', f'Viewer camera -> {name} (display only; the fly pilot is unaffected)')
         return True
+
+    def _set(self, path, value):
+        req = urllib.request.Request(f'http://127.0.0.1:{self.httpd}/json{path}',
+                                     json.dumps({'value': value}).encode(), method='POST')
+        urllib.request.urlopen(req, timeout=2).read()
+
+    def _run(self, command):
+        """Run a FlightGear command (fgcommand) through the property web server."""
+        url = f'http://127.0.0.1:{self.httpd}/run.cgi?value={urllib.parse.quote(command)}'
+        urllib.request.urlopen(url, timeout=5).read()
+
+    def _get_maybe(self, path):
+        """Like _get, but a property FlightGear hasn't created yet reads as None.
+
+        /sim/video/* only exist after the first recording, and FlightGear's web
+        server answers 404 for a missing property; that isn't a dead FlightGear."""
+        try:
+            return self._get(path)
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                return None
+            raise
+
+    def record(self, action, why=''):
+        """Start or stop FlightGear's own video recorder. Returns True if it did."""
+        try:
+            if action == 'start':
+                if self._get_maybe('/sim/video/is-encoding'):
+                    return True
+                folder = VIDEO_ROOT / self.id
+                folder.mkdir(parents=True, exist_ok=True)
+                for path, value in VIDEO_SETTINGS.items():
+                    self._set(path, value)
+                self._set('/sim/video/directory', str(folder))
+                self._run('video-start')
+            elif action == 'stop':
+                self._run('video-stop')
+            else:
+                return False
+            time.sleep(1.0)
+            on = bool(self._get_maybe('/sim/video/is-encoding'))
+            path = self._get_maybe('/sim/video/encoding-path') or ''
+            error = self._get_maybe('/sim/video/error') or ''
+        except (OSError, ValueError) as exc:
+            self.event('session', f'Video {action} failed: FlightGear did not answer ({exc})')
+            return False
+        with self.lock:
+            self.video = {'recording': on, 'path': path, 'error': '' if on or action == 'stop' else error}
+            if on and path and path not in self.videos:
+                self.videos.append(path)
+        if action == 'start' and on:
+            self.event('session', f'Recording video{why}: {path} (local, not pushed)')
+        elif action == 'start':
+            self.event('session', f'Video did not start{why}: {error or "FlightGear gave no reason"}')
+        else:
+            self.event('session', 'Video stopped' + (f': {path}' if path else ''))
+        return on if action == 'start' else not on
+
+    def _auto_video(self):
+        """Start recording once, as soon as the scenery has loaded."""
+        if not self.want_video or self.video_auto_done or not self.connected:
+            return
+        try:
+            loaded = self._get_maybe('/sim/sceneryloaded')
+        except OSError:
+            return                       # busy loading; try again next second
+        if loaded:
+            self.video_auto_done = True
+            self.record('start', ' (automatic, every session)')
 
     def _get(self, path):
         url = f'http://127.0.0.1:{self.httpd}/json{path}'
@@ -732,7 +815,7 @@ class Session:
             return {
                 'id': self.id, 'name': self.name, 'status': self.status,
                 'control': self.control, 'autopilot': self.autopilot,
-                'connected': self.connected, 'paused': self.paused,
+                'connected': self.connected, 'paused': self.paused, 'video': self.video,
                 'elapsed_s': round(time.time() - self.started),
                 'flightgear': self.fg_info, 'latest': self.latest,
                 'series': self.series,
@@ -753,13 +836,15 @@ class Session:
                 pass
 
             def do_POST(self):
-                if self.path not in ('/api/name', '/api/control', '/api/view'):
+                if self.path not in ('/api/name', '/api/control', '/api/view', '/api/video'):
                     self.send_error(404)
                     return
                 try:
                     body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
                     if self.path == '/api/view':
                         ok = session.set_view(str(body.get('view', '')))
+                    elif self.path == '/api/video':
+                        ok = session.record(str(body.get('action', '')), ' (log page button)')
                     elif self.path == '/api/control':
                         ok = body.get('by') in ('llm', 'human', 'script', 'end') and session.declare(
                             body['by'], str(body.get('who', ''))[:120], str(body.get('note', ''))[:300])
@@ -881,7 +966,7 @@ class Session:
 
     def _tails(self):
         """Side streams must never take the logger down; the session log matters more."""
-        for tail in (self.tail_fg_log, self.tail_controller):
+        for tail in (self.tail_fg_log, self.tail_controller, self._auto_video):
             try:
                 tail()
             except Exception as exc:
@@ -913,6 +998,8 @@ class Session:
                 'flightgear': {**self.fg_info, 'fgfs_log': str(self.fg_log),
                                'warning_lines': len(self.fg_kept)},
                 'airplane_samples': self.samples, 'controller_runs': controller,
+                'videos': [{'path': v, 'bytes': Path(v).stat().st_size if Path(v).exists() else None}
+                           for v in self.videos],
                 'code': {'commit': runlog.git('rev-parse', 'HEAD', check=False),
                          'branch': runlog.git('rev-parse', '--abbrev-ref', 'HEAD', check=False)}}
         (self.dir / 'meta.json').write_text(json.dumps(meta, indent=2, default=str) + '\n', encoding='utf-8')
@@ -926,6 +1013,8 @@ class Session:
                 ('Max altitude / IAS', f"{self.maxima['alt_ft'] and round(self.maxima['alt_ft'])} ft / "
                                        f"{self.maxima['ias_kt'] and round(self.maxima['ias_kt'])} kt"),
                 ('FlightGear warnings', f'{len(self.fg_kept)} lines (fgfs_warnings.log)'),
+                ('Video (on the recording machine, not pushed)',
+                 '<br>'.join(f'`{v}`' for v in self.videos) or ('none' if self.want_video else 'off (--no-video)')),
                 ('Controller runs', ', '.join(f'[{k}](../{k}/feedback.md)' for k in controller) or 'none')]
         title = self.name or 'UNNAMED SESSION'
         text = (f'# {title}\n\n`{self.id}`, FlightGear session by {self.who}.\n\n'
@@ -955,6 +1044,7 @@ def main(argv=None):
     w.add_argument('--httpd', type=int, help='default: from the fgfs command line, else 8080')
     w.add_argument('--fg-home', help='FlightGear home holding fgfs.log')
     w.add_argument('--no-browser', action='store_true')
+    w.add_argument('--no-video', action='store_true', help="don't record this session (FRUITFLY_NO_VIDEO=1 too)")
     at = sub.add_parser('attach', help='log (or name) an already running fgfs now')
     at.add_argument('--pid', type=int)
     at.add_argument('--name')

@@ -134,6 +134,11 @@ var ap_off = func {
     autopilot737.ap_disengage();
     foreach (var p; ["SPD", "SPD-SPEED", "SPD-N1", "SPD-RETARD", "LVLCHG"])
         setprop("/autopilot/internal/" ~ p, 0);
+    # ap_disengage() starts the looping autopilot-disconnect wailer (/b737/sound/apdisco)
+    # that a real pilot cancels with a second press of the disconnect button. Nobody
+    # presses it here, so it wailed for the whole flight. Acknowledge it like that
+    # second press: the autopilot stays off, only the alarm stops.
+    settimer(func { setprop("/b737/sound/apdisco", 0); }, 1.5);
 };
 var enforce_no_ap = func {
     if (!ap_forbidden.getBoolValue()) return;

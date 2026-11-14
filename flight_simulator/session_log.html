@@ -48,6 +48,12 @@ main { display: flex; flex-direction: column; min-width: 0; }
 .views button:hover { border-color: var(--text-2); }
 .views button.on { border-color: var(--fly); box-shadow: inset 0 0 0 1px var(--fly); }
 .views button:disabled { opacity: .5; cursor: default; }
+.video { display: flex; gap: 6px; align-items: center; }
+.video button { font: inherit; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--panel); color: var(--text); cursor: pointer; white-space: nowrap; }
+.video.on button { border-color: var(--bad); color: var(--bad); }
+.video span { color: var(--text-2); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.video.on span { color: var(--bad); font-weight: 600; }
 .toolbar { display: flex; gap: 10px; padding: 4px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); }
 .toolbar label { display: flex; gap: 3px; align-items: center; }
 #log { flex: 1; overflow: auto; padding: 4px 10px; font: 11.5px/1.45 ui-monospace, Consolas, monospace; }
@@ -71,6 +77,9 @@ main { display: flex; flex-direction: column; min-width: 0; }
   <div class="views" title="Changes what you see in FlightGear. The fly pilot does not use the camera.">
     <small>Camera (your view only)</small>
     <div id="views"></div>
+  </div>
+  <div class="video" id="video" title="FlightGear's own recorder, saved on this computer (not pushed)">
+    <button type="button" id="video-btn">● Record</button><span id="video-text">video off</span>
   </div>
 </aside>
 <main>
@@ -101,6 +110,12 @@ function render(d) {
   box.className = 'control ' + String(c.who || 'nobody').toLowerCase();
   box.querySelector('b').textContent = c.label || '–';
   box.title = c.detail || '';
+  const v = d.video || {}, vb = document.getElementById('video');
+  vb.classList.toggle('on', !!v.recording);
+  document.getElementById('video-btn').textContent = v.recording ? '■ Stop' : '● Record';
+  const vt = document.getElementById('video-text');
+  vt.textContent = v.recording ? 'REC ' + (v.path || '').split(/[\\/]/).pop() : (v.error ? 'video error: ' + v.error : 'video off');
+  vt.title = v.path || v.error || '';
   const form = document.getElementById('name-form');
   if (form.hidden === !!d.name) form.hidden = !!d.name;
   const fg = d.flightgear || {};
@@ -149,6 +164,12 @@ async function views() {
   } catch (e) { /* older logger without view buttons */ }
 }
 views();
+document.getElementById('video-btn').addEventListener('click', async e => {
+  const on = document.getElementById('video').classList.contains('on');
+  e.target.disabled = true;
+  try { await fetch('/api/video', {method: 'POST', body: JSON.stringify({action: on ? 'stop' : 'start'})}); }
+  finally { e.target.disabled = false; }
+});
 async function tick() {
   try { render(await (await fetch(`/api/state?since=${since}`, {cache: 'no-store'})).json()); }
   catch (e) {

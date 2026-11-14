@@ -342,8 +342,9 @@ goes there instead of the run folder.
 ### Graphics profile: light by default
 
 The project launchers start FlightGear with a **light** graphics profile
-(`flight_simulator/fg_graphics.py`): no trees, random objects, random buildings
-or 3D clouds; cheapest fog; no specular/horizon effects; a shorter full-detail
+(`flight_simulator/fg_graphics.py`): no trees, random objects or random
+buildings; 3D clouds only out to 8 km (the storm sky needs them; its visibility
+is 4 km); cheapest fog; no specular/horizon effects; a shorter full-detail
 range; and the frame rate capped at 30 fps. The fly's senses are computed from
 geometry, not pixels, so experiments lose nothing, and the 30 fps cap keeps
 FlightGear from taking CPU the fly brain and the loggers need.
@@ -388,6 +389,25 @@ python -m flight_simulator.session status                # what is being logged 
   files are written but never committed, so they cannot ride along with someone
   else's push.
 
+#### Video of every session
+
+Every session is filmed by FlightGear's own recorder (`video-start`/`video-stop`)
+so we can show the fly in action:
+
+- **Automatic:** the session logger starts recording as soon as the scenery has
+  loaded. The video ends when FlightGear closes, or when you press **■ Stop** on
+  the log window. **● Record** starts a new file.
+- **Format:** H.264 in MKV, at the FlightGear window's size. MKV, because a file
+  cut short by a FlightGear crash still plays. It opens in VLC, Windows Media
+  Player / Films & TV, and Chrome.
+- **Where:** `%LOCALAPPDATA%\FruitFly\videos\<session id>\fgvideo-*.mkv` on the
+  machine that ran FlightGear. Videos are **not** pushed to `sim-logs` because
+  they're too big for git. `events.log`, `meta.json` (`videos`) and
+  `feedback.md` record the path and size.
+- **Opt out** for one session with `session watch --no-video`, or for everything
+  with `FRUITFLY_NO_VIDEO=1`. Encoding costs some CPU; if a run is short of frame
+  rate, try without.
+
 #### Who is flying: control attribution in every log
 
 Every log states what is controlling the airplane, so a fly-brain flight can't
@@ -410,15 +430,17 @@ be confused with code, the autopilot or a person:
      program, not the fly brain).
   5. `NOBODY`: no controller and no inputs.
 
-#### Companion windows: log below, fly brain to the right (Windows)
+#### Companion panel under FlightGear: Log / Fly brain (Windows)
 
-When FlightGear's window appears, the session logger makes room on that monitor
-and opens two chromeless windows glued to it (they follow when you move, resize,
-minimise or raise FlightGear):
+When FlightGear's window appears, the session logger gives FlightGear the top 75%
+of that monitor and opens **one** chromeless, scrollable panel glued under it (it
+follows when you move, resize, minimise or raise FlightGear). The panel's **Log** /
+**Fly brain** buttons (keys **1** / **2**) switch between:
 
-- **Log** (below): session name/status, altitude, speed, attitude, throttle, and
-  the running log (session events, FlightGear warnings, controller output).
-- **Fly brain** (right): all 138,639 FlyWire neurons drawn at their real positions
+- **Log**: session name/status, altitude, speed, attitude, throttle, the camera
+  buttons, the video **Record/Stop** button, and the running log (session events,
+  FlightGear warnings, controller output).
+- **Fly brain**: all 138,639 FlyWire neurons drawn at their real positions
   (frontal view); neurons that fired in the latest 200 ms connectome trial light
   up (brightness = spike count), plus the descending-neuron rates. It states
   plainly when no fly brain is flying (no controller, or a reflex/silent baseline).

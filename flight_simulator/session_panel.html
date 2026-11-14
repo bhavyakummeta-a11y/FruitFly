@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FruitFly panel · {{TAG}}</title>
+<style>
+/* One window under FlightGear: two buttons switch between the session log and the
+   fly brain. Both pages are the session server's own /log and /brain, shown in frames
+   (same origin), restyled here so they scroll inside this short, wide window. */
+:root {
+  --surface: #fcfcfb; --panel: #ffffff; --border: #e4e3df;
+  --text: #0b0b0b; --text-2: #52514e; --fly: #eb6834;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #1a1a19; --panel: #222220; --border: #383835;
+    --text: #f0efec; --text-2: #c3c2b7; --fly: #ff8a4c;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--surface); color: var(--text); font: 12px/1.4 system-ui, "Segoe UI", sans-serif;
+  display: flex; flex-direction: column; overflow: hidden; }
+nav { display: flex; gap: 4px; padding: 4px 8px; border-bottom: 1px solid var(--border); flex: none; }
+nav button { font: inherit; font-weight: 600; padding: 4px 14px; border-radius: 5px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--panel); color: var(--text-2); }
+nav button:hover { border-color: var(--text-2); }
+nav button[aria-selected="true"] { color: var(--text); border-color: var(--fly); box-shadow: inset 0 0 0 1px var(--fly); }
+nav .hint { margin-left: auto; align-self: center; color: var(--text-2); font-size: 11px; }
+main { flex: 1; min-height: 0; position: relative; }
+iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--surface); }
+iframe[hidden] { display: none; }
+</style>
+</head>
+<body>
+<nav role="tablist" aria-label="Session views">
+  <button role="tab" id="tab-log" aria-controls="log" aria-selected="true">Log</button>
+  <button role="tab" id="tab-brain" aria-controls="brain" aria-selected="false">Fly brain</button>
+  <span class="hint">scroll with the mouse wheel · keys 1 / 2 switch</span>
+</nav>
+<main>
+  <iframe id="log" title="Session log" src="log"></iframe>
+  <iframe id="brain" title="Fly brain" src="brain" hidden></iframe>
+</main>
+<script>
+// Make each page scroll inside this short window instead of clipping.
+const FIT = {
+  log: `
+    body { overflow: auto !important; min-height: 380px; }
+    aside { overflow: auto !important; }`,
+  brain: `
+    html, body { height: auto !important; min-height: 100%; }
+    body { overflow: visible !important; display: grid !important;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr); grid-template-rows: auto auto 1fr auto;
+      column-gap: 8px; }
+    html { overflow: auto !important; }
+    header { grid-column: 1 / -1; }
+    #brain-wrap { grid-column: 1; grid-row: 2 / span 3; max-width: 640px; }
+    .caption { grid-column: 1; }
+    h2 { grid-column: 2; grid-row: 2; }
+    #bars { grid-column: 2; grid-row: 3; overflow: visible !important; flex: none !important; }
+    .note { grid-column: 2; grid-row: 4; }`,
+};
+function fit(frame) {
+  try {
+    const doc = frame.contentDocument;
+    if (!doc || !doc.head || doc.getElementById('panel-fit')) return;
+    const style = doc.createElement('style');
+    style.id = 'panel-fit';
+    style.textContent = FIT[frame.id];
+    doc.head.appendChild(style);
+    frame.contentWindow.dispatchEvent(new Event('resize'));   // brain map redraws at its new width
+  } catch (e) { /* not same origin: the page still works, just unstyled for the panel */ }
+}
+const frames = [...document.querySelectorAll('iframe')];
+for (const f of frames) { f.addEventListener('load', () => fit(f)); fit(f); }
+
+function show(id) {
+  for (const f of frames) {
+    const on = f.id === id;
+    f.hidden = !on;
+    document.getElementById('tab-' + f.id).setAttribute('aria-selected', on);
+  }
+  const f = document.getElementById(id);
+  fit(f);
+  try { f.contentWindow.dispatchEvent(new Event('resize')); f.contentWindow.focus(); } catch (e) {}
+  try { localStorage.setItem('fruitfly-panel-tab', id); } catch (e) {}
+}
+document.getElementById('tab-log').addEventListener('click', () => show('log'));
+document.getElementById('tab-brain').addEventListener('click', () => show('brain'));
+function keys(e) {
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+  if (e.key === '1') show('log');
+  if (e.key === '2') show('brain');
+}
+addEventListener('keydown', keys);
+for (const f of frames) f.addEventListener('load', () => { try { f.contentWindow.addEventListener('keydown', keys); } catch (e) {} });
+let saved = null;
+try { saved = localStorage.getItem('fruitfly-panel-tab'); } catch (e) {}
+const wanted = location.hash.slice(1) || saved;     // /panel#brain opens on the brain
+if (wanted === 'brain') show('brain');
+</script>
+</body>
+</html>
