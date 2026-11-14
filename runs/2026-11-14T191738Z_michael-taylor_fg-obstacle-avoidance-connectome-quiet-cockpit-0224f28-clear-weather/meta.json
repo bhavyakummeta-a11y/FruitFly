@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-11-14T191738Z_michael-taylor_fg-obstacle-avoidance-connectome-quiet-cockpit-0224f28-clear-weather",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 25.0
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: CMDA, SPD; controller 2026-11-14T191800Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 25.0,
+      "to_s": 35.2
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+      "detail": "run 2026-11-14T191800Z_michael-taylor_flightgear-connectome. Neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input. Code decides: synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+      "from_s": 35.2,
+      "to_s": 59.0
+    }
+  ],
+  "name": "obstacle avoidance - CONNECTOME, quiet cockpit (0224f28), clear weather",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 17852,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T19:17:38.142316+00:00",
+  "duration_s": 59,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 46
+  },
+  "airplane_samples": 16,
+  "controller_runs": {
+    "2026-11-14T191800Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T191139Z_kaden-vandine_flightgear-connectome": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "0b2ef590ff2461fea6c7024e69e2bc9d640b36a7",
+    "branch": "main"
+  }
+}
