@@ -1,0 +1,2 @@
+{"type": "image", "file": "fg-193947-001.jpg", "kind": "fg", "utc": "2026-11-14T19:39:47+00:00", "caption": "", "source": "httpd:8080", "who": "recorder", "w": 1280, "h": 871, "telemetry": {}}
+{"type": "image", "file": "fg-193951-002.jpg", "kind": "fg", "utc": "2026-11-14T19:39:51+00:00", "caption": "[session] Connected to property API on :8080", "source": "httpd:8080", "who": "recorder", "w": 1280, "h": 871, "telemetry": {"alt_ft": -9999, "agl_ft": 0, "ias_kt": 0, "heading_deg": 297.9, "pitch_deg": 0.42, "roll_deg": 0, "sim_time_s": 0, "paused": false}}

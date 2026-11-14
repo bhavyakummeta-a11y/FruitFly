@@ -1,0 +1,36 @@
+{
+  "run_id": "2026-11-14T193935Z_michael-taylor_fg-takeoff-fly-to-2000-ft-connectome-period-0-25-screen-recorded-fg-screenshots-off",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 27.8
+    }
+  ],
+  "name": "takeoff fly to 2000 ft - CONNECTOME, period 0.25, screen-recorded, FG screenshots off",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 27004,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T19:39:35.302186+00:00",
+  "duration_s": 28,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 23
+  },
+  "airplane_samples": 2,
+  "controller_runs": {},
+  "videos": [],
+  "code": {
+    "commit": "83f564196166141c6bfb1f8718e84ebced4aa94c",
+    "branch": "main"
+  }
+}
