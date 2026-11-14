@@ -1,0 +1,11 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T172715Z_michael-taylor_flightgear-connectome
+CONNECTOME LIF (notebook model)
+Connectome decisions run synchronously; FlightGear pauses during each trial.
+Waiting for airborne FlightGear telemetry on localhost...
+Waiting for the 737 autopilot to settle into steady flight before taking over...
+FlightGear connected. Initial altitude/heading/speed are the hold targets.
+Placed 3 obstacle towers in FlightGear (telnet 5500).
+Handover sent: the 737 autopilot (if any) switches off, the controller flies.
+  21.4s AVOID  altitude=  681.4m speed=114.6m/s escape=  0.0Hz clearance= 6669.5m
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: No FlightGear telemetry; check UDP flags and protocol XML.

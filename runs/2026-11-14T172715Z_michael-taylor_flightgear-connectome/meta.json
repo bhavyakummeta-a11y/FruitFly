@@ -1,0 +1,54 @@
+{
+  "run_id": "2026-11-14T172715Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T17:27:15.829503+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain connectome --seconds 90 --note 'latest a49150c; CONNECTOME fly brain; 738-flies in-air'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "connectome",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 90.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_cockpit_fly": false,
+    "no_scene": false,
+    "note": "latest a49150c; CONNECTOME fly brain; 738-flies in-air",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "a49150ccd49bd05c89a62e278aef7d25738dba84",
+    "branch": "main",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "fg_sessions": [
+    {
+      "name": "obstacle avoidance - CONNECTOME fly brain (latest a49150c)",
+      "run_id": "2026-11-14T172628Z_michael-taylor_fg-obstacle-avoidance-connectome-fly-brain-latest-a49150c"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 771
+  },
+  "finished_utc": "2026-11-14T17:29:02.348977+00:00",
+  "exit_code": 1
+}
