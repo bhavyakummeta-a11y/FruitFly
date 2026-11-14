@@ -310,7 +310,7 @@ featured.forEach((e, i) => {
   const ser = e.series;
   const hasMedia = e.hero && exists(e.hero.path);
   const s = slide("CONTENT");
-  s.addText(clip(e.name, 60), { placeholder: "title" });
+  s.addText(clip(e.name, 46), { placeholder: "title" });
   const tel = (e.images || []).map((x) => x.telemetry || {});   // fallback: telemetry stamped on screenshots
   const maxAlt = ser ? maxOf(ser.alt_ft) : maxOf(tel.map((t) => t.alt_ft));
   const maxIas = ser ? maxOf(ser.ias_kt) : maxOf(tel.map((t) => t.ias_kt));
@@ -360,7 +360,7 @@ featured.forEach((e, i) => {
     + (hasMedia ? ` Screenshot caption: ${e.hero.caption || "none"}.` : ""));
   if (e.gif && exists(e.gif)) {
     const g = slide("CONTENT");
-    g.addText(clip(`Time-lapse: ${e.name}`, 60), { placeholder: "title" });
+    g.addText(`Time-lapse: ${clip(e.name, 34)}`, { placeholder: "title" });
     framed(g, e.gif, MX, 1.3, 12.1, 5.55, "session time-lapse");
     g.addNotes(`Animated time-lapse of ${(e.images || []).filter((x) => x.kind === "fg").length} FlightGear frames (plays in slideshow mode). Frames are 20 s apart plus extra frames on events; each carries the telemetry banner and event caption at the time.`);
   }
