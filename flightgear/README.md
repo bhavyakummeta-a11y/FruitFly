@@ -1,0 +1,64 @@
+# FlightGear: Boeing 737-800 with fruit fly passengers
+
+**This is the project's default aircraft** (`738-flies`). `flightgear/launch.py` and `flight_simulator/launch_fg.py` both start it unless told otherwise. The C172 (`c172p`) is the fallback.
+
+```
+python flightgear/setup_aircraft.py     # once: downloads the stock 737-800 (~40 MB) and installs our overlay
+python flightgear/launch.py             # starts fgfs at KSFO 28R with telnet 5500 + httpd 8080
+```
+
+`launch.py` finds `fgfs` on PATH or in common install folders. Otherwise pass `--fgfs <path>` or set `FGFS`. Use `--stock` for the plain 737-800 without the cabin.
+
+Manual start (any OS):
+
+```
+fgfs --fg-aircraft=<repo>/flightgear/Aircraft --aircraft=738-flies --airport=KSFO --runway=28R --telnet=5500 --httpd=8080
+```
+
+In the sim, press **v** to cycle views, or use **View → Select view**. Two cabin views are added:
+
+- **Cabin: aisle, looking forward** (from the rear galley)
+- **Cabin: front, facing the passengers**
+
+## Layout
+
+| Path | What | Committed? |
+|---|---|---|
+| `Aircraft/737-800/` | Stock FGAddon Boeing 737-800 (package id `738`, rev 6882), from the Aircraft-2024 catalog | No (downloaded) |
+| `overlay/738-flies-set.xml` | Our aircraft definition. It includes the stock `738-set.xml`, swaps in the cabin model, adds the cabin views, and loads our Nasal. `setup_aircraft.py` copies it into `Aircraft/737-800/` because JSBSim loads the flight model from the -set file's folder. | Yes |
+| `Aircraft/FlyCabin/Models/` | `738-flies.xml` (stock model + cabin + 166 flies), `cabin.ac`, `fly.ac`, `fly-group{0,1,2}.xml` | Yes, generated |
+| `Aircraft/FlyCabin/Nasal/fruitfly.nas` | Animates the passengers and adds the autostart hook | Yes |
+| `tools/make_cabin.py` | Generates everything in `FlyCabin/Models/`. Edit this, then re-run it. | Yes |
+
+The stock 737 has a cockpit but **no passenger cabin**. Its "Economy" views only look out of the windows. We build the cabin ourselves: floor, walls with window holes, ceiling, overhead bins, and 29 rows of 3+3 seats (174 seats). A few seats are left empty at random, so there are 166 fly passengers.
+
+## Properties for the Python bridge
+
+| Property | Type | Effect |
+|---|---|---|
+| `/controls/engines/engine[0]/throttle` | 0..1 | Throttle. `fruitfly.nas` copies it to `engine[1]`, so code written for the single-engine C172 (`flight_simulator/protocols/flybrain-controls.xml`) drives both engines. Set `/fruitfly/mirror-throttle` to `false` to control the engines separately. |
+| `/fruitfly/autostart` | bool | Set to `true` to run the 737's own engine autostart, which takes about 30–60 s to spool up. It resets itself to `false`. |
+| `/fruitfly/passengers/activity` | 0..1 | How agitated the passengers are: wing flapping speed and amplitude, plus head turning. Drive it from a firing rate, such as normalised DNp09. |
+| `/fruitfly/keep-737-autopilot` | bool | By default the 737's own autopilot and autothrottle, which its in-air start switches on, are turned off about 7 s after spawning so the fly is the one flying. Set to `true` to keep them. |
+| `/controls/gear/brake-parking` | 0/1 | Release the parking brake before trying to roll. |
+| `/velocities/groundspeed-kt`, `/velocities/airspeed-kt` | read | Speed |
+
+Telnet example:
+
+```
+set /fruitfly/autostart true
+set /controls/gear/brake-parking 0
+set /fruitfly/passengers/activity 0.8
+```
+
+The passenger animation is display only. It never touches the flight controls.
+
+## Using it with `flight_simulator/`
+
+The UDP bridge in `flight_simulator/` (see `docs/FLIGHT_SIMULATOR.md`) works with this aircraft. Pass the `--generic` protocol flags through `launch.py` after `--`, or use `flight_simulator/launch_fg.py` with `--aircraft 738-flies` plus `--fg-aircraft=<repo>/flightgear/Aircraft` as an extra argument. Its control gains were tuned for the C172 and will need retuning for the 737.
+
+## Known gaps / TODO
+
+- The cabin hasn't been checked in the running sim yet. The geometry was only checked in an offline render. If a wing flaps *inward*, flip the signs of the two `<factor>` values in `make_cabin.py`.
+- The fuselage's windows are painted onto its texture, so the window holes in our cabin wall may show the inside of the fuselage skin rather than the outside world.
+- Takeoff numbers for the 737: flaps 5 (`/controls/flight/flaps` = 0.625), rotate at about 140–150 kt.
