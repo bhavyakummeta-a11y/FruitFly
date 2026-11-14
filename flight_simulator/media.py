@@ -323,6 +323,24 @@ class Track:
                 out.append(line)
         return out
 
+    def fg_screenshots_off(self):
+        """A session can opt out of FlightGear screenshots with
+        --prop:bool:/fruitfly/no-screenshots=true (e.g. launch_fg ... -- that prop).
+        Used to test whether /screenshot requests mid-render crash fgfs (2026-11-14:
+        in-air runs crashed with 0xC0000005 shortly before the next screenshot)."""
+        if getattr(self, '_off_checked', 0) > time.time() - 30:
+            return self._off
+        try:
+            self._off = bool(http_json(self.httpd, '/fruitfly/no-screenshots'))
+        except (OSError, ValueError):
+            self._off = False
+        self._off_checked = time.time()
+        if self._off and not getattr(self, '_off_said', False):
+            print(f'{self.info["run_id"]}: FlightGear screenshots OFF for this session (/fruitfly/no-screenshots)',
+                  flush=True)
+            self._off_said = True
+        return self._off
+
     def tick(self):
         now = time.time()
         events = self.new_events()
@@ -332,6 +350,9 @@ class Track:
             self.last_event_frame = now
         else:
             caption = ''
+        if due and self.fg_screenshots_off():
+            due = False
+            self.next_fg = now + FG_EVERY_S
         if due:
             try:
                 tel = fg_telemetry(self.httpd)
