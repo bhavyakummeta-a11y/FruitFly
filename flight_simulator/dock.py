@@ -1,16 +1,18 @@
-"""Glue one companion panel under the FlightGear window (Windows only).
+"""Glue one companion panel to the right of the FlightGear window (Windows only).
 
-    +---------------------------------------+
-    |                                       |
-    |        FlightGear (top 75%)           |
-    |                                       |
-    +---------------------------------------+
-    | [Log] [Fly brain]   panel (bottom 25%)|  <- scrolls; buttons switch view
-    +---------------------------------------+
+    +-----------------------------+-----------+
+    |                             | [Log]     |
+    |                             | [Fly      |
+    |   FlightGear (left 75%)     |  brain]   |  <- panel (right 25%): scrolls,
+    |                             |           |     buttons switch view
+    |                             |           |
+    +-----------------------------+-----------+
+
+Side by side so one screen recording shows the sim and the fly's panel together.
 
 The panel is one chromeless Edge app window (--app=URL) on the session's
 /panel page, which shows the live /log or /brain page. A loop follows the
-FlightGear window: move/resize it and the panel follows underneath; minimize it
+FlightGear window: move/resize it and the panel follows alongside; minimize it
 and the panel minimizes; bring it to the front and the panel comes too.
 Display only: nothing here talks to the simulator or the pilot.
 """
@@ -25,8 +27,8 @@ import time
 user32 = ctypes.windll.user32
 dwmapi = ctypes.windll.dwmapi
 
-FG_SHARE = 0.75     # FlightGear gets the top 75% of the screen, the panel the rest
-PANEL_MIN_H = 160   # logical px (scaled by the monitor's DPI) if FlightGear is moved low
+FG_SHARE = 0.75     # FlightGear gets the left 75% of the screen, the panel the rest
+PANEL_MIN_W = 320   # logical px (scaled by the monitor's DPI) if FlightGear is moved right
 SWP_NOSIZE, SWP_NOMOVE, SWP_NOZORDER, SWP_NOACTIVATE = 0x1, 0x2, 0x4, 0x10
 SW_RESTORE, SW_SHOWMINNOACTIVE, SW_SHOWNOACTIVATE = 9, 7, 4
 HWND_TOP = 0
@@ -138,7 +140,7 @@ def open_app(url, profile, x=0, y=0, w=600, h=300):
 
 
 class Dock:
-    """Open the Log / Fly brain panel and keep it glued under FlightGear until stop()."""
+    """Open the Log / Fly brain panel and keep it glued right of FlightGear until stop()."""
 
     def __init__(self, fgfs_pid, log_url, brain_url, tag, profile, say=print):
         self.pid, self.tag, self.say = fgfs_pid, tag, say
@@ -162,21 +164,21 @@ class Dock:
                     user32.PostMessageW(hwnd, WM_CLOSE, 0, 0)
 
     def _layout(self):
-        """Panel directly under FlightGear, as wide as it, down to the bottom of the screen."""
+        """Panel directly right of FlightGear, as tall as it, out to the right edge of the screen."""
         fl, ft, fr, fb = frame(self.fg)
-        (_, _, _, wb), _ = work_area(self.fg)
-        h = max(wb - fb, int(PANEL_MIN_H * scale(self.fg)))
-        return {'panel': (fl, fb, fr - fl, h)}
+        (_, _, wr, _), _ = work_area(self.fg)
+        w = max(wr - fr, int(PANEL_MIN_W * scale(self.fg)))
+        return {'panel': (fr, ft, w, fb - ft)}
 
     def _arrange_fg(self):
-        """Once: FlightGear across the top 75% of its monitor, leaving the bottom for the panel."""
+        """Once: FlightGear on the left 75% of its monitor, full height, leaving the right for the panel."""
         (wl, wt, wr, wb), monitor = work_area(self.fg)
         if frame(self.fg) == monitor:
-            self.say('FlightGear is fullscreen; the panel opens but cannot dock under it')
+            self.say('FlightGear is fullscreen; the panel opens but cannot dock beside it')
             return
         if user32.IsZoomed(self.fg):
             user32.ShowWindow(self.fg, SW_RESTORE)
-        place(self.fg, wl, wt, wr - wl, int((wb - wt) * FG_SHARE))
+        place(self.fg, wl, wt, int((wr - wl) * FG_SHARE), wb - wt)
 
     def _run(self):
         deadline = time.time() + 600
@@ -197,7 +199,7 @@ class Dock:
             if all(self.hwnd.values()):
                 break
             time.sleep(0.5)
-        self.say('Docked: Log / Fly brain panel under FlightGear (top 75%)'
+        self.say('Docked: Log / Fly brain panel right of FlightGear (left 75%)'
                  if all(self.hwnd.values()) else f'Docking incomplete: {self.hwnd}')
         last, was_min, was_front = None, False, False
         while not self.stopped.is_set():

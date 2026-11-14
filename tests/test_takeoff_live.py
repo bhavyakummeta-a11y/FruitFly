@@ -1,5 +1,6 @@
 import os
 import shutil
+from pathlib import Path
 import unittest
 from unittest import mock
 
@@ -105,6 +106,14 @@ class TakeoffLiveTests(unittest.TestCase):
         finally:
             fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off, takeoff_landing.run_flightgear = saved
         self.assertEqual(sent, [True, False])
+
+    def test_stop_at_ft_is_ours_not_takeoff_landings(self):
+        seen = {}
+        with mock.patch.object(takeoff_landing, 'main', lambda argv: seen.setdefault('argv', list(argv)) and 0):
+            takeoff_live.main(['takeoff', '--brain', 'standin', '--backend', 'demo', '--stop-at-ft', '2000'])
+        self.assertEqual(seen['argv'], ['takeoff', '--brain', 'standin', '--backend', 'demo'])
+        for d in Path(takeoff_live.__file__).resolve().parents[1].glob('.sim-logs/runs/*demo-standin*'):
+            shutil.rmtree(d, ignore_errors=True)
 
     def test_fly_row_names_match_brain_page(self):
         row = takeoff_live.fly_row({'time': 1.0, 'phase': 'ROLL', 'in_sugar': 200, 'dn_MN9': 65, 'x': 3})

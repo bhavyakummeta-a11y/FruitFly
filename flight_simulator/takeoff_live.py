@@ -167,7 +167,13 @@ def main(argv=None):
     p.add_argument('--brain', default='standin')
     p.add_argument('--backend', default='demo')
     p.add_argument('--telemetry-port', type=int, default=5501)
+    p.add_argument('--stop-at-ft', type=float, default=None,
+                   help='takeoff_live only: end the run (and pause FlightGear) once airborne at this height')
     ns, _ = p.parse_known_args(argv)
+    # Our own options are not takeoff_landing's: strip them before handing argv over.
+    if ns.stop_at_ft is not None:
+        i = next(k for k, a in enumerate(argv) if a.startswith('--stop-at-ft'))
+        del argv[i:i + (1 if '=' in argv[i] else 2)]
     telnet = ns.telemetry_port - 1
     hold = ns.backend == 'flightgear' and ns.phase == 'takeoff'
     # Landing starts in the air: nothing flies it while the brain loads and calibrates, so
@@ -241,15 +247,28 @@ def main(argv=None):
 
     from . import flightgear as fg
     originals = (tl.run_demo, tl.run_flightgear, tl.make_brain,
-                 fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off)
+                 fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off, fg.RunwayFlightGear.read)
     tl.run_demo, tl.run_flightgear = wrap('demo'), wrap('flightgear')
+    if ns.stop_at_ft is not None:
+        from .runway import FT
+        read = fg.RunwayFlightGear.read
+
+        def read_until_height(self):
+            s = read(self)
+            if not s.on_ground and s.agl / FT >= ns.stop_at_ft:
+                print(f'Reached {ns.stop_at_ft:.0f} ft (agl {s.agl / FT:.0f} ft, {s.speed / 0.514444:.0f} kt): '
+                      'end of run, pausing FlightGear.', flush=True)
+                stage.set('finished', note=f'reached {ns.stop_at_ft:.0f} ft')
+                raise KeyboardInterrupt   # takeoff_landing ends the loop cleanly and pauses
+            return s
+        fg.RunwayFlightGear.read = read_until_height
     code = 1
     try:
         code = tl.main(argv)
     finally:
         # Undo every patch, so a second run in the same process starts clean.
         (tl.run_demo, tl.run_flightgear, make_brain_saved,
-         fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off) = originals
+         fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off, fg.RunwayFlightGear.read) = originals
         tl.make_brain = make_brain
         if 'log' in live:
             live['log'].close()
