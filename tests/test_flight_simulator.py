@@ -115,6 +115,19 @@ class ProtocolTests(unittest.TestCase):
         c = self.bridge.parse(b'40.1,37,-121.999,3000,90,11,2,100,5,1\n')
         self.assertAlmostEqual(c.time, .05)
 
+    def test_slow_telemetry_keeps_rate_damping(self):
+        self.bridge.parse(b'10,37,-122,3000,0,0,2,100,0,0')
+        state=self.bridge.parse(b'10.7,37,-122,3000,0,1,4,100,0,0')
+        self.assertAlmostEqual(state.pitch_rate,math.radians(2)/.7)
+        self.assertAlmostEqual(state.roll_rate,math.radians(1)/.7)
+
+    def test_cruise_pause_protocol_controls_actual_simulation_clock(self):
+        root=ROOT/'flight_simulator/protocols'
+        for name in ['flybrain-state.xml','flybrain-controls.xml','flybrain-controls-twin.xml']:
+            nodes=[x.text for x in ET.parse(root/name).findall('.//node')]
+            self.assertIn('/sim/freeze/clock',nodes)
+            self.assertNotIn('/sim/freeze/master',nodes)
+
     def test_reject_malformed_and_clock_reset(self):
         for packet in [b'1,2', b'1,nan,0,3000,0,0,0,100,0,0', b'1,91,0,3000,0,0,0,100,0,0']:
             with self.assertRaises(ValueError):

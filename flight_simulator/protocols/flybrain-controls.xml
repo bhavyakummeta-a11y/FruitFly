@@ -35,7 +35,7 @@
       </chunk>
       <chunk>
         <name>frozen</name>
-        <node>/sim/freeze/master</node>
+        <node>/sim/freeze/clock</node>
         <type>bool</type>
       </chunk>
     </input>
