@@ -1,0 +1,5 @@
+13:00:16 [session] Session 'UNNAMED' watching fgfs pid 12728
+13:00:16 [session] This session has NO NAME - enter one on the live page (or: python -m flight_simulator.session attach --name "...")
+13:00:16 [session] Live log page: http://127.0.0.1:8765/
+13:00:17 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+13:01:18 [session] FlightGear exited (code 1) - crashed or force-closed

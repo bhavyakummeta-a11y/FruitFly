@@ -1,0 +1,32 @@
+{
+  "run_id": "2026-11-14T180015Z_michael-taylor_fg-UNNAMED",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.6,
+      "to_s": 62.9
+    }
+  ],
+  "name": null,
+  "aircraft": null,
+  "fgfs_pid": 12728,
+  "fgfs_exit_code": 1,
+  "started_utc": "2026-11-14T18:00:15.940677+00:00",
+  "duration_s": 63,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 1
+  },
+  "airplane_samples": 0,
+  "controller_runs": {},
+  "code": {
+    "commit": "aece023c64ea9e894959dc5fa2e96c1d3e13e7bb",
+    "branch": "main"
+  }
+}
