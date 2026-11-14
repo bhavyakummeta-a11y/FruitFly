@@ -51,6 +51,12 @@ For towers visible in the simulator, use the [optional scenery overlay](flightge
 python3 -m flight_simulator --brain reflex --seconds 180
 ```
 
+## Experimental reinforcement learning
+
+Opt-in dopamine-gated learning now updates selected KC→MBON connections, with
+checkpoint saving and a frozen comparison experiment. Better flight performance
+has not been established. See [learning instructions](docs/REINFORCEMENT_LEARNING.md).
+
 ## Resources
 
 ### Data

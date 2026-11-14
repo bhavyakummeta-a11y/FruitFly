@@ -31,7 +31,14 @@ def run(args, runlog=None):
         from .scenery import validate_origin
         course_origin = validate_origin(course['origin'])
     brain = {'reflex': ReflexBrain, 'silent': SilentBrain}.get(args.brain)
-    brain = brain() if brain else ConnectomeBrain(args.data, seed=args.seed)
+    if args.learn or args.load_learning:
+        from .learning import LearningBrain
+        brain = LearningBrain(args.data, seed=args.seed)
+        if args.load_learning:
+            brain.plasticity.load(args.load_learning)
+        brain.name += ' (UPDATES ENABLED)' if args.learn else ' (FROZEN CHECKPOINT)'
+    else:
+        brain = brain() if brain else ConnectomeBrain(args.data, seed=args.seed)
     print(brain.name, flush=True)
     if args.brain == 'connectome':
         print('Connectome decisions run synchronously; FlightGear pauses during each trial.', flush=True)
@@ -83,7 +90,8 @@ def run(args, runlog=None):
             Path(args.log).parent.mkdir(parents=True, exist_ok=True)
             log_file = open(args.log, 'w', newline='')
             fields = list(asdict(state)) + ['phase', 'brain', 'looming_hz', 'escape_hz',
-                      'clearance', 'aileron', 'elevator', 'rudder', 'throttle']
+                      'clearance', 'aileron', 'elevator', 'rudder', 'throttle',
+                      'reward', 'dan_hz', 'plastic_edges_changed']
             writer = csv.DictWriter(log_file, fields)
             writer.writeheader()
         next_brain, next_display, next_print = 0.0, 0.0, 0.0
@@ -92,14 +100,24 @@ def run(args, runlog=None):
         min_altitude = state.altitude
         collision = False
         start = state.time
+        previous_decision = None
+        learning_event = {'reward': 0.0, 'dan_hz': 0.0, 'changed_edges': 0}
         while args.seconds == 0 or state.time - start < args.seconds:
             tick = time.monotonic()
             stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
-            if state.time >= next_brain:
+            terminal = state.altitude <= 0 or any(o.clearance(state) <= 0 for o in obstacles)
+            if state.time >= next_brain and not terminal:
                 if bridge and args.brain == 'connectome':
                     state = bridge.freeze(True)
                     stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
+                if args.learn and previous_decision is not None:
+                    from .learning import flight_reward
+                    distance = min((o.clearance(state) for o in obstacles), default=math.inf)
+                    reward = flight_reward(previous_decision, state, controller.heading, distance,
+                                           collision=distance <= 0 or state.altitude <= 0)
+                    learning_event = brain.reinforce(reward)
                 escape = brain.escape(stimulus.looming_hz)
+                previous_decision = replace(state)
                 if runlog:
                     runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
                                 'looming_hz': stimulus.looming_hz, 'escape_hz': escape,
@@ -121,7 +139,9 @@ def run(args, runlog=None):
             if log_file:
                 writer.writerow({**asdict(state), **asdict(controls), 'phase': controller.phase,
                                  'brain': args.brain, 'looming_hz': stimulus.looming_hz,
-                                 'escape_hz': escape, 'clearance': clearance})
+                                 'escape_hz': escape, 'clearance': clearance,
+                                 'reward': learning_event['reward'], 'dan_hz': learning_event['dan_hz'],
+                                 'plastic_edges_changed': learning_event['changed_edges']})
             if state.time >= next_print:
                 print(f'{state.time:6.1f}s {controller.phase:6} altitude={state.altitude:7.1f}m '
                       f'speed={state.speed:5.1f}m/s escape={escape:5.1f}Hz clearance={clearance:7.1f}m', flush=True)
@@ -132,6 +152,10 @@ def run(args, runlog=None):
                 view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading)
                 next_display = state.time + .2
             if collision:
+                if args.learn:
+                    if bridge:
+                        bridge.freeze(True)
+                    learning_event = brain.reinforce(-1.0)
                 print('STOP: collision with a configured obstacle or ground.', flush=True)
                 break
             if bridge:
@@ -146,6 +170,9 @@ def run(args, runlog=None):
                   'minimum_clearance_m': round(minimum, 2) if math.isfinite(minimum) else None,
                   'minimum_altitude_m': round(min_altitude, 2),
                   'avoidance_activations': controller.activations}
+        if hasattr(brain, 'plasticity'):
+            result['learning'] = brain.plasticity.summary()
+            result['learning_enabled'] = args.learn
         if runlog:
             runlog.result = result
         print(json.dumps(result, indent=2))
@@ -153,11 +180,19 @@ def run(args, runlog=None):
     finally:
         if log_file:
             log_file.close()
-        if scene:
-            scene.close()
-        if bridge:
-            bridge.close()
-            print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
+        try:
+            if scene:
+                scene.close()
+        finally:
+            try:
+                if bridge:
+                    bridge.close()
+                    print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
+            finally:
+                if args.learn:
+                    brain.plasticity.save(args.save_learning)
+                    print(f'Learning checkpoint saved locally: {args.save_learning}', flush=True)
+
 
 
 def main():
@@ -166,6 +201,9 @@ def main():
     parser.add_argument('--brain', choices=['reflex', 'connectome', 'silent'], required=True,
                         help='Explicit selection: reflex is a non-neural baseline; connectome needs data.')
     parser.add_argument('--data', default='data/brain')
+    parser.add_argument('--learn', action='store_true', help='Experimental KC->MBON reward updates (connectome only)')
+    parser.add_argument('--load-learning', help='Load a matching checkpoint; frozen unless --learn is given')
+    parser.add_argument('--save-learning', default='runs/learning-checkpoint.npz', help='Checkpoint output when --learn is enabled')
     parser.add_argument('--obstacles', default=str(ROOT / 'scenarios/obstacles.json'))
     parser.add_argument('--seconds', type=float, default=180, help='Active flight time; 0 runs until Ctrl-C')
     parser.add_argument('--seed', type=int, default=0)
@@ -186,6 +224,8 @@ def main():
         parser.error('--seconds must be finite and nonnegative')
     if any(not 1 <= p <= 65535 for p in [args.telemetry_port, args.control_port]):
         parser.error('Ports must be between 1 and 65535')
+    if (args.learn or args.load_learning) and args.brain != 'connectome':
+        parser.error('Learning requires --brain connectome')
     runlog = None
     if not args.no_runlog:
         from .runlog import RunLog

@@ -88,7 +88,9 @@ The shared controller still requires live validation with the selected aircraft.
 
 This implements the assisted alternative in the reference notes. The direct
 neural flight-control goal in [PROJECT_PLAN.md](PROJECT_PLAN.md) remains an
-unproven research objective. Dopamine learning is not implemented.
+unproven research objective. Opt-in experimental dopamine learning is now available; see
+[reinforcement learning](REINFORCEMENT_LEARNING.md). Flight improvement has not
+been established.
 
 ## Run the local demo
 
