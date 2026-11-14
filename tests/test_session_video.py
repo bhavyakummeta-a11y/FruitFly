@@ -40,7 +40,9 @@ class FakeFG(BaseHTTPRequestHandler):
             FakeFG.commands.append(cmd)
             if cmd == 'video-start' and FakeFG.works:
                 FakeFG.props['/sim/video/is-encoding'] = True
-                FakeFG.props['/sim/video/encoding-path'] = FakeFG.props['/sim/video/directory'] + '\\fgvideo-1.mkv'
+                video = Path(FakeFG.screenshots, 'fgvideo-1.mkv')     # FlightGear's own folder
+                video.write_bytes(b'mkv')
+                FakeFG.props['/sim/video/encoding-path'] = str(video)
             elif cmd == 'video-start':
                 FakeFG.props['/sim/video/error'] = 'codec not found'
             elif cmd == 'video-stop':
@@ -54,17 +56,27 @@ class FakeFG(BaseHTTPRequestHandler):
 
     def do_POST(self):
         value = json.loads(self.rfile.read(int(self.headers['Content-Length'])))['value']
-        FakeFG.props[self.path[len('/json'):]] = value
+        prop = self.path[len('/json'):]
+        if prop not in FakeFG.props:            # FlightGear can't create nodes over HTTP
+            self.send_error(404)
+            return
+        FakeFG.props[prop] = value
         self.reply({})
 
 
 class SessionVideo(unittest.TestCase):
     def setUp(self):
-        FakeFG.props, FakeFG.commands, FakeFG.works = {'/sim/sceneryloaded': False}, [], True
+        # what FlightGear's defaults.xml provides; /sim/video/directory etc. do NOT exist
+        FakeFG.props = {'/sim/sceneryloaded': False, '/sim/video/codec': 'libx265',
+                        '/sim/video/container': 'mp4', '/sim/video/quality': 0.75,
+                        '/sim/video/speed': 1.0, '/sim/video/bitrate': 0}
+        FakeFG.commands, FakeFG.works = [], True
         self.fg = HTTPServer(('127.0.0.1', 0), FakeFG)
         threading.Thread(target=self.fg.serve_forever, daemon=True).start()
         self.tmp = tempfile.TemporaryDirectory()
-        self.root = mock.patch.object(session, 'VIDEO_ROOT', Path(self.tmp.name))
+        FakeFG.screenshots = Path(self.tmp.name, 'fg-screenshots')
+        FakeFG.screenshots.mkdir()
+        self.root = mock.patch.object(session, 'VIDEO_ROOT', Path(self.tmp.name, 'videos'))
         self.root.start()
         s = session.Session.__new__(session.Session)
         s.httpd, s.id, s.lock, s.connected = self.fg.server_port, 'RUN-ID', threading.Lock(), True
@@ -87,12 +99,16 @@ class SessionVideo(unittest.TestCase):
         self.assertEqual(FakeFG.commands, ['video-start'])
         self.assertEqual(FakeFG.props['/sim/video/container'], 'mkv')
         self.assertEqual(FakeFG.props['/sim/video/codec'], 'libx264')
-        folder = Path(FakeFG.props['/sim/video/directory'])
-        self.assertEqual(folder, Path(self.tmp.name) / 'RUN-ID')
-        self.assertTrue(folder.is_dir())
+        self.assertNotIn('/sim/video/directory', FakeFG.props)
+        recorded = FakeFG.screenshots / 'fgvideo-1.mkv'
         self.assertTrue(self.s.video['recording'])
-        self.assertEqual(self.s.videos, [str(folder) + '\\fgvideo-1.mkv'])
+        self.assertEqual(self.s.videos, [str(recorded)])
         self.assertIn('not pushed', self.s.log[-1])
+        self.s._collect_videos()                   # after FlightGear has closed
+        moved = Path(self.tmp.name, 'videos', 'RUN-ID', 'fgvideo-1.mkv')
+        self.assertTrue(moved.exists())
+        self.assertFalse(recorded.exists())
+        self.assertEqual(self.s.videos, [str(moved)])
 
     def test_button_stops_and_restarts(self):
         self.assertTrue(self.s.record('start'))

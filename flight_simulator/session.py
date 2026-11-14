@@ -40,6 +40,7 @@ import subprocess
 import sys
 import threading
 import time
+import shutil
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -519,17 +520,44 @@ class Session:
                 return None
             raise
 
+    def _set_existing(self, path, value):
+        """_set, but skip a property FlightGear doesn't have (its web server can't create one)."""
+        try:
+            self._set(path, value)
+        except urllib.error.HTTPError as exc:
+            if exc.code != 404:
+                raise
+
+    def _collect_videos(self):
+        """After FlightGear has closed: move its recordings into VIDEO_ROOT/<session id>/."""
+        kept = []
+        for v in self.videos:
+            src = Path(v)
+            if not src.exists():
+                kept.append(v)
+                continue
+            folder = VIDEO_ROOT / self.id
+            folder.mkdir(parents=True, exist_ok=True)
+            dst = folder / src.name
+            try:
+                shutil.move(str(src), str(dst))
+                kept.append(str(dst))
+            except OSError as exc:
+                self.event('session', f'Video left at {src} (could not move it: {exc})')
+                kept.append(v)
+        self.videos = kept
+
     def record(self, action, why=''):
         """Start or stop FlightGear's own video recorder. Returns True if it did."""
         try:
             if action == 'start':
                 if self._get_maybe('/sim/video/is-encoding'):
                     return True
-                folder = VIDEO_ROOT / self.id
-                folder.mkdir(parents=True, exist_ok=True)
+                # FlightGear's web server can change properties but not create them, so
+                # only the settings defaults.xml already has are set, and FlightGear
+                # writes into its own folder; finish() moves the file to VIDEO_ROOT.
                 for path, value in VIDEO_SETTINGS.items():
-                    self._set(path, value)
-                self._set('/sim/video/directory', str(folder))
+                    self._set_existing(path, value)
                 self._run('video-start')
             elif action == 'stop':
                 self._run('video-stop')
@@ -547,7 +575,8 @@ class Session:
             if on and path and path not in self.videos:
                 self.videos.append(path)
         if action == 'start' and on:
-            self.event('session', f'Recording video{why}: {path} (local, not pushed)')
+            self.event('session', f'Recording video{why}: {path} (local, not pushed; moved to '
+                                  f'{VIDEO_ROOT} when FlightGear closes)')
         elif action == 'start':
             self.event('session', f'Video did not start{why}: {error or "FlightGear gave no reason"}')
         else:
@@ -981,6 +1010,7 @@ class Session:
             target = self.dir.with_name(final)
             os.replace(self.dir, target)
             self.id, self.dir = final, target
+        self._collect_videos()
         (self.dir / 'fgfs_warnings.log').write_text(
             '\n'.join(runlog.filter_fg_log(self.fg_kept)) + '\n', encoding='utf-8')
         duration = round(time.time() - self.started)
