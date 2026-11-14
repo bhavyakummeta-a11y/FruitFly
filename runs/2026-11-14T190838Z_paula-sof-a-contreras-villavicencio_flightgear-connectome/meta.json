@@ -1,0 +1,38 @@
+{
+  "run_id": "2026-11-14T190838Z_paula-sof-a-contreras-villavicencio_flightgear-connectome",
+  "who": "Paula Sof\u00eda Contreras Villavicencio",
+  "started_utc": "2026-11-14T19:08:38.107758+00:00",
+  "command": "python -m flight_simulator takeoff_live takeoff --brain connectome --backend flightgear --telemetry-port 5501 --control-port 5502 --period 0.25",
+  "args": {
+    "phase": "takeoff",
+    "brain": "connectome",
+    "backend": "flightgear",
+    "telemetry_port": 5501
+  },
+  "code": {
+    "commit": "36c3b04c7431e0951596c24c83140a1a67e992f1",
+    "branch": "pau",
+    "dirty": [
+      "M flight_simulator/flies.py",
+      " M flight_simulator/takeoff_landing.py"
+    ],
+    "untracked": []
+  },
+  "python": "3.12.3",
+  "platform": "Linux 6.18.33.1-microsoft-standard-WSL2",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the takeoff",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "connectome takeoff",
+      "run_id": "2026-11-14T190825Z_paula-sof-a-contreras-villavicencio_fg-connectome-takeoff"
+    }
+  ],
+  "finished_utc": "2026-11-14T19:10:00.781590+00:00",
+  "exit_code": 1
+}

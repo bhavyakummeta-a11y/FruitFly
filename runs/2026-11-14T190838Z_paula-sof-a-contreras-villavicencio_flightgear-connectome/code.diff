@@ -1,0 +1,75 @@
+diff --git a/flight_simulator/flies.py b/flight_simulator/flies.py
+index d53f17d..cd1c651 100644
+--- a/flight_simulator/flies.py
++++ b/flight_simulator/flies.py
+@@ -374,9 +374,17 @@ class LandingFly(PhaseFly):
+     def unstable(self, s):
+         # Judged between 1,000 and 100 ft; below 100 ft the pilot flies the flare by eye.
+         return (100 * FT < s.agl < 1000 * FT and not s.on_ground and
+-                (self.off_glideslope(s) or abs(s.y) > 40
++                (self.off_glideslope(s) or self.off_localizer(s)
+                  or not -8 * KT <= s.speed - VREF <= 15 * KT))
+ 
++    @staticmethod
++    def off_localizer(s):
++        """More than ~1 localizer dot (0.6 deg seen from the far end of the runway), and never
++        stricter than 40 m. A flat 40 m sent a live FlightGear approach around: it started
++        31.7 m off the centerline at 3 nm."""
++        distance = max(3600.0 - s.x, 1.0)  # localizer antenna ~ far end of the runway
++        return abs(s.y) > max(40.0, distance * math.tan(math.radians(0.6)))
++
+     @staticmethod
+     def off_glideslope(s):
+         """More than 0.7 deg off, but never stricter than 10 m in height: the same height
+diff --git a/flight_simulator/takeoff_landing.py b/flight_simulator/takeoff_landing.py
+index 86f0199..8a32e9f 100644
+--- a/flight_simulator/takeoff_landing.py
++++ b/flight_simulator/takeoff_landing.py
+@@ -88,6 +88,10 @@ def run_flightgear(args, fly, log):
+     # on the extended centerline, --final-nm before the threshold.
+     ahead = args.final_nm * 1852.0 if args.phase == 'landing' else 0.0
+     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
++    if args.phase == 'landing':
++        # Landing configuration (scripted). Without this the bridge's default, flaps 5,
++        # would retract the flaps on final.
++        bridge.flaps = 0.875
+     pilot = None
+     ap_guard = None
+     speed_lock = None
+@@ -294,17 +298,28 @@ def main(argv=None):
+                                  else 'flying fly, looming -> DNp07 = flare'), flush=True)
+         log = []
+         start = time.monotonic()
+-        result = (run_demo if args.backend == 'demo' else run_flightgear)(args, fly, log)
++        # A terminated controller must still pause FlightGear and save its log: treat
++        # SIGTERM/SIGHUP like Ctrl-C (FlightGear keeps the last controls it received).
++        import signal
++        def _stop(signum, frame):
++            raise KeyboardInterrupt
++        for sig in (signal.SIGTERM, getattr(signal, 'SIGHUP', None)):
++            if sig is not None:
++                signal.signal(sig, _stop)
++        try:
++            result = (run_demo if args.backend == 'demo' else run_flightgear)(args, fly, log)
++        finally:
++            if args.log and log:  # always, even if the run is stopped mid-flight
++                Path(args.log).parent.mkdir(parents=True, exist_ok=True)
++                fields = sorted({k for r in log for k in r}, key=lambda k: (k.startswith(('in_', 'dn_')), k))
++                with open(args.log, 'w', newline='') as f:
++                    w = csv.DictWriter(f, fields)
++                    w.writeheader()
++                    w.writerows(log)
++                print(f'Log written to {args.log} ({len(log)} rows)', flush=True)
+         result['backend'] = args.backend
+         result['wall_s'] = round(time.monotonic() - start, 1)
+         result['success'] = judge(args.phase, result)
+-        if args.log and log:
+-            Path(args.log).parent.mkdir(parents=True, exist_ok=True)
+-            fields = sorted({k for r in log for k in r}, key=lambda k: (k.startswith(('in_', 'dn_')), k))
+-            with open(args.log, 'w', newline='') as f:
+-                w = csv.DictWriter(f, fields)
+-                w.writeheader()
+-                w.writerows(log)
+         if args.plot and log:
+             from .plot_run import plot
+             title = f'{fly.name}, {brain.name} ({args.backend}): ' + ('success' if result['success'] else 'FAILED')
