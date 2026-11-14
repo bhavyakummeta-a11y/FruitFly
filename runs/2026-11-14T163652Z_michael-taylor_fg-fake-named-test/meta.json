@@ -1,0 +1,24 @@
+{
+  "run_id": "2026-11-14T163652Z_michael-taylor_fg-fake-named-test",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "fake named test",
+  "aircraft": null,
+  "fgfs_pid": 8904,
+  "fgfs_exit_code": 0,
+  "started_utc": "2026-11-14T16:36:52.797767+00:00",
+  "duration_s": 6,
+  "httpd_port": 18080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 2
+  },
+  "airplane_samples": 7,
+  "controller_runs": {},
+  "code": {
+    "commit": "2dc498585d1f4df379ca397e23d9857cb4521ca4",
+    "branch": "main"
+  }
+}
