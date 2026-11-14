@@ -1,0 +1,20 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T162133Z_michael-taylor_flightgear-reflex
+REFLEX BASELINE (no connectome)
+Waiting for airborne FlightGear telemetry on localhost...
+FlightGear connected. Initial altitude/heading/speed are the hold targets.
+   0.0s CRUISE altitude=  932.3m speed= 42.8m/s escape=  0.0Hz clearance= 1150.0m
+  10.0s CRUISE altitude=  943.1m speed= 36.6m/s escape=  0.0Hz clearance=  756.8m
+  20.1s CRUISE altitude=  942.7m speed= 38.6m/s escape=  0.0Hz clearance=  418.5m
+  30.1s AVOID  altitude=  944.8m speed= 38.5m/s escape=  0.0Hz clearance=  198.8m
+  40.1s CRUISE altitude=  945.8m speed= 38.4m/s escape=  0.0Hz clearance=  398.3m
+  50.1s CRUISE altitude=  950.5m speed= 38.3m/s escape=  0.0Hz clearance=  654.0m
+{
+  "backend": "flightgear",
+  "brain": "reflex",
+  "elapsed_s": 60.05,
+  "collision": false,
+  "minimum_clearance_m": 195.05,
+  "minimum_altitude_m": 932.3,
+  "avoidance_activations": 3
+}
+Sent FlightGear pause request on exit. Verify pause in the simulator.

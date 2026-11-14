@@ -1,0 +1,30 @@
+    0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+    0.11 [WARN]:aircraft  C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Aircraft\initialstate.cxx:72: missing state node for:cruise
+    8.75 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:481: Creating osgViewer::CompositeViewer
+    8.75 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:488: affinity=none
+    8.75 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:500: Calling composite_viewer->setUseConfigureAffinity() with flag=0
+   10.10 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+   10.10 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+   10.11 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\main.cxx:793: Enabling ATI/AMD viewport hack
+   10.13 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\fg_os_osgviewer.cxx:456: affinity=none
+   16.95 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\GUI\new_gui.cxx:525: dialog Path "D:/FlightGear/data/Aircraft/c172p/gui/dialogs/c172p-menu.xml" has no name; skipping.
+   17.28 [WARN]:autopilot C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Autopilot\digitalfilter.cxx:988: DigitalFilter: initialize-to (0.0) ignored
+   34.36 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:461: Deprecation Alert: The knob/slider animations listed below are getting duplicated.
+   34.36 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:462:     This will be fixed in a future version. Please apply workarounds to ensure compatibility.
+   34.36 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:463:     For details see: https://wiki.flightgear.org/Knob_and_Slider_Duplication
+   34.36 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:467: Warning: 2x duplication of slider animation on object "AltStaticAir" is deprecated behaviour (see above)
+   34.36 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:468:     Animation node at: D:/FlightGear/data/Aircraft/c172p/Models/c172p.xml:2784
+   34.36 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:479:     Duplicated due to: D:/FlightGear/data/Aircraft/c172p/Models/Interior/Panel/c172p-panel/c172p.xml:3362
+   35.85 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+   36.06 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+   36.06 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+   36.06 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+   36.06 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+   36.41 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /sim[0]/current-view[0]/heading-offset-deg[0]
+   36.53 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /instrumentation[0]/gps[0]/mode[0]
+   36.53 [WARN]:instrumentationC:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Instrumentation\gps.cxx:1357: empty GPS search query
+   36.53 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage 5
+   36.53 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage e
+   38.34 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\mipmap.cxx:276: mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+   38.90 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\fg_commands.cxx:929: loadxml: no such file:Path "C:/Users/micha/AppData/Roaming/flightgear.org-instance1/aircraft-data/garmin196.xml"
+   38.90 [ALRT]:flight    C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\FDM\fdm_shell.cxx:192: Failed to save initial FDM property state

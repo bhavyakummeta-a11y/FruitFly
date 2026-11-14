@@ -1,0 +1,10 @@
+{
+  "backend": "flightgear",
+  "brain": "reflex",
+  "elapsed_s": 60.05,
+  "collision": false,
+  "minimum_clearance_m": 195.05,
+  "minimum_altitude_m": 932.3,
+  "avoidance_activations": 3,
+  "exit_code": 0
+}
