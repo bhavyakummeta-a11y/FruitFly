@@ -41,6 +41,47 @@ var update = func {
 var timer = maketimer(DT, update);
 timer.start();
 
+# ---- the fly pilot (captain's seat) ------------------------------------------
+# Inputs, written by the controller from the fly brain's descending neurons:
+#   /fruitfly/pilot/active  bool   a fly-brain controller is connected
+#   /fruitfly/pilot/power   0..1   DNg02 (wingbeat amplitude)
+#   /fruitfly/pilot/steer  -1..1   steering DNs, right minus left
+#   /fruitfly/pilot/escape  0..1   DNp01 Giant Fibre
+# Outputs (fly-pilot.xml animations): flap-norm, head-turn-deg, lean-deg, hop-m.
+var pilot = props.globals.getNode("/fruitfly/pilot", 1);
+var pt = 0.0;
+var hop_t = -10.0;
+var was_escaping = 0;
+var lean = 0.0;
+var update_pilot = func {
+    pt += DT;
+    var active = pilot.getBoolValue("active");
+    var power = active ? (pilot.getValue("power") or 0) : 0;
+    var steer = active ? (pilot.getValue("steer") or 0) : 0;
+    var escape = active ? (pilot.getValue("escape") or 0) : 0;
+    if (escape > 0.5 and !was_escaping) hop_t = pt;   # Giant Fibre: hop + wing flare
+    was_escaping = escape > 0.5;
+    var hop = pt - hop_t < 0.8 ? 1 - (pt - hop_t) / 0.8 : 0;
+    # Wings: idle twitch when no brain is connected; beat faster/wider with DNg02.
+    var hz = active ? 2.0 + 8.0 * power : 0.3;
+    var amp = active ? 0.25 + 0.6 * power : 0.08;
+    var beat = 0.5 + 0.5 * math.sin(2 * math.pi * hz * pt);
+    pilot.setDoubleValue("flap-norm", math.max(amp * beat, hop));
+    pilot.setDoubleValue("head-turn-deg", 25 * steer + 4 * math.sin(0.5 * pt));
+    lean += (12 * steer - lean) * 0.15;             # smoothed lean into the turn
+    pilot.setDoubleValue("lean-deg", lean);
+    pilot.setDoubleValue("hop-m", 0.12 * hop);
+};
+var pilot_timer = maketimer(DT, update_pilot);
+pilot_timer.start();
+
+var pilot_view = func {
+    if (!getprop("/fruitfly/pilot/start-view")) return;
+    var i = view.indexof("Cockpit: fly pilot");
+    if (i != nil and i >= 0) setprop("/sim/current-view/view-number", i);
+};
+setlistener("/sim/signals/fdm-initialized", func { settimer(pilot_view, 1); }, 0, 0);
+
 setlistener("/fruitfly/autostart", func(n) {
     if (n.getBoolValue()) {
         print("FruitFly: running 737 autostart");

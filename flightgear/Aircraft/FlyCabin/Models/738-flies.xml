@@ -9,6 +9,9 @@
     <path>Aircraft/737-800/Models/738.xml</path>
   </model>
 
+  <!-- The fly pilot (its brain flies the plane). -->
+  <model><name>flypilot</name><path>Aircraft/FlyCabin/Models/fly-pilot.xml</path><offsets><x-m>-17.100</x-m><y-m>-0.510</y-m><z-m>0.460</z-m></offsets></model>
+
   <!-- One <model> per occupied seat. -->
   <model><name>fly000</name><path>Aircraft/FlyCabin/Models/fly-group1.xml</path><offsets><x-m>-12.600</x-m><y-m>-0.950</y-m><z-m>0.520</z-m><heading-deg>0.2</heading-deg></offsets></model>
   <model><name>fly001</name><path>Aircraft/FlyCabin/Models/fly-group1.xml</path><offsets><x-m>-12.600</x-m><y-m>-1.410</y-m><z-m>0.520</z-m><heading-deg>-0.2</heading-deg></offsets></model>

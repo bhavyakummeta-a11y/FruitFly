@@ -85,6 +85,7 @@ def run_flightgear(args, fly, log):
     # on the extended centerline, --final-nm before the threshold.
     ahead = args.final_nm * 1852.0 if args.phase == 'landing' else 0.0
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
+    pilot = None
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
@@ -102,6 +103,13 @@ def run_flightgear(args, fly, log):
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
         body = None
+        if not args.no_cockpit_fly:
+            # The fly pilot in the 737's captain seat, animated by this brain (display only).
+            from .flightgear import CockpitFly
+            try:
+                pilot = CockpitFly(args.telemetry_port - 1)
+            except OSError as exc:
+                print(f'Cockpit fly not animated (telnet: {exc}).', flush=True)
         if not args.no_fly_body:
             # Live 3D fly window (python -m flight_simulator.fly_body); display only.
             from .fly_body import BodyLink
@@ -134,6 +142,10 @@ def run_flightgear(args, fly, log):
                 last = fly.decisions[-1] if fly.decisions else None
                 rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
                 body.send(s, fly.status.phase, args.brain, (rates or {}).get('DNp01_hz', 0.0), rates)
+            if pilot:
+                last = fly.decisions[-1] if fly.decisions else None
+                rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
+                pilot.update((rates or {}).get('DNp01_hz', 0.0), rates)
             bridge.send(controls)
             previous = s.time
             was_ground = s.on_ground
@@ -163,6 +175,8 @@ def run_flightgear(args, fly, log):
             touchdown_pitch_deg=touchdown and touchdown[2]))()
         return summarize(fly, sim_like, max_y)
     finally:
+        if pilot:
+            pilot.close()
         paused = bridge.close()
         print('FlightGear paused (acknowledged), ailerons and rudder centred.' if paused else
               'WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: '
@@ -199,6 +213,7 @@ def main(argv=None):
     p.add_argument('--log', help='CSV of every sim step, incl. sensory inputs and DN rates')
     p.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window')
     p.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
+    p.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
     p.add_argument('--plot', help='PNG of sugar input, brain activity, altitude and airspeed (needs matplotlib)')
     args = p.parse_args(argv)
     if not math.isfinite(args.seconds) or args.seconds <= 0 or args.period <= 0:
