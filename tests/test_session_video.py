@@ -46,7 +46,11 @@ class FakeFG(BaseHTTPRequestHandler):
             elif cmd == 'video-stop':
                 FakeFG.props['/sim/video/is-encoding'] = False
             return self.reply({})
-        self.reply({'value': FakeFG.props.get(url.path[len('/json'):])})
+        prop = url.path[len('/json'):]
+        if prop not in FakeFG.props:            # FlightGear: missing node -> 404
+            self.send_error(404)
+            return
+        self.reply({'value': FakeFG.props[prop]})
 
     def do_POST(self):
         value = json.loads(self.rfile.read(int(self.headers['Content-Length'])))['value']

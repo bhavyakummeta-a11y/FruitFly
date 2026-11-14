@@ -507,11 +507,23 @@ class Session:
         url = f'http://127.0.0.1:{self.httpd}/run.cgi?value={urllib.parse.quote(command)}'
         urllib.request.urlopen(url, timeout=5).read()
 
+    def _get_maybe(self, path):
+        """Like _get, but a property FlightGear hasn't created yet reads as None.
+
+        /sim/video/* only exist after the first recording, and FlightGear's web
+        server answers 404 for a missing property; that isn't a dead FlightGear."""
+        try:
+            return self._get(path)
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                return None
+            raise
+
     def record(self, action, why=''):
         """Start or stop FlightGear's own video recorder. Returns True if it did."""
         try:
             if action == 'start':
-                if self._get('/sim/video/is-encoding'):
+                if self._get_maybe('/sim/video/is-encoding'):
                     return True
                 folder = VIDEO_ROOT / self.id
                 folder.mkdir(parents=True, exist_ok=True)
@@ -523,10 +535,10 @@ class Session:
                 self._run('video-stop')
             else:
                 return False
-            time.sleep(0.5)
-            on = bool(self._get('/sim/video/is-encoding'))
-            path = self._get('/sim/video/encoding-path') or ''
-            error = self._get('/sim/video/error') or ''
+            time.sleep(1.0)
+            on = bool(self._get_maybe('/sim/video/is-encoding'))
+            path = self._get_maybe('/sim/video/encoding-path') or ''
+            error = self._get_maybe('/sim/video/error') or ''
         except (OSError, ValueError) as exc:
             self.event('session', f'Video {action} failed: FlightGear did not answer ({exc})')
             return False
@@ -546,7 +558,11 @@ class Session:
         """Start recording once, as soon as the scenery has loaded."""
         if not self.want_video or self.video_auto_done or not self.connected:
             return
-        if self._get('/sim/sceneryloaded'):
+        try:
+            loaded = self._get_maybe('/sim/sceneryloaded')
+        except OSError:
+            return                       # busy loading; try again next second
+        if loaded:
             self.video_auto_done = True
             self.record('start', ' (automatic, every session)')
 
