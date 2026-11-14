@@ -1,0 +1,93 @@
+{
+  "run_id": "2026-11-14T215310Z_kaden-vandine_fg-takeoff-fly-connectome-ksfo-28r-run-3",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 10.0
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the takeoff",
+      "detail": "run 2026-11-14T215317Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 10.0,
+      "to_s": 132.4
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 132.4,
+      "to_s": 149.5
+    }
+  ],
+  "name": "takeoff fly: connectome, KSFO 28R (run 3)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 79092,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T21:53:10.579545+00:00",
+  "duration_s": 150,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 83,
+  "controller_runs": {
+    "2026-11-14T215317Z_kaden-vandine_flightgear-connectome": {
+      "fly": "Takeoff fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "HANDOVER (1,000 ft)",
+      "completed": true,
+      "time_s": 119.0,
+      "decisions": 310,
+      "max_centerline_m": 5.1,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "liftoff_x_m": 1356,
+      "rejected": false,
+      "agl_ft": 2185,
+      "ias_kt": 173.2,
+      "stop_x_m": null,
+      "safe_reject": false,
+      "takeoff_achieved": true,
+      "outcome": "takeoff_achieved",
+      "events": [
+        "30.0s JUMP: escape DNs 183 Hz",
+        "30.8s JUMP: escape DNs 302 Hz",
+        "31.4s JUMP: escape DNs 465 Hz",
+        "...",
+        "33.3s JUMP: escape DNs 687 Hz",
+        "33.8s JUMP: escape DNs 693 Hz",
+        "34.3s JUMP: escape DNs 694 Hz"
+      ],
+      "termination_reason": "interrupted",
+      "decision_timing": {
+        "applied": 310,
+        "completed": 310,
+        "discarded": 0,
+        "skipped": 75,
+        "latency_mean_s": 0.253,
+        "latency_max_s": 2.567
+      },
+      "speed_up_resets": 0,
+      "requested_phase": "takeoff",
+      "backend": "flightgear",
+      "wall_s": 120.1,
+      "success": true,
+      "exit_code": 0
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "feaefd52d7682f58f8916dd2c3e0c48a87de3563",
+    "branch": "main"
+  }
+}
