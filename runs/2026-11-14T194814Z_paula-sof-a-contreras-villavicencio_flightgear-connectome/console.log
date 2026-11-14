@@ -1,0 +1,294 @@
+[runlog] /home/pau-_/flyhack/FruitFly/.sim-logs/runs/2026-11-14T194814Z_paula-sof-a-contreras-villavicencio_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the landing
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-17.5
+Landing fly: flying fly, looming -> DNp07 = flare
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Landing handover: throttle 0.55, elevator +0.00, reference attitude 1.5 deg (plane at 0.4 deg, +110 fpm)
+NO-AUTOPILOT RULE: autopilot was still on after handover (/autopilot/internal/SPD); forced off.
+FlightGear resumes with the fly's first controls: the fly has the approach.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 0.0s after its state  APPROACH       ias=144.3kt agl=  993ft pitch= 0.4deg thr=0.53
+  decision applied 0.4s after its state  APPROACH       ias=143.5kt agl=  991ft pitch= 0.5deg thr=0.53
+  decision applied 0.5s after its state  APPROACH       ias=143.4kt agl=  988ft pitch= 0.6deg thr=0.54
+  decision applied 0.7s after its state  APPROACH       ias=143.8kt agl=  978ft pitch= 0.5deg thr=0.51
+  decision applied 0.5s after its state  APPROACH       ias=144.2kt agl=  970ft pitch= 0.3deg thr=0.57
+  decision applied 0.9s after its state  APPROACH       ias=145.0kt agl=  953ft pitch= 0.1deg thr=0.55
+  decision applied 0.6s after its state  APPROACH       ias=145.7kt agl=  939ft pitch=-0.1deg thr=0.56
+  decision applied 0.4s after its state  APPROACH       ias=146.3kt agl=  929ft pitch=-0.3deg thr=0.58
+  decision applied 0.6s after its state  APPROACH       ias=147.2kt agl=  914ft pitch=-0.2deg thr=0.57
+  decision applied 0.4s after its state  APPROACH       ias=147.8kt agl=  905ft pitch= 0.1deg thr=0.57
+  decision stale 1.1s after its state  APPROACH       ias=149.2kt agl=  878ft pitch= 0.3deg thr=0.57
+  decision applied 0.7s after its state  APPROACH       ias=150.1kt agl=  861ft pitch= 0.0deg thr=0.54
+  decision applied 0.4s after its state  APPROACH       ias=150.5kt agl=  851ft pitch= 0.1deg thr=0.51
+  decision applied 0.2s after its state  APPROACH       ias=150.7kt agl=  846ft pitch= 0.3deg thr=0.42
+  decision applied 0.4s after its state  APPROACH       ias=151.2kt agl=  825ft pitch= 0.7deg thr=0.45
+  decision stale 1.0s after its state  APPROACH       ias=151.6kt agl=  801ft pitch=-0.1deg thr=0.45
+  decision applied 0.6s after its state  APPROACH       ias=151.9kt agl=  787ft pitch=-0.8deg thr=0.47
+  decision applied 0.5s after its state  APPROACH       ias=152.3kt agl=  775ft pitch=-1.3deg thr=0.46
+  decision applied 0.6s after its state  APPROACH       ias=152.8kt agl=  757ft pitch=-0.9deg thr=0.44
+  decision applied 0.5s after its state  APPROACH       ias=153.0kt agl=  745ft pitch=-0.1deg thr=0.41
+  decision stale 1.1s after its state  APPROACH       ias=153.3kt agl=  716ft pitch=-0.3deg thr=0.41
+  decision applied 0.7s after its state  APPROACH       ias=153.6kt agl=  700ft pitch=-1.4deg thr=0.44
+  decision applied 0.4s after its state  APPROACH       ias=153.9kt agl=  688ft pitch=-1.6deg thr=0.46
+  decision applied 0.6s after its state  APPROACH       ias=154.3kt agl=  671ft pitch=-0.5deg thr=0.49
+  decision applied 0.4s after its state  APPROACH       ias=154.5kt agl=  660ft pitch= 0.9deg thr=0.48
+  decision applied 0.4s after its state  APPROACH       ias=154.7kt agl=  651ft pitch= 1.6deg thr=0.49
+  decision applied 0.9s after its state  APPROACH       ias=154.9kt agl=  631ft pitch=-0.0deg thr=0.43
+  decision applied 0.6s after its state  APPROACH       ias=155.2kt agl=  618ft pitch=-2.0deg thr=0.42
+  decision applied 0.4s after its state  APPROACH       ias=155.4kt agl=  609ft pitch=-2.8deg thr=0.47
+  decision applied 0.4s after its state  APPROACH       ias=155.7kt agl=  599ft pitch=-2.6deg thr=0.42
+  decision applied 0.4s after its state  APPROACH       ias=156.0kt agl=  589ft pitch=-1.4deg thr=0.46
+  decision applied 0.4s after its state  APPROACH       ias=156.2kt agl=  577ft pitch= 0.6deg thr=0.53
+  decision applied 1.0s after its state  APPROACH       ias=156.6kt agl=  553ft pitch= 0.5deg thr=0.53
+  decision applied 0.4s after its state  APPROACH       ias=156.8kt agl=  544ft pitch=-1.4deg thr=0.48
+Landing fly: approach path re-anchored at 2.2 deg from 535 ft, 4264 m out
+  decision applied 0.4s after its state  APPROACH       ias=157.3kt agl=  535ft pitch=-2.8deg thr=0.46
+  decision applied 0.4s after its state  APPROACH       ias=157.7kt agl=  525ft pitch=-2.1deg thr=0.34
+  decision applied 0.4s after its state  APPROACH       ias=157.8kt agl=  514ft pitch=-0.3deg thr=0.28
+  decision applied 0.4s after its state  APPROACH       ias=157.7kt agl=  504ft pitch= 1.1deg thr=0.25
+  decision applied 0.4s after its state  APPROACH       ias=157.5kt agl=  495ft pitch= 1.8deg thr=0.24
+  decision applied 0.4s after its state  GO-AROUND      ias=157.1kt agl=  487ft pitch= 1.9deg thr=1.00
+  decision applied 0.7s after its state  GO-AROUND      ias=156.4kt agl=  473ft pitch= 0.8deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=156.1kt agl=  465ft pitch= 0.2deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=155.9kt agl=  457ft pitch= 0.5deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=156.0kt agl=  450ft pitch= 1.8deg thr=1.00
+  decision applied 0.6s after its state  GO-AROUND      ias=156.9kt agl=  439ft pitch= 4.5deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=158.1kt agl=  434ft pitch= 5.8deg thr=1.00
+  decision stale 1.2s after its state  GO-AROUND      ias=161.4kt agl=  428ft pitch= 7.7deg thr=1.00
+  decision applied 0.6s after its state  GO-AROUND      ias=162.9kt agl=  430ft pitch= 8.6deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=163.6kt agl=  434ft pitch=10.1deg thr=1.00
+  decision applied 0.9s after its state  GO-AROUND      ias=164.6kt agl=  448ft pitch=12.6deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=164.9kt agl=  461ft pitch=12.9deg thr=1.00
+  decision applied 0.8s after its state  GO-AROUND      ias=165.2kt agl=  489ft pitch=14.7deg thr=1.00
+  decision applied 0.6s after its state  GO-AROUND      ias=165.0kt agl=  515ft pitch=17.3deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=164.6kt agl=  536ft pitch=19.3deg thr=1.00
+  decision applied 0.2s after its state  GO-AROUND      ias=164.3kt agl=  546ft pitch=19.9deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=162.8kt agl=  595ft pitch=16.9deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=162.4kt agl=  620ft pitch=14.5deg thr=1.00
+  decision applied 0.8s after its state  GO-AROUND      ias=162.0kt agl=  667ft pitch=17.1deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=161.5kt agl=  690ft pitch=21.4deg thr=1.00
+  decision applied 0.4s after its state  GO-AROUND      ias=160.4kt agl=  718ft pitch=26.0deg thr=1.00
+  decision applied 0.2s after its state  GO-AROUND      ias=159.7kt agl=  733ft pitch=27.3deg thr=1.00
+  decision applied 0.7s after its state  GO-AROUND      ias=156.2kt agl=  805ft pitch=23.0deg thr=1.00
+  decision applied 0.5s after its state  GO-AROUND      ias=155.1kt agl=  845ft pitch=17.2deg thr=1.00
+  decision stale 1.2s after its state  GO-AROUND      ias=153.9kt agl=  936ft pitch=15.0deg thr=1.00
+  decision applied 0.6s after its state  GO-AROUND      ias=153.2kt agl=  973ft pitch=22.6deg thr=1.00
+  decision applied 0.2s after its state  GO-AROUND      ias=152.7kt agl=  985ft pitch=24.7deg thr=1.00
+  decision applied 0.2s after its state  GO-AROUND      ias=151.3kt agl= 1014ft pitch=27.4deg thr=1.00
+GO-AROUND reached in the air. No Cruise fly yet, so the Landing fly keeps flying: wings level, 10 deg climb, climb power. Press Ctrl-C to pause FlightGear and exit.
+  decision applied 0.2s after its state  GO-AROUND      ias=149.2kt agl= 1059ft pitch=25.1deg thr=0.70
+  decision applied 0.2s after its state  GO-AROUND      ias=147.8kt agl= 1091ft pitch=21.0deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=143.7kt agl= 1161ft pitch=14.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=142.5kt agl= 1184ft pitch=14.1deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=141.2kt agl= 1208ft pitch=14.4deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.1kt agl= 1227ft pitch=13.3deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=139.1kt agl= 1246ft pitch=10.8deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=138.4kt agl= 1263ft pitch= 8.3deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=138.0kt agl= 1276ft pitch= 6.7deg thr=0.70
+  decision applied 0.9s after its state  GO-AROUND      ias=137.7kt agl= 1298ft pitch= 6.5deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=137.7kt agl= 1304ft pitch= 7.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=137.7kt agl= 1308ft pitch= 7.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=137.7kt agl= 1311ft pitch= 6.2deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=137.9kt agl= 1314ft pitch= 5.2deg thr=0.70
+  decision applied 0.3s after its state  GO-AROUND      ias=138.2kt agl= 1315ft pitch= 4.5deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=138.5kt agl= 1315ft pitch= 4.1deg thr=0.70
+  decision applied 0.3s after its state  GO-AROUND      ias=138.9kt agl= 1314ft pitch= 3.8deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=139.9kt agl= 1310ft pitch= 3.2deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.4kt agl= 1307ft pitch= 2.9deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.9kt agl= 1303ft pitch= 2.8deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=141.5kt agl= 1299ft pitch= 3.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=142.0kt agl= 1294ft pitch= 3.4deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=142.6kt agl= 1289ft pitch= 3.9deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=143.0kt agl= 1284ft pitch= 4.3deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=143.6kt agl= 1279ft pitch= 4.6deg thr=0.70
+  decision stale 1.0s after its state  GO-AROUND      ias=144.7kt agl= 1268ft pitch= 5.5deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.0kt agl= 1264ft pitch= 5.8deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.3kt agl= 1260ft pitch= 6.1deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=145.8kt agl= 1254ft pitch= 7.1deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=146.0kt agl= 1253ft pitch= 7.8deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=146.1kt agl= 1251ft pitch= 9.0deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=146.0kt agl= 1251ft pitch= 9.5deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=145.8kt agl= 1254ft pitch= 9.3deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.6kt agl= 1256ft pitch= 9.2deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.5kt agl= 1259ft pitch= 9.4deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.4kt agl= 1262ft pitch= 9.7deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.2kt agl= 1265ft pitch=10.1deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=145.0kt agl= 1269ft pitch=10.3deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=144.4kt agl= 1279ft pitch=10.2deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=144.0kt agl= 1286ft pitch=10.1deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=143.8kt agl= 1292ft pitch=10.3deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=143.4kt agl= 1300ft pitch=10.6deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=143.1kt agl= 1305ft pitch=10.6deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=142.9kt agl= 1311ft pitch=10.6deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=142.3kt agl= 1322ft pitch=10.4deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=142.0kt agl= 1327ft pitch=10.3deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=141.8kt agl= 1333ft pitch=10.1deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=141.6kt agl= 1339ft pitch= 9.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=141.3kt agl= 1346ft pitch= 9.5deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=141.1kt agl= 1352ft pitch= 9.6deg thr=0.70
+  decision stale 1.0s after its state  GO-AROUND      ias=140.6kt agl= 1364ft pitch= 9.8deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.4kt agl= 1371ft pitch= 9.7deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.3kt agl= 1375ft pitch= 9.7deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=140.0kt agl= 1382ft pitch= 9.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.8kt agl= 1387ft pitch= 9.8deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=139.5kt agl= 1398ft pitch= 9.3deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.4kt agl= 1402ft pitch= 8.8deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.4kt agl= 1407ft pitch= 8.2deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.4kt agl= 1410ft pitch= 7.9deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.5kt agl= 1412ft pitch= 8.0deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=139.7kt agl= 1419ft pitch= 8.4deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.9kt agl= 1420ft pitch= 8.5deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.0kt agl= 1420ft pitch= 8.4deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.2kt agl= 1421ft pitch= 8.6deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.4kt agl= 1422ft pitch= 9.0deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=140.4kt agl= 1424ft pitch= 9.8deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.4kt agl= 1426ft pitch= 9.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.3kt agl= 1429ft pitch= 9.9deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.2kt agl= 1431ft pitch= 9.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.1kt agl= 1434ft pitch=10.0deg thr=0.70
+  decision applied 0.9s after its state  GO-AROUND      ias=139.9kt agl= 1439ft pitch= 9.2deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.8kt agl= 1443ft pitch= 8.2deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.8kt agl= 1445ft pitch= 7.4deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=139.9kt agl= 1447ft pitch= 7.5deg thr=0.70
+  decision applied 0.3s after its state  GO-AROUND      ias=140.0kt agl= 1448ft pitch= 7.9deg thr=0.70
+  decision stale 1.6s after its state  GO-AROUND      ias=140.1kt agl= 1451ft pitch= 9.5deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.1kt agl= 1453ft pitch= 8.8deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.1kt agl= 1455ft pitch= 7.3deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.3kt agl= 1456ft pitch= 6.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.5kt agl= 1456ft pitch= 7.9deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=140.5kt agl= 1456ft pitch= 9.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.5kt agl= 1456ft pitch= 9.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.6kt agl= 1457ft pitch= 8.9deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.7kt agl= 1457ft pitch= 9.0deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=140.7kt agl= 1457ft pitch=10.3deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=140.3kt agl= 1462ft pitch=12.1deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.9kt agl= 1467ft pitch=11.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.6kt agl= 1472ft pitch=11.2deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.4kt agl= 1477ft pitch=10.8deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.2kt agl= 1481ft pitch=11.1deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=138.6kt agl= 1492ft pitch=10.2deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=138.4kt agl= 1498ft pitch= 8.6deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=138.3kt agl= 1501ft pitch= 7.6deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=138.3kt agl= 1504ft pitch= 7.6deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=138.3kt agl= 1506ft pitch= 8.8deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=138.1kt agl= 1510ft pitch= 9.4deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=138.2kt agl= 1513ft pitch= 7.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.4kt agl= 1515ft pitch= 7.2deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.6kt agl= 1515ft pitch= 8.0deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=138.7kt agl= 1515ft pitch= 9.6deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=138.5kt agl= 1518ft pitch=11.0deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=138.3kt agl= 1521ft pitch=10.2deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=138.3kt agl= 1525ft pitch= 8.6deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=138.4kt agl= 1527ft pitch= 8.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.5kt agl= 1529ft pitch=10.7deg thr=0.70
+  decision applied 1.0s after its state  GO-AROUND      ias=138.0kt agl= 1534ft pitch=13.1deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=137.5kt agl= 1541ft pitch=12.5deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=137.2kt agl= 1546ft pitch=12.0deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=136.8kt agl= 1553ft pitch=11.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=136.5kt agl= 1559ft pitch=11.6deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=135.8kt agl= 1571ft pitch=10.8deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=135.5kt agl= 1578ft pitch=10.0deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.4kt agl= 1583ft pitch= 9.3deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.4kt agl= 1586ft pitch= 8.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.4kt agl= 1589ft pitch= 8.8deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=135.7kt agl= 1594ft pitch= 9.2deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.8kt agl= 1595ft pitch= 9.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.8kt agl= 1597ft pitch= 9.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.8kt agl= 1598ft pitch=10.1deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.8kt agl= 1600ft pitch=10.1deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=135.8kt agl= 1604ft pitch= 9.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.9kt agl= 1606ft pitch= 9.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=135.9kt agl= 1609ft pitch= 9.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.9kt agl= 1611ft pitch= 9.7deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=135.8kt agl= 1613ft pitch= 9.9deg thr=0.70
+  decision applied 1.0s after its state  GO-AROUND      ias=135.8kt agl= 1618ft pitch= 9.8deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=135.8kt agl= 1621ft pitch= 9.4deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=135.9kt agl= 1623ft pitch= 9.1deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=136.0kt agl= 1625ft pitch= 9.0deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=136.1kt agl= 1626ft pitch= 9.1deg thr=0.70
+  decision stale 1.0s after its state  GO-AROUND      ias=136.1kt agl= 1629ft pitch= 9.3deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=136.1kt agl= 1630ft pitch= 9.5deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=136.2kt agl= 1631ft pitch= 9.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=136.3kt agl= 1632ft pitch= 9.7deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=136.4kt agl= 1634ft pitch= 9.8deg thr=0.70
+  decision applied 1.0s after its state  GO-AROUND      ias=136.5kt agl= 1636ft pitch= 9.9deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=136.5kt agl= 1638ft pitch= 9.7deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=136.6kt agl= 1640ft pitch= 9.6deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=136.6kt agl= 1642ft pitch= 9.5deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=136.7kt agl= 1643ft pitch= 9.5deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=136.9kt agl= 1646ft pitch= 8.7deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=137.1kt agl= 1649ft pitch= 7.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=137.4kt agl= 1650ft pitch= 6.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=137.8kt agl= 1650ft pitch= 6.0deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.3kt agl= 1649ft pitch= 6.3deg thr=0.70
+  decision applied 1.0s after its state  GO-AROUND      ias=139.0kt agl= 1645ft pitch= 7.2deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.5kt agl= 1641ft pitch= 7.7deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.8kt agl= 1638ft pitch= 8.1deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.2kt agl= 1635ft pitch= 8.3deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.4kt agl= 1634ft pitch= 8.1deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=140.8kt agl= 1631ft pitch= 9.0deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.9kt agl= 1632ft pitch=10.1deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.8kt agl= 1636ft pitch=10.9deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=140.4kt agl= 1640ft pitch=10.7deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.3kt agl= 1642ft pitch= 9.6deg thr=0.70
+  decision applied 1.0s after its state  GO-AROUND      ias=140.1kt agl= 1648ft pitch= 8.5deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.0kt agl= 1649ft pitch= 9.3deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.9kt agl= 1651ft pitch= 9.7deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.7kt agl= 1656ft pitch= 9.5deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.6kt agl= 1663ft pitch= 9.1deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=139.6kt agl= 1672ft pitch= 9.4deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.5kt agl= 1676ft pitch=10.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=139.4kt agl= 1678ft pitch=10.1deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=139.3kt agl= 1681ft pitch= 9.6deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=139.3kt agl= 1683ft pitch= 9.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=139.3kt agl= 1684ft pitch= 8.4deg thr=0.70
+  decision applied 0.9s after its state  GO-AROUND      ias=139.5kt agl= 1687ft pitch= 8.1deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.6kt agl= 1688ft pitch= 8.4deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.6kt agl= 1688ft pitch= 8.4deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.7kt agl= 1689ft pitch= 8.1deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.8kt agl= 1690ft pitch= 7.9deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=140.1kt agl= 1690ft pitch= 8.4deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.1kt agl= 1689ft pitch= 9.0deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.1kt agl= 1689ft pitch= 9.4deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.0kt agl= 1689ft pitch= 9.4deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.0kt agl= 1689ft pitch= 8.9deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=140.1kt agl= 1690ft pitch= 8.3deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.2kt agl= 1691ft pitch= 8.7deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.2kt agl= 1692ft pitch= 8.8deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.2kt agl= 1693ft pitch= 8.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.2kt agl= 1694ft pitch= 8.5deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=140.4kt agl= 1695ft pitch= 8.9deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.4kt agl= 1695ft pitch= 9.5deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=140.3kt agl= 1695ft pitch= 9.9deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=140.0kt agl= 1696ft pitch= 9.8deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.9kt agl= 1697ft pitch= 8.9deg thr=0.70
+  decision stale 1.2s after its state  GO-AROUND      ias=139.9kt agl= 1698ft pitch= 8.8deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.9kt agl= 1699ft pitch=10.3deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.7kt agl= 1700ft pitch=10.9deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=139.5kt agl= 1702ft pitch= 9.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=139.4kt agl= 1703ft pitch= 8.4deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=139.7kt agl= 1700ft pitch= 8.8deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=139.6kt agl= 1701ft pitch=11.8deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=139.3kt agl= 1702ft pitch=13.2deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=138.7kt agl= 1707ft pitch=12.3deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=138.4kt agl= 1713ft pitch= 9.7deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=138.7kt agl= 1730ft pitch= 7.0deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=138.9kt agl= 1732ft pitch=10.5deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.7kt agl= 1732ft pitch=11.9deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.4kt agl= 1732ft pitch=10.6deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=138.3kt agl= 1731ft pitch= 7.0deg thr=0.70
+  decision applied 0.9s after its state  GO-AROUND      ias=139.1kt agl= 1732ft pitch= 2.7deg thr=0.70
+  decision applied 0.7s after its state  GO-AROUND      ias=140.0kt agl= 1726ft pitch= 4.2deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=140.5kt agl= 1721ft pitch= 5.5deg thr=0.70
+  decision applied 0.6s after its state  GO-AROUND      ias=141.0kt agl= 1714ft pitch= 5.8deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=141.3kt agl= 1710ft pitch= 4.9deg thr=0.70
+  decision stale 1.1s after its state  GO-AROUND      ias=142.4kt agl= 1697ft pitch= 4.6deg thr=0.70
+  decision applied 0.8s after its state  GO-AROUND      ias=143.2kt agl= 1685ft pitch= 6.7deg thr=0.70
+WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: it keeps the last controls it received.
+Error: No FlightGear telemetry; check UDP flags and protocol XML.
