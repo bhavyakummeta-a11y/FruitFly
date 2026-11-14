@@ -108,6 +108,23 @@ over telnet, and `fruitfly.nas` switches the autopilot off (never sooner than 7 
 after spawn). Before this, the autopilot went off on a fixed 7 s timer and the
 plane stalled while FlightGear was still loading.
 
+**No-autopilot rule (mandatory, every aircraft): the fly never uses the airplane's
+autopilot or autothrottle.** It is enforced in three places:
+
+- **In FlightGear (737):** from the handover on, `fruitfly.nas` forces CMD A,
+  CMD B and the autothrottle off whenever anything engages them, and counts each
+  attempt in `/fruitfly/autopilot/violations`. There is no override.
+- **In the controllers (all aircraft):** `flight_simulator` and `takeoff_landing`
+  open an `AutopilotGuard` (`flightgear.py`) over telnet. Without telnet they
+  refuse to fly. After the handover they wait until the autopilot is confirmed
+  off before the fly touches the controls, then check it every second. If it is
+  on, they force it off and count it (`autopilot_violations` in the result). If
+  it stays on, the run stops and FlightGear is paused. The guard watches the
+  737 (CMD A/B, autothrottle), the C172's KAP140 and FlightGear's generic
+  `/autopilot/locks`.
+- **In the code:** `tests/test_no_autopilot.py` fails if repo code engages an
+  autopilot, reintroduces an override, or weakens the guard.
+
 ## What actually controls the airplane
 
 - **Connectome mode:** the starter notebook's LIF equations run on the downloaded
@@ -195,8 +212,9 @@ gain tuning on the teammate's machine.
    (100 kt for the C172), with engines running over flat terrain or water.
    `python -m flight_simulator.launch_fg --instance 0` does this for you.
    The 737 auto-engages its own autopilot on an in-air start; our overlay
-   (`fruitfly.nas`) switches it back off after about 7 s. Select calm weather. Disable
-   any aircraft autopilot and conflicting joystick/mouse control inputs. In the
+   (`fruitfly.nas`) switches it off at the handover and keeps it off (no-autopilot
+   rule, above). Select calm weather. Disable conflicting joystick/mouse control
+   inputs. In the
    launcher, add these additional arguments:
 
    ```text

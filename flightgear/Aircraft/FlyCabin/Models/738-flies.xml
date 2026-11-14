@@ -12,6 +12,89 @@
   <!-- The fly pilot (its brain flies the plane). -->
   <model><name>flypilot</name><path>Aircraft/FlyCabin/Models/fly-pilot.xml</path><offsets><x-m>-17.100</x-m><y-m>-0.510</y-m><z-m>0.460</z-m></offsets></model>
 
+  <!-- Clear view: hide the overhead panel and centre post while /fruitfly/pilot/clear-view
+       is true (fruitfly.nas sets it in the "Cockpit: fly pilot" view). -->
+  <animation>
+    <type>select</type>
+    <object-name>dorrhfront</object-name>
+    <object-name>batt-cover</object-name>
+    <object-name>BatterySw</object-name>
+    <object-name>BusTransferSw</object-name>
+    <object-name>Circle.175</object-name>
+    <object-name>Circle.176</object-name>
+    <object-name>Circle.177</object-name>
+    <object-name>Circle.178</object-name>
+    <object-name>Circle.179</object-name>
+    <object-name>Circle.180</object-name>
+    <object-name>Circle.181</object-name>
+    <object-name>Circle.182</object-name>
+    <object-name>Circle.183</object-name>
+    <object-name>Circle.184</object-name>
+    <object-name>Circle.185</object-name>
+    <object-name>Circle.186</object-name>
+    <object-name>Circle.187</object-name>
+    <object-name>Circle.188</object-name>
+    <object-name>Circle.189</object-name>
+    <object-name>Circle.190</object-name>
+    <object-name>Circle.191</object-name>
+    <object-name>Circle.192</object-name>
+    <object-name>Circle.193</object-name>
+    <object-name>Circle.194</object-name>
+    <object-name>Circle.195</object-name>
+    <object-name>Circle.196</object-name>
+    <object-name>Circle.197</object-name>
+    <object-name>Circle.198</object-name>
+    <object-name>Circle.199</object-name>
+    <object-name>Circle.200</object-name>
+    <object-name>Circle.201</object-name>
+    <object-name>Circle.202</object-name>
+    <object-name>Circle.203</object-name>
+    <object-name>Circle.204</object-name>
+    <object-name>Circle.205</object-name>
+    <object-name>Circle.206</object-name>
+    <object-name>Circle.207</object-name>
+    <object-name>Circle.208</object-name>
+    <object-name>Circle.209</object-name>
+    <object-name>Circle.210</object-name>
+    <object-name>Circle.211</object-name>
+    <object-name>Circle.212</object-name>
+    <object-name>Circle.213</object-name>
+    <object-name>Circle.214</object-name>
+    <object-name>Circle.215</object-name>
+    <object-name>Circle.216</object-name>
+    <object-name>Circle.223</object-name>
+    <object-name>Circle.224</object-name>
+    <object-name>Circle.225</object-name>
+    <object-name>Circle.226</object-name>
+    <object-name>Drive1Sw</object-name>
+    <object-name>Drive2Sw</object-name>
+    <object-name>engNo1start</object-name>
+    <object-name>engNo2start</object-name>
+    <object-name>FuelPumpCL</object-name>
+    <object-name>FuelPumpCR</object-name>
+    <object-name>FuelPumpLAft</object-name>
+    <object-name>FuelPumpLFwd</object-name>
+    <object-name>FuelPumpRAft</object-name>
+    <object-name>FuelPumpRFwd</object-name>
+    <object-name>GalleySw</object-name>
+    <object-name>knob1.028</object-name>
+    <object-name>knob1.030</object-name>
+    <object-name>knob1.031</object-name>
+    <object-name>knob1.032</object-name>
+    <object-name>knob1.033</object-name>
+    <object-name>knob1.034</object-name>
+    <object-name>knob1.035</object-name>
+    <object-name>knob1.036</object-name>
+    <object-name>knob1.037</object-name>
+    <object-name>knob1.038</object-name>
+    <object-name>knob1.039</object-name>
+    <object-name>knob1.040</object-name>
+    <object-name>Plane.004</object-name>
+    <object-name>StbyPwSw</object-name>
+    <object-name>Cube</object-name>
+    <condition><not><property>/fruitfly/pilot/clear-view</property></not></condition>
+  </animation>
+
   <!-- One <model> per occupied seat. -->
   <model><name>fly000</name><path>Aircraft/FlyCabin/Models/fly-group1.xml</path><offsets><x-m>-12.600</x-m><y-m>-0.950</y-m><z-m>0.520</z-m><heading-deg>0.2</heading-deg></offsets></model>
   <model><name>fly001</name><path>Aircraft/FlyCabin/Models/fly-group1.xml</path><offsets><x-m>-12.600</x-m><y-m>-1.410</y-m><z-m>0.520</z-m><heading-deg>-0.2</heading-deg></offsets></model>

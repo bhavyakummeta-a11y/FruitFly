@@ -40,7 +40,7 @@ The stock 737 has a cockpit but **no passenger cabin**. Its "Economy" views only
 | `/controls/engines/engine[0]/throttle` | 0..1 | Throttle. `fruitfly.nas` copies it to `engine[1]`, so code written for the single-engine C172 (`flight_simulator/protocols/flybrain-controls.xml`) drives both engines. Set `/fruitfly/mirror-throttle` to `false` to control the engines separately. |
 | `/fruitfly/autostart` | bool | Set to `true` to run the 737's own engine autostart, which takes about 30–60 s to spool up. It resets itself to `false`. |
 | `/fruitfly/passengers/activity` | 0..1 | How agitated the passengers are: wing flapping speed and amplitude, plus head turning. Drive it from a firing rate, such as normalised DNp09. |
-| `/fruitfly/keep-737-autopilot` | bool | By default the 737's own autopilot and autothrottle, which its in-air start switches on, are turned off about 7 s after spawning so the fly is the one flying. Set to `true` to keep them. |
+| `/fruitfly/autopilot/forbidden`, `/fruitfly/autopilot/violations` | read | **No-autopilot rule: the fly never uses the airplane autopilot.** The 737's in-air start switches its autopilot and autothrottle on to hold the plane until a controller connects. At the handover they go off and `forbidden` becomes `true`. From then on, any attempt to engage CMD A, CMD B or the autothrottle is forced off and counted in `violations`. There is no override (the old `/fruitfly/keep-737-autopilot` switch was removed). |
 | `/controls/gear/brake-parking` | 0/1 | Release the parking brake before trying to roll. |
 | `/velocities/groundspeed-kt`, `/velocities/airspeed-kt` | read | Speed |
 

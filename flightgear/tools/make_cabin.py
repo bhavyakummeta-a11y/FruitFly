@@ -378,6 +378,28 @@ PILOT_XML = """<?xml version="1.0"?>
 </PropertyList>
 """
 
+# Stock cockpit objects (Models/cockpit.ac) hidden in the "Cockpit: fly pilot" view so the
+# windshield is a clear, wide view outside: the overhead panel (Plane.004) with all its
+# switches/knobs (everything above 1.38 m over the seats) and the centre windshield post
+# (Cube), plus the cockpit shell (dorrhfront: roof, side walls and window frames) for an
+# open, panoramic view. Found by bounding box; the stock captain view still shows them.
+CLEAR_VIEW_HIDE = [
+    'dorrhfront',
+    'batt-cover', 'BatterySw', 'BusTransferSw', 'Circle.175', 'Circle.176', 'Circle.177',
+    'Circle.178', 'Circle.179', 'Circle.180', 'Circle.181', 'Circle.182', 'Circle.183',
+    'Circle.184', 'Circle.185', 'Circle.186', 'Circle.187', 'Circle.188', 'Circle.189',
+    'Circle.190', 'Circle.191', 'Circle.192', 'Circle.193', 'Circle.194', 'Circle.195',
+    'Circle.196', 'Circle.197', 'Circle.198', 'Circle.199', 'Circle.200', 'Circle.201',
+    'Circle.202', 'Circle.203', 'Circle.204', 'Circle.205', 'Circle.206', 'Circle.207',
+    'Circle.208', 'Circle.209', 'Circle.210', 'Circle.211', 'Circle.212', 'Circle.213',
+    'Circle.214', 'Circle.215', 'Circle.216', 'Circle.223', 'Circle.224', 'Circle.225',
+    'Circle.226', 'Drive1Sw', 'Drive2Sw', 'engNo1start', 'engNo2start', 'FuelPumpCL',
+    'FuelPumpCR', 'FuelPumpLAft', 'FuelPumpLFwd', 'FuelPumpRAft', 'FuelPumpRFwd', 'GalleySw',
+    'knob1.028', 'knob1.030', 'knob1.031', 'knob1.032', 'knob1.033', 'knob1.034',
+    'knob1.035', 'knob1.036', 'knob1.037', 'knob1.038', 'knob1.039', 'knob1.040',
+    'Plane.004', 'StbyPwSw', 'Cube',
+]
+
 # Captain's seat: the stock captain eye point is (view axes) x -0.51, y 1.28, z -17.18,
 # i.e. model x -17.18 (forward), y -0.51 (left), z 1.28 (up). Put the fly's eyes there.
 PILOT_SEAT = (-17.10, -0.51, 0.46)
@@ -396,6 +418,14 @@ TOP_XML_HEAD = """<?xml version="1.0"?>
   <!-- The fly pilot (its brain flies the plane). -->
   <model><name>flypilot</name><path>Aircraft/FlyCabin/Models/fly-pilot.xml</path><offsets><x-m>{px:.3f}</x-m><y-m>{py:.3f}</y-m><z-m>{pz:.3f}</z-m></offsets></model>
 
+  <!-- Clear view: hide the overhead panel and centre post while /fruitfly/pilot/clear-view
+       is true (fruitfly.nas sets it in the "Cockpit: fly pilot" view). -->
+  <animation>
+    <type>select</type>
+{hide}
+    <condition><not><property>/fruitfly/pilot/clear-view</property></not></condition>
+  </animation>
+
   <!-- One <model> per occupied seat. -->
 """
 
@@ -410,7 +440,8 @@ def main():
     with open(os.path.join(OUT, "fly-pilot.xml"), "w", newline="\n") as f:
         f.write(PILOT_XML.format(rx=WING_ROOT[0], ry=WING_ROOT_Y, rz=WING_ROOT[1]))
     rng = random.Random(SEED)
-    parts = [TOP_XML_HEAD.format(px=PILOT_SEAT[0], py=PILOT_SEAT[1], pz=PILOT_SEAT[2])]
+    hide = "\n".join(f"    <object-name>{n}</object-name>" for n in CLEAR_VIEW_HIDE)
+    parts = [TOP_XML_HEAD.format(px=PILOT_SEAT[0], py=PILOT_SEAT[1], pz=PILOT_SEAT[2], hide=hide)]
     n = 0
     for i, (x, y, z) in enumerate(seats):
         if rng.random() < EMPTY_FRACTION:

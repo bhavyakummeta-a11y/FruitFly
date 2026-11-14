@@ -48,7 +48,7 @@
       </config>
     </view>
     <!-- The fly pilot at the controls, the panel and the windshield in one frame:
-         from the jump seat behind and right of the captain, looking forward-left. -->
+         just behind and right of the captain, looking forward-left at the fly and out the windshield. -->
     <view n="132">
       <name>Cockpit: fly pilot</name>
       <type>lookfrom</type>
@@ -56,12 +56,12 @@
       <config>
         <from-model type="bool">true</from-model>
         <from-model-idx type="int">0</from-model-idx>
-        <default-field-of-view-deg type="double">80</default-field-of-view-deg>
-        <pitch-offset-deg>-8</pitch-offset-deg>
-        <heading-offset-deg>14</heading-offset-deg>
-        <x-offset-m archive="y">0.25</x-offset-m>
-        <y-offset-m archive="y">1.55</y-offset-m>
-        <z-offset-m archive="y">-16.05</z-offset-m>
+        <default-field-of-view-deg type="double">85</default-field-of-view-deg>
+        <pitch-offset-deg>2</pitch-offset-deg>
+        <heading-offset-deg>34</heading-offset-deg>
+        <x-offset-m archive="y">0.15</x-offset-m>
+        <y-offset-m archive="y">1.38</y-offset-m>
+        <z-offset-m archive="y">-16.75</z-offset-m>
       </config>
     </view>
   </sim>
