@@ -1,0 +1,24 @@
+    0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+    0.12 [WARN]:aircraft  C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\fg_init.cxx:455: Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+    0.12 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:481: Creating osgViewer::CompositeViewer
+    0.13 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:488: affinity=none
+    0.13 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:500: Calling composite_viewer->setUseConfigureAffinity() with flag=0
+    1.55 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    1.55 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    1.56 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\main.cxx:793: Enabling ATI/AMD viewport hack
+    1.59 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: Warning: GraphicsWindowWin32::grabFocus() - Failed grabbing the focus
+    1.59 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\fg_os_osgviewer.cxx:456: affinity=none
+   13.66 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+   13.66 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+   15.37 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   15.46 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   18.68 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+   18.72 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+   18.72 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+   18.72 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+   18.73 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+   19.31 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+   21.19 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage 5
+   21.19 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage e
+   23.66 [WARN]:network   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Network\http\JsonUriHandler.cxx:103: JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+   23.88 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\mipmap.cxx:276: mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png

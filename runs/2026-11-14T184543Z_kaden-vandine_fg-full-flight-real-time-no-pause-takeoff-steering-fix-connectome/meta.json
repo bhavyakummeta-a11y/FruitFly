@@ -1,0 +1,40 @@
+{
+  "run_id": "2026-11-14T184543Z_kaden-vandine_fg-full-flight-real-time-no-pause-takeoff-steering-fix-connectome",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 19.8
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 19.8,
+      "to_s": 155.6
+    }
+  ],
+  "name": "full flight real-time (no pause) + takeoff steering fix (connectome)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 26521,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T18:45:43.067844+00:00",
+  "duration_s": 156,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 82,
+  "controller_runs": {},
+  "code": {
+    "commit": "c2b1a57915e6f9bb6932547527b81f9704957f03",
+    "branch": "main"
+  }
+}

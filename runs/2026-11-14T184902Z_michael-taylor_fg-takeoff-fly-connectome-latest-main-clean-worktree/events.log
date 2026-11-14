@@ -1,0 +1,30 @@
+13:49:03 [session] Session 'takeoff fly - CONNECTOME, latest main (clean worktree)' watching fgfs pid 7396 (738-flies)
+13:49:03 [session] Live log page: http://127.0.0.1:8766/
+13:49:04 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+13:49:04 [fgfs] 0.12 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+13:49:04 [fgfs] 0.12 [ALRT]:view      Creating osgViewer::CompositeViewer
+13:49:04 [fgfs] 0.13 [ALRT]:general   affinity=none
+13:49:04 [fgfs] 0.13 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+13:49:04 [fgfs] 1.55 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+13:49:04 [fgfs] 1.55 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+13:49:04 [fgfs] 1.56 [WARN]:general   Enabling ATI/AMD viewport hack
+13:49:04 [fgfs] 1.59 [WARN]:osg       Warning: GraphicsWindowWin32::grabFocus() - Failed grabbing the focus
+13:49:04 [fgfs] 1.59 [ALRT]:view      affinity=none
+13:49:07 [session] Docked: log below and fly brain right of FlightGear
+13:49:17 [fgfs] 13.66 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+13:49:17 [fgfs] 13.66 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+13:49:18 [fgfs] 15.37 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+13:49:18 [fgfs] 15.46 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+13:49:21 [fgfs] 18.68 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+13:49:21 [fgfs] 18.72 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+13:49:21 [fgfs] 18.72 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+13:49:21 [fgfs] 18.72 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+13:49:21 [fgfs] 18.73 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+13:49:23 [fgfs] 19.31 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+13:49:26 [session] Connected to property API on :8080
+13:49:26 [fgfs] 21.19 [WARN]:input     Unhandled HID usage page:d with usage 5
+13:49:26 [fgfs] 21.19 [WARN]:input     Unhandled HID usage page:d with usage e
+13:49:26 [fgfs] 23.66 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:49:26 [fgfs] 23.88 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+13:49:29 [session] Property API stopped answering
+13:49:29 [session] FlightGear exited (code 3221225477) - crashed or force-closed

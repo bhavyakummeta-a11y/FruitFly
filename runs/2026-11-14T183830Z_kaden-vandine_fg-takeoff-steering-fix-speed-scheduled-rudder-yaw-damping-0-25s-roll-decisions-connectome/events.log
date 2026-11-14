@@ -1,0 +1,33 @@
+13:38:30 [session] Session 'takeoff steering fix: speed-scheduled rudder, yaw damping, 0.25s roll decisions (connectome)' watching fgfs pid 23434 (738-flies)
+13:38:30 [session] Live log page: http://127.0.0.1:8765/
+13:38:36 [session] Connected to property API on :8080
+13:39:08 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+13:39:08 [flightgear] Paused
+13:39:10 [flightgear] Resumed
+13:39:11 [flightgear] Paused
+13:39:15 [session] Property API stopped answering
+13:39:28 [session] Connected to property API on :8080
+13:39:28 [flightgear] Resumed
+13:39:29 [flightgear] Paused
+13:39:31 [flightgear] Resumed
+13:39:32 [flightgear] Paused
+13:39:34 [flightgear] Resumed
+13:39:37 [flightgear] Paused
+13:39:40 [flightgear] Resumed
+13:39:43 [flightgear] Paused
+13:39:46 [flightgear] Resumed
+13:39:48 [flightgear] Paused
+13:39:49 [flightgear] Resumed
+13:39:51 [flightgear] Paused
+13:39:53 [flightgear] Resumed
+13:39:57 [flightgear] Paused
+13:40:00 [flightgear] Resumed
+13:40:09 [flightgear] Paused
+13:40:11 [flightgear] Resumed
+13:40:13 [flightgear] Paused
+13:40:14 [flightgear] Resumed
+13:40:16 [flightgear] Paused
+13:40:17 [flightgear] Resumed
+13:40:19 [flightgear] Paused
+13:40:23 [session] Property API stopped answering
+13:40:23 [session] FlightGear exited (code None)

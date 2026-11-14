@@ -1,0 +1,14 @@
+13:45:43 [session] Session 'full flight real-time (no pause) + takeoff steering fix (connectome)' watching fgfs pid 26521 (738-flies)
+13:45:43 [session] Live log page: http://127.0.0.1:8765/
+13:45:49 [session] Connected to property API on :8080
+13:45:56 [session] Property API stopped answering
+13:46:01 [session] Connected to property API on :8080
+13:46:02 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+13:46:06 [session] Property API stopped answering
+13:46:08 [session] Connected to property API on :8080
+13:46:10 [session] Property API stopped answering
+13:46:11 [session] Connected to property API on :8080
+13:46:58 [session] Property API stopped answering
+13:47:00 [session] Connected to property API on :8080
+13:48:08 [session] Property API stopped answering
+13:48:08 [session] FlightGear exited (code None)

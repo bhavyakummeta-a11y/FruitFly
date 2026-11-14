@@ -1,0 +1,40 @@
+{
+  "run_id": "2026-11-14T184852Z_kaden-vandine_fg-full-flight-real-time-steering-fix-fg-detached-connectome",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 41.4
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 41.4,
+      "to_s": 188.2
+    }
+  ],
+  "name": "full flight real-time + steering fix, FG detached (connectome)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 28283,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T18:48:52.857582+00:00",
+  "duration_s": 188,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 93,
+  "controller_runs": {},
+  "code": {
+    "commit": "c2b1a57915e6f9bb6932547527b81f9704957f03",
+    "branch": "main"
+  }
+}

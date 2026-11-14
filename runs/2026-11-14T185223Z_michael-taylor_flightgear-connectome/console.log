@@ -1,0 +1,6 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T185223Z_michael-taylor_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the takeoff
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+Error: Missing connectome data: Completeness_783.csv, Connectivity_783.parquet, annotations.tsv. See docs/FLIGHT_SIMULATOR.md; no baseline substitution occurs.
