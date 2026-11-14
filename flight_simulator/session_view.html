@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FruitFly Sim Log</title>
+<style>
+:root {
+  --surface: #fcfcfb; --panel: #ffffff; --border: #e4e3df;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #8a8984;
+  --airplane: #2a78d6; --fly: #eb6834; --grid: #ecebe7;
+  --good: #0ca30c; --warn: #b07800; --bad: #e34948;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #1a1a19; --panel: #222220; --border: #383835;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88;
+    --airplane: #3987e5; --fly: #d95926; --grid: #2c2c2a;
+    --good: #0ca30c; --warn: #fab219; --bad: #e66767;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 14px 16px; border-bottom: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; }
+h1 { font-size: 17px; margin: 0; }
+.status { font-weight: 600; }
+.status::before { content: "●  "; }
+.status.ok { color: var(--good); } .status.wait { color: var(--warn); } .status.done { color: var(--text-2); }
+.meta { color: var(--text-2); font-size: 13px; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding: 14px 16px; }
+@media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); } }
+section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); margin: 0 0 10px; }
+h2 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+.charts { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.chart .label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-2); }
+.chart .value { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 600; }
+.chart svg { width: 100%; height: 64px; display: block; overflow: visible; cursor: crosshair; }
+.empty { color: var(--muted); font-size: 13px; }
+#log-section { grid-column: 1 / -1; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.toolbar label { font-size: 12px; color: var(--text-2); display: flex; gap: 4px; align-items: center; }
+#log { height: 46vh; min-height: 240px; overflow: auto; font: 12px/1.5 ui-monospace, Consolas, monospace;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 8px; }
+.row { white-space: pre-wrap; word-break: break-word; }
+.row .t { color: var(--muted); }
+.row .src { display: inline-block; min-width: 86px; color: var(--text-2); }
+.row.fgfs .src::before { content: "✈ "; } .row.controller .src::before { content: "🪰 "; }
+.row.session .src::before { content: "• "; }
+.row.alert .text { color: var(--bad); }
+table.now { border-collapse: collapse; font-size: 12px; width: 100%; margin-top: 10px; }
+table.now td { padding: 2px 6px 2px 0; color: var(--text-2); }
+table.now td.v { color: var(--text); font-variant-numeric: tabular-nums; text-align: right; }
+.tip { position: fixed; pointer-events: none; background: var(--text); color: var(--surface);
+  font-size: 12px; padding: 3px 7px; border-radius: 4px; display: none; z-index: 5; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FruitFly sim log</h1>
+  <span id="status" class="status wait">Connecting…</span>
+  <span id="meta" class="meta"></span>
+</header>
+<main>
+  <section>
+    <h2><span class="swatch" style="background:var(--airplane)"></span>Airplane</h2>
+    <div class="charts" id="airplane-charts"></div>
+    <table class="now" id="airplane-now"></table>
+  </section>
+  <section>
+    <h2><span class="swatch" style="background:var(--fly)"></span>Fly activity</h2>
+    <div class="charts" id="fly-charts"></div>
+    <p class="empty" id="fly-empty">Cabin fly activity shows when the 738-flies aircraft is loaded. Brain
+      signals (looming input, escape output, LC4/LPLC2 + DNp01 rates) appear while
+      <code>python -m flight_simulator</code> runs.</p>
+  </section>
+  <section id="log-section">
+    <h2>Running log</h2>
+    <div class="toolbar">
+      <label><input type="checkbox" data-src="session" checked> session</label>
+      <label><input type="checkbox" data-src="fgfs" checked> FlightGear</label>
+      <label><input type="checkbox" data-src="controller" checked> controller</label>
+      <label><input type="checkbox" id="follow" checked> follow</label>
+    </div>
+    <div id="log" role="log" aria-live="polite"></div>
+  </section>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const AIRPLANE = [['alt_ft', 'Altitude', 'ft', 0], ['ias_kt', 'Airspeed', 'kt', 0],
+                  ['vs_fpm', 'Vertical speed', 'fpm', 0], ['roll_deg', 'Roll', '°', 1]];
+const NOW = [['agl_ft', 'AGL ft', 0], ['heading_deg', 'Heading °', 0], ['pitch_deg', 'Pitch °', 1],
+             ['throttle', 'Throttle', 2], ['elevator', 'Elevator', 2], ['aileron', 'Aileron', 2],
+             ['flaps', 'Flaps', 2], ['gear_down', 'Gear down', 0]];
+let since = 0, finished = false;
+const tip = document.getElementById('tip');
+const charts = {};
+
+function chart(container, key, title, unit, digits, color) {
+  if (charts[key]) return charts[key];
+  const el = document.createElement('div');
+  el.className = 'chart';
+  el.innerHTML = `<div class="label"><span>${title}</span><span class="value">–</span></div>
+    <svg viewBox="0 0 300 64" preserveAspectRatio="none" role="img" aria-label="${title} over time">
+      <line class="base" x1="0" x2="300" stroke="var(--grid)" stroke-width="1"/>
+      <path fill="none" stroke="${color}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+      <line class="cross" y1="0" y2="64" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke" visibility="hidden"/>
+    </svg>`;
+  container.appendChild(el);
+  const c = {el, unit, digits, xs: [], ys: [], svg: el.querySelector('svg')};
+  c.svg.addEventListener('mousemove', e => {
+    if (!c.ys.length) return;
+    const r = c.svg.getBoundingClientRect();
+    const i = Math.max(0, Math.min(c.ys.length - 1, Math.round((e.clientX - r.left) / r.width * (c.ys.length - 1))));
+    const x = i / Math.max(1, c.ys.length - 1) * 300;
+    const cross = c.svg.querySelector('.cross');
+    cross.setAttribute('x1', x); cross.setAttribute('x2', x); cross.setAttribute('visibility', 'visible');
+    tip.textContent = `${fmt(c.ys[i], c.digits)} ${c.unit}  ·  ${c.xs[i]}`;
+    tip.style.display = 'block'; tip.style.left = (e.clientX + 12) + 'px'; tip.style.top = (e.clientY - 28) + 'px';
+  });
+  c.svg.addEventListener('mouseleave', () => {
+    tip.style.display = 'none'; c.svg.querySelector('.cross').setAttribute('visibility', 'hidden');
+  });
+  return charts[key] = c;
+}
+
+function fmt(v, d) { return (v === null || v === undefined || v === '' || isNaN(v)) ? '–' : Number(v).toFixed(d); }
+
+function draw(c, xs, ys) {
+  const pts = ys.map((y, i) => [i, y === null || y === '' ? NaN : Number(y)]).filter(p => isFinite(p[1]));
+  c.xs = xs; c.ys = ys;
+  c.el.querySelector('.value').textContent = pts.length ? `${fmt(pts[pts.length - 1][1], c.digits)} ${c.unit}` : '–';
+  if (pts.length < 2) { c.svg.querySelector('path').setAttribute('d', ''); return; }
+  let lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1]));
+  if (hi - lo < 1e-9) { hi += 1; lo -= 1; }
+  const n = Math.max(1, ys.length - 1), Y = v => 60 - (v - lo) / (hi - lo) * 56;
+  c.svg.querySelector('path').setAttribute('d', pts.map((p, k) => `${k ? 'L' : 'M'}${(p[0] / n * 300).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(''));
+  const zero = lo < 0 && hi > 0 ? Y(0) : 60;
+  const base = c.svg.querySelector('.base'); base.setAttribute('y1', zero); base.setAttribute('y2', zero);
+}
+
+function timeLabel(sec) { const m = Math.floor(sec / 60), s = Math.round(sec % 60); return `${m}:${String(s).padStart(2, '0')}`; }
+
+function render(d) {
+  const st = document.getElementById('status');
+  finished = d.status.startsWith('FlightGear closed') && d.status.includes('saved');
+  st.textContent = d.paused ? 'FlightGear paused' : d.status;
+  st.className = 'status ' + (d.status.startsWith('FlightGear closed') ? 'done' : d.connected ? 'ok' : 'wait');
+  const fg = d.flightgear || {};
+  document.getElementById('meta').textContent =
+    [d.id, fg.version && `FlightGear ${fg.version}`, fg.aircraft, `${timeLabel(d.elapsed_s)} elapsed`].filter(Boolean).join('  ·  ');
+
+  const s = d.series, xs = s.t.map(timeLabel);
+  const ac = document.getElementById('airplane-charts');
+  for (const [k, t, u, dg] of AIRPLANE) draw(chart(ac, k, t, u, dg, 'var(--airplane)'), xs, s[k]);
+  document.getElementById('airplane-now').innerHTML = NOW.map(([k, t, dg]) =>
+    `<tr><td>${t}</td><td class="v">${fmt(d.latest[k], dg)}</td></tr>`).join('');
+
+  const fc = document.getElementById('fly-charts');
+  let anyFly = false;
+  if (s.cabin_activity.some(v => v !== null && v !== '')) {
+    draw(chart(fc, 'cabin_activity', 'Cabin flies activity', '', 2, 'var(--fly)'), xs, s.cabin_activity);
+    anyFly = true;
+  }
+  if (d.fly_header && d.fly_controller.length) {
+    const cols = d.fly_header.split(','), rows = d.fly_controller.map(r => r.split(','));
+    const ti = cols.indexOf('time'), tx = rows.map(r => `${Number(r[ti]).toFixed(1)} s`);
+    const ALWAYS = {looming_hz: 'Looming input (LC4/LPLC2 drive)', escape_hz: 'Escape output (DNp01 Giant Fibre)'};
+    cols.forEach((col, j) => {
+      if (['time', 'brain', 'trial_s', 'in_looming_hz', 'DNp01_hz'].includes(col)) return;
+      const ys = rows.map(r => r[j]);
+      // neuron groups appear once they fire, so silent DNs don't bury the active ones
+      if (!ALWAYS[col] && !charts['ctrl_' + col] && !ys.some(v => Number(v) > 0)) return;
+      const title = ALWAYS[col] || col.replace(/^in_/, 'input ').replace(/_hz$/, '') + ' rate';
+      draw(chart(fc, 'ctrl_' + col, title, col.endsWith('_hz') ? 'Hz' : '', 1, 'var(--fly)'), tx, ys);
+    });
+    anyFly = true;
+  }
+  document.getElementById('fly-empty').style.display = anyFly ? 'none' : 'block';
+
+  const log = document.getElementById('log');
+  const frag = document.createDocumentFragment();
+  for (const e of d.events) {
+    const row = document.createElement('div');
+    row.className = `row ${e.src}` + (/\[(ALRT|DEV_ALRT)\]|error|crash/i.test(e.text) ? ' alert' : '');
+    row.dataset.src = e.src;
+    row.innerHTML = `<span class="t">${e.t}</span> <span class="src">${e.src}</span> <span class="text"></span>`;
+    row.querySelector('.text').textContent = e.text;
+    row.hidden = !document.querySelector(`input[data-src="${e.src}"]`)?.checked;
+    frag.appendChild(row);
+  }
+  log.appendChild(frag);
+  while (log.childElementCount > 3000) log.firstChild.remove();
+  since = d.event_count;
+  if (document.getElementById('follow').checked) log.scrollTop = log.scrollHeight;
+}
+
+document.querySelectorAll('input[data-src]').forEach(cb => cb.addEventListener('change', () => {
+  document.querySelectorAll(`#log .row[data-src="${cb.dataset.src}"]`).forEach(r => r.hidden = !cb.checked);
+}));
+
+async function tick() {
+  try {
+    const r = await fetch(`/api/state?since=${since}`, {cache: 'no-store'});
+    render(await r.json());
+  } catch (e) {
+    const st = document.getElementById('status');
+    if (!st.className.includes('done')) { st.textContent = 'Session logger stopped'; st.className = 'status done'; }
+    return setTimeout(tick, 5000);
+  }
+  setTimeout(tick, finished ? 5000 : 1000);
+}
+tick();
+</script>
+</body>
+</html>

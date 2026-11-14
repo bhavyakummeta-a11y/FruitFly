@@ -209,7 +209,8 @@ Each run gets `runs/<UTC time>_<who>_<backend>-<brain>/` containing:
 | `feedback.md` | Outcome table + notes. Start here. |
 | `meta.json` | Exact command, args, code commit, dirty/untracked files, Python, FlightGear version |
 | `code.diff` | Uncommitted changes at run time, so anyone can reproduce the run |
-| `telemetry.csv` | Every control step (gzipped if over 5 MB) |
+| `airplane.csv` | **Airplane log**: aircraft state + controls at every control step (gzipped if over 5 MB) |
+| `fly_activity.csv` | **Fly-activity log**: every brain decision: looming input and escape output; in connectome mode also every stimulated input rate (`in_*_hz`) and every descending-neuron readout rate in `READOUTS` (DNp01 Giant Fibre, DNg02 flight power, DNa01/02 steering, ...) + trial time |
 | `console.log`, `result.json` | Printed output and the summary |
 | `fgfs_warnings.log` | FlightGear backend: WARN/ALERT/Nasal lines from `fgfs.log`, terrasync noise removed |
 
@@ -223,8 +224,28 @@ python -m flight_simulator.runlog push                                         #
 
 `--no-push` logs and commits locally only (or set `FRUITFLY_NO_PUSH=1`);
 `--no-runlog` skips logging. A failed push keeps the commit locally, and it goes
-up with the next run. Passing `--log path.csv` still works; the telemetry then
+up with the next run. Passing `--log path.csv` still works; the airplane log then
 goes there instead of the run folder.
+
+### FlightGear session log + live page
+
+Opening FlightGear through any project launcher also starts a session log and
+opens a **live log page** in your browser (`http://127.0.0.1:8765/`): airplane
+charts, fly-activity charts, and a running log of session events, FlightGear
+warnings/Nasal errors, and the output of any controller run started meanwhile.
+When FlightGear closes (or crashes, which is flagged), the session folder
+`runs/<time>_<who>_fg-session/` (`airplane.csv` at 2 Hz from the property API,
+`fly_activity.csv` with the cabin flies' activity, `events.log`,
+`fgfs_warnings.log`, `feedback.md` linking the controller runs) is pushed.
+
+```sh
+python flightgear/launch.py                       # 737 + fly cabin  (--no-log to skip)
+python -m flight_simulator.launch_fg --instance 1 # extra instance   (--no-log to skip)
+python -m flight_simulator.session attach         # FlightGear opened another way (desktop shortcut)
+```
+
+Airplane charts need the property API (`--httpd=8080`, which the launchers set);
+without it the session still records FlightGear's warnings and controller runs.
 
 ## Shared interface for teammates
 

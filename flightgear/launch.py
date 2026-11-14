@@ -33,6 +33,7 @@ def main():
     ap.add_argument("--stock", action="store_true", help="stock 737-800 without the cabin")
     ap.add_argument("--telnet", type=int, default=5500)
     ap.add_argument("--httpd", type=int, default=8080)
+    ap.add_argument("--no-log", action="store_true", help="do not start the session log / live page")
     ap.add_argument("extra", nargs="*", help="extra fgfs args, after --")
     a = ap.parse_args()
 
@@ -50,7 +51,12 @@ def main():
            "--timeofday=noon", "--disable-real-weather-fetch",
            *a.extra]
     print(" ".join(f'"{c}"' if " " in c else c for c in cmd))
-    subprocess.Popen(cmd)
+    proc = subprocess.Popen(cmd)
+    if not a.no_log:
+        # Session log + live page; pushed to the sim-logs branch when FlightGear closes.
+        sys.path.insert(0, os.path.dirname(HERE))
+        from flight_simulator.session import spawn
+        spawn(proc.pid, a.httpd, label="738" if a.stock else "738-flies")
 
 
 if __name__ == "__main__":

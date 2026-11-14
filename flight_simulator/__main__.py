@@ -88,6 +88,10 @@ def run(args, runlog=None):
                     state = bridge.freeze(True)
                     stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
                 escape = brain.escape(stimulus.looming_hz)
+                if runlog:
+                    runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
+                                'looming_hz': stimulus.looming_hz, 'escape_hz': escape,
+                                **getattr(brain, 'last_activity', {})})
                 next_brain = state.time + .5
                 if bridge and args.brain == 'connectome':
                     state = bridge.freeze(False)
@@ -169,7 +173,7 @@ def main():
         from .runlog import RunLog
         runlog = RunLog(args, sys.argv[1:], auto_push=not args.no_push)
         if not args.log:
-            args.log = str(runlog.dir / 'telemetry.csv')
+            args.log = str(runlog.dir / 'airplane.csv')
     code = 1
     try:
         code = run(args, runlog)
