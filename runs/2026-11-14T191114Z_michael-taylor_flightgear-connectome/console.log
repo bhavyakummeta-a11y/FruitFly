@@ -109,3 +109,12 @@ GO-AROUND reached in the air. No Cruise fly yet, so the Landing fly keeps flying
   decision applied 0.1s after its state  GO-AROUND      ias=169.1kt agl= 1420ft pitch= 8.5deg thr=0.70
   decision applied 0.1s after its state  GO-AROUND      ias=169.1kt agl= 1423ft pitch= 8.6deg thr=0.70
   decision applied 0.2s after its state  GO-AROUND      ias=169.1kt agl= 1426ft pitch= 8.7deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=169.4kt agl= 1444ft pitch= 8.6deg thr=0.70
+  decision applied 0.2s after its state  GO-AROUND      ias=169.4kt agl= 1446ft pitch= 8.6deg thr=0.70
+  decision applied 0.2s after its state  GO-AROUND      ias=169.5kt agl= 1449ft pitch= 8.7deg thr=0.70
+  decision applied 0.5s after its state  GO-AROUND      ias=169.6kt agl= 1454ft pitch= 9.0deg thr=0.70
+  decision applied 0.2s after its state  GO-AROUND      ias=169.6kt agl= 1456ft pitch= 9.0deg thr=0.70
+  decision applied 0.1s after its state  GO-AROUND      ias=169.6kt agl= 1458ft pitch= 9.1deg thr=0.70
+  decision applied 0.2s after its state  GO-AROUND      ias=169.6kt agl= 1461ft pitch= 9.2deg thr=0.70
+  decision applied 0.4s after its state  GO-AROUND      ias=169.6kt agl= 1468ft pitch= 9.0deg thr=0.70
+  decision applied 0.2s after its state  GO-AROUND      ias=169.7kt agl= 1471ft pitch= 8.9deg thr=0.70
