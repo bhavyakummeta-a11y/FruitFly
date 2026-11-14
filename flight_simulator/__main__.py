@@ -37,6 +37,7 @@ def run(args, runlog=None):
         print('Connectome decisions run synchronously; FlightGear pauses during each trial.', flush=True)
     view = None
     bridge = None
+    scene = None
     log_file = None
     try:
         if args.backend == 'flightgear':
@@ -64,6 +65,17 @@ def run(args, runlog=None):
             obstacles = [replace(o, east=o.east*cs + o.north*scale*sn,
                                  north=-o.east*sn + o.north*scale*cs,
                                  top=max(o.top, state.altitude+500)) for o in obstacles]
+        if bridge and not args.no_scene and not course.get('scenery'):
+            # Show the virtual cylinders as live towers inside FlightGear. A fixed
+            # scenery course (flightgear/SCENERY.md) already has its own towers.
+            try:
+                from .fg_scene import ObstacleScene
+                scene = ObstacleScene(args.telnet_port or args.telemetry_port - 1)
+                n = scene.publish(obstacles, bridge.origin)
+                print(f'Placed {n} obstacle towers in FlightGear (telnet {scene.sock.getpeername()[1]}).', flush=True)
+            except OSError as exc:
+                scene = None
+                print(f'Obstacles not shown in FlightGear (telnet: {exc}); start it with --telnet=5500.', flush=True)
         if args.plot or (args.backend == 'flightgear' and not args.no_plot):
             from .view import View
             view = View(obstacles, scenery=bool(course.get('scenery')))
@@ -114,6 +126,8 @@ def run(args, runlog=None):
                 print(f'{state.time:6.1f}s {controller.phase:6} altitude={state.altitude:7.1f}m '
                       f'speed={state.speed:5.1f}m/s escape={escape:5.1f}Hz clearance={clearance:7.1f}m', flush=True)
                 next_print = state.time + 10
+            if scene and state.time >= next_display:
+                scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
             if view and state.time >= next_display:
                 view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading)
                 next_display = state.time + .2
@@ -139,6 +153,8 @@ def run(args, runlog=None):
     finally:
         if log_file:
             log_file.close()
+        if scene:
+            scene.close()
         if bridge:
             bridge.close()
             print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
@@ -160,6 +176,8 @@ def main():
     parser.add_argument('--log', help='CSV telemetry output path')
     parser.add_argument('--telemetry-port', type=int, default=5501)
     parser.add_argument('--control-port', type=int, default=5502)
+    parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle towers (default: telemetry port - 1)')
+    parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle towers in FlightGear')
     parser.add_argument('--note', help='Feedback note saved with this run log')
     parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')
     parser.add_argument('--no-runlog', action='store_true', help='Skip the run log entirely')
