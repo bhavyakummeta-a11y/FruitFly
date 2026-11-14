@@ -1,0 +1,31 @@
+{
+  "run_id": "2026-11-14T164255Z_michael-taylor_fg-737-obstacle-avoidance-evals",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "737 obstacle avoidance evals",
+  "aircraft": "738-flies",
+  "fgfs_pid": 22456,
+  "fgfs_exit_code": 1,
+  "started_utc": "2026-11-14T16:42:55.195752+00:00",
+  "duration_s": 141,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 30
+  },
+  "airplane_samples": 80,
+  "controller_runs": {
+    "2026-11-14T164342Z_michael-taylor_flightgear-reflex": {
+      "exit_code": 1
+    },
+    "2026-11-14T164454Z_michael-taylor_flightgear-reflex": {
+      "exit_code": 1
+    }
+  },
+  "code": {
+    "commit": "c86158de183ddbcc19323956c3145f9f98247e66",
+    "branch": "main"
+  }
+}
