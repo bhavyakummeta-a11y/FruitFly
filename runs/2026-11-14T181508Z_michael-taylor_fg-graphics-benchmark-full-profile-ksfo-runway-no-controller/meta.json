@@ -1,0 +1,75 @@
+{
+  "run_id": "2026-11-14T181508Z_michael-taylor_fg-graphics-benchmark-full-profile-ksfo-runway-no-controller",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.9,
+      "to_s": 70.0
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the takeoff",
+      "detail": "run 2026-11-14T181613Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 70.0,
+      "to_s": 117.7
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 117.7,
+      "to_s": 135.2
+    }
+  ],
+  "name": "graphics benchmark: full profile, KSFO runway, no controller",
+  "aircraft": "738-flies",
+  "graphics": "full",
+  "fgfs_pid": 20852,
+  "fgfs_exit_code": 1073741845,
+  "started_utc": "2026-11-14T18:15:08.112582+00:00",
+  "duration_s": 135,
+  "httpd_port": 8090,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org-instance1\\fgfs.log",
+    "warning_lines": 48
+  },
+  "airplane_samples": 41,
+  "controller_runs": {
+    "2026-11-14T181613Z_michael-taylor_flightgear-connectome": {
+      "fly": "Takeoff fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "takeoff",
+      "completed": false,
+      "time_s": 24.5,
+      "decisions": 20,
+      "max_centerline_m": 30.9,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": true,
+      "liftoff_x_m": null,
+      "rejected": false,
+      "agl_ft": 0,
+      "ias_kt": 104.6,
+      "stop_x_m": null,
+      "events": [],
+      "decision_timing": {
+        "applied": 20,
+        "skipped": 1,
+        "latency_mean_s": 0.731,
+        "latency_max_s": 2.975
+      },
+      "speed_up_resets": 0,
+      "exit_code": 2
+    }
+  },
+  "code": {
+    "commit": "17381cce6106eebb44adce602b4bf2391a0cde1d",
+    "branch": "main"
+  }
+}

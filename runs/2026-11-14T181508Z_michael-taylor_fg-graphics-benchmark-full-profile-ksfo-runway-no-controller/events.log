@@ -1,0 +1,123 @@
+13:15:09 [session] Session 'graphics benchmark: full profile, KSFO runway, no controller' watching fgfs pid 20852 (738-flies)
+13:15:09 [session] Live log page: http://127.0.0.1:8765/
+13:15:10 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+13:15:10 [fgfs] 0.04 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+13:15:10 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+13:15:10 [fgfs] 0.04 [ALRT]:general   affinity=none
+13:15:10 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+13:15:10 [fgfs] 1.48 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+13:15:10 [fgfs] 1.48 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+13:15:10 [fgfs] 1.49 [WARN]:general   Enabling ATI/AMD viewport hack
+13:15:10 [fgfs] 1.53 [ALRT]:view      affinity=none
+13:15:14 [session] Docked: log below and fly brain right of FlightGear
+13:15:16 [fgfs] 9.51 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+13:15:16 [fgfs] 9.51 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+13:15:17 [fgfs] 10.54 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+13:15:17 [fgfs] 10.64 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+13:15:19 [fgfs] 12.85 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+13:15:19 [fgfs] 12.89 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+13:15:19 [fgfs] 12.89 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+13:15:19 [fgfs] 12.89 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+13:15:19 [fgfs] 12.89 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+13:15:19 [fgfs] 13.46 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+13:15:21 [fgfs] 14.84 [WARN]:input     Unhandled HID usage page:d with usage 5
+13:15:21 [fgfs] 14.84 [WARN]:input     Unhandled HID usage page:d with usage e
+13:15:24 [session] Connected to property API on :8090
+13:15:24 [fgfs] 18.18 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:15:27 [fgfs] 18.97 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+13:15:29 [session] Property API stopped answering
+13:15:29 [fgfs] 22.42 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+13:15:29 [fgfs] 22.85 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+13:15:33 [fgfs] 27.18 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+13:15:33 [fgfs] 27.79 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+13:15:35 [fgfs] 28.09 [ALRT]:flight    Failed to save initial FDM property state
+13:15:41 [session] Connected to property API on :8090
+13:15:41 [fgfs] 35.63 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:15:46 [fgfs] 40.17 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:15:51 [fgfs] 44.94 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:15:55 [fgfs] 49.23 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:01 [fgfs] 55.58 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:08 [fgfs] 62.10 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:14 [fgfs] 68.42 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:15 [controller] Run started: 2026-11-14T181613Z_michael-taylor_flightgear-connectome
+13:16:15 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T181613Z_michael-taylor_flightgear-connectome
+13:16:15 [controller] [control] FLY BRAIN (connectome) flying the takeoff
+13:16:15 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+13:16:15 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+13:16:15 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+13:16:18 [control] IN CONTROL: FLY BRAIN (connectome) flying the takeoff (run 2026-11-14T181613Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+13:16:22 [fgfs] 76.29 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:22 [controller] CONNECTOME LIF (notebook model)
+13:16:22 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+13:16:30 [fgfs] 84.01 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:35 [fgfs] 89.61 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:37 [controller]   zero points: steer=-18.8
+13:16:37 [controller] Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+13:16:37 [controller] Parking brake released: the fly has the airplane.
+13:16:37 [controller] Waiting for FlightGear runway telemetry on localhost...
+13:16:40 [fgfs] 93.92 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:40 [session] tail_controller skipped: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+13:16:41 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+13:16:41 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+13:16:41 [controller]   decision applied 3.0s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:41 [controller]   decision applied 1.0s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:43 [fgfs] 97.71 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:43 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:43 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  0.4kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:45 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  3.8kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:48 [fgfs] 101.90 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:48 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 12.9kt agl=    0ft pitch=-0.4deg thr=1.00
+13:16:48 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 19.7kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:49 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 26.4kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:49 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 35.5kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:52 [fgfs] 106.42 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:52 [controller]   decision applied 0.8s after its state  TAKEOFF ROLL   ias= 43.6kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:52 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 49.0kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:54 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 56.8kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:54 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 63.3kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:57 [fgfs] 111.54 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:16:57 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 69.6kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:57 [controller]   decision applied 0.7s after its state  TAKEOFF ROLL   ias= 78.1kt agl=    0ft pitch=-0.2deg thr=1.00
+13:16:57 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 83.2kt agl=    0ft pitch=-0.2deg thr=0.98
+13:17:00 [controller]   decision applied 0.7s after its state  TAKEOFF ROLL   ias= 89.5kt agl=    0ft pitch=-0.2deg thr=1.00
+13:17:00 [controller]   decision applied 0.8s after its state  TAKEOFF ROLL   ias= 97.9kt agl=    0ft pitch=-0.2deg thr=1.00
+13:17:03 [fgfs] 117.25 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:17:03 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias=102.9kt agl=    0ft pitch=-0.2deg thr=0.52
+13:17:03 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias=104.7kt agl=    0ft pitch=-0.4deg thr=0.26
+13:17:03 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+13:17:03 [controller] {
+13:17:03 [controller]   "fly": "Takeoff fly",
+13:17:03 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+13:17:03 [controller]   "phase": "TAKEOFF ROLL",
+13:17:03 [controller]   "completed": false,
+13:17:03 [controller]   "time_s": 24.5,
+13:17:03 [controller]   "decisions": 20,
+13:17:03 [controller]   "max_centerline_m": 30.9,
+13:17:03 [controller]   "tail_strike": false,
+13:17:03 [controller]   "stall": false,
+13:17:03 [controller]   "left_runway": true,
+13:17:03 [controller]   "liftoff_x_m": null,
+13:17:03 [controller]   "rejected": false,
+13:17:03 [controller]   "agl_ft": 0,
+13:17:03 [controller]   "ias_kt": 104.6,
+13:17:03 [controller]   "stop_x_m": null,
+13:17:03 [controller]   "events": [],
+13:17:03 [controller]   "decision_timing": {
+13:17:03 [controller]     "applied": 20,
+13:17:03 [controller]     "skipped": 1,
+13:17:03 [controller]     "latency_mean_s": 0.731,
+13:17:03 [controller]     "latency_max_s": 2.975
+13:17:03 [controller]   },
+13:17:03 [controller]   "speed_up_resets": 0,
+13:17:03 [controller]   "backend": "flightgear",
+13:17:03 [controller]   "wall_s": 25.6,
+13:17:03 [controller]   "success": false
+13:17:03 [controller] }
+13:17:03 [controller] Run finished: 2026-11-14T181613Z_michael-taylor_flightgear-connectome exit=2
+13:17:05 [control] IN CONTROL: Nobody: no controller running and no control inputs
+13:17:07 [fgfs] 121.84 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:17:11 [fgfs] 125.50 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:17:14 [fgfs] 128.76 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:17:18 [fgfs] 132.73 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+13:17:21 [session] Property API stopped answering
+13:17:23 [session] FlightGear exited (code 1073741845) - crashed or force-closed
