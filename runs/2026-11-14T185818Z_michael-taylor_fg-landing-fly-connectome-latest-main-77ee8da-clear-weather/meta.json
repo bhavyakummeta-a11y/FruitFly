@@ -1,0 +1,78 @@
+{
+  "run_id": "2026-11-14T185818Z_michael-taylor_fg-landing-fly-connectome-latest-main-77ee8da-clear-weather",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.9,
+      "to_s": 31.0
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: CMDA, SPD; controller 2026-11-14T185847Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 31.0,
+      "to_s": 128.6
+    }
+  ],
+  "name": "landing fly - CONNECTOME, latest main 77ee8da, clear weather",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 3288,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T18:58:18.215011+00:00",
+  "duration_s": 129,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 55
+  },
+  "airplane_samples": 52,
+  "controller_runs": {
+    "2026-11-14T185847Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T185943Z_michael-taylor_demo-standin": {
+      "fly": "Takeoff fly",
+      "brain": "PROBE-TABLE STAND-IN (no connectome)",
+      "phase": "HANDOVER (1,000 ft)",
+      "completed": true,
+      "time_s": 61.3,
+      "decisions": 222,
+      "max_centerline_m": 0.2,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "liftoff_x_m": 1680,
+      "rejected": false,
+      "agl_ft": 1003,
+      "ias_kt": 172.7,
+      "stop_x_m": null,
+      "safe_reject": false,
+      "takeoff_achieved": true,
+      "outcome": "takeoff_achieved",
+      "events": [
+        "30.8s JUMP: escape DNs 184 Hz",
+        "31.1s JUMP: escape DNs 267 Hz",
+        "31.3s JUMP: escape DNs 346 Hz",
+        "...",
+        "37.2s JUMP: escape DNs 684 Hz",
+        "37.5s JUMP: escape DNs 684 Hz",
+        "37.7s JUMP: escape DNs 684 Hz"
+      ],
+      "requested_phase": "takeoff",
+      "backend": "demo",
+      "wall_s": 0.3,
+      "success": true,
+      "exit_code": 0
+    }
+  },
+  "code": {
+    "commit": "36c3b04c7431e0951596c24c83140a1a67e992f1",
+    "branch": "main"
+  }
+}
