@@ -627,11 +627,20 @@ class Session:
                     st['control'] = meta.get('control')
                     st['brain'] = meta['args'].get('brain')
                     with self.lock:
-                        self.brain_state.update(run=d.name, mode=st['brain'], active=True)
+                        self.brain_state.update(run=d.name, mode=st['brain'], active=True, stage=None)
                 except (OSError, ValueError, KeyError):
                     pass
             if st['done']:
                 continue
+            # What the fly brain is doing right now (loading / calibrating k of n /
+            # flying), written by takeoff_live; the brain page shows it.
+            try:
+                stage = json.loads((d / 'stage.json').read_text(encoding='utf-8'))
+                with self.lock:
+                    if self.brain_state.get('run') == d.name:
+                        self.brain_state['stage'] = stage
+            except (OSError, ValueError):
+                pass
             self._tail_spikes(d, st)
             for name, key in (('console.log', 'console'), ('fly_activity.csv', 'fly')):
                 p = d / name

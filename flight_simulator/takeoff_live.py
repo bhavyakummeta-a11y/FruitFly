@@ -14,8 +14,11 @@ the fly live. Nothing about how the fly flies changes (takeoff_landing.py is unt
 """
 import argparse
 import csv
+import json
+import os
 import socket
 import sys
+import time
 
 from . import takeoff_landing as tl
 from .runlog import RunLog
@@ -35,6 +38,50 @@ def parking_brake(telnet_port, on):
     except OSError:
         return False
     return telnet_get(telnet_port, '/controls/gear/brake-parking') in (str(int(on)), str(bool(on)).lower())
+
+
+CALIBRATION_TRIALS = 20  # flies.PhaseFly.calibrate() default
+
+
+class Stage:
+    """stage.json in the run folder: what the fly brain is doing right now.
+
+    The session logger passes it to the brain page, so the page can say
+    "loading", "calibrating: trial 7 of 20" or "flying" instead of looking idle
+    during the minutes before the handover. Written atomically (replace)."""
+    def __init__(self, runlog):
+        self.path, self.runlog = runlog.dir / 'stage.json', runlog
+        self.state = {}
+
+    def set(self, stage, **info):
+        self.state = {'stage': stage, 'since': time.time(), **info}
+        self._write()
+
+    def update(self, **info):
+        self.state.update(info)
+        self._write()
+
+    def _write(self):
+        tmp = self.path.with_suffix('.tmp')
+        tmp.write_text(json.dumps(self.state), encoding='utf-8')
+        os.replace(tmp, self.path)
+
+
+def watch_calibration(brain, stage, runlog):
+    """Count the brain's calibration trials (read-only wrapper around brain.run)."""
+    run = brain.run
+
+    def counted(*a, **k):
+        out = run(*a, **k)
+        if stage.state.get('stage') == 'calibrating':
+            done = stage.state.get('done', 0) + 1
+            stage.update(done=done, last_trial_s=round(time.time() - stage.state['trial_started'], 1),
+                         trial_started=time.time())
+            counts = getattr(brain, 'last_counts', None)
+            if counts is not None and hasattr(counts, 'nonzero'):
+                runlog._spike_row(None, counts, getattr(brain, 'ms', None))
+        return out
+    brain.run = counted
 
 
 def fly_row(entry):
@@ -98,6 +145,21 @@ def main(argv=None):
         print('Parking brake ' + ('SET' if parking_brake(telnet, True) else 'could NOT be set')
               + ' while the fly brain calibrates.', flush=True)
     runlog = RunLog(ns, ['takeoff_live', *argv])
+    stage = Stage(runlog)
+    stage.set('loading', note=f'loading the {ns.brain} brain')
+    calibrate = '--no-calibrate' not in argv
+    make_brain = tl.make_brain
+
+    def made(args):
+        brain = make_brain(args)
+        if calibrate:
+            stage.set('calibrating', done=0, total=CALIBRATION_TRIALS, trial_started=time.time(),
+                      note='measuring the resting steering level (neutral stimulus); '
+                           'the airplane is held on the parking brake' if hold else
+                           'measuring the resting steering level (neutral stimulus)')
+            watch_calibration(brain, stage, runlog)
+        return brain
+    tl.make_brain = made
     live = {}
     real = {'demo': tl.run_demo, 'flightgear': tl.run_flightgear}
 
@@ -108,6 +170,7 @@ def main(argv=None):
                 if not parking_brake(telnet, False):
                     raise RuntimeError('Could not release the parking brake for the takeoff roll')
                 print('Parking brake released: the fly has the airplane.', flush=True)
+            stage.set('flying', note='the fly brain has the controls')
             result = real[name](args, fly, live['log'])
             log.extend(live['log'])
             runlog.result = {**result, 'phase': ns.phase}
@@ -121,6 +184,7 @@ def main(argv=None):
     finally:
         if 'log' in live:
             live['log'].close()
+        stage.set('finished', exit_code=code)
         runlog.finish(code)
     return code
 

@@ -28,6 +28,15 @@ h1 { font-size: 15px; margin: 0 0 2px; }
 #mode { font-weight: 600; }
 #mode.idle, #mode.baseline { color: var(--warn); }
 #detail { color: var(--text-2); }
+#stage { display: none; margin-top: 6px; }
+#stage.on { display: block; }
+#stage .label { font-weight: 600; color: var(--spike); }
+#stage .label.flying { color: var(--text); }
+#stage .why { color: var(--text-2); font-size: 11px; }
+#stage .track { height: 6px; background: var(--track); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+#stage .fill { height: 100%; width: 0; background: var(--spike); transition: width .4s; }
+#stage.busy .fill { animation: pulse 1.2s ease-in-out infinite alternate; }
+@keyframes pulse { from { opacity: .45; } to { opacity: 1; } }
 #brain-wrap { position: relative; padding: 0 12px; }
 canvas { width: 100%; display: block; }
 .caption { color: var(--text-2); padding: 4px 12px 8px; font-size: 11px; }
@@ -49,6 +58,8 @@ h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: v
   <h1>Fly brain</h1>
   <div id="mode" class="idle">Waiting for the session…</div>
   <div id="detail"></div>
+  <div id="stage" aria-live="polite"><div class="label"></div><div class="why"></div>
+    <div class="track"><div class="fill"></div></div></div>
 </header>
 <div id="brain-wrap"><canvas id="brain" role="img" aria-label="Fly brain neurons, frontal view, with neurons that fired highlighted"></canvas></div>
 <div class="caption" id="caption">Frontal view: every dot is one of the fly's neurons at its real FlyWire position.
@@ -138,6 +149,34 @@ function bars(header, rows) {
       <div class="track"><div class="fill" style="width:${(v / max * 100).toFixed(1)}%"></div></div></div>`).join('');
 }
 
+// What the fly brain is doing before/while it flies: loading, calibrating k of n, flying.
+function stageView(st, active) {
+  const el = document.getElementById('stage');
+  if (!st || !st.stage || !active) { el.className = ''; return; }
+  const label = el.querySelector('.label'), why = el.querySelector('.why'), fill = el.querySelector('.fill');
+  const secs = Math.max(0, Math.round(Date.now() / 1000 - st.since));
+  label.className = 'label' + (st.stage === 'flying' ? ' flying' : '');
+  if (st.stage === 'calibrating') {
+    const done = st.done || 0, total = st.total || 20;
+    const per = st.last_trial_s ? ` · ${st.last_trial_s} s per trial` : '';
+    const left = st.last_trial_s ? ` · about ${Math.ceil((total - done) * st.last_trial_s / 60)} min left` : '';
+    label.textContent = `Calibrating the fly brain: trial ${Math.min(done + 1, total)} of ${total}`;
+    why.textContent = (st.note || '') + per + left + '. The fly takes the controls when this finishes.';
+    fill.style.width = `${(100 * done / total).toFixed(1)}%`;
+  } else if (st.stage === 'loading') {
+    label.textContent = 'Loading the fly brain (FlyWire connectome)…';
+    why.textContent = `${secs} s · next: calibration, then the fly takes the controls.`;
+    fill.style.width = '4%';
+  } else if (st.stage === 'flying') {
+    label.textContent = 'Calibration done: the fly brain has the controls';
+    why.textContent = st.note ? `${st.note} (for ${secs} s)` : '';
+    fill.style.width = '100%';
+  } else {
+    el.className = ''; return;
+  }
+  el.className = 'on' + (st.stage === 'flying' ? '' : ' busy');
+}
+
 function render(d) {
   const mode = document.getElementById('mode'), detail = document.getElementById('detail');
   const t = d.trial || {};
@@ -151,7 +190,7 @@ function render(d) {
   mode.style.color = '';
   if (!d.run || (!d.active && !t.idx)) {
     mode.className = 'idle'; mode.textContent = 'Fly brain idle: no controller is flying the airplane';
-    detail.textContent = 'Start one with python -m flight_simulator --backend flightgear --brain connectome';
+    detail.textContent = 'One command starts the sim and hands it to the fly: python -m flight_simulator.launch_fg --phase takeoff --fly --name "..."';
   } else if (d.mode !== 'connectome') {
     mode.className = 'baseline';
     mode.textContent = `${(d.mode || '').toUpperCase()} BASELINE: no fly brain is running`;
@@ -159,11 +198,17 @@ function render(d) {
     spikes = [];
   } else {
     mode.className = '';
-    mode.textContent = d.active ? ((d.control && d.control.label) || 'FLY BRAIN (connectome) is flying') : 'Connectome run finished (last trial shown)';
-    detail.textContent = t.idx ? `trial at t = ${Number(t.time).toFixed(1)} s · ${t.idx.length.toLocaleString()} neurons fired`
-                               : 'waiting for the first brain trial…';
+    const st = d.stage || {}, getReady = d.active && (st.stage === 'calibrating' || st.stage === 'loading');
+    mode.textContent = !d.active ? 'Connectome run finished (last trial shown)'
+      : getReady ? 'FLY BRAIN (connectome) is getting ready to fly'
+      : ((d.control && d.control.label) || 'FLY BRAIN (connectome) is flying');
+    detail.textContent = !t.idx ? (getReady ? 'neurons light up below during each calibration trial'
+                                           : 'waiting for the first brain trial…')
+      : (t.time == null ? `calibration trial · ${t.idx.length.toLocaleString()} neurons fired`
+                        : `trial at t = ${Number(t.time).toFixed(1)} s · ${t.idx.length.toLocaleString()} neurons fired`);
     if (t.seq !== lastSeq) { lastSeq = t.seq; setTrial(t); }
   }
+  stageView(d.stage, d.active);
   canvas.style.opacity = d.mode && d.mode !== 'connectome' ? .45 : 1;
   bars(d.mode === 'connectome' ? d.fly_header : '', d.fly_controller || []);
 }
