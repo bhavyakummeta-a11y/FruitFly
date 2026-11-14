@@ -1,0 +1,31 @@
+{
+  "run_id": "2026-11-14T171912Z_michael-taylor_fg-obstacle-avoidance-connectome-fly-brain-e2a3d22",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "obstacle avoidance - CONNECTOME fly brain (e2a3d22)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 4560,
+  "fgfs_exit_code": 4294967295,
+  "started_utc": "2026-11-14T17:19:12.890062+00:00",
+  "duration_s": 459,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 76
+  },
+  "airplane_samples": 63,
+  "controller_runs": {
+    "2026-11-14T172127Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    },
+    "2026-11-14T172627Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    }
+  },
+  "code": {
+    "commit": "a49150ccd49bd05c89a62e278aef7d25738dba84",
+    "branch": "main"
+  }
+}
