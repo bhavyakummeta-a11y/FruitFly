@@ -1,0 +1,31 @@
+{
+  "title": "Fly Brains Fly a Plane",
+  "subtitle": "A real fruit-fly connectome at the controls of a FlightGear airliner",
+  "rule": "The connectome is the controller. Encoders and decoders stay thin; we never train the wiring with backprop, and every result is compared with a dumb baseline.",
+  "goals": [
+    {"tier": "Minimum", "name": "Takeoff fly", "text": "One fly brain gets the plane off the runway."},
+    {"tier": "Main", "name": "Three flies", "text": "Takeoff, Cruise and Landing flies, each owning one phase of flight."},
+    {"tier": "Reach", "name": "Barrel roll + dopamine", "text": "A barrel roll, and learning through the fly's own PAM / PPL1 dopamine neurons."}
+  ],
+  "pipeline": [
+    {"name": "FlightGear", "text": "737-800 / C172 state over UDP + HTTP"},
+    {"name": "Encoder", "text": "state to sensory rates, 0-200 Hz"},
+    {"name": "Fly brain", "text": "139k LIF neurons, FlyWire wiring"},
+    {"name": "Decoder", "text": "neuron rates to stick, rudder, throttle"},
+    {"name": "Controls", "text": "back into the sim, paused per trial"}
+  ],
+  "workflow": [
+    {"name": "Launch with --name", "text": "project launchers only"},
+    {"name": "Watchdog", "text": "attaches to every fgfs.exe"},
+    {"name": "Logger + recorder", "text": "telemetry, events, screenshots"},
+    {"name": "sim-logs branch", "text": "pushed when FlightGear exits"},
+    {"name": "This deck", "text": "rebuilt from the logs"}
+  ],
+  "next_steps": [
+    "Run the connectome takeoff with the pause fix and capture it start to finish",
+    "Name the cockpit hotspots and feed their directions to the fly's visual inputs",
+    "Cruise fly: obstacle avoidance on the 737 with the live 3D fly body",
+    "Landing fly; dopamine learning is owned by a teammate (not this team's scope)"
+  ],
+  "how_to_add": "Snap the sim: python -m flight_simulator.media snap --caption \"...\"  |  agent window: --window \"<title>\"  |  annotate: media note latest --caption \"...\" --box x0,y0,x1,y1=label  |  rebuild: python -m flight_simulator.media deck"
+}
