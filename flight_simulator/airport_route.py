@@ -11,6 +11,7 @@ from .runway import FT, KT, AIM_POINT, GLIDESLOPE, RunwayState, RunwaySim, takeo
 from .mission import (Mission, CircuitFly, Leg, LandingFly, TakeoffFly, CFG_TAKEOFF,
                       CFG_CIRCUIT, CFG_LANDING, MAX_BANK, HS_GAIN, mission_row)
 from .guidance import RouteGuidance, NoSafeRoute
+from .route_weather import RouteWeather, runway_briefing, briefing_text
 
 R = 6371000.0
 
@@ -177,6 +178,29 @@ class RouteMission(Mission):
         self.minimum_clearance=math.inf
         super().__init__(brain,period,calibrate,self.route.legs,log)
         self.vision_obstacles=list(self.route.obstacles)
+        # The storm story (route_weather.py): looks only. Built on the first step so
+        # a --vision-obstacles file that replaces the tornadoes is used.
+        self.weather=None
+        self.sky_changes=[]      # stages reached, for the FlightGear runner to show
+        self.briefing=None       # Burbank runway briefing; landing never starts without it
+
+    def update_weather(self,s):
+        if self.weather is None:
+            self.weather=RouteWeather(self.route,list(self.vision_obstacles))
+        stage=self.weather.update(s.x,s.y,s.time)
+        if stage is None:
+            return
+        self.say(f'    sky: {stage.name} ({self.weather.u/1000:.1f} km along the route)')
+        message=None
+        if stage.briefing:
+            message=self.give_briefing(s)
+        self.sky_changes.append((stage,message))
+
+    def give_briefing(self,s):
+        if self.briefing is None:
+            self.briefing=dict(runway_briefing(self.route.arrival),time_s=round(s.time,1))
+            self.say('    runway briefing: '+briefing_text(self.briefing))
+        return briefing_text(self.briefing)
 
     def control_state(self,s):
         return self.route.to_arrival(s) if isinstance(self.fly,LandingFly) else s
@@ -187,10 +211,13 @@ class RouteMission(Mission):
 
     def step(self,s,dt):
         self.last_state=s
+        self.update_weather(s)
         if isinstance(self.fly,TakeoffFly) and self.fly.status.done and not self.fly.rejected:
             self.start_fly(RouteFly(self.brain,self.period,self.route),s)
         elif isinstance(self.fly,RouteFly) and self.fly.status.done:
             self.avoidance_count=self.fly.avoidance_count
+            if self.briefing is None:   # cannot normally happen: final comes after the intercept leg
+                self.give_briefing(s)
             a=self.route.to_arrival(s)
             fly=DestinationLanding(self.brain,self.period,trim_throttle=self.fly.throttle_trim)
             fly.trim_pitch_deg=math.degrees(a.alpha-GLIDESLOPE)
@@ -220,7 +247,14 @@ class RouteMission(Mission):
     def report(self):
         return dict(departure='KLAX 25R',destination='KBUR 08',route=self.route.name,
                     minimum_clearance_m=None if math.isinf(self.minimum_clearance) else round(self.minimum_clearance,1),
-                    avoidance_count=getattr(self.fly,'avoidance_count',self.avoidance_count))
+                    avoidance_count=getattr(self.fly,'avoidance_count',self.avoidance_count),
+                    sky=self.weather.stage.name if self.weather else 'clear',
+                    runway_briefed=self.briefing is not None)
+
+    def story(self):
+        """Weather stages reached and the runway briefing, for result.json."""
+        return dict(sky_stages=list(self.weather.history) if self.weather else [],
+                    runway_briefing=self.briefing)
 
 class RouteView:
     """Keep the companion map in one EN/MSL frame through both airport handovers."""
@@ -284,7 +318,7 @@ def run_local(mission,seconds=1800,dt=.05,log=None,progress=True):
     success=(reason=='landing_completed' and touchdown is not None and 0<=touchdown<=900
              and sim.events.touchdown_sink_fpm<500 and 0<=a.x<=BUR.length and abs(a.y)<BUR.width/2 and a.speed<1)
     if reason=='landing_completed' and not success: reason='landing_outside_criteria'
-    return dict(mission.report(),success=success,outcome=reason,termination_reason=reason,
+    return dict(mission.report(),**mission.story(),success=success,outcome=reason,termination_reason=reason,
                 touchdown_x_m=touchdown,touchdown_sink_fpm=sim.events.touchdown_sink_fpm,
                 stop_x_m=a.x if a.on_ground else None,time_s=sim.state.time,
                 handovers=mission.handovers,ended_in=mission.phase)

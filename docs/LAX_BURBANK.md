@@ -56,6 +56,44 @@ python -m flight_simulator.mission --route lax-burbank --brain standin --vision-
 `--brain connectome` for the actual neural model. During logging-code tests,
 set `FRUITFLY_NO_PUSH=1` to save runs locally without publishing them.
 
+## The storm story
+
+The route tells one story (`flight_simulator/route_weather.py`):
+
+| Stage | Where (route km from KLAX 25R) | Sky | Tornadoes |
+|---|---|---|---|
+| clear | takeoff and the westbound departure leg | clear, a few high clouds | hidden |
+| darkening | after the turn north, 12 km before tornado 1 | lowering overcast, light rain | hidden |
+| storm | 8 km before tornado 1 until 4 km past tornado 2 | thunderstorm, heavy rain, lightning, thunder, the roar | shown |
+| clearing | past the tornadoes | rain easing, no lightning | behind you |
+| burbank | start of the Burbank intercept leg | fair | behind you |
+
+At the burbank stage the fly gets its **runway briefing**: KBUR 08 threshold,
+true heading, length, width, threshold elevation, 3 deg glide path, calm wind.
+It appears on FlightGear's screen as an ATC message and is logged.
+`result.json` keeps it as `runway_briefing`, with the stages reached as
+`sky_stages`. The landing never starts without the briefing. It is runway data
+the code supplies, not something the fly perceives.
+
+Stages follow the airplane's position along the route, not the clock, and only
+move forward. The weather is looks only: every METAR has calm wind (00000KT),
+turbulence stays 0, and cloud bases stay above the 5,000 ft cruise and the
+tornado tops (about 7,300 ft MSL). The controller changes the sky live by
+writing the METAR to `/environment/metar/data`, the same way FlightGear's
+weather dialog does. A failed change is logged in `sky_applied` and the flight
+goes on.
+
+The route planner knows the tornado positions from the start (they are the
+route's known obstacles). FlightGear shows them only from the storm stage. That
+stage begins 8 km before the first tornado, beyond the planner's at most 70 s
+look-ahead, so nothing is avoided before it can be seen.
+
+`launch_fg --route lax-burbank` starts with a clear sky. Pass `--weather storm`
+or `--weather clear` to fix the weather for the whole flight instead: the
+launcher then starts the controller with `--sky fixed`, which leaves the
+weather and the tornado models alone. The runway briefing is still given and
+logged either way.
+
 ## What drives the aircraft
 
 The route goes west after departure, turns north, intercepts a long eastbound

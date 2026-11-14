@@ -98,6 +98,11 @@ def install_protocols(fg):
     return None
 
 
+def weather_given():
+    """True if --weather was on the command line (it then fixes the route's weather)."""
+    return any(a == '--weather' or a.startswith('--weather=') for a in sys.argv[1:])
+
+
 def controller_command(args):
     p = ports(args.instance)
     cmd = f'python -m flight_simulator.takeoff_landing {args.phase} --brain standin --backend flightgear'
@@ -155,7 +160,7 @@ def fly_command(args):
     ports_args = ['--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
     if getattr(args,'route',None):
         return [python,'-m','flight_simulator.mission','--route',args.route,'--brain',args.fly,
-                '--seconds','1800',*ports_args]
+                '--seconds','1800',*(['--sky','fixed'] if weather_given() else []),*ports_args]
     if not args.phase:
         # In-air start: the obstacle-avoidance controller (python -m flight_simulator). It takes
         # over as soon as the plane is flying and holds the spawn preset (ticket #1).
@@ -207,9 +212,15 @@ def main():
     cmd[at:at] = profile_args(args.graphics)
     # Weather (fg_weather.py): looks only, calm air. After the launcher's own weather flags,
     # before the user's extra args.
+    # The LAX->Burbank route tells a weather story (route_weather.py): it starts clear and
+    # the controller brings the storm in mid-route. An explicit --weather still wins.
     from .fg_weather import weather_args
     at = len(cmd) - len(args.extra)
-    cmd[at:at] = weather_args(args.weather)
+    if args.route and not weather_given():
+        from .route_weather import launch_args
+        cmd[at:at] = launch_args()
+    else:
+        cmd[at:at] = weather_args(args.weather)
     # Refuse a --state the aircraft doesn't define (FlightGear would ignore it; issue #2).
     from .aircraft_states import check_command
     try:

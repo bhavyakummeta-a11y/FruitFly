@@ -332,7 +332,7 @@ def run_flightgear(mission, args, log):
     options = {} if route is None else dict(runway=(route.departure.lat,route.departure.lon,route.departure.heading),
                                            elevation_ft=route.departure.elevation_ft)
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, **options)
-    body = ap_guard = speed_lock = obstacle_scene = None
+    body = ap_guard = speed_lock = obstacle_scene = sky = None
     reason = 'time_limit'
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
@@ -352,6 +352,11 @@ def run_flightgear(mission, args, log):
             obstacle_scene = ObstacleScene(args.telemetry_port-1)
             obstacle_scene.publish(route.world_obstacles(mission.vision_obstacles),
                                    (route.departure.lat,route.departure.lon))
+            # Storm story (route_weather.py, looks only): clear sky, tornadoes hidden until the storm.
+            if getattr(args, 'sky', 'story') == 'story':
+                from .route_weather import SkyDirector, STAGES
+                sky = SkyDirector(obstacle_scene, len(mission.vision_obstacles))
+                sky.apply(STAGES[0])
         mission.prepare_realtime()  # all phase calibration happens before releasing control
         if route:
             from .takeoff_live import parking_brake
@@ -372,6 +377,8 @@ def run_flightgear(mission, args, log):
                 reason = 'takeoff_rejected' if isinstance(mission.fly,TakeoffFly) else ('go_around' if mission.fly.go_around else 'landing_completed')
                 break
             controls = mission.step(s, max(s.time-previous,1e-3))
+            while sky and mission.sky_changes:
+                sky.apply(*mission.sky_changes.pop(0))
             bridge.gear_down = mission.gear_down
             bridge.flaps = FG_FLAPS[mission.config.name]
             entry = mission_row(mission,s,controls)
@@ -420,7 +427,8 @@ def run_flightgear(mission, args, log):
             local=mission.control_state(s)
             success = success and s.on_ground and s.speed<1 and 0<=local.x<route.arrival.length and abs(local.y)<route.arrival.width/2
         if reason=='landing_completed' and not success: reason='landing_outside_criteria'
-        return {**(mission.report() if route else {}), 'brain':getattr(mission.brain,'name','?'),'ended_in':mission.phase,
+        return {**(mission.report() if route else {}), **(mission.story() if route else {}),
+                **({'sky_applied': sky.applied} if sky else {}), 'brain':getattr(mission.brain,'name','?'),'ended_in':mission.phase,
                 'handovers':mission.handovers,'touchdown_x_m':touchdown and touchdown[0],
                 'touchdown_sink_fpm':touchdown and touchdown[1], 'time_s':round(s.time-start,2),
                 'max_centerline_m':round(max_y,1),'outcome':reason,'termination_reason':reason,
@@ -465,6 +473,9 @@ def main(argv=None):
     p.add_argument('--no-calibrate', action='store_true')
     p.add_argument('--seconds', type=float, default=1500)
     p.add_argument('--vision-port',type=int,default=5601,help='Synthetic visual cue stream; 0 disables')
+    p.add_argument('--sky', choices=['story', 'fixed'], default='story',
+                   help='--route only. story (default): clear at LAX, storm and tornadoes mid-route, clearing '
+                        'for Burbank (looks only); fixed: leave the weather FlightGear was started with')
     p.add_argument('--vision-obstacles',help='Obstacles JSON in runway coordinates and heights above runway')
     p.add_argument('--log', help='CSV of every step: state, controls, active fly, inputs, DN rates')
     p.add_argument('--plot', help='PNG of the whole flight with the handovers marked (needs matplotlib)')
