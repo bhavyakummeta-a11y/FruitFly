@@ -1,0 +1,65 @@
+{
+  "run_id": "2026-11-14T195736Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T19:57:36.042829+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain connectome --seconds 180 --no-scene --note 'obstacle course, user request; --no-scene (no tornado models in FlightGear) to isolate the fgfs.exe+0x5adea5 crash'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "connectome",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "vision_port": 5601,
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_cockpit_fly": false,
+    "no_scene": true,
+    "no_threat_glow": false,
+    "note": "obstacle course, user request; --no-scene (no tornado models in FlightGear) to isolate the fgfs.exe+0x5adea5 crash",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "407c4ac1f781134ee180abeb3f7961a7a3aac934",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/screen_record.py"
+    ],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+    "neurons_decide": "escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input",
+    "code_decides": "synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "obstacle course - CONNECTOME fly brain, no tornado models (--no-scene, crash isolation)",
+      "run_id": "2026-11-14T195649Z_michael-taylor_fg-obstacle-course-connectome-fly-brain-no-tornado-models-no-scene-crash-isolation"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 37
+  },
+  "finished_utc": "2026-11-14T19:57:45.060295+00:00",
+  "exit_code": 1
+}
