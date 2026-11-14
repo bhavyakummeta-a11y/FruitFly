@@ -41,6 +41,13 @@ form[hidden] { display: none; }
 form input { font: inherit; padding: 3px 6px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); }
 form button { font: inherit; padding: 3px 6px; border-radius: 4px; border: 0; background: var(--text); color: var(--surface); cursor: pointer; }
 main { display: flex; flex-direction: column; min-width: 0; }
+.views small { display: block; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; margin-bottom: 3px; }
+.views div { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.views button { font: inherit; padding: 3px 4px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--panel); color: var(--text); cursor: pointer; }
+.views button:hover { border-color: var(--text-2); }
+.views button.on { border-color: var(--fly); box-shadow: inset 0 0 0 1px var(--fly); }
+.views button:disabled { opacity: .5; cursor: default; }
 .toolbar { display: flex; gap: 10px; padding: 4px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); }
 .toolbar label { display: flex; gap: 3px; align-items: center; }
 #log { flex: 1; overflow: auto; padding: 4px 10px; font: 11.5px/1.45 ui-monospace, Consolas, monospace; }
@@ -61,6 +68,10 @@ main { display: flex; flex-direction: column; min-width: 0; }
     <button type="submit">Save name</button>
   </form>
   <dl id="now"></dl>
+  <div class="views" title="Changes what you see in FlightGear. The fly pilot does not use the camera.">
+    <small>Camera (your view only)</small>
+    <div id="views"></div>
+  </div>
 </aside>
 <main>
   <div class="toolbar">
@@ -119,6 +130,25 @@ document.getElementById('name-form').addEventListener('submit', async e => {
   const name = document.getElementById('name-input').value.trim();
   if (name) await fetch('/api/name', {method: 'POST', body: JSON.stringify({name})});
 });
+async function views() {
+  const box = document.getElementById('views');
+  try {
+    const {views} = await (await fetch('/api/views', {cache: 'no-store'})).json();
+    for (const label of views) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = label;
+      b.addEventListener('click', async () => {
+        b.disabled = true;
+        try {
+          const r = await fetch('/api/view', {method: 'POST', body: JSON.stringify({view: label})});
+          if (r.ok) box.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+        } finally { b.disabled = false; }
+      });
+      box.appendChild(b);
+    }
+  } catch (e) { /* older logger without view buttons */ }
+}
+views();
 async function tick() {
   try { render(await (await fetch(`/api/state?since=${since}`, {cache: 'no-store'})).json()); }
   catch (e) {

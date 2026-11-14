@@ -262,4 +262,7 @@
   <model><name>fly163</name><path>Aircraft/FlyCabin/Models/fly-group1.xml</path><offsets><x-m>9.870</x-m><y-m>0.490</y-m><z-m>0.520</z-m><heading-deg>3.0</heading-deg></offsets></model>
   <model><name>fly164</name><path>Aircraft/FlyCabin/Models/fly-group2.xml</path><offsets><x-m>9.870</x-m><y-m>0.950</y-m><z-m>0.520</z-m><heading-deg>-5.9</heading-deg></offsets></model>
   <model><name>fly165</name><path>Aircraft/FlyCabin/Models/fly-group2.xml</path><offsets><x-m>9.870</x-m><y-m>1.410</y-m><z-m>0.520</z-m><heading-deg>-2.2</heading-deg></offsets></model>
+
+  <!-- Running gag: the fly flight attendant and her snack cart (cabin_show.nas). -->
+  <model><name>attendant</name><path>Aircraft/FlyCabin/Models/attendant.xml</path><offsets><x-m>0</x-m><y-m>0</y-m><z-m>0.100</z-m></offsets></model>
 </PropertyList>

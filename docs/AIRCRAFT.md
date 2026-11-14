@@ -40,5 +40,7 @@ The neuron-to-control decoder (DNp09 → throttle up, MDN → throttle down) sta
 - **Seats:** 29 rows of 3+3, 174 seats in all, with 166 occupied by low-poly *Drosophila*. The flies have tan bodies, dark abdomen stripes, red compound eyes and translucent wings.
 - **Live passengers:** Their wings and heads move with `/fruitfly/passengers/activity` (0..1). Drive it from the brain's firing rates so the passengers visibly react to what the brain is doing. This is display only.
 - **Cabin views:** Two cabin views are added to the sim. Cycle with **v**.
+- **Flight attendant (running gag, no brain):** a fly flight attendant in a navy jacket, red scarf and pillbox hat pushes a snack cart down the aisle. She stops at every row and hands each side a cup of water, a swirl of poop or a slice of rotten banana. Then she pulls the cart back to the galley and starts again. [`cabin_show.nas`](../flightgear/Aircraft/FlyCabin/Nasal/cabin_show.nas) scripts her, and the totals are counted under `/fruitfly/cabin/served/`. The **Cabin: follow the snack cart** view rides along with her cart. It's display only and never touches the controls or the fly pilot.
+- **Camera buttons:** the docked session log page has buttons for Fly pilot, Captain seat, Snack cart, Cabin aisle, Cabin front and Outside. They change only what the person watching sees, through `/fruitfly/view-request`. The fly pilot doesn't use the camera.
 
 Still to do: check it in the running sim and tune the look. See the TODOs in [flightgear/README.md](../flightgear/README.md).

@@ -55,6 +55,18 @@ HISTORY = 1200            # points kept for the live charts (10 min at 2 Hz)
 NAME_PROP = '/fruitfly/session/name'
 WATCHDOG_PORT = 8764      # bound by the watchdog: one per machine
 UNNAMED = 'UNNAMED'
+# View buttons on the log page: button label -> FlightGear view name. Pressing one writes
+# the name to VIEW_PROP and the aircraft's cabin_show.nas switches the camera. It changes
+# only what the person watching sees; the fly pilot never uses the camera.
+VIEW_PROP = '/fruitfly/view-request'
+VIEW_BUTTONS = {
+    'Fly pilot': 'Cockpit: fly pilot',
+    'Captain seat': 'Cockpit View',
+    'Snack cart': 'Cabin: follow the snack cart',
+    'Cabin aisle': 'Cabin: aisle, looking forward',
+    'Cabin front': 'Cabin: front, facing the passengers',
+    'Outside': 'Chase View',
+}
 
 # column -> (property path, scale)
 AIRPLANE = {
@@ -451,6 +463,24 @@ class Session:
             self._events.flush()
 
     # ---- FlightGear property API ----------------------------------------
+    def set_view(self, label):
+        """Switch the FlightGear camera for whoever is watching (log page button).
+
+        Only names in VIEW_BUTTONS; writes VIEW_PROP, cabin_show.nas does the switch.
+        Display only: no flight control, and the fly pilot doesn't see the camera."""
+        name = VIEW_BUTTONS.get(label)
+        if not name:
+            return False
+        req = urllib.request.Request(f'http://127.0.0.1:{self.httpd}/json{VIEW_PROP}',
+                                     json.dumps({'value': name}).encode(), method='POST')
+        try:
+            urllib.request.urlopen(req, timeout=2).read()
+        except OSError as exc:
+            self.event('session', f'View button {label!r}: FlightGear did not answer ({exc})')
+            return False
+        self.event('session', f'Viewer camera -> {name} (display only; the fly pilot is unaffected)')
+        return True
+
     def _get(self, path):
         url = f'http://127.0.0.1:{self.httpd}/json{path}'
         with urllib.request.urlopen(url, timeout=1.0) as r:
@@ -721,12 +751,14 @@ class Session:
                 pass
 
             def do_POST(self):
-                if self.path not in ('/api/name', '/api/control'):
+                if self.path not in ('/api/name', '/api/control', '/api/view'):
                     self.send_error(404)
                     return
                 try:
                     body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
-                    if self.path == '/api/control':
+                    if self.path == '/api/view':
+                        ok = session.set_view(str(body.get('view', '')))
+                    elif self.path == '/api/control':
                         ok = body.get('by') in ('llm', 'human', 'script', 'end') and session.declare(
                             body['by'], str(body.get('who', ''))[:120], str(body.get('note', ''))[:300])
                     else:
@@ -760,6 +792,8 @@ class Session:
                                 'fly_header': session.fly_header,
                                 'fly_controller': session.fly_ctrl[-120:]}
                     body, ctype = json.dumps(data).encode(), 'application/json'
+                elif self.path.startswith('/api/views'):
+                    body, ctype = json.dumps({'views': list(VIEW_BUTTONS)}).encode(), 'application/json'
                 elif self.path.split('?')[0] in PAGES:
                     html = PAGES[self.path.split('?')[0]].read_text(encoding='utf-8')
                     body = html.replace('{{TAG}}', str(session.a.pid)).encode()

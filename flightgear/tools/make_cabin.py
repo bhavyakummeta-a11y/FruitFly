@@ -8,6 +8,8 @@ Writes into flightgear/Aircraft/FlyCabin/Models/:
                    /fruitfly/passengers/group[n]/... (three groups so the
                    cabin doesn't move in lockstep)
   738-flies.xml    top-level aircraft model: the stock 737-800 + cabin + flies
+  attendant.ac/.xml  the fly flight attendant + snack cart (running gag, no brain)
+  ../Nasal/cabin_rows.nas  row positions for the attendant script (cabin_show.nas)
 
 Run:  python flightgear/tools/make_cabin.py
 Re-run after changing any constant below. The outputs are committed so
@@ -234,7 +236,7 @@ def build_cabin():
                  ("seatframe", (0.25, 0.25, 0.27), 0), ("seatcloth", (0.10, 0.22, 0.55), 0)]
     write_ac(os.path.join(OUT, "cabin.ac"), materials,
              [floor, wall, ceil, bins, seats, cushions])
-    return seat_pos
+    return seat_pos, rows
 
 
 # ---- fly -------------------------------------------------------------------
@@ -282,6 +284,155 @@ def build_fly():
                  ("wing", (0.85, 0.90, 0.95), 0.55)]
     write_ac(os.path.join(OUT, "fly.ac"), materials,
              [body, abd_band, eyes, legs, head] + wings)
+
+
+# ---- flight attendant + snack cart (running gag, display only) ----------------
+# A fly flight attendant walks the aisle pushing a cart and hands each row water,
+# poop or a slice of rotten banana. No brain: cabin_show.nas scripts it. Local frame:
+# origin on the cabin floor at the aisle centre, the attendant faces -x (forward)
+# before cabin_show.nas turns her; the cart sits on her +x side.
+ATT_START_X = X_FRONT + 0.30            # parked by the front galley between passes
+ATT_SERVE_OFFSET = -0.05                # she stands this far (x) from a row's seat centre
+CART_X, CART_LEN, CART_W, CART_H = 0.55, 0.60, 0.32, 0.86
+HAND = (-0.34, 0.0, 1.08)               # where a handed-out item starts
+HIP_Z = 0.72
+
+
+def build_attendant():
+    m = {k: Mesh(n, mat) for k, n, mat in (
+        ("body", "AttBody", "chitin"), ("bands", "AttBands", "band"), ("eyes", "AttEyes", "eye"),
+        ("head", "AttHead", "chitin"), ("uniform", "AttUniform", "uniform"),
+        ("scarf", "AttScarf", "scarf"), ("apron", "AttApron", "apron"), ("hat", "AttHat", "uniform"),
+        ("arms", "AttArms", "leg"), ("legsA", "AttLegsA", "leg"), ("legsB", "AttLegsB", "leg"),
+        ("wingR", "AttWingR", "wing"), ("wingL", "AttWingL", "wing"),
+        ("cup", "ItemWaterCup", "cup"), ("water", "ItemWater", "water"),
+        ("poop", "ItemPoop", "poop"), ("banana", "ItemBanana", "banana"), ("rot", "ItemBananaRot", "poop"),
+        ("cart", "Cart", "cart"), ("cartTrim", "CartTrim", "scarf"), ("wheels", "CartWheels", "leg"),
+        ("stock", "CartStock", "cup"), ("stockWater", "CartStockWater", "water"),
+        ("stockPoop", "CartStockPoop", "poop"), ("stockBanana", "CartStockBanana", "banana"))}
+
+    # standing fly, upright like a person; navy jacket over the thorax, apron, red scarf, pillbox hat
+    m["body"].ellipsoid((0.03, 0, 0.92), (0.15, 0.16, 0.24), pitch_deg=-8)          # abdomen
+    for k, zb in enumerate((0.80, 0.90, 1.00)):
+        m["bands"].ellipsoid((0.04, 0, zb), (0.152, 0.163, 0.03), seg=10, rings=4)
+    m["apron"].box(-0.15, 0, 0.88, 0.03, 0.22, 0.32)
+    m["uniform"].ellipsoid((0.0, 0, 1.25), (0.16, 0.17, 0.16))                       # jacket = thorax
+    m["scarf"].ellipsoid((-0.02, 0, 1.39), (0.12, 0.13, 0.04), seg=10, rings=4)
+    m["head"].ellipsoid((-0.04, 0, 1.51), (0.10, 0.13, 0.10))
+    m["hat"].ellipsoid((0.0, 0, 1.63), (0.08, 0.08, 0.035), seg=10, rings=4)
+    for s in (-1, 1):
+        m["eyes"].ellipsoid((-0.07, s * 0.10, 1.53), (0.07, 0.055, 0.08))
+        m["head"].box(-0.13, s * 0.04, 1.60, 0.03, 0.02, 0.09)                    # antennae
+        # front legs = arms, reaching forward to hold the item
+        shoulder, elbow, hand = (-0.06, s * 0.12, 1.22), (-0.22, s * 0.15, 1.02), (HAND[0] + 0.04, s * 0.06, HAND[2])
+        m["arms"].segment(shoulder, elbow, 0.022)
+        m["arms"].segment(elbow, hand, 0.018)
+        # mid and hind legs stand on the floor; A/B alternate when she walks
+        for k, (hx, kx, fx) in enumerate(((0.0, -0.12, -0.06), (0.06, 0.14, 0.10))):
+            group = "legsA" if (s > 0) == (k == 0) else "legsB"
+            hip, knee, foot = (hx, s * 0.10, HIP_Z), (kx, s * 0.18, 0.38), (fx, s * 0.16, 0.0)
+            m[group].segment(hip, knee, 0.025)
+            m[group].segment(knee, foot, 0.02)
+    for s, key in ((1, "wingR"), (-1, "wingL")):                                    # folded down her back
+        pts = []
+        for k in range(12):
+            t = 2 * math.pi * k / 12
+            u = 0.22 + 0.22 * math.cos(t)
+            v = 0.07 * math.sin(t)
+            pts.append((0.14 + 0.05 * u / 0.44 + v, s * (0.07 + 0.08 * u), 1.32 - 0.9 * u))
+        m[key].poly(pts)
+
+    # the items she hands out (one shown at a time, at HAND)
+    hx, hy, hz = HAND
+    m["cup"].box(hx, hy, hz + 0.02, 0.07, 0.07, 0.10)
+    m["water"].box(hx, hy, hz + 0.07, 0.072, 0.072, 0.01)
+    for dz, r, h in ((0.0, 0.07, 0.035), (0.04, 0.05, 0.03), (0.075, 0.03, 0.025)):  # the classic swirl
+        m["poop"].ellipsoid((hx, hy, hz + dz), (r, r, h), seg=10, rings=5)
+    m["banana"].ellipsoid((hx, hy, hz + 0.02), (0.035, 0.12, 0.03), seg=10, rings=5)
+    for dy in (-0.06, 0.0, 0.05):
+        m["rot"].ellipsoid((hx - 0.03, hy + dy, hz + 0.03), (0.012, 0.018, 0.012), seg=6, rings=3)
+
+    # the cart, stocked on top
+    cx, ch = CART_X, CART_H
+    m["cart"].box(cx, 0, 0.06 + ch / 2, CART_LEN, CART_W, ch)
+    for z in (0.30, 0.55):
+        m["cartTrim"].box(cx, 0, z, CART_LEN + 0.01, CART_W + 0.01, 0.03)
+    for dx in (-0.24, 0.24):
+        for dy in (-0.12, 0.12):
+            m["wheels"].box(cx + dx, dy, 0.03, 0.07, 0.03, 0.06)
+    top = 0.06 + ch
+    for i, dx in enumerate((-0.22, -0.13, -0.04)):
+        for dy in (-0.08, 0.08):
+            m["stock"].box(cx + dx, dy, top + 0.05, 0.07, 0.07, 0.10)
+            m["stockWater"].box(cx + dx, dy, top + 0.10, 0.072, 0.072, 0.01)
+    for dx, dy in ((0.07, -0.08), (0.07, 0.08), (0.16, 0.0)):
+        for dz, r, h in ((0.0, 0.06, 0.03), (0.035, 0.042, 0.025), (0.065, 0.025, 0.02)):
+            m["stockPoop"].ellipsoid((cx + dx, dy, top + 0.03 + dz), (r, r, h), seg=8, rings=4)
+    m["stockBanana"].ellipsoid((cx + 0.24, 0, top + 0.03), (0.03, 0.11, 0.03), seg=8, rings=4)
+
+    materials = [("chitin", (0.72, 0.55, 0.30), 0), ("band", (0.22, 0.15, 0.10), 0),
+                 ("eye", (0.78, 0.06, 0.04), 0), ("leg", (0.30, 0.22, 0.14), 0),
+                 ("wing", (0.85, 0.90, 0.95), 0.55), ("uniform", (0.08, 0.12, 0.32), 0),
+                 ("scarf", (0.80, 0.10, 0.12), 0), ("apron", (0.95, 0.95, 0.92), 0),
+                 ("cup", (0.97, 0.97, 0.97), 0), ("water", (0.25, 0.55, 0.95), 0.25),
+                 ("poop", (0.36, 0.22, 0.10), 0), ("banana", (0.85, 0.72, 0.20), 0),
+                 ("cart", (0.72, 0.74, 0.76), 0)]
+    write_ac(os.path.join(OUT, "attendant.ac"), materials, list(m.values()))
+    return {k: v.name for k, v in m.items()}
+
+
+def attendant_xml(names):
+    obj = lambda keys: "".join(f"<object-name>{names[k]}</object-name>" for k in keys)
+    cart = ["cart", "cartTrim", "wheels", "stock", "stockWater", "stockPoop", "stockBanana"]
+    items = ["cup", "water", "poop", "banana", "rot"]
+    fly = ["body", "bands", "eyes", "head", "uniform", "scarf", "apron", "hat", "arms",
+           "legsA", "legsB", "wingR", "wingL"]
+    p = "/fruitfly/cabin/attendant/"
+    # FlightGear nests animations in the order listed: the first is the outermost transform.
+    return f"""<?xml version="1.0"?>
+<!-- Generated by flightgear/tools/make_cabin.py - edit the generator, not this file.
+     Running gag: the fly flight attendant and her snack cart. No brain; cabin_show.nas
+     scripts the properties under {p}. Display only. -->
+<PropertyList>
+  <path>attendant.ac</path>
+  <animation><type>translate</type>{obj(fly + items + cart)}
+    <property>{p}x-m</property><axis><x>1</x><y>0</y><z>0</z></axis></animation>
+  <animation><type>translate</type>{obj(fly + items)}
+    <property>{p}bob-m</property><axis><x>0</x><y>0</y><z>1</z></axis></animation>
+  <animation><type>rotate</type>{obj(fly + items)}
+    <property>{p}turn-deg</property>
+    <center><x-m>0</x-m><y-m>0</y-m><z-m>0</z-m></center><axis><x>0</x><y>0</y><z>1</z></axis></animation>
+  <animation><type>rotate</type>{obj(["legsA"])}
+    <property>{p}stride-deg</property>
+    <center><x-m>0</x-m><y-m>0</y-m><z-m>{HIP_Z}</z-m></center><axis><x>0</x><y>1</y><z>0</z></axis></animation>
+  <animation><type>rotate</type>{obj(["legsB"])}
+    <property>{p}stride-deg</property><factor>-1</factor>
+    <center><x-m>0</x-m><y-m>0</y-m><z-m>{HIP_Z}</z-m></center><axis><x>0</x><y>1</y><z>0</z></axis></animation>
+  <animation><type>rotate</type>{obj(["wingR"])}
+    <property>{p}flap-norm</property><factor>-60</factor>
+    <center><x-m>0.14</x-m><y-m>0.07</y-m><z-m>1.32</z-m></center><axis><x>1</x><y>0</y><z>0</z></axis></animation>
+  <animation><type>rotate</type>{obj(["wingL"])}
+    <property>{p}flap-norm</property><factor>60</factor>
+    <center><x-m>0.14</x-m><y-m>-0.07</y-m><z-m>1.32</z-m></center><axis><x>1</x><y>0</y><z>0</z></axis></animation>
+  <animation><type>translate</type>{obj(items)}
+    <property>{p}serve-m</property><axis><x>-1</x><y>0</y><z>0</z></axis></animation>
+  <!-- item: 0 hands empty, 1 water, 2 poop, 3 rotten banana -->
+  <animation><type>select</type>{obj(["cup", "water"])}
+    <condition><equals><property>{p}item</property><value>1</value></equals></condition></animation>
+  <animation><type>select</type>{obj(["poop"])}
+    <condition><equals><property>{p}item</property><value>2</value></equals></condition></animation>
+  <animation><type>select</type>{obj(["banana", "rot"])}
+    <condition><equals><property>{p}item</property><value>3</value></equals></condition></animation>
+</PropertyList>
+"""
+
+
+ROWS_NAS = """# Generated by flightgear/tools/make_cabin.py - edit the generator, not this file.
+# Cabin layout for cabin_show.nas (FlightGear model x, metres, + = toward the tail).
+var ROWS = [{rows}];
+var START_X = {start:.3f};
+var SERVE_OFFSET = {offset:.3f};
+"""
 
 
 FLY_XML = """<?xml version="1.0"?>
@@ -432,8 +583,15 @@ TOP_XML_HEAD = """<?xml version="1.0"?>
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    seats = build_cabin()
+    seats, rows = build_cabin()
     build_fly()
+    att_names = build_attendant()
+    with open(os.path.join(OUT, "attendant.xml"), "w", newline="\n") as f:
+        f.write(attendant_xml(att_names))
+    nas_dir = os.path.join(OUT, "..", "Nasal")
+    with open(os.path.join(nas_dir, "cabin_rows.nas"), "w", newline="\n") as f:
+        f.write(ROWS_NAS.format(rows=", ".join(f"{x:.3f}" for x in rows),
+                                start=ATT_START_X, offset=ATT_SERVE_OFFSET))
     for g in range(3):
         with open(os.path.join(OUT, f"fly-group{g}.xml"), "w", newline="\n") as f:
             f.write(FLY_XML.format(g=g, rx=WING_ROOT[0], ry=WING_ROOT_Y, rz=WING_ROOT[1]))
@@ -452,6 +610,10 @@ def main():
             f"<offsets><x-m>{x:.3f}</x-m><y-m>{y:.3f}</y-m><z-m>{z:.3f}</z-m>"
             f"<heading-deg>{rng.uniform(-6, 6):.1f}</heading-deg></offsets></model>\n")
         n += 1
+    parts.append(
+        "\n  <!-- Running gag: the fly flight attendant and her snack cart (cabin_show.nas). -->\n"
+        f"  <model><name>attendant</name><path>Aircraft/FlyCabin/Models/attendant.xml</path>"
+        f"<offsets><x-m>0</x-m><y-m>0</y-m><z-m>{Z_FLOOR:.3f}</z-m></offsets></model>\n")
     parts.append("</PropertyList>\n")
     with open(os.path.join(OUT, "738-flies.xml"), "w", newline="\n") as f:
         f.write("".join(parts))
