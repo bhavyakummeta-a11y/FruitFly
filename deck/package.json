@@ -1,0 +1,8 @@
+{
+  "name": "fruitfly-deck",
+  "private": true,
+  "description": "Builds deck/FruitFly_Progress.pptx from deck/build/manifest.json",
+  "dependencies": {
+    "pptxgenjs": "3.12.0"
+  }
+}

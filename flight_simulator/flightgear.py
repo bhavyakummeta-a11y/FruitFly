@@ -43,6 +43,53 @@ def wait_until_steady(bridge, state, hold=3.0, timeout=120.0, climb=1.5, roll_de
                        f'bank {math.degrees(state.roll):+.0f} deg, pitch {math.degrees(state.pitch):+.0f} deg).')
 
 
+class CockpitFly:
+    """Drives the fly pilot in the 737's captain seat (FlyCabin fly-pilot.xml) from the
+    brain that is flying the plane. Writes /fruitfly/pilot/{active,power,steer,escape}
+    over telnet, at most `hz` times a second. Display only: it never touches the controls,
+    and any telnet failure just switches it off.
+
+    Rates are scaled by the largest value seen so far this run (floor 20 Hz), so the
+    animation shows changes in activity rather than absolute Hz."""
+
+    def __init__(self, telnet_port, hz=10.0):
+        self.period, self.next = 1.0 / hz, 0.0
+        self.peak = {}
+        self.sock = socket.create_connection(('127.0.0.1', telnet_port), timeout=3)
+        self.sock.sendall(b'data\r\nset /fruitfly/pilot/active true\r\n')
+
+    def _norm(self, key, value, floor=20.0):
+        self.peak[key] = max(self.peak.get(key, floor), value)
+        return max(0.0, min(1.0, value / self.peak[key]))
+
+    def update(self, escape_hz, activity):
+        if self.sock is None or time.monotonic() < self.next:
+            return
+        self.next = time.monotonic() + self.period
+        a = {k: v for k, v in (activity or {}).items() if isinstance(v, (int, float)) and math.isfinite(v)}
+        gf = max(float(escape_hz or 0.0), a.get('DNp01_hz', 0.0))
+        right = a.get('DNa01_R_hz', 0.0) + a.get('DNa02_R_hz', 0.0)
+        left = a.get('DNa01_L_hz', 0.0) + a.get('DNa02_L_hz', 0.0)
+        values = {'power': self._norm('DNg02', a.get('DNg02_hz', 0.0)),
+                  'steer': max(-1.0, min(1.0, (right - left) / (right + left + 20.0))),
+                  'escape': self._norm('DNp01', gf)}
+        lines = ''.join(f'set /fruitfly/pilot/{k} {v:.3f}\r\n' for k, v in values.items())
+        try:
+            self.sock.sendall(lines.encode())
+        except OSError:
+            self.close()
+
+    def close(self):
+        if self.sock is None:
+            return
+        try:
+            self.sock.sendall(b'set /fruitfly/pilot/active false\r\nquit\r\n')
+        except OSError:
+            pass
+        self.sock.close()
+        self.sock = None
+
+
 def hand_over(telnet_port, attempts=5):
     """Tell the 737 overlay (FlyCabin/Nasal/fruitfly.nas) that a controller is connected,
     so it switches the 737's own autopilot off now rather than leaving it holding the plane.

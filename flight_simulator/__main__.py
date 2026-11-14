@@ -45,6 +45,7 @@ def run(args, runlog=None):
     view = None
     bridge = None
     body = None
+    pilot = None
     scene = None
     log_file = None
     try:
@@ -76,6 +77,13 @@ def run(args, runlog=None):
             sim = DemoSimulator()
             state = sim.state
             controller = FlightController()
+        if bridge and not args.no_cockpit_fly:
+            # The fly pilot in the 737's captain seat, animated by this brain (display only).
+            from .flightgear import CockpitFly
+            try:
+                pilot = CockpitFly(args.telnet_port or args.telemetry_port - 1)
+            except OSError as exc:
+                print(f'Cockpit fly not animated (telnet: {exc}).', flush=True)
         if not args.no_fly_body:
             # Live 3D fly (python -m flight_simulator.fly_body); fire-and-forget UDP, display only.
             from .fly_body import BodyLink
@@ -193,6 +201,8 @@ def run(args, runlog=None):
             if body:
                 body.send(state, controller.phase, args.brain, escape,
                           getattr(brain, 'last_activity', None))
+            if pilot:
+                pilot.update(escape, getattr(brain, 'last_activity', None))
             if state.time >= next_display:
                 if scene:
                     scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
@@ -235,6 +245,8 @@ def run(args, runlog=None):
             try:
                 if body:
                     body.close()
+                if pilot:
+                    pilot.close()
                 if bridge:
                     bridge.close()
                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
@@ -269,6 +281,7 @@ def main():
     parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle towers (default: telemetry port - 1)')
     parser.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window (python -m flight_simulator.fly_body)')
     parser.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
+    parser.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
     parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle towers in FlightGear')
     parser.add_argument('--note', help='Feedback note saved with this run log')
     parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')

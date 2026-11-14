@@ -77,6 +77,15 @@ def run_demo(args, fly, log):
     return run_phase(fly, sim, args.seconds, log=log, on_tick=progress)
 
 
+def _set_speed_up(telnet_port, value):
+    import socket
+    try:
+        with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as sock:
+            sock.sendall(f'data\r\nset /sim/speed-up {value}\r\nquit\r\n'.encode())
+    except OSError as exc:
+        print(f'WARNING: could not set /sim/speed-up over telnet ({exc}).', flush=True)
+
+
 def run_flightgear(args, fly, log):
     """Live FlightGear. The sim is frozen during every brain trial."""
     from .flightgear import RunwayFlightGear
@@ -85,6 +94,14 @@ def run_flightgear(args, fly, log):
     # on the extended centerline, --final-nm before the threshold.
     ahead = args.final_nm * 1852.0 if args.phase == 'landing' else 0.0
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
+    pilot = None
+    if args.smooth:
+        # Smooth mode: no freeze per brain trial. The whole sim runs in steady slow motion
+        # and keeps flying on the last commands while the brain computes, so each decision
+        # acts on a state ~trial*speed-up sim-seconds old (like a slow fly's latency).
+        _set_speed_up(args.telemetry_port - 1, args.speed_up)
+        print(f'Smooth mode: sim at {args.speed_up:g}x, no pause during brain trials '
+              f'(decisions use a slightly stale state).', flush=True)
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
@@ -102,6 +119,13 @@ def run_flightgear(args, fly, log):
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
         body = None
+        if not args.no_cockpit_fly:
+            # The fly pilot in the 737's captain seat, animated by this brain (display only).
+            from .flightgear import CockpitFly
+            try:
+                pilot = CockpitFly(args.telemetry_port - 1)
+            except OSError as exc:
+                print(f'Cockpit fly not animated (telnet: {exc}).', flush=True)
         if not args.no_fly_body:
             # Live 3D fly window (python -m flight_simulator.fly_body); display only.
             from .fly_body import BodyLink
@@ -119,12 +143,16 @@ def run_flightgear(args, fly, log):
                       f'flying: wings level, {HOLD_PITCH:.0f} deg climb, climb power. '
                       'Press Ctrl-C to pause FlightGear and exit.', flush=True)
             if fly.decision_due(s):
-                s = bridge.freeze(True)
+                if not args.smooth:
+                    s = bridge.freeze(True)
                 t0 = time.monotonic()
                 controls = fly.step(s, max(s.time - previous, 1e-3))
                 if args.brain == 'connectome':
-                    print(f'  brain trial {time.monotonic() - t0:.1f}s', flush=True)
-                s = bridge.freeze(False)
+                    print(f'  brain trial {time.monotonic() - t0:.1f}s  {fly.status.phase:14s} '
+                          f'ias={s.speed / KT:5.1f}kt agl={s.agl / FT:5.0f}ft pitch={math.degrees(s.pitch):4.1f}deg '
+                          f'thr={controls.throttle:.2f}', flush=True)
+                if not args.smooth:
+                    s = bridge.freeze(False)
             else:
                 controls = fly.step(s, max(s.time - previous, 1e-3))
             if isinstance(fly, TakeoffFly) and not s.on_ground and s.climb > 1 and s.agl > 10:
@@ -134,6 +162,10 @@ def run_flightgear(args, fly, log):
                 last = fly.decisions[-1] if fly.decisions else None
                 rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
                 body.send(s, fly.status.phase, args.brain, (rates or {}).get('DNp01_hz', 0.0), rates)
+            if pilot:
+                last = fly.decisions[-1] if fly.decisions else None
+                rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
+                pilot.update((rates or {}).get('DNp01_hz', 0.0), rates)
             bridge.send(controls)
             previous = s.time
             was_ground = s.on_ground
@@ -163,6 +195,10 @@ def run_flightgear(args, fly, log):
             touchdown_pitch_deg=touchdown and touchdown[2]))()
         return summarize(fly, sim_like, max_y)
     finally:
+        if pilot:
+            pilot.close()
+        if args.smooth:
+            _set_speed_up(args.telemetry_port - 1, 1.0)
         paused = bridge.close()
         print('FlightGear paused (acknowledged), ailerons and rudder centred.' if paused else
               'WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: '
@@ -199,6 +235,10 @@ def main(argv=None):
     p.add_argument('--log', help='CSV of every sim step, incl. sensory inputs and DN rates')
     p.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window')
     p.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
+    p.add_argument('--smooth', action='store_true',
+                   help='FlightGear: no pause per brain trial; run the sim in slow motion instead')
+    p.add_argument('--speed-up', type=float, default=0.5, help='Sim speed in --smooth mode')
+    p.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
     p.add_argument('--plot', help='PNG of sugar input, brain activity, altitude and airspeed (needs matplotlib)')
     args = p.parse_args(argv)
     if not math.isfinite(args.seconds) or args.seconds <= 0 or args.period <= 0:

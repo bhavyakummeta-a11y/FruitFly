@@ -47,11 +47,41 @@
         <z-offset-m archive="y">-13.1</z-offset-m>
       </config>
     </view>
+    <!-- The fly pilot at the controls, the panel and the windshield in one frame:
+         from the jump seat behind and right of the captain, looking forward-left. -->
+    <view n="132">
+      <name>Cockpit: fly pilot</name>
+      <type>lookfrom</type>
+      <internal archive="y">true</internal>
+      <config>
+        <from-model type="bool">true</from-model>
+        <from-model-idx type="int">0</from-model-idx>
+        <default-field-of-view-deg type="double">80</default-field-of-view-deg>
+        <pitch-offset-deg>-8</pitch-offset-deg>
+        <heading-offset-deg>14</heading-offset-deg>
+        <x-offset-m archive="y">0.25</x-offset-m>
+        <y-offset-m archive="y">1.55</y-offset-m>
+        <z-offset-m archive="y">-16.05</z-offset-m>
+      </config>
+    </view>
   </sim>
 
   <fruitfly>
     <!-- Python bridge writes these over telnet/httpd -->
     <autostart type="bool">false</autostart>   <!-- set true: runs the 737's own autostart -->
+    <!-- The fly pilot: the controller (the fly brain) writes active/power/steer/escape
+         from descending-neuron rates; fruitfly.nas animates the rest. Display only. -->
+    <pilot>
+      <active type="bool">false</active>
+      <power type="double">0</power>        <!-- 0..1  DNg02 (wingbeat amplitude) -->
+      <steer type="double">0</steer>        <!-- -1..1 steering DNs, right minus left -->
+      <escape type="double">0</escape>      <!-- 0..1  DNp01 Giant Fibre -->
+      <start-view type="bool">true</start-view>  <!-- open in "Cockpit: fly pilot" -->
+      <flap-norm type="double">0</flap-norm>
+      <head-turn-deg type="double">0</head-turn-deg>
+      <lean-deg type="double">0</lean-deg>
+      <hop-m type="double">0</hop-m>
+    </pilot>
     <passengers>
       <activity type="double">0.15</activity>  <!-- 0..1, e.g. a normalised firing rate -->
       <group n="0"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>

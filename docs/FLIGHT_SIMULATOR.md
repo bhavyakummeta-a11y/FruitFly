@@ -319,6 +319,24 @@ python -m flight_simulator.session status                # what is being logged 
   files are written but never committed, so they cannot ride along with someone
   else's push.
 
+#### Companion windows: log below, fly brain to the right (Windows)
+
+When FlightGear's window appears, the session logger makes room on that monitor
+and opens two chromeless windows glued to it (they follow when you move, resize,
+minimise or raise FlightGear):
+
+- **Log** (below): session name/status, altitude, speed, attitude, throttle, and
+  the running log (session events, FlightGear warnings, controller output).
+- **Fly brain** (right): all 138,639 FlyWire neurons drawn at their real positions
+  (frontal view); neurons that fired in the latest 200 ms connectome trial light
+  up (brightness = spike count), plus the descending-neuron rates. It states
+  plainly when no fly brain is flying (no controller, or a reflex/silent baseline).
+
+The brain data comes from the controller run's `fly_spikes.jsonl`, read
+(read-only) from `ConnectomeBrain.last_counts`; the pilot code is not modified.
+It needs the connectome data (`python -m flight_simulator.download_data`).
+Parallel sessions each get their own windows, port and browser profile.
+
 Airplane charts need the property API (`--httpd`, which the launchers set);
 without it the session still records FlightGear's warnings and controller runs.
 
