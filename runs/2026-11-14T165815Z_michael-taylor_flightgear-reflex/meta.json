@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-11-14T165815Z_michael-taylor_flightgear-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:58:15.895592+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain reflex --seconds 180 --note 'latest cruise rules f5c0ca0 + AP handover e8355dc; reflex baseline; 738-flies'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "reflex",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_scene": false,
+    "note": "latest cruise rules f5c0ca0 + AP handover e8355dc; reflex baseline; 738-flies",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "e8355dc5deca7f154c0308534045dae9c6550aac",
+    "branch": "main",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "fg_sessions": [
+    {
+      "name": "obstacle avoidance - latest cruise rules (f5c0ca0)",
+      "run_id": "2026-11-14T165741Z_michael-taylor_fg-obstacle-avoidance-latest-cruise-rules-f5c0ca0"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 30
+  },
+  "finished_utc": "2026-11-14T16:58:47.107992+00:00",
+  "exit_code": 1
+}

@@ -1,0 +1,11 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T165815Z_michael-taylor_flightgear-reflex
+REFLEX BASELINE (no connectome)
+Waiting for airborne FlightGear telemetry on localhost...
+FlightGear connected. Initial altitude/heading/speed are the hold targets.
+Handover sent: the 737 autopilot (if any) switches off, the controller flies.
+Placed 3 obstacle towers in FlightGear (telnet 5500).
+   0.0s AVOID  altitude=  679.2m speed=116.2m/s escape=  0.0Hz clearance= 6873.5m
+  10.2s AVOID  altitude=  684.6m speed=113.8m/s escape=  0.0Hz clearance= 5685.8m
+  20.2s ALTITUDE RECOVERY / AVOID altitude=  680.3m speed=120.5m/s escape= 50.0Hz clearance= 4456.6m
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: Flight departed the test envelope (heading, bank, pitch, speed or altitude); pausing. Check aircraft controls and trim.
