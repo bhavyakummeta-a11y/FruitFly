@@ -1,0 +1,6 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T172627Z_michael-taylor_flightgear-connectome
+CONNECTOME LIF (notebook model)
+Connectome decisions run synchronously; FlightGear pauses during each trial.
+Waiting for airborne FlightGear telemetry on localhost...
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: No FlightGear telemetry; check UDP flags and protocol XML.
