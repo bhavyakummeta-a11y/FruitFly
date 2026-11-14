@@ -2,7 +2,7 @@
 
 FlightGear is the free, open-source flight simulator we use for the [current MVP](PROJECT_PLAN.md#current-mvp-as-of-2026-11-14): get the plane on a runway, then let the fly brain drive the throttle from Python.
 
-> **Aircraft:** the project flies the **Boeing 737-800**. It isn't bundled; see [AIRCRAFT.md](AIRCRAFT.md) for installing it. Examples below use the bundled Cessna 172P (`c172p`), which is our fallback for debugging, because it works straight after install. For the 737, swap `--aircraft=c172p` for the 737's ID and write **both** `engine[0]` and `engine[1]` throttles.
+> **Aircraft:** the project's default is the **Boeing 737-800 with fly passengers** (`738-flies`). Install it once with `python flightgear/setup_aircraft.py`, then start it with `python flightgear/launch.py` or `python -m flight_simulator.launch_fg`. See [flightgear/README.md](../flightgear/README.md) and [AIRCRAFT.md](AIRCRAFT.md). The examples below use the bundled Cessna 172P (`c172p`), our fallback for debugging, because it works straight after install. For the 737, swap `--aircraft=c172p` for `--fg-aircraft=<repo>/flightgear/Aircraft --aircraft=738-flies`. Writing `engine[0]` throttle is enough, because the overlay mirrors it to `engine[1]`.
 >
 > **Related:** [FLIGHT_SIMULATOR.md](FLIGHT_SIMULATOR.md) covers the obstacle-avoidance experiment, which talks to FlightGear over `--generic` UDP rather than telnet.
 
