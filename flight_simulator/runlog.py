@@ -42,7 +42,6 @@ import time
 
 ROOT = Path(__file__).resolve().parent.parent
 BRANCH = 'sim-logs'
-WORKTREE = ROOT / '.sim-logs'
 RUNS = 'runs'
 GZIP_OVER = 5 * 1024 * 1024
 DIFF_CAP = 512 * 1024
@@ -91,24 +90,45 @@ def fg_home(telemetry_port):
     return Path(os.environ['FG_HOME']) if os.environ.get('FG_HOME') else appdata / 'flightgear.org'
 
 
+def shared_worktree():
+    """The sim-logs checkout of this repo, wherever it is.
+
+    A branch can be checked out in only one worktree, so every worktree/clone of the
+    repo on this machine (FruitFly, FruitFly-obst, ...) must write to the same one."""
+    path = None
+    for line in git('worktree', 'list', '--porcelain', check=False).splitlines():
+        if line.startswith('worktree '):
+            path = Path(line[len('worktree '):])
+        elif line == f'branch refs/heads/{BRANCH}' and path is not None and (path / '.git').exists():
+            return path
+    return None
+
+
+def main_root():
+    """Root of the main checkout (not a linked worktree); .sim-logs/ lives there."""
+    return Path(git('rev-parse', '--path-format=absolute', '--git-common-dir')).parent
+
+
 def ensure_worktree():
-    """Check out the sim-logs branch at .sim-logs/, creating the branch if needed."""
-    if (WORKTREE / '.git').exists():
-        return WORKTREE
+    """Return the sim-logs checkout, creating it (and the branch) if needed."""
+    found = shared_worktree()
+    if found:
+        return found
     git('worktree', 'prune', check=False)
+    target = main_root() / '.sim-logs'
     git('fetch', '-q', 'origin', BRANCH, check=False, timeout=30)
     local = git('rev-parse', '--verify', '-q', f'refs/heads/{BRANCH}', check=False)
     remote = git('rev-parse', '--verify', '-q', f'refs/remotes/origin/{BRANCH}', check=False)
     if local:
-        git('worktree', 'add', '-q', str(WORKTREE), BRANCH)
+        git('worktree', 'add', '-q', str(target), BRANCH)
     elif remote:
-        git('worktree', 'add', '-q', '--track', '-b', BRANCH, str(WORKTREE), f'origin/{BRANCH}')
+        git('worktree', 'add', '-q', '--track', '-b', BRANCH, str(target), f'origin/{BRANCH}')
     else:
-        git('worktree', 'add', '-q', '--orphan', '-b', BRANCH, str(WORKTREE))
-        (WORKTREE / 'README.md').write_text(BRANCH_README, encoding='utf-8')
-        git('add', 'README.md', cwd=WORKTREE)
-        git('commit', '-q', '-m', 'Start sim-logs branch', cwd=WORKTREE)
-    return WORKTREE
+        git('worktree', 'add', '-q', '--orphan', '-b', BRANCH, str(target))
+        (target / 'README.md').write_text(BRANCH_README, encoding='utf-8')
+        git('add', 'README.md', cwd=target)
+        git('commit', '-q', '-m', 'Start sim-logs branch', cwd=target)
+    return target
 
 
 def push(message=None, paths=(), quiet=False):
@@ -116,13 +136,16 @@ def push(message=None, paths=(), quiet=False):
     say = (lambda *a: None) if quiet else (lambda *a: print(*a, file=sys.__stdout__, flush=True))
     try:
         wt = ensure_worktree()
+        if os.environ.get('FRUITFLY_NO_PUSH'):
+            # Not even a local commit: the sim-logs checkout is shared by every
+            # session on this machine, so a local commit would ride along with
+            # someone else's next push. The files stay on disk, untracked.
+            say(f'[runlog] FRUITFLY_NO_PUSH set; saved on disk only (not committed): {", ".join(paths)}')
+            return True
         if paths:
             git('add', '--', *paths, cwd=wt)
             if git('diff', '--cached', '--name-only', cwd=wt):
                 git('commit', '-q', '-m', message or 'sim log', cwd=wt)
-        if os.environ.get('FRUITFLY_NO_PUSH'):
-            say('[runlog] FRUITFLY_NO_PUSH set; committed locally only.')
-            return True
         if git('ls-remote', '--heads', 'origin', BRANCH, cwd=wt, timeout=30):
             git('pull', '-q', '--rebase', 'origin', BRANCH, cwd=wt, timeout=60)
         git('push', '-q', '-u', 'origin', BRANCH, cwd=wt, timeout=90)
@@ -131,7 +154,7 @@ def push(message=None, paths=(), quiet=False):
             else '[runlog] pushed')
         return True
     except (RuntimeError, OSError, subprocess.TimeoutExpired) as exc:
-        say(f'[runlog] push failed ({exc}); log kept locally in {WORKTREE}. '
+        say(f'[runlog] push failed ({exc}); log kept locally on the {BRANCH} branch. '
             'Retry: python -m flight_simulator.runlog push')
         return False
 
@@ -167,7 +190,8 @@ class RunLog:
         try:
             self.base = ensure_worktree()
         except (RuntimeError, OSError, subprocess.TimeoutExpired) as exc:
-            print(f'[runlog] sim-logs worktree unavailable ({exc}); logging to runs/ only.')
+            print('!' * 70 + f'\n[runlog] WARNING: sim-logs checkout unavailable ({exc}).\n'
+                  '[runlog] This run is saved to runs/ ONLY and will NOT be pushed.\n' + '!' * 70)
             self.base, self.auto_push = ROOT, False
         self.dir = self.base / RUNS / self.id
         self.dir.mkdir(parents=True, exist_ok=True)
@@ -175,6 +199,10 @@ class RunLog:
         self._saved = sys.stdout, sys.stderr
         sys.stdout, sys.stderr = Tee(sys.stdout, self._console), Tee(sys.stderr, self._console)
         self._write_meta()
+        sessions = active_sessions(self.base)
+        if sessions:
+            self._meta['fg_sessions'] = sessions
+            self._dump('meta.json', self._meta)
         print(f'[runlog] {self.dir}', flush=True)
 
     def _write_meta(self):
@@ -280,12 +308,20 @@ class RunLog:
         if self.auto_push:
             push(message, [f'{RUNS}/{self.id}'])
         else:
-            try:
-                git('add', '--', f'{RUNS}/{self.id}', cwd=self.base)
-                git('commit', '-q', '-m', message, cwd=self.base)
-                print('[runlog] committed locally (--no-push).')
-            except RuntimeError as exc:
-                print(f'[runlog] local commit failed: {exc}')
+            # Never commit: the shared sim-logs checkout would push it with the next run.
+            print(f'[runlog] --no-push: saved on disk only (not committed): {self.dir}')
+
+
+def active_sessions(base):
+    """FlightGear sessions currently being logged (see session.py lock files)."""
+    found = []
+    for lock in (Path(base) / '.sessions').glob('*.lock'):
+        try:
+            info = json.loads(lock.read_text(encoding='utf-8'))
+            found.append({'name': info.get('name'), 'run_id': info.get('run_id')})
+        except (OSError, ValueError):
+            pass
+    return found
 
 
 def runs_dir():

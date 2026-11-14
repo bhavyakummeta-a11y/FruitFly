@@ -70,7 +70,7 @@ def main():
     parser.add_argument('--aircraft', default=DEFAULT_AIRCRAFT, help='738-flies (default), 738 = stock 737, c172p')
     parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir, or an fgfs/AppImage file (or set FG_INSTALL)')
     parser.add_argument('--print', action='store_true', help='Only print the command')
-    parser.add_argument('--no-log', action='store_true', help='Do not start the session log / live page')
+    parser.add_argument('--name', help='Session name (required to launch): what this session is for')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if not 0 <= args.instance <= 50:
@@ -93,11 +93,11 @@ def main():
     p = ports(args.instance)
     print(f'Controller flags: --telemetry-port {p["telemetry"]} --control-port {p["control"]}')
     if not args.print:
-        proc = subprocess.Popen(cmd, env=env)
-        if not args.no_log:
-            from .session import spawn
-            spawn(proc.pid, p['httpd'], p['telemetry'], env.get('FG_HOME'),
-                  label=f'instance {args.instance}, {args.aircraft}')
+        # Every session is logged and pushed; the watchdog reads the name from fgfs's args.
+        from .session import ensure_watchdog, name_arg
+        cmd.insert(1, name_arg(args.name))
+        ensure_watchdog()
+        subprocess.Popen(cmd, env=env)
     return 0
 
 
