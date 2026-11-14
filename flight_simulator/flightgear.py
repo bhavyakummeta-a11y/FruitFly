@@ -4,6 +4,7 @@ import socket
 import select
 import time
 from .core import State, Controls, wrap
+from .scenery import to_local
 
 
 class FlightGear:
@@ -43,9 +44,7 @@ class FlightGear:
             raise ValueError('FlightGear clock reset or out-of-order telemetry; restart controller')
         if self.origin is None:
             self.origin = lat, lon
-        lat0, lon0 = self.origin
-        east = 6371000 * wrap(math.radians(lon - lon0)) * math.cos(math.radians(lat0))
-        north = 6371000 * math.radians(lat - lat0)
+        east, north = to_local(lat, lon, self.origin)
         delta = 0.0 if self.previous_clock is None else clock - self.previous_clock
         # elapsed-sec is wall-like simulator elapsed time. Exclude pause boundaries.
         active = delta > 0 and not frozen and not self.frozen

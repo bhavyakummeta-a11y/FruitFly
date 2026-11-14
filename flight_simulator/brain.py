@@ -56,9 +56,10 @@ READOUTS = {
 }
 
 
-def validate_inputs(inputs):
+def validate_inputs(inputs, specifications=None):
+    specifications = INPUTS if specifications is None else specifications
     for name, hz in inputs.items():
-        if name not in INPUTS:
+        if name not in specifications:
             raise KeyError(f'Unknown input group {name!r}')
         if not math.isfinite(hz) or not 0 <= hz <= 200:
             raise ValueError(f'Input rate for {name} must be in 0-200 Hz, got {hz}')
@@ -85,7 +86,7 @@ class ConnectomeBrain:
     cut (the notebook's lesion method: the neurons still fire, nobody hears
     them). It is for control experiments only.
     """
-    def __init__(self, directory, seed=0, ms=200, silence=()):
+    def __init__(self, directory, seed=0, ms=200, silence=(), extra_inputs=None, extra_readouts=None):
         import numpy as np
         import scipy.sparse as sp
         try:
@@ -127,7 +128,10 @@ class ConnectomeBrain:
                 ids = [rows[int(v)] for v in values if int(v) in rows]
             return np.array(sorted(set(ids)), dtype=int)
 
-        self.groups = {name: group(spec) for name, spec in {**INPUTS, **READOUTS}.items()}
+        self.input_specs = {**INPUTS, **(extra_inputs or {})}
+        self.readout_specs = {**READOUTS, **(extra_readouts or {})}
+        self.groups = {name: group(spec) for name, spec in {**self.input_specs, **self.readout_specs}.items()}
+        self.last_counts = np.zeros(self.n, dtype=int)
         empty = [name for name, idx in self.groups.items() if not len(idx)]
         if empty:
             raise ValueError('Empty neuron groups (check annotation IDs): ' + ', '.join(empty))
@@ -150,14 +154,18 @@ class ConnectomeBrain:
     def run(self, inputs, readouts=None):
         """Fresh 200 ms trial from rest. inputs: {group: Hz} -> {readout: Hz}."""
         import numpy as np
-        validate_inputs(inputs)
-        readouts = list(READOUTS) if readouts is None else list(readouts)
+        validate_inputs(inputs, self.input_specs)
+        readouts = list(self.readout_specs) if readouts is None else list(readouts)
+        for name in readouts:
+            if name not in self.groups:
+                raise KeyError(f'Unknown readout group {name!r}')
         start = time.monotonic()
         active = [(self.groups[name], hz) for name, hz in inputs.items() if hz > 0]
         if not active:
             # Exact shortcut: reset voltages are below threshold, synaptic current
             # is zero, and there is no other drive or spontaneous noise.
             self.calls += 1
+            self.last_counts.fill(0)
             self.last_seconds = time.monotonic() - start
             return self._record(inputs, {name: 0.0 for name in readouts})
         dt, v0, vth, tm, ts, ref = 0.1, -52.0, -45.0, 20.0, 5.0, 2.2
@@ -185,6 +193,7 @@ class ConnectomeBrain:
             counts[spikes] += 1
             if len(spikes):
                 ring[slot] += np.asarray(self.w[spikes].sum(0)).ravel() * wsyn
+        self.last_counts = counts
         self.last_seconds = time.monotonic() - start
         seconds = self.ms / 1000
         return self._record(inputs, {name: float(counts[self.groups[name]].mean() / seconds)
