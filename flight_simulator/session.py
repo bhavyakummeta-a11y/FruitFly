@@ -62,11 +62,13 @@ UNNAMED = 'UNNAMED'
 # the name to VIEW_PROP and the aircraft's cabin_show.nas switches the camera. It changes
 # only what the person watching sees; the fly pilot never uses the camera.
 VIEW_PROP = '/fruitfly/view-request'
-# Video: FlightGear's own recorder (video-start/video-stop) films every session from the
-# moment the scenery has loaded. H.264 in MKV, because an MKV cut short by a FlightGear
-# crash still plays (an MP4 doesn't). Videos are big, so they stay on this machine and
-# are NOT pushed to sim-logs; the session log records where they are.
-# Opt out: `session watch --no-video` or FRUITFLY_NO_VIDEO=1.
+# Video: FlightGear's own recorder (video-start/video-stop). OFF BY DEFAULT: in
+# FlightGear 2024.1.4 on Windows, video-start crashed fgfs within seconds
+# (0x40000015 in sentry.dll, session 2026-11-14T200356Z). For demo footage use
+# screen_record.py (takeoff_live --screen-record), which never touches fgfs.
+# Opt in, at your own risk: `session watch --video` or FRUITFLY_VIDEO=1.
+# Then: H.264 in MKV from the moment the scenery has loaded, kept on this machine
+# (not pushed); the session log records where.
 VIDEO_ROOT = Path(os.environ.get('LOCALAPPDATA') or Path.home()) / 'FruitFly' / 'videos'
 VIDEO_SETTINGS = {'/sim/video/codec': 'libx264', '/sim/video/container': 'mkv',
                   '/sim/video/quality': 0.6, '/sim/video/speed': 1.0, '/sim/video/bitrate': 0}
@@ -406,7 +408,9 @@ class Session:
         self.control_log = []            # closed segments
         self.brain_trial = {}
         self.dock = None
-        self.want_video = not (getattr(a, 'no_video', False) or os.environ.get('FRUITFLY_NO_VIDEO'))
+        opt_in = getattr(a, 'video', False) or os.environ.get('FRUITFLY_VIDEO')
+        opt_out = getattr(a, 'no_video', False) or os.environ.get('FRUITFLY_NO_VIDEO')
+        self.want_video = bool(opt_in) and not opt_out      # off by default: video-start crashed fgfs
         self.video_auto_done = False
         self.video = {'recording': False, 'path': '', 'error': ''}
         self.videos = []                 # every file this session recorded
@@ -1044,7 +1048,7 @@ class Session:
                                        f"{self.maxima['ias_kt'] and round(self.maxima['ias_kt'])} kt"),
                 ('FlightGear warnings', f'{len(self.fg_kept)} lines (fgfs_warnings.log)'),
                 ('Video (on the recording machine, not pushed)',
-                 '<br>'.join(f'`{v}`' for v in self.videos) or ('none' if self.want_video else 'off (--no-video)')),
+                 '<br>'.join(f'`{v}`' for v in self.videos) or ('none' if self.want_video else 'off (opt in: --video / FRUITFLY_VIDEO=1)')),
                 ('Controller runs', ', '.join(f'[{k}](../{k}/feedback.md)' for k in controller) or 'none')]
         title = self.name or 'UNNAMED SESSION'
         text = (f'# {title}\n\n`{self.id}`, FlightGear session by {self.who}.\n\n'
@@ -1074,7 +1078,9 @@ def main(argv=None):
     w.add_argument('--httpd', type=int, help='default: from the fgfs command line, else 8080')
     w.add_argument('--fg-home', help='FlightGear home holding fgfs.log')
     w.add_argument('--no-browser', action='store_true')
-    w.add_argument('--no-video', action='store_true', help="don't record this session (FRUITFLY_NO_VIDEO=1 too)")
+    w.add_argument('--video', action='store_true',
+                   help="opt in to FlightGear's own video recorder (FRUITFLY_VIDEO=1 too); it has crashed fgfs")
+    w.add_argument('--no-video', action='store_true', help='never record (overrides --video / FRUITFLY_VIDEO)')
     at = sub.add_parser('attach', help='log (or name) an already running fgfs now')
     at.add_argument('--pid', type=int)
     at.add_argument('--name')

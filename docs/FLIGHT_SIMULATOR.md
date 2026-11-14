@@ -389,24 +389,22 @@ python -m flight_simulator.session status                # what is being logged 
   files are written but never committed, so they cannot ride along with someone
   else's push.
 
-#### Video of every session
+#### Session video (FlightGear's own recorder): off, opt-in only
 
-Every session is filmed by FlightGear's own recorder (`video-start`/`video-stop`)
-so we can show the fly in action:
+**Don't use it for normal runs.** In FlightGear 2024.1.4 on Windows, starting
+FlightGear's built-in recorder (`video-start`) crashed fgfs within seconds
+(`0x40000015` in `sentry.dll`, session `2026-11-14T200356Z`). For demo footage of
+FlightGear plus the side panel, use the screen recorder
+(`takeoff_live --screen-record`, `flight_simulator/screen_record.py`), which never
+touches fgfs.
 
-- **Automatic:** the session logger starts recording as soon as the scenery has
-  loaded. The video ends when FlightGear closes, or when you press **■ Stop** on
-  the log window. **● Record** starts a new file.
-- **Format:** H.264 in MKV, at the FlightGear window's size. MKV, because a file
-  cut short by a FlightGear crash still plays. It opens in VLC, Windows Media
-  Player / Films & TV, and Chrome.
-- **Where:** `%LOCALAPPDATA%\FruitFly\videos\<session id>\fgvideo-*.mkv` on the
-  machine that ran FlightGear. Videos are **not** pushed to `sim-logs` because
-  they're too big for git. `events.log`, `meta.json` (`videos`) and
-  `feedback.md` record the path and size.
-- **Opt out** for one session with `session watch --no-video`, or for everything
-  with `FRUITFLY_NO_VIDEO=1`. Encoding costs some CPU; if a run is short of frame
-  rate, try without.
+- **Opt in, at your own risk:** `session watch --video` or `FRUITFLY_VIDEO=1`.
+  `--no-video` / `FRUITFLY_NO_VIDEO=1` always win.
+- When on, the logger starts recording once the scenery has loaded (H.264 in
+  MKV). The log window's **● Record / ■ Stop** button works too. After
+  FlightGear closes, the file is moved to
+  `%LOCALAPPDATA%\FruitFlyideos\<session id>\`. It is not pushed;
+  `meta.json` `videos` and `feedback.md` record the path.
 
 #### Who is flying: control attribution in every log
 
