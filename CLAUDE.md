@@ -14,6 +14,20 @@
 - Don't weaken or bypass any of the three. A design that needs the autopilot
   (e.g. "autopilot flies the ILS") is out: ask the user instead.
 
+## Real time: 1x, no pauses, crashes are data (mandatory)
+
+- **FlightGear runs at 1x** during fly-brain runs. No slow motion, no
+  fast-forward; the controllers lock `/sim/speed-up` at 1 (`SpeedLock`).
+- **The fly decides in real time.** Never pause or slow the sim while the brain
+  works. Brain trials run in a background worker (`DecisionWorker`); the plane
+  flies on the last decision until the next is ready.
+- **Crashes are data.** Leaving the test envelope is logged, not an abort. A
+  run ends on collision/ground contact or its time limit.
+- Allowed pauses: setup before the fly takes the controls, and the end of a run.
+  Fly-training runs (`--learn` / `--load-learning`, a teammate's) keep their own
+  pause per trial.
+- `tests/test_realtime.py` checks all of this; don't weaken it.
+
 ## Ticket board: claim work before you start (mandatory)
 
 Several agents work in this repo at once, across checkouts and worktrees

@@ -41,7 +41,8 @@ def default_fg():
 
 DEFAULT_FG = default_fg()
 # Project default aircraft: 737-800 with fly passengers (run flightgear/setup_aircraft.py once).
-REPO_AIRCRAFT = Path(__file__).resolve().parent.parent / 'flightgear' / 'Aircraft'
+REPO = Path(__file__).resolve().parent.parent
+REPO_AIRCRAFT = REPO / 'flightgear' / 'Aircraft'
 DEFAULT_AIRCRAFT = '738-flies'
 # In-air start speed. 100 kt is fine for the C172 but stalls a 737.
 START_KT = {'c172p': 100}
@@ -141,11 +142,15 @@ def wait_ready(telnet_port, timeout=600):
 
 def fly_command(args):
     p = ports(args.instance)
-    cmd = [sys.executable, '-m', 'flight_simulator.takeoff_landing', args.phase, '--brain', args.fly,
+    # takeoff_live = takeoff_landing + a run log, so the session's brain page shows the fly live.
+    # The connectome needs the project venv (requirements-brain.txt) if there is one.
+    venv = REPO / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
+    python = str(venv) if venv.exists() else sys.executable
+    cmd = [python, '-m', 'flight_simulator.takeoff_live', args.phase, '--brain', args.fly,
            '--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
-    if not args.no_smooth:
-        cmd += ['--smooth', '--period', '1.0', '--speed-up', f'{args.speed:g}']
-    return cmd
+    # Always real time: the controller locks FlightGear at 1x and never pauses it for a
+    # brain trial (project rules, gh #3 / #4). There is no speed or pause option.
+    return cmd + ['--period', '1.0']
 
 
 def main():
@@ -161,10 +166,6 @@ def main():
     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
                         help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
                              '(default brain: connectome)')
-    parser.add_argument('--speed', type=float, default=1.0,
-                        help='With --fly: sim speed (1 = real time); the brain decides as fast as it can')
-    parser.add_argument('--no-smooth', action='store_true',
-                        help='With --fly: pause FlightGear for every brain trial instead of slow motion')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if args.instance is None:

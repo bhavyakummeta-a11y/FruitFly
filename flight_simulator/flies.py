@@ -153,20 +153,42 @@ class PhaseFly:
             self.elevator_i = clip(self.elevator_i - 4.0 * error * dt, -1, 1)
         return clip(self.elevator_i - 8.0 * error, -1, 1)
 
+    # Set to a flightgear.DecisionWorker for live, real-time flight: brain trials then run
+    # in the background and step() never waits for one (the sim is not paused). None
+    # (default) runs each trial inline, for the offline sims and tests.
+    worker = None
+
+    def run_in_background(self):
+        from .flightgear import DecisionWorker
+        self.worker = DecisionWorker(lambda inputs: (inputs, self.brain.run(inputs, self.readouts)))
+        return self.worker
+
+    def _apply(self, inputs, rates, s):
+        # One 200 ms trial reads 1-2 neurons per group, so rates jitter by +-20 Hz.
+        # The nerve cord integrates: low-pass the DN rates across trials.
+        if self.smoothed is None:
+            self.smoothed = dict(rates)
+        else:
+            self.smoothed = {k: SMOOTHING * v + (1 - SMOOTHING) * self.smoothed.get(k, v)
+                             for k, v in rates.items()}
+        note = self.decode(self.smoothed, s)
+        self.decisions.append(Decision(s.time, inputs, rates, note or ''))
+
     def step(self, s, dt):
-        """Called at the sim rate. Runs a brain trial when one is due."""
-        if s.time >= self.next_decision and (not self.status.done or self.hold):
+        """Called at the sim rate. Runs (or, with a worker, starts/collects) a brain trial
+        when one is due."""
+        if self.worker is not None:
+            done = self.worker.poll(s.time)
+            if done:
+                self._apply(*done[0], s)  # decided on an older state, applied now
+            if self.decision_due(s) and not self.worker.busy:
+                period = self.current_period(s)
+                missed = (s.time - self.next_decision) / period if self.next_decision > -1e8 else 0
+                self.worker.submit(s.time, self.encode(s), missed=missed)
+                self.next_decision = s.time + period
+        elif self.decision_due(s):
             inputs = self.encode(s)
-            rates = self.brain.run(inputs, self.readouts)
-            # One 200 ms trial reads 1-2 neurons per group, so rates jitter by +-20 Hz.
-            # The nerve cord integrates: low-pass the DN rates across trials.
-            if self.smoothed is None:
-                self.smoothed = dict(rates)
-            else:
-                self.smoothed = {k: SMOOTHING * v + (1 - SMOOTHING) * self.smoothed.get(k, v)
-                                 for k, v in rates.items()}
-            note = self.decode(self.smoothed, s)
-            self.decisions.append(Decision(s.time, inputs, rates, note or ''))
+            self._apply(inputs, self.brain.run(inputs, self.readouts), s)
             self.next_decision = s.time + self.current_period(s)
         self.check(s)
         return AirlinerControls(self.aileron, self.haltere(s, dt), self.rudder,
