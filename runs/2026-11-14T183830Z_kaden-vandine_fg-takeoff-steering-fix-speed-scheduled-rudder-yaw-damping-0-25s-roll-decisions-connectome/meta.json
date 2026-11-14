@@ -1,0 +1,39 @@
+{
+  "run_id": "2026-11-14T183830Z_kaden-vandine_fg-takeoff-steering-fix-speed-scheduled-rudder-yaw-damping-0-25s-roll-decisions-connectome",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 37.9
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 37.9,
+      "to_s": 123.0
+    }
+  ],
+  "name": "takeoff steering fix: speed-scheduled rudder, yaw damping, 0.25s roll decisions (connectome)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "fgfs_pid": 23434,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T18:38:30.835232+00:00",
+  "duration_s": 123,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 61,
+  "controller_runs": {},
+  "code": {
+    "commit": "bcfa42e5a8db000ebe01a6f104004decd180a476",
+    "branch": "main"
+  }
+}
