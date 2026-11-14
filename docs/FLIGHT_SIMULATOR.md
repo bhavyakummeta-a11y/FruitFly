@@ -126,6 +126,37 @@ No automatic resume occurs after exit. Resume manually when taking back control.
 Pause/resume acknowledgements are required for connectome trials. A process crash
 or broken socket cannot provide a reliable remote watchdog.
 
+## Run logs and feedback (automatic)
+
+Every `python -m flight_simulator ...` run is logged and pushed to the
+[`sim-logs` branch](https://github.com/bhavyakummeta-a11y/FruitFly/tree/sim-logs)
+with no extra steps. `main` and your working tree are never touched; the branch
+is checked out separately at `.sim-logs/` (git-ignored).
+
+Each run gets `runs/<UTC time>_<who>_<backend>-<brain>/` containing:
+
+| File | What |
+|---|---|
+| `feedback.md` | Outcome table + notes. Start here. |
+| `meta.json` | Exact command, args, code commit, dirty/untracked files, Python, FlightGear version |
+| `code.diff` | Uncommitted changes at run time, so anyone can reproduce the run |
+| `telemetry.csv` | Every control step (gzipped if over 5 MB) |
+| `console.log`, `result.json` | Printed output and the summary |
+| `fgfs_warnings.log` | FlightGear backend: WARN/ALERT/Nasal lines from `fgfs.log`, terrasync noise removed |
+
+```sh
+python -m flight_simulator --backend flightgear --brain reflex --note "first try with new gains"
+python -m flight_simulator.runlog note "overshot heading after 2nd obstacle"   # feedback on latest run
+python -m flight_simulator.runlog note --run <run id> "..."                    # feedback on any run
+python -m flight_simulator.runlog list                                         # recent runs
+python -m flight_simulator.runlog push                                         # retry if offline
+```
+
+`--no-push` logs and commits locally only (or set `FRUITFLY_NO_PUSH=1`);
+`--no-runlog` skips logging. A failed push keeps the commit locally, and it goes
+up with the next run. Passing `--log path.csv` still works; the telemetry then
+goes there instead of the run folder.
+
 ## Shared interface for teammates
 
 `State` and `Controls` in `flight_simulator/core.py` are simulator independent.
