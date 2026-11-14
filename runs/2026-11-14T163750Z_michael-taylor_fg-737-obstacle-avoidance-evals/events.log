@@ -1,0 +1,43 @@
+11:37:52 [session] Session '737 obstacle avoidance evals' watching fgfs pid 4644 (738-flies)
+11:37:52 [session] Live log page: http://127.0.0.1:8765/
+11:37:54 [session] Connected to property API on :8080
+11:37:54 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+11:37:54 [fgfs] 0.04 [WARN]:aircraft  missing state node for:cruise
+11:37:54 [fgfs] 66.94 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+11:37:54 [fgfs] 66.94 [ALRT]:view      Creating osgViewer::CompositeViewer
+11:37:54 [fgfs] 66.94 [ALRT]:general   affinity=none
+11:37:54 [fgfs] 66.94 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+11:37:54 [fgfs] 68.36 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+11:37:54 [fgfs] 68.36 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+11:37:54 [fgfs] 68.37 [WARN]:general   Enabling ATI/AMD viewport hack
+11:37:54 [fgfs] 68.39 [ALRT]:view      affinity=none
+11:37:54 [fgfs] 74.88 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+11:37:54 [fgfs] 74.88 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+11:37:54 [fgfs] 75.75 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+11:37:54 [fgfs] 75.81 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+11:37:54 [fgfs] 77.65 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+11:37:54 [fgfs] 77.68 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+11:37:54 [fgfs] 77.68 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+11:37:54 [fgfs] 77.69 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+11:37:54 [fgfs] 77.69 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+11:37:54 [fgfs] 78.02 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+11:37:54 [fgfs] 78.80 [WARN]:input     Unhandled HID usage page:d with usage 5
+11:37:54 [fgfs] 78.80 [WARN]:input     Unhandled HID usage page:d with usage e
+11:37:54 [fgfs] 80.51 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+11:37:54 [fgfs] 81.67 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+11:37:54 [fgfs] 81.85 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+11:37:54 [fgfs] 83.88 [ALRT]:nasal     Nasal runtime error: non-objects have no members
+11:37:54 [fgfs] 83.88 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 100
+11:37:54 [fgfs] 83.89 [ALRT]:nasal       called from: D:/FlightGear/data/Nasal/globals.nas, line 137
+11:37:54 [fgfs] 84.09 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+11:37:54 [fgfs] 84.44 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+11:37:54 [fgfs] 84.66 [ALRT]:flight    Failed to save initial FDM property state
+11:38:06 [session] Property API stopped answering
+11:38:14 [controller] Run started: 2026-11-14T163813Z_michael-taylor_flightgear-reflex
+11:38:14 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T163813Z_michael-taylor_flightgear-reflex
+11:38:14 [controller] REFLEX BASELINE (no connectome)
+11:38:14 [controller] Waiting for airborne FlightGear telemetry on localhost...
+11:38:14 [controller] Sent FlightGear pause request on exit. Verify pause in the simulator.
+11:38:14 [controller] Error: Start FlightGear in stable flight, at least 35 m/s and wings near level.
+11:38:14 [controller] Run finished: 2026-11-14T163813Z_michael-taylor_flightgear-reflex exit=1
+11:38:27 [session] FlightGear exited (code 1) - looks like a crash
