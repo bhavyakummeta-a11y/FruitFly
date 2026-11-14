@@ -10,8 +10,8 @@ We start in **FlightGear** (free, scriptable) rather than waiting on MSFS access
 
 | Step | What | Done when |
 |---|---|---|
-| **A. FlightGear running** | Install FlightGear, load a Cessna 172 on a runway, and talk to it from Python through FlightGear's property server (`--telnet` or `--httpd`). | Python can read `/velocities/groundspeed-kt` and set `/controls/engines/engine[0]/throttle`. |
-| **B. Fly goes forward** | Run the fly brain and read **DNp09** (walk forward → more throttle) and **MDN** (walk backward → less throttle), as mapped in [the concept notes](notes/FLY_BRAIN_AIRPLANE_CONCEPT.md). Write the result to FlightGear's throttle. | Stimulating the fly makes the plane roll forward along the runway, and taking the stimulus away makes it slow down. |
+| **A. FlightGear running** | Install FlightGear, load the **Boeing 737-800** (see [Aircraft](AIRCRAFT.md)) on a runway, and talk to it from Python through FlightGear's property server (`--telnet` or `--httpd`). | Python can read `/velocities/groundspeed-kt` and set `/controls/engines/engine[0]/throttle` and `engine[1]/throttle`. |
+| **B. Fly goes forward** | Run the fly brain and read **DNp09** (walk forward → more throttle) and **MDN** (walk backward → less throttle), as mapped in [the concept notes](notes/FLY_BRAIN_AIRPLANE_CONCEPT.md). Write the result to both engines' throttles. | Stimulating the fly makes the plane roll forward along the runway, and taking the stimulus away makes it slow down. |
 
 Out of scope for the MVP: steering, rotation, takeoff, MSFS, and dopamine learning. Those follow in the milestones below.
 
@@ -104,7 +104,7 @@ Plan:
 ## Open questions
 
 - [ ] MSFS access: which version, and which machine runs it?
-- [ ] Which aircraft? Something forgiving, like a Cessna 172.
+- [x] Which aircraft? **Boeing 737-800**, decided 2026-11-14. We want a big airliner with a cabin we can fill with fly passengers. See [Aircraft](AIRCRAFT.md).
 - [ ] Phase switching: a simple rule-based selector based on altitude, airspeed and gear state?
 - [ ] Which descending neurons give a clean left/right and up/down? This is answered in milestone 3.
 - [ ] How do we show the result? A live MSFS view plus a neuron-activity panel?
