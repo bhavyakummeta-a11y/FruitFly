@@ -1,0 +1,385 @@
+diff --git a/flight_simulator/__main__.py b/flight_simulator/__main__.py
+index 5a51cd3..6cdac57 100644
+--- a/flight_simulator/__main__.py
++++ b/flight_simulator/__main__.py
+@@ -64,14 +64,14 @@ def run(args, runlog=None):
+                 raise ValueError('Start FlightGear in stable flight, at least 35 m/s and wings near level.')
+             if course_origin is not None and math.hypot(state.east, state.north) > 20000:
+                 raise ValueError('Aircraft is over 20 km from the scenery course. Use the course launch position.')
++            # Pause before scenery/display setup; the autopilot still holds trim.
++            state = bridge.freeze(True)
++            clock_paused = telnet_get(args.telnet_port or args.telemetry_port - 1, "/sim/freeze/clock")
++            if clock_paused is not None and clock_paused.lower() in ("false", "0"):
++                raise RuntimeError("Outdated cruise pause protocol: reinstall flybrain-state and flybrain-controls "
++                                   "from flight_simulator/protocols and restart FlightGear.")
+             controller = FlightController(state.altitude, state.heading, state.speed, state.pitch)
+             print('FlightGear connected. Initial altitude/heading/speed are the hold targets.', flush=True)
+-            from .flightgear import hand_over
+-            if hand_over(args.telnet_port or args.telemetry_port - 1):
+-                print('Handover sent: the 737 autopilot (if any) switches off, the controller flies.', flush=True)
+-            else:
+-                print('WARNING: no telnet handover. A 737 started in the air keeps its own autopilot on '
+-                      'and will fight the controller; launch with --telnet (launch_fg does).', flush=True)
+         else:
+             sim = DemoSimulator()
+             state = sim.state
+@@ -85,8 +85,8 @@ def run(args, runlog=None):
+             # need more space to turn; custom obstacle files remain local ENU.
+             scale = max(1.0, (state.speed / 50.0)**2)
+             sn, cs = math.sin(state.heading), math.cos(state.heading)
+-            obstacles = [replace(o, east=o.east*cs + o.north*scale*sn,
+-                                 north=-o.east*sn + o.north*scale*cs,
++            obstacles = [replace(o, east=state.east + o.east*cs + o.north*scale*sn,
++                                 north=state.north - o.east*sn + o.north*scale*cs,
+                                  top=max(o.top, state.altitude+500)) for o in obstacles]
+         controller.configure_course(obstacles, origin=(state.east, state.north))
+         if bridge and not args.no_scene and not course.get('scenery'):
+@@ -101,8 +101,8 @@ def run(args, runlog=None):
+                 scene = None
+                 print(f'Obstacles not shown in FlightGear (telnet: {exc}); start it with --telnet=5500.', flush=True)
+         if args.plot or (args.backend == 'flightgear' and not args.no_plot):
+-            from .view import View
+-            view = View(obstacles, scenery=bool(course.get('scenery')))
++            from .companion import Companion
++            view = Companion(obstacles, scenery=bool(course.get('scenery')))
+         if args.log:
+             Path(args.log).parent.mkdir(parents=True, exist_ok=True)
+             log_file = open(args.log, 'w', newline='')
+@@ -113,6 +113,14 @@ def run(args, runlog=None):
+                       'cross_track', 'predicted_clearance', 'decision_source']
+             writer = csv.DictWriter(log_file, fields)
+             writer.writeheader()
++        if bridge:
++            from .flightgear import hand_over
++            if hand_over(args.telnet_port or args.telemetry_port - 1):
++                print('Handover sent: the 737 autopilot (if any) switches off, the controller flies.', flush=True)
++            else:
++                print('WARNING: no telnet handover. A 737 started in the air keeps its own autopilot on '
++                      'and will fight the controller; launch with --telnet (launch_fg does).', flush=True)
++            state = bridge.freeze(False)
+         next_brain, next_display, next_print = 0.0, 0.0, 0.0
+         escape, controls = 0.0, Controls()
+         minimum = math.inf
+@@ -231,6 +239,8 @@ def run(args, runlog=None):
+                     bridge.close()
+                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
+             finally:
++                if view:
++                    view.close()
+                 if args.learn:
+                     brain.plasticity.save(args.save_learning)
+                     print(f'Learning checkpoint saved locally: {args.save_learning}', flush=True)
+diff --git a/flight_simulator/core.py b/flight_simulator/core.py
+index b094876..2fd0f26 100644
+--- a/flight_simulator/core.py
++++ b/flight_simulator/core.py
+@@ -133,7 +133,7 @@ class FlightController:
+         self.next_plan = 0.0
+ 
+     def update(self, state, stimulus, escape_hz):
+-        dt = .05 if self.last_time is None else clip(state.time-self.last_time,0,.2)
++        dt = .05 if self.last_time is None else clip(state.time-self.last_time,0,.5)
+         self.last_time = state.time
+         if not self.initialized:
+             # Nose attitude alone is not level-flight trim: subtract flight-path
+@@ -145,18 +145,19 @@ class FlightController:
+             self.obstacles.append(Obstacle(stimulus.obstacle,stimulus.east,stimulus.north,stimulus.radius))
+         altitude_error=self.altitude-state.altitude
+         # Strong vertical-speed feedback acts before a large altitude error builds.
+-        self.desired_climb=clip(.12*altitude_error,-2.0,3.0)
++        self.desired_climb=clip(.06*altitude_error,-1.5,2.0)
+         vertical_error=self.desired_climb-state.climb
+-        self.pitch_integral=clip(self.pitch_integral+.0025*vertical_error*dt,-.06,.10)
++        self.pitch_integral=clip(self.pitch_integral+.001*vertical_error*dt,-.06,.10)
+         bank_lift=self.trim_pitch*(1/max(math.cos(state.roll),.75)-1)
+-        self.target_pitch=clip(self.trim_pitch+math.atan2(self.desired_climb,max(state.speed,25))
+-                               +.018*vertical_error+self.pitch_integral+bank_lift,-.10,.22)
++        pitch_demand=clip(self.trim_pitch+math.atan2(self.desired_climb,max(state.speed,25))
++                               +.006*vertical_error+self.pitch_integral+bank_lift,-.10,.22)
++        self.target_pitch+=clip(pitch_demand-self.target_pitch,-math.radians(2)*dt,math.radians(2)*dt)
+         pitch_error=self.target_pitch-state.pitch
+         # Integral trim removes persistent airframe/control bias. Anti-windup:
+         # integrate only when the resulting elevator has room to move.
+-        elevator=-2.2*pitch_error+.8*state.pitch_rate+self.trim_elevator
++        elevator=-1.2*pitch_error+1.6*state.pitch_rate+self.trim_elevator
+         if abs(elevator)<.65:
+-            self.trim_elevator=clip(self.trim_elevator-.16*pitch_error*dt,-.35,.35)
++            self.trim_elevator=clip(self.trim_elevator-.06*pitch_error*dt,-.35,.35)
+         speed_error=self.speed-state.speed
+         self.speed_integral=clip(self.speed_integral+.004*speed_error*dt,-.25,.25)
+         throttle=self.trim_throttle+.035*speed_error+self.speed_integral+.025*max(self.desired_climb,0)
+diff --git a/flight_simulator/flightgear.py b/flight_simulator/flightgear.py
+index f112af3..5683a75 100644
+--- a/flight_simulator/flightgear.py
++++ b/flight_simulator/flightgear.py
+@@ -110,7 +110,7 @@ class FlightGear:
+         state = State(self.active_time, east, north, alt_ft * 0.3048,
+                       math.radians(heading), math.radians(roll), math.radians(pitch),
+                       speed_kt * 0.514444, climb_fps * 0.3048)
+-        if self.previous is not None and active and delta < 0.5:
++        if self.previous is not None and active and delta <= 2.0:
+             state.roll_rate = wrap(state.roll - self.previous.roll) / delta
+             state.pitch_rate = (state.pitch - self.previous.pitch) / delta
+         self.previous, self.previous_clock, self.frozen = state, clock, bool(frozen)
+@@ -225,7 +225,7 @@ class RunwayFlightGear(FlightGear):
+                             psi=wrap(math.radians(heading - rwy)), roll=math.radians(roll),
+                             pitch=math.radians(pitch), gamma=gamma, speed=speed,
+                             on_ground=bool(wow))
+-        if self.previous is not None and active and delta < 0.5:
++        if self.previous is not None and active and delta <= 2.0:
+             state.roll_rate = wrap(state.roll - self.previous.roll) / delta
+             state.pitch_rate = (state.pitch - self.previous.pitch) / delta
+             state.yaw_rate = wrap(state.psi - self.previous.psi) / delta
+diff --git a/flight_simulator/guidance.py b/flight_simulator/guidance.py
+index 8373795..c540abb 100644
+--- a/flight_simulator/guidance.py
++++ b/flight_simulator/guidance.py
+@@ -51,10 +51,12 @@ class RouteGuidance:
+             if clearance < self.margin:
+                 continue
+             if i==0:
+-                desired_safe=True
++                desired_safe=clearance >= self.margin+100
+             end_cross=(path[-1][0]-self.origin[0])*cs-(path[-1][1]-self.origin[1])*sn
+             score=(abs(wrap(target-desired)) + .15*abs(wrap(target-previous))
+                    + .10*abs(end_cross)/max(800,state.speed*18))
++            # Prefer extra tracking room; the hard margin remains a last-resort bound.
++            score += max(0.0, self.margin+100-clearance)/100
+             if preferred_turn and preferred_turn*wrap(target-self.heading)<0:
+                 score += .05  # Neural preference can break ties, never waive clearance.
+             options.append((score,target,clearance,path))
+diff --git a/flight_simulator/launch_fg.py b/flight_simulator/launch_fg.py
+index b9c9601..86b54f1 100644
+--- a/flight_simulator/launch_fg.py
++++ b/flight_simulator/launch_fg.py
+@@ -46,6 +46,7 @@ DEFAULT_AIRCRAFT = '738-flies'
+ # In-air start speed. 100 kt is fine for the C172 but stalls a 737.
+ START_KT = {'c172p': 100}
+ PROTOCOLS = Path(__file__).resolve().parent / 'protocols'
++CRUISE_PROTOCOLS = ('flybrain-state.xml', 'flybrain-controls.xml', 'flybrain-controls-twin.xml')
+ RUNWAY_PROTOCOLS = ('flybrain-runway-state.xml', 'flybrain-runway-controls.xml')
+ # Takeoff/landing start. 737 flap detents are 0.125 apart: flaps 5 = 0.375, flaps 30 = 0.875.
+ AIRPORT, RUNWAY, FINAL_NM = 'KSFO', '28R', 3.0
+@@ -69,21 +70,21 @@ def fg_root(fg):
+     return None if fg.is_file() else fg / 'data'
+ 
+ 
+-def install_protocols(fg):
+-    """Copy the takeoff/landing protocols into $FG_ROOT/Protocol. Returns a problem or None."""
++def install_protocols(fg, names=RUNWAY_PROTOCOLS):
++    """Copy the selected protocols into $FG_ROOT/Protocol. Returns a problem or None."""
+     root = fg_root(fg)
+     if root is None:
+         return ('FlightGear data folder unknown (AppImage or bare fgfs). Set FG_ROOT, or copy '
+-                f'{", ".join(RUNWAY_PROTOCOLS)} from {PROTOCOLS} into <fg-root>/Protocol yourself.')
++                f'{", ".join(names)} from {PROTOCOLS} into <fg-root>/Protocol yourself.')
+     dest = root / 'Protocol'
+     try:
+-        for name in RUNWAY_PROTOCOLS:
++        for name in names:
+             src = PROTOCOLS / name
+             if not (dest / name).exists() or (dest / name).read_bytes() != src.read_bytes():
+                 shutil.copyfile(src, dest / name)
+                 print(f'Installed {name} -> {dest}')
+     except OSError as exc:
+-        return (f'Could not copy the protocols into {dest} ({exc}). Copy {", ".join(RUNWAY_PROTOCOLS)} '
++        return (f'Could not copy the protocols into {dest} ({exc}). Copy {", ".join(names)} '
+                 f'from {PROTOCOLS} there yourself (an admin terminal may be needed).')
+     return None
+ 
+@@ -154,8 +155,8 @@ def main():
+         base = Path(os.environ.get('APPDATA', Path.home())) / f'flightgear.org-instance{args.instance}'
+         base.mkdir(parents=True, exist_ok=True)
+         env['FG_HOME'] = str(base)
+-    if args.phase and not args.print:
+-        problem = install_protocols(Path(args.fg))
++    if not args.print:
++        problem = install_protocols(Path(args.fg), RUNWAY_PROTOCOLS if args.phase else CRUISE_PROTOCOLS)
+         if problem:
+             print('WARNING:', problem)
+     print(' '.join(cmd))
+diff --git a/flight_simulator/protocols/flybrain-controls-twin.xml b/flight_simulator/protocols/flybrain-controls-twin.xml
+index 96fb45f..5c08144 100644
+--- a/flight_simulator/protocols/flybrain-controls-twin.xml
++++ b/flight_simulator/protocols/flybrain-controls-twin.xml
+@@ -42,7 +42,7 @@
+       </chunk>
+       <chunk>
+         <name>frozen</name>
+-        <node>/sim/freeze/master</node>
++        <node>/sim/freeze/clock</node>
+         <type>bool</type>
+       </chunk>
+     </input>
+diff --git a/flight_simulator/protocols/flybrain-controls.xml b/flight_simulator/protocols/flybrain-controls.xml
+index b011988..ac3cc52 100644
+--- a/flight_simulator/protocols/flybrain-controls.xml
++++ b/flight_simulator/protocols/flybrain-controls.xml
+@@ -35,7 +35,7 @@
+       </chunk>
+       <chunk>
+         <name>frozen</name>
+-        <node>/sim/freeze/master</node>
++        <node>/sim/freeze/clock</node>
+         <type>bool</type>
+       </chunk>
+     </input>
+diff --git a/flight_simulator/protocols/flybrain-state.xml b/flight_simulator/protocols/flybrain-state.xml
+index 0671ddc..a3542e5 100644
+--- a/flight_simulator/protocols/flybrain-state.xml
++++ b/flight_simulator/protocols/flybrain-state.xml
+@@ -61,7 +61,7 @@
+       </chunk>
+       <chunk>
+         <name>frozen</name>
+-        <node>/sim/freeze/master</node>
++        <node>/sim/freeze/clock</node>
+         <type>bool</type>
+         <format>%d</format>
+       </chunk>
+diff --git a/flight_simulator/validate_cruise.py b/flight_simulator/validate_cruise.py
+index 1d3a765..48daff5 100644
+--- a/flight_simulator/validate_cruise.py
++++ b/flight_simulator/validate_cruise.py
+@@ -11,17 +11,19 @@ from .scenery import to_local
+ from .__main__ import load_obstacles,ROOT
+ 
+ 
+-def validate(seconds=240,output=None,disturbance=False):
++def validate(seconds=240,output=None,disturbance=False,model="c172p",control_period=.05):
+     if not math.isfinite(seconds) or seconds < .05:
+         raise ValueError("Validation duration must be finite and at least 0.05 seconds")
++    if not math.isfinite(control_period) or not .01 <= control_period <= .5:
++        raise ValueError("Control period must be between 0.01 and 0.5 seconds")
+     import jsbsim
+     fdm=jsbsim.FGFDMExec(None)
+     fdm.set_debug_level(0)
+-    if not fdm.load_model('c172p'):
+-        raise RuntimeError('JSBSim c172p model missing')
++    if not fdm.load_model(model):
++        raise RuntimeError(f'JSBSim {model} model missing')
+     fdm.set_dt(.01)
+     origin=(37.60,-122.35)
+-    for k,v in {'ic/h-sl-ft':3000,'ic/vc-kts':100,'ic/lat-geod-deg':origin[0],
++    for k,v in {'ic/h-sl-ft':3000,'ic/vc-kts':220 if model=='737' else 100,'ic/lat-geod-deg':origin[0],
+                 'ic/long-gc-deg':origin[1],'ic/psi-true-deg':0}.items():
+         fdm[k]=v
+     fdm.run_ic()
+@@ -36,10 +38,16 @@ def validate(seconds=240,output=None,disturbance=False):
+     initial=state()
+     controller=FlightController(initial.altitude,initial.heading,initial.speed,initial.pitch)
+     obstacles=load_obstacles(ROOT/'scenarios/obstacles.json')
++    if model=='737':
++        from dataclasses import replace
++        scale=max(1,(initial.speed/50)**2)
++        obstacles=[replace(o,north=o.north*scale) for o in obstacles]
+     controller.configure_course(obstacles)
+     brain=ReflexBrain()
+     rows=[];escape=0;next_brain=0
+-    for step in range(round(seconds/.05)):
++    substeps=round(control_period/.01)
++    period=substeps*.01
++    for step in range(round(seconds/period)):
+         s=state()
+         stimulus=sense(s,obstacles,horizon=max(25,s.speed/2))
+         if s.time>=next_brain:
+@@ -49,6 +57,8 @@ def validate(seconds=240,output=None,disturbance=False):
+         fdm['fcs/elevator-cmd-norm']=controls.elevator
+         fdm['fcs/rudder-cmd-norm']=controls.rudder
+         fdm['fcs/throttle-cmd-norm']=controls.throttle
++        if model=='737':
++            fdm['fcs/throttle-cmd-norm[1]']=controls.throttle
+         # A transient pitch-control disturbance tests recovery, not just trim.
+         if disturbance and 45 <= s.time < 47:
+             fdm['fcs/elevator-cmd-norm']=controls.elevator+.10
+@@ -60,9 +70,9 @@ def validate(seconds=240,output=None,disturbance=False):
+                   f'climb={s.climb:+.2f}m/s bank={math.degrees(s.roll):+.1f}deg clearance={clearance:.1f}m',flush=True)
+         if clearance<=0 or abs(s.altitude-controller.altitude)>40:
+             raise RuntimeError('JSBSim test exceeded altitude or obstacle bounds')
+-        for _ in range(5):
++        for _ in range(substeps):
+             fdm.run()
+-    result={'model':'JSBSim c172p','jsbsim_version':jsbsim.__version__,'seconds':seconds,
++    result={'model':f'JSBSim {model}', 'control_period':period,'jsbsim_version':jsbsim.__version__,'seconds':seconds,
+             'disturbance':disturbance,'minimum_clearance_m':min(r['clearance'] for r in rows),
+             'maximum_altitude_error_m':max(abs(r['altitude']-initial.altitude) for r in rows),
+             'final_cross_track_m':controller.guidance.cross_track,
+@@ -82,5 +92,7 @@ if __name__=='__main__':
+     parser.add_argument('--seconds',type=float,default=240)
+     parser.add_argument('--output',default='runs/jsbsim-cruise.csv')
+     parser.add_argument('--disturbance',action='store_true')
++    parser.add_argument('--model',choices=['c172p','737'],default='c172p')
++    parser.add_argument('--control-period',type=float,default=.05)
+     args=parser.parse_args()
+-    validate(args.seconds,args.output,args.disturbance)
++    validate(args.seconds,args.output,args.disturbance,args.model,args.control_period)
+diff --git a/tests/test_cruise_rules.py b/tests/test_cruise_rules.py
+index f114344..dbfee71 100644
+--- a/tests/test_cruise_rules.py
++++ b/tests/test_cruise_rules.py
+@@ -27,7 +27,7 @@ class CruiseRulesTests(unittest.TestCase):
+             level.update(State(time=i*.05),sense(State(),[]),0)
+             s=State(time=i*.05,climb=-4)
+             sinking=sink.update(s,sense(s,[]),0)
+-        self.assertLess(sinking.elevator,level.last_controls.elevator-.1)
++        self.assertLess(sinking.elevator,level.last_controls.elevator-.02)
+         self.assertGreater(sinking.throttle,level.last_controls.throttle)
+ 
+     def test_multiple_obstacles_return_to_route_even_without_neural_escape(self):
+@@ -57,6 +57,32 @@ class CruiseRulesTests(unittest.TestCase):
+             self.assertGreater(target*turn,0)
+             self.assertGreaterEqual(guide.clearance,guide.margin)
+ 
++    def test_pitch_target_slews_and_rate_feedback_opposes_motion(self):
++        level=FlightController(); rising=FlightController()
++        s=State(altitude=890, climb=-3)
++        first=level.update(s,sense(s,[]),0)
++        self.assertLessEqual(abs(level.target_pitch),math.radians(2)*.05)
++        s.pitch_rate=.1
++        damped=rising.update(s,sense(s,[]),0)
++        self.assertGreater(damped.elevator,first.elevator)
++
++    def test_slow_companion_drops_frames_without_blocking_controls(self):
++        from flight_simulator.companion import Companion
++        from queue import Queue
++        from threading import Event
++        from unittest.mock import Mock
++        viewer=Companion.__new__(Companion)
++        viewer.frames=Queue(maxsize=1)
++        viewer.stop=Event()
++        viewer.process=Mock()
++        viewer.process.is_alive.return_value=True
++        state=State()
++        viewer.update(state)
++        state.altitude=123
++        viewer.update(state)  # Full queue: this must return rather than wait.
++        args,kwargs=viewer.frames.get_nowait()
++        self.assertEqual(args[0].altitude,900)  # Snapshots do not mutate with the sim.
++
+     def test_large_descent_reduces_bank_budget(self):
+         c=FlightController();s=State(altitude=880,climb=-4)
+         for i in range(20):
+diff --git a/tests/test_flight_simulator.py b/tests/test_flight_simulator.py
+index d6a9f21..2f6ac88 100644
+--- a/tests/test_flight_simulator.py
++++ b/tests/test_flight_simulator.py
+@@ -115,6 +115,19 @@ class ProtocolTests(unittest.TestCase):
+         c = self.bridge.parse(b'40.1,37,-121.999,3000,90,11,2,100,5,1\n')
+         self.assertAlmostEqual(c.time, .05)
+ 
++    def test_slow_telemetry_keeps_rate_damping(self):
++        self.bridge.parse(b'10,37,-122,3000,0,0,2,100,0,0')
++        state=self.bridge.parse(b'10.7,37,-122,3000,0,1,4,100,0,0')
++        self.assertAlmostEqual(state.pitch_rate,math.radians(2)/.7)
++        self.assertAlmostEqual(state.roll_rate,math.radians(1)/.7)
++
++    def test_cruise_pause_protocol_controls_actual_simulation_clock(self):
++        root=ROOT/'flight_simulator/protocols'
++        for name in ['flybrain-state.xml','flybrain-controls.xml','flybrain-controls-twin.xml']:
++            nodes=[x.text for x in ET.parse(root/name).findall('.//node')]
++            self.assertIn('/sim/freeze/clock',nodes)
++            self.assertNotIn('/sim/freeze/master',nodes)
++
+     def test_reject_malformed_and_clock_reset(self):
+         for packet in [b'1,2', b'1,nan,0,3000,0,0,0,100,0,0', b'1,91,0,3000,0,0,0,100,0,0']:
+             with self.assertRaises(ValueError):

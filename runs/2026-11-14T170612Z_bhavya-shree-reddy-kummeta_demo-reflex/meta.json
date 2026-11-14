@@ -1,0 +1,55 @@
+{
+  "run_id": "2026-11-14T170612Z_bhavya-shree-reddy-kummeta_demo-reflex",
+  "who": "Bhavya Shree Reddy Kummeta",
+  "started_utc": "2026-11-14T17:06:12.808142+00:00",
+  "command": "python -m flight_simulator --brain reflex --plot --realtime --seconds 10 --note 'Headless independent-renderer smoke test'",
+  "args": {
+    "backend": "demo",
+    "brain": "reflex",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "obstacles": "/Users/Bhavya_1/FruitFly/scenarios/obstacles.json",
+    "seconds": 10.0,
+    "seed": 0,
+    "plot": true,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": true,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_scene": false,
+    "note": "Headless independent-renderer smoke test",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "8e36f63f354dc07346f527bbb579574bf551cc17",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/__main__.py",
+      " M flight_simulator/core.py",
+      " M flight_simulator/flightgear.py",
+      " M flight_simulator/guidance.py",
+      " M flight_simulator/launch_fg.py",
+      " M flight_simulator/protocols/flybrain-controls-twin.xml",
+      " M flight_simulator/protocols/flybrain-controls.xml",
+      " M flight_simulator/protocols/flybrain-state.xml",
+      " M flight_simulator/validate_cruise.py",
+      " M tests/test_cruise_rules.py",
+      " M tests/test_flight_simulator.py"
+    ],
+    "untracked": [
+      "flight_simulator/companion.py"
+    ]
+  },
+  "python": "3.10.6",
+  "platform": "Darwin 25.6.0",
+  "finished_utc": "2026-11-14T17:06:24.956545+00:00",
+  "exit_code": 0
+}
