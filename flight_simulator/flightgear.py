@@ -105,6 +105,9 @@ class FlightGear:
             self.tx.close()
 
 
+GEAR_AGL_FT = 7.95  # 738-flies parked: altitude-agl-ft with the wheels on the runway
+
+
 class RunwayFlightGear(FlightGear):
     """Takeoff/landing bridge: protocols/flybrain-runway-{state,controls}.xml.
 
@@ -119,6 +122,9 @@ class RunwayFlightGear(FlightGear):
                  runway=None, ahead_m=0.0):
         super().__init__(telemetry_port, control_port, timeout, engines=2)
         self.runway = runway  # (lat, lon, true heading deg) or None
+        # /position/altitude-agl-ft is the CG height: the 738 reads ~7.95 ft parked.
+        # Measured from the first on-ground packet; this default covers airborne starts.
+        self.agl_offset_ft = None
         self.ahead_m = ahead_m
         self.gear_down = True
         from .runway import AirlinerControls
@@ -138,6 +144,8 @@ class RunwayFlightGear(FlightGear):
             raise ValueError('FlightGear runway state out of range')
         if self.previous_clock is not None and clock < self.previous_clock:
             raise ValueError('FlightGear clock reset or out-of-order telemetry; restart controller')
+        if self.agl_offset_ft is None:
+            self.agl_offset_ft = agl_ft if wow else GEAR_AGL_FT
         if self.runway is None:
             h = math.radians(heading)
             self.runway = (lat + math.degrees(self.ahead_m * math.cos(h) / 6371000),
@@ -156,7 +164,7 @@ class RunwayFlightGear(FlightGear):
         speed = max(0.0, speed_kt) * KT
         climb = climb_fps * 0.3048
         gamma = math.asin(max(-1.0, min(1.0, climb / speed))) if speed > 5 else 0.0
-        state = RunwayState(time=self.active_time, x=x, y=y, agl=max(0.0, agl_ft * FT),
+        state = RunwayState(time=self.active_time, x=x, y=y, agl=max(0.0, (agl_ft - self.agl_offset_ft) * FT),
                             psi=wrap(math.radians(heading - rwy)), roll=math.radians(roll),
                             pitch=math.radians(pitch), gamma=gamma, speed=speed,
                             on_ground=bool(wow))
@@ -174,3 +182,25 @@ class RunwayFlightGear(FlightGear):
         data = (f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{c.throttle:.7f},{c.throttle:.7f},'
                 f'{brake:.7f},{brake:.7f},{int(self.gear_down)},{int(frozen)}\n')
         self.tx.sendto(data.encode('ascii'), self.address)
+
+    def close(self):
+        """Centre ailerons and rudder, then pause; returns True if FG acknowledged.
+
+        FlightGear keeps the last received controls, so leaving a bank or rudder
+        input latched is what crashed the first live takeoff test."""
+        from dataclasses import replace
+        paused = False
+        try:
+            self.last_controls = replace(self.last_controls, aileron=0.0, rudder=0.0)
+            for _ in range(5):  # UDP: repeat rather than trust one packet
+                self.send(self.last_controls, True)
+                time.sleep(0.05)
+            try:
+                self.freeze(True)
+                paused = True
+            except (TimeoutError, ValueError, OSError):
+                pass
+        finally:
+            self.rx.close()
+            self.tx.close()
+        return paused

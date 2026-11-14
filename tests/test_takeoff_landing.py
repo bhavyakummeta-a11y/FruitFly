@@ -290,5 +290,57 @@ class PlotTests(unittest.TestCase):
             self.assertEqual(png.read_bytes()[:4], b'\x89PNG')
 
 
+class AfterHandoverTests(unittest.TestCase):
+    """2026-11-14 FlightGear test: the takeoff fly handed over at 1,000 ft, the
+    controller exited, FlightGear kept the last controls (rudder -0.2) and the 737
+    spiralled into the ground. The fly must keep flying while airborne."""
+
+    def test_hold_keeps_wings_level_and_climbing(self):
+        sim = RunwaySim(takeoff_start(y=3.0), FLAPS5, yaw_disturbance=0.004)
+        fly = TakeoffFly(StandInBrain(noise_seed=1))
+        run_phase(fly, sim, 150)
+        self.assertTrue(fly.status.phase.startswith('HANDOVER'))
+        fly.hold = True
+        start_agl, worst_roll = sim.state.agl, 0.0
+        for _ in range(int(60 / 0.05)):
+            sim.step(fly.step(sim.state, 0.05), 0.05)
+            worst_roll = max(worst_roll, abs(sim.state.roll))
+        self.assertLess(math.degrees(worst_roll), 15)
+        self.assertGreater(sim.state.agl, start_agl)
+        self.assertGreater(len(fly.decisions), 100)  # still deciding after handover
+
+    def test_air_rudder_capped(self):
+        fly = TakeoffFly(StandInBrain())
+        fly.decode(neutral_rates(DNp15_L=200.0), RunwayState(speed=90, agl=300, on_ground=False))
+        self.assertLessEqual(abs(fly.rudder), 0.1)
+
+
+class SafeExitTests(unittest.TestCase):
+    def test_close_centres_surfaces_and_requests_pause(self):
+        sink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sink.bind(('127.0.0.1', 0))
+        sink.settimeout(1)
+        bridge = RunwayFlightGear(0, sink.getsockname()[1], timeout=.2, runway=(37.0, -122.0, 90.0))
+        bridge.send(AirlinerControls(-.08, .04, -.2, 1.0))
+        sink.recvfrom(8192)
+        self.assertFalse(bridge.close())  # nobody acknowledges in this test
+        fields = [float(v) for v in sink.recvfrom(8192)[0].decode().split(',')]
+        self.assertEqual(fields[0], 0.0)    # aileron centred
+        self.assertEqual(fields[2], 0.0)    # rudder centred
+        self.assertEqual(fields[-1], 1.0)   # freeze requested
+        sink.close()
+
+    def test_agl_offset_from_parked_aircraft(self):
+        bridge = RunwayFlightGear(0, 9, timeout=.2, runway=(37.0, -122.0, 90.0))
+        try:
+            parked = bridge.parse(b'1,37.0,-122.0,7.95,90,0,0,0,0,1,0\n')
+            self.assertAlmostEqual(parked.agl, 0.0)
+            flying = bridge.parse(b'2,37.0,-121.999,107.95,90,0,5,150,10,0,0\n')
+            self.assertAlmostEqual(flying.agl, 100 * FT)
+        finally:
+            bridge.rx.close()
+            bridge.tx.close()
+
+
 if __name__ == '__main__':
     unittest.main()

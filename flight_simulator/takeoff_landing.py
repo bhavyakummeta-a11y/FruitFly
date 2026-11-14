@@ -26,7 +26,7 @@ import sys
 import time
 
 from .brain import INPUTS, READOUTS
-from .flies import TakeoffFly, LandingFly, StandInBrain, run_phase, row, summarize
+from .flies import TakeoffFly, LandingFly, StandInBrain, run_phase, row, summarize, HOLD_PITCH
 from .runway import (RunwaySim, FLAPS5, FLAPS30, FT, KT, RUNWAY_LENGTH,
                      takeoff_start, trimmed_approach, trim_elevator)
 
@@ -96,7 +96,18 @@ def run_flightgear(args, fly, log):
             fly.trim_throttle = fly.throttle = args.approach_throttle
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
-        while s.time < args.seconds and not fly.status.done:
+        while True:
+            # Never stop sending while airborne: FlightGear keeps the last controls
+            # it received, so an exit mid-air flies the plane on frozen surfaces.
+            # (2026-11-14 FG test: handover at 1,000 ft, controller exited, rudder
+            # -0.2 stayed latched, spiral dive into the ground.)
+            if (fly.status.done or s.time >= args.seconds) and s.on_ground:
+                break
+            if fly.status.done and not fly.hold:
+                fly.hold = True
+                print(f'{fly.status.phase} reached in the air. No Cruise fly yet, so the {fly.name} keeps '
+                      f'flying: wings level, {HOLD_PITCH:.0f} deg climb, climb power. '
+                      'Press Ctrl-C to pause FlightGear and exit.', flush=True)
             if fly.decision_due(s):
                 s = bridge.freeze(True)
                 t0 = time.monotonic()
@@ -112,7 +123,11 @@ def run_flightgear(args, fly, log):
             bridge.send(controls)
             previous = s.time
             was_ground = s.on_ground
-            s = bridge.read()
+            try:
+                s = bridge.read()
+            except KeyboardInterrupt:
+                print('\nCtrl-C: pausing FlightGear.', flush=True)
+                break
             if s.on_ground or s.agl < 100 * FT:
                 max_y = max(max_y, abs(s.y))
             if was_ground and not s.on_ground and liftoff is None:
@@ -134,8 +149,10 @@ def run_flightgear(args, fly, log):
             touchdown_pitch_deg=touchdown and touchdown[2]))()
         return summarize(fly, sim_like, max_y)
     finally:
-        bridge.close()
-        print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
+        paused = bridge.close()
+        print('FlightGear paused (acknowledged), ailerons and rudder centred.' if paused else
+              'WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: '
+              'it keeps the last controls it received.', flush=True)
 
 
 def main(argv=None):

@@ -25,16 +25,25 @@ from .runway import AirlinerControls, KT, FT, FLAPS5_GEAR_UP
 STEER_ZERO = -37.0     # (DNp15_L + DNa02_L) - (DNp15_R + DNa02_R) at HS 100/100
 PITCH_ZERO = 107.0     # DNp20_L + DNp20_R at VS 100/100
 ROLL_ZERO = -43.0      # DNp20_L - DNp20_R at VS 100/100
-MN9_APPROACH = 70.0    # MN9 with sugar 100 Hz plus tonic VS/HS drive
+MN9_APPROACH = 65.0    # MN9 with sugar 100 Hz plus tonic VS/HS drive (mean over the connectome approach)
 ESCAPE_FULL = 600.0    # DNp02 + DNp04 + DNp11 at looming ~150 Hz
 TONIC = 100.0          # Hz, VS/HS resting drive
+SMOOTHING = 0.5        # weight of the newest trial in the DN-rate low-pass (nerve-cord integration)
+# Neurons per readout group (FlyWire 783). Single-neuron readouts are quantised to 5 Hz per 200 ms trial.
+GROUP_SIZE = {'DNp01': 2, 'DNp02': 2, 'DNp04': 2, 'DNp11': 2, 'DNp07': 2, 'DNp10': 2, 'MDN': 4,
+              'MN9': 1, 'DNp15_L': 1, 'DNp15_R': 1, 'DNa02_L': 1, 'DNa02_R': 1, 'DNp20_L': 1, 'DNp20_R': 1}
 
 # --- 737-800 numbers (weight-dependent; check against the FlightGear model) ---
 V1, VR, V2 = 135 * KT, 145 * KT, 152 * KT
 VREF = 140 * KT
 VAPP = VREF + 5 * KT   # approach speed target
 LOOM_TAU = 8.0         # s, time-to-contact at which the runway starts to loom
-FLARE_GAIN = 1.5       # deg/s of nose-up per 20 Hz of DNp07
+FLARE_GAIN = 2.5       # deg/s of nose-up per 20 Hz of DNp07
+GS_GAIN = 3.0          # deg of pitch target per deg below the glideslope
+JUMP_RATE = 2.5        # deg/s nose-up at full escape activity (FG 737 lifted off at 10.9 deg with 3.0)
+AIR_RUDDER = 0.1       # max rudder in the air (0.3 held after handover rolled the FG 737 over)
+HOLD_PITCH = 10.0      # deg: after the phase ends in the air, keep flying (no Cruise fly yet)
+HOLD_THROTTLE = 0.7    # scripted climb power while holding
 
 
 @dataclass
@@ -72,6 +81,8 @@ class PhaseFly:
         self.brain, self.period = brain, period
         self.next_decision = -1e9
         self.decisions = []
+        self.smoothed = None
+        self.hold = False  # keep flying after the phase is done (live sim, still airborne)
         self.q_cmd = 0.0        # pitch-rate command, rad/s (from the brain)
         self.elevator_i = 0.0   # haltere reflex integrator
         self.throttle, self.brake, self.aileron, self.rudder = 0.0, 0.0, 0.0, 0.0
@@ -109,10 +120,17 @@ class PhaseFly:
 
     def step(self, s, dt):
         """Called at the sim rate. Runs a brain trial when one is due."""
-        if s.time >= self.next_decision and not self.status.done:
+        if s.time >= self.next_decision and (not self.status.done or self.hold):
             inputs = self.encode(s)
             rates = self.brain.run(inputs, self.readouts)
-            note = self.decode(rates, s)
+            # One 200 ms trial reads 1-2 neurons per group, so rates jitter by +-20 Hz.
+            # The nerve cord integrates: low-pass the DN rates across trials.
+            if self.smoothed is None:
+                self.smoothed = dict(rates)
+            else:
+                self.smoothed = {k: SMOOTHING * v + (1 - SMOOTHING) * self.smoothed.get(k, v)
+                                 for k, v in rates.items()}
+            note = self.decode(self.smoothed, s)
             self.decisions.append(Decision(s.time, inputs, rates, note or ''))
             self.next_decision = s.time + self.current_period(s)
         self.check(s)
@@ -123,7 +141,7 @@ class PhaseFly:
         return self.period
 
     def decision_due(self, s):
-        return s.time >= self.next_decision and not self.status.done
+        return s.time >= self.next_decision and (not self.status.done or self.hold)
 
 
 class TakeoffFly(PhaseFly):
@@ -148,7 +166,7 @@ class TakeoffFly(PhaseFly):
         # Looming ramps over the last few knots around Vr, only while on the wheels.
         looming = 0.0 if airborne else clip(200 * (s.speed - (VR - 5 * KT)) / (10 * KT), 0, 200)
         # VS: hold the nose level on the wheels (the jump alone rotates), 15 deg once flying.
-        pitch_target = 15.0 if airborne else 0.0
+        pitch_target = HOLD_PITCH if self.hold else (15.0 if airborne else 0.0)
         drift = math.degrees(s.psi + math.atan2(s.y, 150.0)) + 0.5 * math.degrees(s.yaw_rate)
         inputs = {'sugar': 200.0, 'bitter': bitter, 'looming': looming}
         inputs.update(self.vs_inputs(s, pitch_target))
@@ -165,7 +183,7 @@ class TakeoffFly(PhaseFly):
         if self.rejected:
             self.throttle, self.brake = 0.0, 1.0
         elif committed:
-            self.throttle, self.brake = 1.0, 0.0
+            self.throttle, self.brake = (HOLD_THROTTLE if self.hold else 1.0), 0.0
         else:
             self.throttle, self.brake = clip(r['MN9'] / 90.0, 0, 1), 0.0
             self.low_appetite = self.low_appetite + 1 if (r['MN9'] < 10 and s.speed > 20 * KT) else 0
@@ -173,7 +191,7 @@ class TakeoffFly(PhaseFly):
                 self.rejected, note = True, 'REJECT: bitter suppressed MN9 below V1'
                 self.throttle, self.brake = 0.0, 1.0
         # Pitch: the jump (standing-state gate: escape DNs act only on the wheels).
-        jump = 3.0 * clip(escape / ESCAPE_FULL, 0, 1.2) if s.on_ground and not self.rejected else 0.0
+        jump = JUMP_RATE * clip(escape / ESCAPE_FULL, 0, 1.2) if s.on_ground and not self.rejected else 0.0
         q_deg = clip(jump + self.pitch_rate_from_vs(r), -3.0, 3.0)
         self.q_cmd = math.radians(q_deg)
         if jump > 0.5 and not note:
@@ -182,7 +200,7 @@ class TakeoffFly(PhaseFly):
         if s.on_ground:
             self.rudder, self.aileron = clip(-steer / 50.0, -1, 1), 0.0
         else:
-            self.rudder = clip(-steer / 150.0, -0.3, 0.3)
+            self.rudder = clip(-steer / 150.0, -AIR_RUDDER, AIR_RUDDER)
             self.aileron = clip(0.004 * self.roll_from_vs(r) - 0.002 * steer, -0.5, 0.5)
         return note
 
@@ -215,10 +233,12 @@ class LandingFly(PhaseFly):
         self.low_appetite = 0
         self.go_around = False
         self.touched_down = False
+        self.flare_pitch_deg = None
         self.status = Status('APPROACH')
 
     def unstable(self, s):
-        return (s.agl < 1000 * FT and not s.on_ground and
+        # Judged between 1,000 and 100 ft; below 100 ft the pilot flies the flare by eye.
+        return (100 * FT < s.agl < 1000 * FT and not s.on_ground and
                 (abs(s.glideslope_error()) > 0.7 or abs(s.y) > 40
                  or not -8 * KT <= s.speed - VREF <= 15 * KT))
 
@@ -226,11 +246,16 @@ class LandingFly(PhaseFly):
         if self.trim_pitch_deg is None:
             self.trim_pitch_deg = math.degrees(s.pitch)
         if self.go_around:
-            pitch_target = 15.0
+            pitch_target = HOLD_PITCH if self.hold else 15.0
         elif s.on_ground:
             pitch_target = 0.0
         else:
-            pitch_target = self.trim_pitch_deg - 1.5 * s.glideslope_error()
+            if s.agl > 100 * FT or self.flare_pitch_deg is None:
+                # Follow the glideslope. The angular error is clipped: it grows without
+                # bound near the aim point. Below 100 ft the target is frozen.
+                gs = clip(s.glideslope_error(), -1.5, 1.5)
+                self.flare_pitch_deg = self.trim_pitch_deg - GS_GAIN * gs
+            pitch_target = self.flare_pitch_deg
         sugar = clip(TONIC + 4.0 * (VAPP - s.speed) / KT, 80, 200)
         bitter = 200.0 if (self.unstable(s) and not self.go_around) else 0.0
         tau = s.time_to_contact()
@@ -261,7 +286,7 @@ class LandingFly(PhaseFly):
             # Throttle from MN9 around the approach power. Go-around: MN9 collapses
             # (bitter suppresses appetite) while still above 100 ft.
             if self.go_around:
-                self.throttle = 1.0
+                self.throttle = HOLD_THROTTLE if self.hold else 1.0
             else:
                 self.throttle = clip(self.trim_throttle + 0.005 * (r['MN9'] - MN9_APPROACH), 0, 1)
                 if s.agl > 100 * FT:
@@ -269,7 +294,7 @@ class LandingFly(PhaseFly):
                     if self.low_appetite >= 2:
                         self.go_around, note = True, 'GO-AROUND: bitter suppressed MN9'
                         self.throttle = 1.0
-            self.rudder = clip(-steer / 150.0, -0.3, 0.3)
+            self.rudder = clip(-steer / 150.0, -AIR_RUDDER, AIR_RUDDER)
             self.aileron = clip(0.004 * self.roll_from_vs(r) - 0.002 * steer, -0.5, 0.5)
         self.q_cmd = math.radians(clip(q_deg, -3.0, 3.0))
         return note
@@ -299,10 +324,24 @@ class StandInBrain:
     ``silence`` lesions as ConnectomeBrain."""
     name = 'PROBE-TABLE STAND-IN (no connectome)'
 
-    def __init__(self, silence=()):
+    def __init__(self, silence=(), noise_seed=None):
+        import random
         self.silenced = set(silence)
+        self.rng = None if noise_seed is None else random.Random(noise_seed)
+        if self.rng:
+            self.name += f' | spike-count noise (seed {noise_seed})'
         if self.silenced:
             self.name += ' | silenced: ' + ', '.join(sorted(self.silenced))
+
+    def poisson(self, lam):
+        if lam > 30:
+            return max(0, round(self.rng.gauss(lam, lam ** 0.5)))
+        k, p, limit = 0, 1.0, math.exp(-lam)
+        while True:
+            p *= self.rng.random()
+            if p <= limit:
+                return k
+            k += 1
 
     @staticmethod
     def interp(x, xs, ys):
@@ -342,6 +381,9 @@ class StandInBrain:
         })
         for name in self.silenced & set(out):
             out[name] = 0.0
+        if self.rng:  # a 200 ms trial counts spikes from 1-4 neurons: Poisson count noise
+            for name, n in GROUP_SIZE.items():
+                out[name] = self.poisson(out[name] * 0.2 * n) / (0.2 * n)
         return {name: out[name] for name in (readouts or out)}
 
 
