@@ -44,6 +44,7 @@ def run(args, runlog=None):
         print('Connectome decisions run synchronously; FlightGear pauses during each trial.', flush=True)
     view = None
     bridge = None
+    body = None
     scene = None
     log_file = None
     try:
@@ -60,10 +61,20 @@ def run(args, runlog=None):
                 raise ValueError('Aircraft is over 20 km from the scenery course. Use the course launch position.')
             controller = FlightController(state.altitude, state.heading, state.speed, state.pitch)
             print('FlightGear connected. Initial altitude/heading/speed are the hold targets.', flush=True)
+            from .flightgear import hand_over
+            if hand_over(args.telnet_port or args.telemetry_port - 1):
+                print('Handover sent: the 737 autopilot (if any) switches off, the controller flies.', flush=True)
+            else:
+                print('WARNING: no telnet handover. A 737 started in the air keeps its own autopilot on '
+                      'and will fight the controller; launch with --telnet (launch_fg does).', flush=True)
         else:
             sim = DemoSimulator()
             state = sim.state
             controller = FlightController()
+        if not args.no_fly_body:
+            # Live 3D fly (python -m flight_simulator.fly_body); fire-and-forget UDP, display only.
+            from .fly_body import BodyLink
+            body = BodyLink(args.body_port)
         if bridge and Path(args.obstacles).resolve() == (ROOT / 'scenarios/obstacles.json').resolve():
             # Keep the default course ahead of any spawn heading. Faster aircraft
             # need more space to turn; custom obstacle files remain local ENU.
@@ -158,6 +169,9 @@ def run(args, runlog=None):
                 print(f'{state.time:6.1f}s {controller.phase:6} altitude={state.altitude:7.1f}m '
                       f'speed={state.speed:5.1f}m/s escape={escape:5.1f}Hz clearance={clearance:7.1f}m', flush=True)
                 next_print = state.time + 10
+            if body:
+                body.send(state, controller.phase, args.brain, escape,
+                          getattr(brain, 'last_activity', None))
             if state.time >= next_display:
                 if scene:
                     scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
@@ -198,6 +212,8 @@ def run(args, runlog=None):
                 scene.close()
         finally:
             try:
+                if body:
+                    body.close()
                 if bridge:
                     bridge.close()
                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
@@ -228,6 +244,8 @@ def main():
     parser.add_argument('--telemetry-port', type=int, default=5501)
     parser.add_argument('--control-port', type=int, default=5502)
     parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle towers (default: telemetry port - 1)')
+    parser.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window (python -m flight_simulator.fly_body)')
+    parser.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
     parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle towers in FlightGear')
     parser.add_argument('--note', help='Feedback note saved with this run log')
     parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')
