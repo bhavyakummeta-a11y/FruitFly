@@ -45,7 +45,6 @@ REPO_AIRCRAFT = Path(__file__).resolve().parent.parent / 'flightgear' / 'Aircraf
 DEFAULT_AIRCRAFT = '738-flies'
 # In-air start speed. 100 kt is fine for the C172 but stalls a 737.
 START_KT = {'c172p': 100}
-<<<<<<< Updated upstream
 PROTOCOLS = Path(__file__).resolve().parent / 'protocols'
 RUNWAY_PROTOCOLS = ('flybrain-runway-state.xml', 'flybrain-runway-controls.xml')
 # Takeoff/landing start. 737 flap detents are 0.125 apart: flaps 5 = 0.375, flaps 30 = 0.875.
@@ -56,11 +55,6 @@ PHASE_ARGS = {
     'landing': [f'--offset-distance={FINAL_NM}', '--altitude=1000', '--vc=145', '--in-air',
                 '--prop:/controls/flight/flaps=0.875', '--prop:bool:/controls/gear/gear-down=true'],
 }
-=======
-# Only aircraft that define a 'cruise' state get --state=cruise. The 737 doesn't, and
-# FlightGear then blocks startup on an 'Unknown aircraft state' dialog.
-CRUISE_STATE = {'c172p'}
->>>>>>> Stashed changes
 
 
 def ports(instance):
@@ -121,11 +115,7 @@ def command(args):
                 *args.extra]
     return [*common,
             '--lat=37.55', '--lon=-122.75', '--altitude=3000', '--heading=0', f'--vc={START_KT.get(args.aircraft, 220)}',
-<<<<<<< Updated upstream
             '--in-air', '--disable-real-weather-fetch', '--wind=0@0',
-=======
-            '--in-air', *(['--state=cruise'] if args.aircraft in CRUISE_STATE else []), '--disable-real-weather-fetch', '--wind=0@0',
->>>>>>> Stashed changes
             '--timeofday=noon', '--disable-ai-traffic',
             f'--generic=socket,out,20,127.0.0.1,{p["telemetry"]},udp,flybrain-state',
             f'--generic=socket,in,20,127.0.0.1,{p["control"]},udp,flybrain-controls',
