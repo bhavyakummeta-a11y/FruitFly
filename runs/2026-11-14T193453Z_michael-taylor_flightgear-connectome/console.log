@@ -1,0 +1,42 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T193453Z_michael-taylor_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the takeoff
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+Screen recording -> C:\Users\micha\FruitFly\runs\videos\screen_20261114T193453Z_takeoff-connectome.mp4
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-18.8
+Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+Parking brake released: the fly has the airplane.
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 2.8s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.6s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.2kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  2.2kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias=  9.4kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 15.5kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 22.5kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias= 30.7kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 37.4kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 44.2kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias= 51.3kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 57.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias= 66.0kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 71.9kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 77.6kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 84.6kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 90.7kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 96.5kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.5s after its state  TAKEOFF ROLL   ias=103.8kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.5s after its state  TAKEOFF ROLL   ias=109.2kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=113.5kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=119.0kt agl=    0ft pitch=-0.1deg thr=0.58
+  decision applied 0.3s after its state  REJECTED       ias=123.2kt agl=    0ft pitch=-0.1deg thr=0.00
+  decision applied 0.2s after its state  REJECTED       ias=118.7kt agl=    0ft pitch=-0.7deg thr=0.00
+WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: it keeps the last controls it received.
+Error: [WinError 10054] An existing connection was forcibly closed by the remote host
+Screen recording saved: C:\Users\micha\FruitFly\runs\videos\screen_20261114T193453Z_takeoff-connectome.mp4
