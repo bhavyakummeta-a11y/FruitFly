@@ -270,7 +270,9 @@ def mission_row(mission, s, c):
     if hasattr(mission, 'route'):
         r.update(mission.report(), world_x=world_state.x, world_y=world_state.y,
                  altitude_msl_ft=world_state.agl/FT+mission.route.departure.elevation_ft,
-                 coordinate_frame=mission.runway.airport)
+                 coordinate_frame=mission.runway.airport,
+                 avoidance_active=getattr(mission.fly,'avoidance',False),
+                 no_safe_route=getattr(mission.fly,'no_safe_route',False))
     r['fly'] = mission.fly.name
     r['brain_state'] = STATES[mission.fly.name]
     r['leg'] = mission.fly.leg.name if isinstance(mission.fly, CircuitFly) else ''

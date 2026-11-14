@@ -97,6 +97,21 @@ and brakes to a stop within the 1,768 m runway. Tests cover geographic frame
 round trips, the altitude-datum change, wrong-start rejection, the launcher,
 old/new telemetry, obstacle sensing, go-around and full-stop completion.
 
+Local validation on 2026-11-14:
+
+| Brain | Minimum obstacle clearance | Touchdown along KBUR 08 | Sink at touchdown | Stop along runway |
+|---|---:|---:|---:|---:|
+| Deterministic stand-in | 357 m | 553 m | 214 ft/min | 1,208 m |
+| Noisy stand-in (seed 1) | 335 m | 543 m | 231 ft/min | 1,198 m |
+| Real connectome (seed 0) | 348 m | 575 m | 263 ft/min | 1,250 m |
+
+All three completed both avoidance events and a full-stop landing. The real
+connectome run took about eight minutes of wall time in the offline model;
+this is not a FlightGear real-time performance measurement. The full suite
+passed 215 tests (five skipped), followed by a separate live-runner regression
+verifying that touchdown and runway bounds use Burbank's frame. After the latest
+teammate merge, 41 relevant launcher, logging, guard and route checks also passed.
+
 This reduced model has no intervening terrain mesh, wind or real 737 brake
 model. Passing it does not validate the Windows FlightGear aircraft. Inspect
 `result.json` for `departure`, `destination`, `outcome`, `success`,
