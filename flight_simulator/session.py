@@ -216,6 +216,25 @@ def ensure_watchdog(quiet=False):
         print('[session] FlightGear watchdog started: every fgfs session will be logged and pushed.')
 
 
+_media = {'next': 0.0, 'warned': False}
+
+
+def ensure_media_recorder():
+    """Screenshots in every session: start media.py's recorder while FlightGear runs.
+
+    Optional add-on (needs Pillow): if it can't start, session logging carries on."""
+    if time.time() < _media['next']:
+        return
+    _media['next'] = time.time() + 10
+    try:
+        from .media import ensure_recorder
+        ensure_recorder(quiet=True)
+    except Exception as exc:
+        if not _media['warned']:
+            print(f'{datetime.now():%H:%M:%S} media recorder unavailable: {exc!r}', flush=True)
+            _media['warned'] = True
+
+
 def watchdog():
     """Attach a session logger to every fgfs.exe that appears. One per machine."""
     guard = socket.socket()
@@ -231,7 +250,10 @@ def watchdog():
     while True:
         try:
             locks = sessions_dir()
-            for pid in find_fgfs():
+            pids = find_fgfs()
+            if pids:
+                ensure_media_recorder()
+            for pid in pids:
                 info = read_lock(locks / f'{pid}.lock')
                 if info and pid_alive(info.get('watcher_pid')):
                     continue
