@@ -165,6 +165,8 @@ def main():
     parser.add_argument('--name', help='Session name (required to launch): what this session is for')
     from .fg_graphics import add_argument as add_graphics_argument
     add_graphics_argument(parser)
+    from .fg_weather import add_argument as add_weather_argument
+    add_weather_argument(parser)
     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
                         help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
                              '(default brain: connectome)')
@@ -183,6 +185,11 @@ def main():
     from .fg_graphics import profile_args
     at = next(i for i, a in enumerate(cmd) if a.startswith('--fg-aircraft='))
     cmd[at:at] = profile_args(args.graphics)
+    # Weather (fg_weather.py): looks only, calm air. After the launcher's own weather flags,
+    # before the user's extra args.
+    from .fg_weather import weather_args
+    at = len(cmd) - len(args.extra)
+    cmd[at:at] = weather_args(args.weather)
     # Refuse a --state the aircraft doesn't define (FlightGear would ignore it; issue #2).
     from .aircraft_states import check_command
     try:

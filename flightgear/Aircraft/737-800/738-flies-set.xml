@@ -136,5 +136,9 @@
       <file>Aircraft/FlyCabin/Nasal/cabin_rows.nas</file>
       <file>Aircraft/FlyCabin/Nasal/cabin_show.nas</file>
     </fruitfly_cabin>
+    <!-- Lightning and thunder for the "storm" weather. Visuals and sound only. -->
+    <fruitfly_storm>
+      <file>Aircraft/FlyCabin/Nasal/storm.nas</file>
+    </fruitfly_storm>
   </nasal>
 </PropertyList>

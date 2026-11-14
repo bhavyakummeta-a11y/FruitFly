@@ -159,13 +159,13 @@ def run(args, runlog=None):
                                  top=max(o.top, state.altitude+500)) for o in obstacles]
         controller.configure_course(obstacles, origin=(state.east, state.north))
         if bridge and not args.no_scene and not course.get('scenery'):
-            # Show the virtual cylinders as live towers inside FlightGear. A fixed
+            # Show the virtual cylinders as live tornadoes inside FlightGear. A fixed
             # scenery course (flightgear/SCENERY.md) already has its own towers.
             try:
                 from .fg_scene import ObstacleScene
                 scene = ObstacleScene(args.telnet_port or args.telemetry_port - 1)
                 n = scene.publish(obstacles, bridge.origin)
-                print(f'Placed {n} obstacle towers in FlightGear (telnet {scene.sock.getpeername()[1]}).', flush=True)
+                print(f'Placed {n} obstacle tornadoes in FlightGear (telnet {scene.sock.getpeername()[1]}).', flush=True)
             except OSError as exc:
                 scene = None
                 print(f'Obstacles not shown in FlightGear (telnet: {exc}); start it with --telnet=5500.', flush=True)
@@ -381,11 +381,11 @@ def main():
     parser.add_argument('--log', help='CSV telemetry output path')
     parser.add_argument('--telemetry-port', type=int, default=5501)
     parser.add_argument('--control-port', type=int, default=5502)
-    parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle towers (default: telemetry port - 1)')
+    parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle tornadoes (default: telemetry port - 1)')
     parser.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window (python -m flight_simulator.fly_body)')
     parser.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
     parser.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
-    parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle towers in FlightGear')
+    parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle tornadoes in FlightGear')
     parser.add_argument('--note', help='Feedback note saved with this run log')
     parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')
     parser.add_argument('--no-runlog', action='store_true', help='Skip the run log entirely')

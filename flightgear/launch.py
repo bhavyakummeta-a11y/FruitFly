@@ -38,6 +38,8 @@ def main():
     sys.path.insert(0, os.path.dirname(HERE))
     from flight_simulator.fg_graphics import add_argument as add_graphics_argument, profile_args
     add_graphics_argument(ap)
+    from flight_simulator.fg_weather import add_argument as add_weather_argument, weather_args
+    add_weather_argument(ap)
     ap.add_argument("--no-wait", action="store_true",
                     help="one FlightGear at a time: exit instead of queueing if a sim is running")
     ap.add_argument("extra", nargs="*", help="extra fgfs args, after --")
@@ -57,7 +59,8 @@ def main():
            "--aircraft=" + ("738" if a.stock else "738-flies"),
            f"--airport={a.airport}", f"--runway={a.runway}",
            f"--telnet={a.telnet}", f"--httpd={a.httpd}",
-           "--timeofday=noon", "--disable-real-weather-fetch",
+           "--timeofday=noon", "--disable-real-weather-fetch", "--wind=0@0",
+           *weather_args(a.weather),   # looks only; the air is calm (fg_weather.py)
            *a.extra]
     print(" ".join(f'"{c}"' if " " in c else c for c in cmd))
     # Every session is logged (live page) and pushed to sim-logs when FlightGear
