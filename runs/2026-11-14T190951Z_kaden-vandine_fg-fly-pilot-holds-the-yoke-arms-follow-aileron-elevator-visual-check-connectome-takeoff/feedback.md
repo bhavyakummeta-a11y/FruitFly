@@ -31,5 +31,6 @@ Timeline (seconds from session start):
 -    109 to    357: **FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)** (run 2026-11-14T191139Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py))
 
 ## Notes
+- **Kaden VanDine** (2026-11-14 14:17): Visual check of the fly pilot's front legs on the yoke (make_cabin.py fly-pilot.ac/xml). LLM control (declared, sim paused on the runway): aileron 0/+0.5/-0.5 and elevator +0.6/-0.6 set by hand; in all five poses the claws stayed on the wheel horns and the legs followed the wheel and column. Then the connectome flew: takeoff and handover at 1,005 ft / 189 kt, crosswind at 109 s. NOT a normal close: FlightGear 2024.1.7 segfaulted at 14:15:38 (kernel: general protection fault in fgfs+0x8e98ba, the same fault as earlier today).
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
