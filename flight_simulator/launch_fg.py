@@ -143,9 +143,9 @@ def fly_command(args):
     p = ports(args.instance)
     cmd = [sys.executable, '-m', 'flight_simulator.takeoff_landing', args.phase, '--brain', args.fly,
            '--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
-    if not args.no_smooth:
-        cmd += ['--smooth', '--period', '1.0', '--speed-up', f'{args.speed:g}']
-    return cmd
+    # Always real time: the controller locks FlightGear at 1x and never pauses it for a
+    # brain trial (project rules, gh #3 / #4). There is no speed or pause option.
+    return cmd + ['--period', '1.0']
 
 
 def main():
@@ -161,10 +161,6 @@ def main():
     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
                         help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
                              '(default brain: connectome)')
-    parser.add_argument('--speed', type=float, default=1.0,
-                        help='With --fly: sim speed (1 = real time); the brain decides as fast as it can')
-    parser.add_argument('--no-smooth', action='store_true',
-                        help='With --fly: pause FlightGear for every brain trial instead of slow motion')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if args.instance is None:

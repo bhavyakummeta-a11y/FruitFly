@@ -23,6 +23,49 @@ def load_obstacles(path):
     return obstacles
 
 
+class EnvelopeMonitor:
+    """Crashes are data (gh #5): leaving the test envelope is logged, never aborts the run.
+
+    update() returns the limits newly broken this step. The run goes on until
+    collision/ground contact or the time limit."""
+
+    def __init__(self):
+        self.active = set()
+        self.events = []
+        self.worst = {'bank_deg': 0.0, 'pitch_deg': 0.0, 'altitude_error_m': 0.0,
+                      'heading_error_deg': 0.0, 'speed_fraction': 1.0}
+
+    def update(self, state, controller):
+        heading = math.degrees(abs(wrap(state.heading - controller.heading)))
+        bank, pitch = math.degrees(state.roll), math.degrees(state.pitch)
+        alt = state.altitude - controller.altitude
+        fraction = state.speed / max(controller.speed, 1e-6)
+        w = self.worst
+        w['bank_deg'] = max(w['bank_deg'], abs(bank))
+        w['pitch_deg'] = max(w['pitch_deg'], abs(pitch))
+        w['altitude_error_m'] = max(w['altitude_error_m'], abs(alt))
+        w['heading_error_deg'] = max(w['heading_error_deg'], heading)
+        w['speed_fraction'] = min(w['speed_fraction'], fraction)
+        limits = {
+            'heading': (heading > 90, f'heading off by {heading:.0f} deg (>90)'),
+            'bank': (abs(bank) > 50, f'bank {bank:+.0f} deg (>50)'),
+            'pitch': (abs(pitch) > 25, f'pitch {pitch:+.0f} deg (>25)'),
+            'speed': (fraction < .70, f'speed {state.speed:.0f} m/s (<70% of {controller.speed:.0f})'),
+            'altitude': (abs(alt) > 40, f'altitude {alt:+.0f} m from target (>40)'),
+        }
+        hit = {kind for kind, (broken, _) in limits.items() if broken}
+        new = [{'time_s': round(state.time, 2), 'kind': kind, 'detail': limits[kind][1]}
+               for kind in limits if kind in hit and kind not in self.active]
+        self.events += new
+        self.active = hit
+        return new
+
+    def result(self):
+        return {'breaches': len(self.events), 'first_breach': self.events[0] if self.events else None,
+                **{f'worst_{k}': round(v, 2) for k, v in self.worst.items()},
+                'events': self.events[:100]}
+
+
 def run(args, runlog=None):
     obstacles = load_obstacles(args.obstacles)
     course = json.loads(Path(args.obstacles).read_text())
@@ -40,8 +83,20 @@ def run(args, runlog=None):
     else:
         brain = brain() if brain else ConnectomeBrain(args.data, seed=args.seed)
     print(brain.name, flush=True)
-    if args.brain == 'connectome':
-        print('Connectome decisions run synchronously; FlightGear pauses during each trial.', flush=True)
+    # Real-time rule (gh #4): in FlightGear the connectome decides in a background worker and
+    # the sim is never paused for it. Fly training (--learn / --load-learning) is owned by a
+    # teammate and keeps its synchronous pause per trial.
+    training = bool(args.learn or args.load_learning)
+    realtime = args.backend == 'flightgear' and args.brain == 'connectome' and not training
+    if realtime:
+        print('Real time: FlightGear stays at 1x and is not paused for brain trials; the plane flies on '
+              'the last decision while the connectome works. A crash is data.', flush=True)
+    elif args.brain == 'connectome' and args.backend == 'flightgear':
+        print('Training run: connectome decisions run synchronously; FlightGear pauses during each trial.',
+              flush=True)
+    worker = None
+    speed_lock = None
+    envelope = EnvelopeMonitor()
     view = None
     bridge = None
     body = None
@@ -57,8 +112,10 @@ def run(args, runlog=None):
                 bridge.origin = course_origin
             print('Waiting for airborne FlightGear telemetry on localhost...', flush=True)
             state = bridge.read()
-            from .flightgear import telnet_get, wait_until_steady
-            aircraft = telnet_get(args.telnet_port or args.telemetry_port - 1, '/sim/aircraft') or ''
+            from .flightgear import SpeedLock, telnet_get, wait_until_steady
+            # 1x rule (gh #3): raises if FlightGear can't be put and kept at 1x sim speed.
+            speed_lock = SpeedLock(args.telnet_port or args.telemetry_port - 1)
+            aircraft =telnet_get(args.telnet_port or args.telemetry_port - 1, '/sim/aircraft') or ''
             if aircraft.startswith('738'):
                 # The 737 overlay keeps its autopilot on until hand_over(); let it settle first.
                 state = wait_until_steady(bridge, state)
@@ -119,7 +176,8 @@ def run(args, runlog=None):
                       'clearance', 'aileron', 'elevator', 'rudder', 'throttle',
                       'reward', 'dan_hz', 'plastic_edges_changed', 'altitude_target', 'altitude_error',
                       'vertical_speed_target', 'pitch_target', 'bank_target', 'heading_target',
-                      'cross_track', 'predicted_clearance', 'decision_source']
+                      'cross_track', 'predicted_clearance', 'decision_source',
+                      'decision_latency_s', 'decisions_skipped', 'envelope_breached']
             writer = csv.DictWriter(log_file, fields)
             writer.writeheader()
         if bridge:
@@ -133,7 +191,11 @@ def run(args, runlog=None):
             ap_guard.wait_off()
             print('Handover: airplane autopilot confirmed OFF; the controller flies.', flush=True)
             state = bridge.freeze(False)
-        next_brain, next_display, next_print = 0.0, 0.0, 0.0
+        if realtime:
+            from .flightgear import DecisionWorker
+            worker = DecisionWorker(lambda hz: (hz, brain.escape(hz), dict(getattr(brain, 'last_activity', {}))))
+        next_brain, next_display, next_print = state.time, 0.0, 0.0
+        latency = None
         escape, controls = 0.0, Controls()
         minimum = math.inf
         min_altitude = state.altitude
@@ -145,8 +207,23 @@ def run(args, runlog=None):
             tick = time.monotonic()
             stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
             terminal = state.altitude <= 0 or any(o.clearance(state) <= 0 for o in obstacles)
-            if state.time >= next_brain and not terminal:
-                if bridge and args.brain == 'connectome':
+            if worker:
+                # Real time: collect a finished decision, start the next one, never wait.
+                done = worker.poll(state.time)
+                if done:
+                    (looming, escape, activity), record = done
+                    latency = record['latency_s']
+                    if runlog:
+                        runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
+                                    'looming_hz': looming, 'escape_hz': escape,
+                                    'decision_started': round(record['started'], 3),
+                                    'decision_latency_s': round(latency, 3),
+                                    'brain_wall_s': round(record['brain_wall_s'], 3), **activity})
+                if state.time >= next_brain and not terminal and not worker.busy:
+                    worker.submit(state.time, stimulus.looming_hz, missed=(state.time - next_brain) / .5)
+                    next_brain = state.time + .5
+            elif state.time >= next_brain and not terminal:
+                if bridge and args.brain == 'connectome':  # training runs only (see `realtime`)
                     state = bridge.freeze(True)
                     stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
                 if args.learn and previous_decision is not None:
@@ -165,19 +242,10 @@ def run(args, runlog=None):
                 if bridge and args.brain == 'connectome':
                     state = bridge.freeze(False)
             if bridge:
-                limits = {
-                    f'heading off by {math.degrees(abs(wrap(state.heading-controller.heading))):.0f} deg (>90)':
-                        abs(wrap(state.heading-controller.heading)) > math.radians(90),
-                    f'bank {math.degrees(state.roll):+.0f} deg (>50)': abs(state.roll) > math.radians(50),
-                    f'pitch {math.degrees(state.pitch):+.0f} deg (>25)': abs(state.pitch) > math.radians(25),
-                    f'speed {state.speed:.0f} m/s (<70% of {controller.speed:.0f})': state.speed < .70 * controller.speed,
-                    f'altitude {state.altitude-controller.altitude:+.0f} m from target (>40)':
-                        abs(state.altitude-controller.altitude) > 40,
-                }
-                broken = [name for name, hit in limits.items() if hit]
-                if broken:
-                    raise RuntimeError('Flight departed the test envelope: ' + '; '.join(broken)
-                                       + '. Pausing. Check aircraft controls and trim.')
+                # Crashes are data (gh #5): log the breach and keep flying.
+                for breach in envelope.update(state, controller):
+                    print(f'{state.time:6.1f}s ENVELOPE BREACH (logged, run continues): {breach["detail"]}',
+                          flush=True)
             controls = controller.update(state, stimulus, escape)
             clearance = min((o.clearance(state) for o in obstacles), default=math.inf)
             minimum = min(minimum, clearance)
@@ -197,7 +265,10 @@ def run(args, runlog=None):
                                  'heading_target': controller.target_heading,
                                  'cross_track': controller.guidance.cross_track,
                                  'predicted_clearance': controller.guidance.clearance,
-                                 'decision_source': controller.decision_source})
+                                 'decision_source': controller.decision_source,
+                                 'decision_latency_s': '' if latency is None else round(latency, 3),
+                                 'decisions_skipped': worker.skipped if worker else '',
+                                 'envelope_breached': ' '.join(sorted(envelope.active))})
             if state.time >= next_print:
                 print(f'{state.time:6.1f}s {controller.phase:6} altitude={state.altitude:7.1f}m '
                       f'speed={state.speed:5.1f}m/s escape={escape:5.1f}Hz clearance={clearance:7.1f}m', flush=True)
@@ -222,6 +293,7 @@ def run(args, runlog=None):
                 break
             if bridge:
                 ap_guard.check()  # no-autopilot rule; raises if it can't be forced off
+                speed_lock.check()  # 1x rule; resets and records any change
                 bridge.send(controls)
                 state = bridge.read()
             else:
@@ -235,6 +307,11 @@ def run(args, runlog=None):
                   'avoidance_activations': controller.activations}
         if ap_guard:
             result['autopilot_violations'] = len(ap_guard.violations)
+        if bridge:
+            result['envelope'] = envelope.result()
+            result['speed_up_resets'] = len(speed_lock.events)
+        if worker:
+            result['decisions'] = worker.summary()
         if hasattr(brain, 'plasticity'):
             result['learning'] = brain.plasticity.summary()
             result['learning_enabled'] = args.learn
@@ -256,6 +333,8 @@ def run(args, runlog=None):
                     pilot.close()
                 if ap_guard:
                     ap_guard.close()
+                if speed_lock:
+                    speed_lock.close()
                 if bridge:
                     bridge.close()
                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)

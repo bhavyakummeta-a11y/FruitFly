@@ -354,9 +354,9 @@ curl -X POST -d '{"value":0.8}' "http://localhost:8080/json/controls/engines/eng
 
 | Property | Notes |
 |---|---|
-| `/sim/freeze/master` | 1 pauses physics, 0 resumes. Use this to **pause the sim while the brain thinks**. |
+| `/sim/freeze/master` | 1 pauses physics, 0 resumes. **Project rule: never pause the sim while the brain thinks**; only during setup and at the end of a run. |
 | `/sim/freeze/clock` | Freeze the sim clock |
-| `/sim/speed-up` | Time multiplier, for example 0.5 for half speed. That buys the brain more wall-clock time per sim second. |
+| `/sim/speed-up` | Time multiplier. **Project rule: always 1 during fly-brain runs**; the controllers lock it there. |
 
 ---
 

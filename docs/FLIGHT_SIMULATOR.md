@@ -394,10 +394,24 @@ packets now have one additional clock-freeze field, so reinstalling is required.
 telnet confirms that a purported pause did not freeze the clock. The teammate’s pause fix also updates takeoff/landing control packets; the
 launcher refreshes all protocols together.
 
-Scenery setup happens while paused, before autopilot handover. Connectome mode
-still pauses during neural calculations by design; reflex mode does not. The
-40 m altitude abort remains in place. A stopped flight prints its reason: do not
-interpret a safety abort or a synchronous brain calculation as obstacle avoidance.
+Scenery setup happens while paused, before autopilot handover. After that the
+run is **real time** (project rules, gh #3–#5):
+
+- **1x:** the controller sets `/sim/speed-up` to 1 at the start, re-checks it
+  every 3 s, resets any change and counts it (`speed_up_resets` in the result).
+  It refuses to run if it can't.
+- **No pause per brain trial:** connectome trials run in a background worker.
+  The plane keeps flying on the last decision until the next is ready. Each
+  applied decision is logged with the sim time it started from and its latency
+  (`decision_started`, `decision_latency_s` in `fly_activity.csv`;
+  `decision_latency_s`, `decisions_skipped` in `airplane.csv`; a `decisions`
+  summary in the result). Training runs (`--learn` / `--load-learning`) are the
+  exception: they still pause for each trial.
+- **Crashes are data:** leaving the envelope (heading off >90°, bank >50°,
+  pitch >25°, speed <70 % of target, altitude more than 40 m off) prints
+  `ENVELOPE BREACH (logged, run continues)` and is recorded in the result
+  (`envelope`: first breach, breach count, worst bank/pitch/altitude error). The
+  run ends only on collision/ground contact or the time limit.
 The brain requests avoidance; conventional rules still stabilize the airplane.
 
 ## Cruise-rule validation

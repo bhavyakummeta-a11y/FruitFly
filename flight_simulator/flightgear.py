@@ -223,6 +223,139 @@ class AutopilotGuard:
         self.sock.close()
 
 
+# ---------------------------------------------------------------- real-time rules
+# RULES (project owner, 2026-11-14): FlightGear runs at 1x sim speed during fly-brain
+# runs, and the fly decides in real time: the sim is never paused or slowed while the
+# brain works. A brain that is too slow flies on its last decision; a crash is data.
+
+class SpeedLock:
+    """Holds /sim/speed-up at 1 over FlightGear's telnet server (gh #3).
+
+    The constructor sets and verifies 1x and raises if it can't. check() (rate-limited)
+    resets any drift and records it in `events` as (wall time, value found)."""
+
+    PATH = '/sim/speed-up'
+
+    def __init__(self, telnet_port, every=3.0, timeout=3.0):
+        try:
+            self.sock = socket.create_connection(('127.0.0.1', telnet_port), timeout=timeout)
+        except OSError as exc:
+            raise RuntimeError(f'Cannot lock FlightGear at 1x speed (no telnet on port {telnet_port}: {exc}). '
+                               'Start FlightGear with --telnet (the project launchers do).') from exc
+        self.file = self.sock.makefile('rb')
+        self.sock.sendall(b'data\r\n')
+        self.every, self.next = every, time.monotonic() + every
+        self.events = []
+        found = self._get()
+        self._set()
+        now = self._get()
+        if not self._is_one(now):
+            self.close()
+            raise RuntimeError(f'FlightGear would not go to 1x sim speed ({self.PATH} = {now!r}).')
+        if not self._is_one(found):
+            print(f'1x RULE: FlightGear was at {found}x sim speed; set to 1x.', flush=True)
+
+    def _get(self):
+        self.sock.sendall(f'get {self.PATH}\r\n'.encode())
+        return self.file.readline().decode(errors='replace').strip()
+
+    def _set(self):
+        self.sock.sendall(f'set {self.PATH} 1\r\n'.encode())
+
+    @staticmethod
+    def _is_one(value):
+        try:
+            return abs(float(value) - 1.0) < 1e-6
+        except (TypeError, ValueError):
+            return False
+
+    def check(self, force=False):
+        if not force and time.monotonic() < self.next:
+            return
+        self.next = time.monotonic() + self.every
+        value = self._get()
+        if self._is_one(value):
+            return
+        self.events.append((time.time(), value))
+        print(f'1x RULE: sim speed was changed to {value}x during the run; reset to 1x.', flush=True)
+        self._set()
+        if not self._is_one(self._get()):
+            raise RuntimeError(f'FlightGear would not return to 1x sim speed ({self.PATH} = {value!r}).')
+
+    def close(self):
+        try:
+            self.sock.sendall(b'quit\r\n')
+        except OSError:
+            pass
+        self.file.close()
+        self.sock.close()
+
+
+class DecisionWorker:
+    """Runs brain trials in a background thread so the control loop never waits (gh #4).
+
+    submit() starts a trial from the latest state unless one is still running; poll()
+    hands back a finished trial once, with the sim time it started from, the sim time
+    it was applied and the latency. A failure in the brain is re-raised by poll()."""
+
+    def __init__(self, fn):
+        import threading
+        self._threading = threading
+        self.fn = fn
+        self.thread = None
+        self._done = None
+        self.records = []      # one dict per applied decision
+        self.skipped = 0       # decision slots that passed while the brain was still busy
+
+    @property
+    def busy(self):
+        return self.thread is not None
+
+    def submit(self, sim_time, *args, missed=0):
+        """Start a trial; False (nothing started) if the previous one is still running."""
+        if self.thread is not None:
+            return False
+        self.skipped += max(0, int(missed))
+        box = {'started': sim_time, 'wall': time.monotonic()}
+
+        def work():
+            try:
+                box['result'] = self.fn(*args)
+            except BaseException as exc:  # handed to the control loop by poll()
+                box['error'] = exc
+            box['wall_s'] = time.monotonic() - box['wall']
+            self._done = box
+
+        self._done = None
+        self.thread = self._threading.Thread(target=work, name='fly-brain', daemon=True)
+        self.thread.start()
+        return True
+
+    def poll(self, sim_time):
+        """None while the brain is working or idle; otherwise (result, record), once."""
+        box = self._done
+        if box is None:
+            return None
+        self.thread.join()
+        self.thread, self._done = None, None
+        if 'error' in box:
+            raise box['error']
+        record = {'started': box['started'], 'applied': sim_time,
+                  'latency_s': sim_time - box['started'], 'brain_wall_s': box['wall_s']}
+        self.records.append(record)
+        return box['result'], record
+
+    def summary(self):
+        lat = [r['latency_s'] for r in self.records]
+        return {'applied': len(lat), 'skipped': self.skipped,
+                'latency_mean_s': round(sum(lat) / len(lat), 3) if lat else None,
+                'latency_max_s': round(max(lat), 3) if lat else None}
+
+    def close(self, wait=10.0):
+        if self.thread is not None:
+            self.thread.join(wait)
+
+
 class FlightGear:
     def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0, engines=1):
         if engines not in (1, 2):
