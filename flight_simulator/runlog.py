@@ -452,7 +452,9 @@ def control_attribution(program, args):
                                       'rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)',
                     'code_decides': 'sensory encoding of the aircraft state, the fixed decoder from DN rates to '
                                     'controls, the behavioural-state gate (standing/flying), a fixed-gain '
-                                    'pitch-rate reflex (haltere stand-in), and phase handover (flies.py)',
+                                    'pitch-rate reflex (haltere stand-in), and phase handover (flies.py)'
+                                    + ('; takeoff_live holds the parking brake while the brain calibrates and '
+                                       'releases it at the handover' if program == 'flight_simulator.takeoff_live' else ''),
                     'autopilot': AUTOPILOT_RULE}
         return {'kind': 'NO_FLY_BRAIN', 'label': f'NO FLY BRAIN: probe-table stand-in flying the {what.strip()}',
                 'neurons_decide': 'nothing (no connectome is simulated in this run)',
