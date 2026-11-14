@@ -197,7 +197,7 @@ class RunwayProtocolTests(unittest.TestCase):
     def test_protocol_xml_matches_wire_order(self):
         state = [c.find('name').text for c in ET.parse(PROTOCOLS / 'flybrain-runway-state.xml').iter('chunk')]
         self.assertEqual(state, ['elapsed', 'latitude', 'longitude', 'agl', 'heading', 'roll', 'pitch',
-                                 'airspeed', 'climb', 'wow', 'frozen', 'n1_left', 'n1_right'])
+                                 'airspeed', 'climb', 'wow', 'frozen', 'n1_left', 'n1_right', 'altitude_msl'])
         controls = [c.find('name').text for c in ET.parse(PROTOCOLS / 'flybrain-runway-controls.xml').iter('chunk')]
         self.assertEqual(controls, ['aileron', 'elevator', 'rudder', 'throttle0', 'throttle1',
                                     'brake_left', 'brake_right', 'gear_down', 'frozen', 'frozen_clock', 'flaps'])

@@ -72,6 +72,7 @@ class RunwayState:
     on_ground: bool = True
     n1_left: float = None     # engine N1 %, FlightGear only (None in the local model)
     n1_right: float = None
+    terrain_agl: float = None  # live terrain clearance; separate from airport datum
 
     @property
     def climb(self):

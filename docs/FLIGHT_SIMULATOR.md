@@ -604,3 +604,10 @@ sync passed its 26 relevant tests. These are not Windows FlightGear 737 flight v
 stand-in CLI smoke run correctly reported a go-around rather than success;
 automatic landing is not guaranteed. Re-test the actual 737 and inspect its new
 termination reason and decision timing before drawing conclusions about it.
+
+
+## Airport destination mission
+
+Use `python -m flight_simulator.launch_fg --route lax-burbank --fly connectome --name "LAX to Burbank"`
+for KLAX 25R to KBUR 08, including known obstacles and full-stop landing.
+The legacy launcher default remains KSFO. See [LAX to Burbank setup and validation](LAX_BURBANK.md).

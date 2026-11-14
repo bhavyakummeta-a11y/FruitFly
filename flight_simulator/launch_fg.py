@@ -114,7 +114,9 @@ def command(args):
     common = [*exe, f'--fg-aircraft={REPO_AIRCRAFT}', f'--aircraft={args.aircraft}',
               f'--httpd={p["httpd"]}', f'--telnet={p["telnet"]}']
     if getattr(args, 'phase', None):
-        return [*common, f'--airport={AIRPORT}', f'--runway={RUNWAY}', *PHASE_ARGS[args.phase],
+        airport, runway = ('KLAX', '25R') if getattr(args,'route',None) else (AIRPORT,RUNWAY)
+        return [*common, f'--airport={airport}', f'--runway={runway}', *PHASE_ARGS[args.phase],
+                *(['--prop:/controls/gear/brake-parking=1'] if getattr(args,'route',None) else []),
                 '--disable-real-weather-fetch', '--wind=0@0', '--timeofday=noon', '--disable-ai-traffic',
                 f'--generic=socket,out,20,127.0.0.1,{p["telemetry"]},udp,flybrain-runway-state',
                 f'--generic=socket,in,20,127.0.0.1,{p["control"]},udp,flybrain-runway-controls',
@@ -147,6 +149,9 @@ def fly_command(args):
     venv = REPO / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
     python = str(venv) if venv.exists() else sys.executable
     ports_args = ['--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
+    if getattr(args,'route',None):
+        return [python,'-m','flight_simulator.mission','--route',args.route,'--brain',args.fly,
+                '--seconds','1800',*ports_args]
     if not args.phase:
         # In-air start: the obstacle-avoidance controller (python -m flight_simulator). It takes
         # over as soon as the plane is flying and holds the spawn preset (ticket #1).
@@ -159,6 +164,7 @@ def fly_command(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--route', choices=['lax-burbank'], help='Start at KLAX 25R and fly to KBUR 08 (implies --phase takeoff)')
     parser.add_argument('--phase', choices=list(PHASE_ARGS),
                         help='Takeoff/landing test at KSFO 28R with the runway protocols')
     parser.add_argument('--instance', type=int, help='0 = default ports, N = ports + 10*N '
@@ -178,6 +184,10 @@ def main():
                         help='One FlightGear at a time: exit instead of queueing if a sim is running')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
+    if args.route:
+        if args.phase and args.phase != 'takeoff': parser.error('--route requires takeoff')
+        args.phase = 'takeoff'
+        if not args.fly: args.fly = 'connectome'
     if args.instance is None:
         args.instance = 0 if args.phase else 1
     if not 0 <= args.instance <= 50:

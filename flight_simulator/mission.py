@@ -16,8 +16,8 @@ Live runs calibrate all three configurations before flight and share one backgro
 brain worker. The haltere-reflex integrator and controls carry over at handover.
 
 The Circuit fly is a thin transit configuration, not the cruise/obstacle work:
-obstacle avoidance belongs to its own experiment (flight_simulator/__main__.py)
-and is NOT used here. `CircuitFly.obstacle_slot` is where it can plug in.
+the default circuit has no obstacle avoidance. With --route lax-burbank,
+airport_route.py adds destination geometry and predictive known-obstacle guidance.
 """
 import argparse
 import csv
@@ -264,7 +264,13 @@ class Mission:
 
 
 def mission_row(mission, s, c):
+    world_state = s
+    if hasattr(mission, 'control_state'): s = mission.control_state(s)
     r = row(mission.fly, s, c)
+    if hasattr(mission, 'route'):
+        r.update(mission.report(), world_x=world_state.x, world_y=world_state.y,
+                 altitude_msl_ft=world_state.agl/FT+mission.route.departure.elevation_ft,
+                 coordinate_frame=mission.runway.airport)
     r['fly'] = mission.fly.name
     r['brain_state'] = STATES[mission.fly.name]
     r['leg'] = mission.fly.leg.name if isinstance(mission.fly, CircuitFly) else ''
@@ -272,6 +278,9 @@ def mission_row(mission, s, c):
 
 
 def run_local(mission, seconds=1500.0, dt=0.05, log=None, progress=True):
+    if hasattr(mission, 'route'):
+        from .airport_route import run_local as run_route
+        return run_route(mission, seconds, dt, log, progress)
     sim = RunwaySim(takeoff_start(), CFG_TAKEOFF)
     next_print = 0.0
     while sim.state.time < seconds and not mission.done:
@@ -317,18 +326,35 @@ def summarize(mission, sim):
 def run_flightgear(mission, args, log):
     """Full mission at 1x. Calibration is on the ground; all flight trials are asynchronous."""
     from .flightgear import RunwayFlightGear, engine_asymmetry, AutopilotGuard, SpeedLock, hand_over
-    bridge = RunwayFlightGear(args.telemetry_port, args.control_port)
-    body = ap_guard = speed_lock = None
+    route = getattr(mission, 'route', None)
+    options = {} if route is None else dict(runway=(route.departure.lat,route.departure.lon,route.departure.heading),
+                                           elevation_ft=route.departure.elevation_ft)
+    bridge = RunwayFlightGear(args.telemetry_port, args.control_port, **options)
+    body = ap_guard = speed_lock = obstacle_scene = None
     reason = 'time_limit'
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
         if not s.on_ground:
             raise ValueError('Start FlightGear on the runway: launch_fg --phase takeoff')
+        if route:
+            route.check_start(s)
+            from .takeoff_live import parking_brake
+            if not parking_brake(args.telemetry_port-1,True):
+                raise RuntimeError('Could not hold parking brake during route setup')
         bridge.send(bridge.last_controls)  # idle + brakes during setup only
         speed_lock = SpeedLock(args.telemetry_port-1)
         ap_guard = AutopilotGuard(args.telemetry_port-1)
+        if route:
+            from .fg_scene import ObstacleScene
+            obstacle_scene = ObstacleScene(args.telemetry_port-1)
+            obstacle_scene.publish(route.world_obstacles(mission.vision_obstacles),
+                                   (route.departure.lat,route.departure.lon))
         mission.prepare_realtime()  # all phase calibration happens before releasing control
+        if route:
+            from .takeoff_live import parking_brake
+            if not parking_brake(args.telemetry_port-1,False):
+                raise RuntimeError('Could not release parking brake before route handover')
         if not hand_over(args.telemetry_port-1):
             raise RuntimeError('FlightGear did not acknowledge mission handover')
         ap_guard.wait_off()
@@ -366,7 +392,12 @@ def run_flightgear(mission, args, log):
             except KeyboardInterrupt:
                 reason='interrupted'
                 break
-            if s.on_ground: max_y=max(max_y,abs(s.y))
+            local = mission.control_state(s) if route else s
+            runway_length = mission.runway.length if route else RUNWAY_LENGTH
+            runway_half = mission.runway.width/2 if route else 30
+            if route and mission.collision(s):
+                reason='obstacle_collision';break
+            if s.on_ground: max_y=max(max_y,abs(local.y))
             warning = engine_asymmetry(s,controls.throttle)
             asym_since=(s.time if asym_since is None else asym_since) if warning else None
             if warning and s.time-asym_since>=2:
@@ -376,21 +407,27 @@ def run_flightgear(mission, args, log):
                 break
             if s.on_ground and math.degrees(s.pitch)>11:
                 reason='tail_strike';break
-            if s.on_ground and (abs(s.y)>30 or s.x>RUNWAY_LENGTH):
+            if s.on_ground and (abs(local.y)>runway_half or local.x>runway_length or (route and local.x < (0 if isinstance(mission.fly,LandingFly) else -150))):
                 reason='runway_departure';break
             if not was_ground and s.on_ground:
                 if not isinstance(mission.fly,LandingFly):
                     reason='ground_contact';break
-                if touchdown is None:touchdown=(round(s.x),round(-entry['climb_fpm']))
+                if touchdown is None:touchdown=(round(local.x),round(-entry['climb_fpm']))
         success = bool(reason=='landing_completed' and touchdown and 0<=touchdown[0]<=900 and touchdown[1]<500)
-        return {'brain':getattr(mission.brain,'name','?'),'ended_in':mission.phase,
+        if route:
+            local=mission.control_state(s)
+            success = success and s.on_ground and s.speed<1 and 0<=local.x<route.arrival.length and abs(local.y)<route.arrival.width/2
+        if reason=='landing_completed' and not success: reason='landing_outside_criteria'
+        return {**(mission.report() if route else {}), 'brain':getattr(mission.brain,'name','?'),'ended_in':mission.phase,
                 'handovers':mission.handovers,'touchdown_x_m':touchdown and touchdown[0],
                 'touchdown_sink_fpm':touchdown and touchdown[1], 'time_s':round(s.time-start,2),
                 'max_centerline_m':round(max_y,1),'outcome':reason,'termination_reason':reason,
                 'safe_reject':reason=='takeoff_rejected' and s.speed<1 and abs(s.y)<=30,
                 'success':success,'decision_timing':mission.worker.summary(),
-                'speed_up_resets':len(speed_lock.events)}
+                'speed_up_resets':len(speed_lock.events),
+                **({'stop_x_m':local.x if s.on_ground else None} if route else {})}
     finally:
+        if obstacle_scene: obstacle_scene.close()
         if body: body.close()
         if ap_guard: ap_guard.close()
         if speed_lock: speed_lock.close()
@@ -417,6 +454,7 @@ def save_log(log, args, brain):
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--brain', choices=['connectome', 'standin'], required=True)
+    p.add_argument('--route', choices=['lax-burbank'], help='KLAX 25R to KBUR 08 with known obstacles')
     p.add_argument('--backend', choices=['demo', 'flightgear'], default='demo')
     p.add_argument('--data', default='data/brain')
     p.add_argument('--seed', type=int, default=0)
@@ -446,7 +484,11 @@ def main(argv=None):
             from .brain import ConnectomeBrain
             brain = ConnectomeBrain(args.data, seed=args.seed)
         print(brain.name, flush=True)
-        mission = Mission(brain, args.period, calibrate=not args.no_calibrate)
+        if args.route:
+            from .airport_route import RouteMission
+            mission = RouteMission(brain, args.period, calibrate=not args.no_calibrate)
+        else:
+            mission = Mission(brain, args.period, calibrate=not args.no_calibrate)
         from .vision import VisionPublisher
         vision = VisionPublisher(args.vision_port)
         mission.vision_sink = vision

@@ -45,6 +45,7 @@ def phase_scene(fly, s, inputs):
     heading=leg.course if leg else 0.0
     origin=(leg.y0,leg.x0) if leg else (0.0,0.0)
     target=leg.altitude_target(s) if leg else (max(0,(AIM_POINT-s.x)*math.tan(GLIDESLOPE)) if landing else None)
+    if hasattr(fly,'altitude_target'): target=fly.altitude_target(s)
     runway={'east':0.0,'north':0.0,'heading':0.0,'length':RUNWAY_LENGTH,
             'width':2*RUNWAY_HALF_WIDTH,'elevation':0.0,'name':'Configured runway'}
     frame=scene(state,fly.vision_obstacles,heading,origin,target,runway)
@@ -60,7 +61,7 @@ def phase_scene(fly, s, inputs):
         frame['alerts'].append('OFF GLIDESLOPE')
     # Never confuse an obstacle with the runway's flare/rotation looming signal.
     # An obstacle is an aversive cue; existing phase decoder decides its response.
-    if frame['obstacle_looming_hz']>0:
+    if frame['obstacle_looming_hz']>0 and not getattr(fly,'obstacle_guidance',False):
         frame['inputs']['bitter']=max(inputs.get('bitter',0),frame['obstacle_looming_hz'])
     return frame
 
