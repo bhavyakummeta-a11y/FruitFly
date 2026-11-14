@@ -29,6 +29,8 @@ class Plasticity:
         import numpy as np
         if not math.isfinite(learning_rate) or not 0 < learning_rate <= 1:
             raise ValueError('Learning rate must be in (0,1]')
+        if not np.issubdtype(weights.dtype, np.floating):
+            raise ValueError('Plasticity requires floating-point weights')
         self.w, self.rate = weights, learning_rate
         self.channels = {}
         for signal, output in [('reward','reward_mbon'),('punishment','punishment_mbon')]:
@@ -97,8 +99,13 @@ class Plasticity:
                 raise ValueError('Checkpoint does not match the connectome and plasticity mask')
             if factors.shape!=self.original.shape or not np.isfinite(factors).all() or (factors<self.floor).any() or (factors>1).any():
                 raise ValueError('Invalid checkpoint weight factors')
+            updates = int(metadata['updates'])
+            rate = float(metadata['learning_rate'])
+            if updates < 0 or not math.isfinite(rate) or not 0 < rate <= 1 or metadata.get('floor') != self.floor:
+                raise ValueError('Invalid checkpoint learning parameters')
             self.w.data[self.positions]=self.original*factors
-            self.updates=int(metadata['updates'])
+            self.updates=updates
+            self.rate=rate
 
     def summary(self):
         import numpy as np
@@ -111,6 +118,7 @@ class LearningBrain(ConnectomeBrain):
     def __init__(self,directory,seed=0,ms=200,learning_rate=.1):
         super().__init__(directory,seed=seed,ms=ms,extra_inputs=LEARNING_INPUTS,
                          extra_readouts=LEARNING_READOUTS)
+        self.w = self.w.astype(float)
         self.plasticity=Plasticity(self.w,self.groups,learning_rate)
         self.name='CONNECTOME LIF + EXPERIMENTAL KC→MBON LEARNING'
 
