@@ -94,6 +94,11 @@ def run_flightgear(args, fly, log):
             raise ValueError('Start FlightGear on a stabilised approach above 300 ft for landing')
         if args.phase == 'landing':
             fly.trim_throttle = fly.throttle = args.approach_throttle
+            # In-air 737 start: the overlay's autopilot holds the plane until we say we're here.
+            from .flightgear import hand_over
+            if not hand_over(args.telemetry_port - 1):
+                print('WARNING: no telnet handover; the 737 autopilot stays on (start FlightGear with --telnet).',
+                      flush=True)
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
         while s.time < args.seconds and not fly.status.done:

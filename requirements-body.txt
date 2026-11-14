@@ -1,0 +1,2 @@
+# Live 3D fly window: python -m flight_simulator.fly_body
+mujoco>=3.2

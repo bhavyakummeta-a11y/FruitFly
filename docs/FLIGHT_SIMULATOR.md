@@ -79,6 +79,32 @@ missing second-engine command but does not establish Boeing flight-model tuning.
 Disable conflicting autopilot, autothrottle, and joystick control before testing.
 The shared controller still requires live validation with the selected aircraft.
 
+## Watch the fly's body (3D)
+
+A second window shows the [flybody](../models/flybody/) fruit fly reacting live to
+its own brain while the controller flies. It banks and pitches with the airplane,
+beats its wings harder with DNg02, beats one wing harder and leans into turns from
+the left/right steering DNs (DNa01/DNa02), and flares its wings and kicks its mid
+legs out when the Giant Fibre (DNp01) fires. It is display only: joint angles are
+set from firing rates, nothing feeds back into the controls, and flybody's RL
+policies are not used.
+
+```sh
+pip install -r requirements-body.txt
+python -m flight_simulator.fly_body          # window 1: waits for the controller
+python -m flight_simulator.launch_fg --instance 0 --name "fly body"   # FlightGear
+python -m flight_simulator --backend flightgear --brain connectome --seconds 180
+```
+
+The controller streams to UDP 127.0.0.1:5600 by default (`--body-port`,
+`--no-fly-body`).
+
+**737 handover:** a 737 started in the air keeps its own autopilot on until the
+controller connects. The controller then sets `/fruitfly/controller-connected`
+over telnet, and `fruitfly.nas` switches the autopilot off (never sooner than 7 s
+after spawn). Before this, the autopilot went off on a fixed 7 s timer and the
+plane stalled while FlightGear was still loading.
+
 ## What actually controls the airplane
 
 - **Connectome mode:** the starter notebook's LIF equations run on the downloaded

@@ -58,19 +58,34 @@ setlistener("/controls/engines/engine[0]/throttle", func(n) {
 
 # The 737's in-air start (autostart.nas: inAirStart) engages its autopilot and
 # autothrottle about 5 s after spawning above 400 ft AGL. The fly must be the
-# one flying, so switch them back off shortly after.
+# one flying, but only once a controller is actually connected: switching the
+# autopilot off on a fixed timer left the plane uncontrolled (and stalling)
+# while FlightGear finished loading. So the autopilot holds the plane until the
+# Python controller sets /fruitfly/controller-connected (flightgear.hand_over),
+# then hands over - never sooner than 7 s after spawn, so the in-air start
+# can't re-engage it afterwards.
 # Set /fruitfly/keep-737-autopilot true to leave them on.
-var hands_off = func {
+var spawn_time = 0;
+var airborne_start = 0;
+var release_ap = func {
     if (getprop("/fruitfly/keep-737-autopilot")) return;
-    if ((getprop("/position/altitude-agl-ft") or 0) <= 400) return;
-    settimer(func {
-        autopilot737.ap_disengage();
-        foreach (var p; ["SPD", "SPD-SPEED", "SPD-N1", "SPD-RETARD", "LVLCHG"])
-            setprop("/autopilot/internal/" ~ p, 0);
-        print("FruitFly: 737 autopilot/autothrottle off - the fly is flying");
-    }, 7);
+    autopilot737.ap_disengage();
+    foreach (var p; ["SPD", "SPD-SPEED", "SPD-N1", "SPD-RETARD", "LVLCHG"])
+        setprop("/autopilot/internal/" ~ p, 0);
+    print("FruitFly: controller connected - 737 autopilot/autothrottle off, the fly is flying");
+};
+var hands_off = func {
+    spawn_time = getprop("/sim/time/elapsed-sec") or 0;
+    airborne_start = (getprop("/position/altitude-agl-ft") or 0) > 400;
+    if (airborne_start and !getprop("/fruitfly/keep-737-autopilot"))
+        print("FruitFly: 737 autopilot holds the plane until the fly-brain controller connects");
 };
 setlistener("/sim/signals/fdm-initialized", hands_off, 0, 0);
+setlistener("/fruitfly/controller-connected", func(n) {
+    if (!n.getBoolValue() or !airborne_start) return;
+    var wait = spawn_time + 7 - (getprop("/sim/time/elapsed-sec") or 0);
+    if (wait > 0) settimer(release_ap, wait) else release_ap();
+}, 0, 0);
 
 # launch_fg --phase takeoff sets /fruitfly/ground-autostart so the engines are
 # running when the fly takes over on the runway.

@@ -7,6 +7,27 @@ from .core import State, Controls, wrap
 from .scenery import to_local
 
 
+def hand_over(telnet_port, attempts=5):
+    """Tell the 737 overlay (FlyCabin/Nasal/fruitfly.nas) that a controller is connected,
+    so it switches the 737's own autopilot off now rather than leaving it holding the plane.
+    Returns True if FlightGear acknowledged. Harmless for aircraft without the overlay."""
+    for _ in range(attempts):
+        try:
+            with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
+                s.sendall(b'data\r\nset /fruitfly/controller-connected true\r\n'
+                          b'get /fruitfly/controller-connected\r\n')
+                reply = b''
+                deadline = time.monotonic() + 3
+                while b'\n' not in reply and time.monotonic() < deadline:
+                    reply += s.recv(256)
+                s.sendall(b'quit\r\n')
+                if reply.strip().lower() in (b'true', b'1'):
+                    return True
+        except OSError:
+            time.sleep(1)
+    return False
+
+
 class FlightGear:
     def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0, engines=1):
         if engines not in (1, 2):
