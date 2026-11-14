@@ -93,6 +93,18 @@ def watch_calibration(brain, stage, runlog):
     brain.run = counted
 
 
+def freeze(telnet_port, on):
+    """Pause/resume FlightGear (master + clock, as its own pause command does)."""
+    from .flightgear import telnet_get
+    v = int(on)
+    try:
+        with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
+            s.sendall(f'data\r\nset /sim/freeze/clock {v}\r\nset /sim/freeze/master {v}\r\nquit\r\n'.encode())
+    except OSError:
+        return False
+    return telnet_get(telnet_port, '/sim/freeze/clock') in (str(v), str(bool(on)).lower())
+
+
 def fly_row(entry):
     """Brain-page row: time, phase, inputs as in_<x>_hz, readouts as <DN>_hz."""
     row = {'time': entry.get('time'), 'phase': entry.get('phase')}
@@ -158,9 +170,15 @@ def main(argv=None):
     ns, _ = p.parse_known_args(argv)
     telnet = ns.telemetry_port - 1
     hold = ns.backend == 'flightgear' and ns.phase == 'takeoff'
+    # Landing starts in the air: nothing flies it while the brain loads and calibrates, so
+    # keep FlightGear paused (launch_fg spawns it paused) until the fly takes over.
+    paused = ns.backend == 'flightgear' and ns.phase == 'landing'
     if hold:
         print('Parking brake ' + ('SET' if parking_brake(telnet, True) else 'could NOT be set')
               + ' while the fly brain calibrates.', flush=True)
+    if paused:
+        print('FlightGear ' + ('PAUSED' if freeze(telnet, True) else 'could NOT be paused')
+              + ' while the fly brain calibrates (the approach waits for the fly).', flush=True)
     runlog = RunLog(ns, ['takeoff_live', *argv])
     stage = Stage(runlog)
     stage.set('loading', note=f'loading the {ns.brain} brain')
@@ -172,11 +190,35 @@ def main(argv=None):
         if calibrate:
             stage.set('calibrating', done=0, total=CALIBRATION_TRIALS, trial_started=time.time(),
                       note='measuring the resting steering level (neutral stimulus); '
-                           'the airplane is held on the parking brake' if hold else
-                           'measuring the resting steering level (neutral stimulus)')
+                           + ('the airplane is held on the parking brake' if hold else
+                              'FlightGear is paused until the fly takes over' if paused else
+                              'the airplane keeps flying meanwhile'))
             watch_calibration(brain, stage, runlog)
         return brain
     tl.make_brain = made
+
+    def hold_paused_until_handover():
+        """Keep the in-air landing start paused through the handover.
+
+        takeoff_landing sends an 'idle + brakes' packet before the handover, and every
+        control packet carries the freeze flag, so FlightGear resumed seconds before the
+        fly had the controls: idle, neutral elevator, flaps 30 -> a -9 deg dive to ~280 ft
+        below the glideslope and an immediate go-around (2026-11-14). Force 'paused' on
+        every packet until the autopilot is confirmed off; the first packet after that
+        carries the fly's own decision and resumes the sim."""
+        from . import flightgear as fg
+        released = {'v': False}
+        send, wait_off = fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off
+
+        def held_send(self, controls, frozen=False):
+            return send(self, controls, frozen or not released['v'])
+
+        def wait_off_then_release(self, *a, **k):
+            out = wait_off(self, *a, **k)
+            released['v'] = True
+            print("FlightGear resumes with the fly's first controls: the fly has the approach.", flush=True)
+            return out
+        fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off = held_send, wait_off_then_release
     live = {}
     real = {'demo': tl.run_demo, 'flightgear': tl.run_flightgear}
 
@@ -187,6 +229,8 @@ def main(argv=None):
                 if not parking_brake(telnet, False):
                     raise RuntimeError('Could not release the parking brake for the takeoff roll')
                 print('Parking brake released: the fly has the airplane.', flush=True)
+            if paused and name == 'flightgear':
+                hold_paused_until_handover()
             stage.set('flying', note='the fly brain has the controls')
             result = real[name](args, fly, live['log'])
             log.extend(live['log'])
@@ -195,11 +239,18 @@ def main(argv=None):
             return result
         return run
 
+    from . import flightgear as fg
+    originals = (tl.run_demo, tl.run_flightgear, tl.make_brain,
+                 fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off)
     tl.run_demo, tl.run_flightgear = wrap('demo'), wrap('flightgear')
     code = 1
     try:
         code = tl.main(argv)
     finally:
+        # Undo every patch, so a second run in the same process starts clean.
+        (tl.run_demo, tl.run_flightgear, make_brain_saved,
+         fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off) = originals
+        tl.make_brain = make_brain
         if 'log' in live:
             live['log'].close()
         stage.set('finished', exit_code=code)
