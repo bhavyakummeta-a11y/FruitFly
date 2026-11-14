@@ -2,6 +2,12 @@
 
 Scope: the two **main** phases from the [project plan](PROJECT_PLAN.md): the **Takeoff fly** (milestone 4, the pivot deliverable) and the **Landing fly** (milestone 6). Cruise and the barrel roll are out of scope. The sim is FlightGear (the current MVP), and everything goes through the same interface MSFS will use later.
 
+**Aircraft: Boeing 737-800** (see [Aircraft](AIRCRAFT.md)). The numbers below are 737 numbers and depend on weight, so take them from the FlightGear model's performance data once it's installed. Three things about the 737 shape this plan:
+
+- **Two turbofans that spool up slowly.** Every throttle decision lands about 5 s late, so throttle comes from rates smoothed over several decisions, and the go-around has to be decided early.
+- **Tail strike.** The tail hits the runway at about 11° pitch on the ground, so rotation has to be a smooth ~2–3°/s, not a snap.
+- **Autopilot and autothrottle must be OFF**, otherwise they fly the plane instead of the fly. Flaps, gear, speedbrakes and autobrake are **scripted checklist items**: documented, fixed, and never touched by the fly.
+
 Rule we keep: **the connectome is the controller.** We use Shiu's LIF settings and `Connectivity_783` signs. Stimulators only turn sim state into sense rates (0–200 Hz, clipped at about 2σ), and decoders only turn firing rates into controls. Neither one does the flying.
 
 ---
@@ -71,23 +77,25 @@ The fly's real takeoff circuit does the plane's takeoff.
 
 | Sim signal (FlightGear) | Stimulator | Why |
 |---|---|---|
-| Airspeed progress, `IAS / Vr` (Vr ≈ 55 KIAS) | **sugar** LB3c, 0–200 Hz | "good, keep going" (MVP path) |
+| Airspeed progress, `IAS / Vr` (Vr ≈ 145 KIAS at flaps 5, weight-dependent) | **sugar** LB3c, 0–200 Hz | "good, keep going" (MVP path) |
 | Centerline offset + yaw rate | **HS cells** L vs R, push-pull | yaw optic flow |
-| Pitch error vs target attitude (0° on the ground, ~8° after liftoff) | **VS cells** (+ ocelli) | pitch optic flow / horizon |
-| `IAS` from Vr−5 to Vr | **LC4/LPLC2 looming**, ramping rate | *the stimulus that makes a standing fly jump* |
-| Reject conditions (off centerline > 5 m, low RPM, short runway) | **bitter** | bad, back off |
+| Pitch error vs target attitude (0° on the ground, ~15° initial climb after liftoff) | **VS cells** (+ ocelli) | pitch optic flow / horizon |
+| `IAS` from V1 to Vr (about the last 10 kt) | **LC4/LPLC2 looming**, ramping rate | *the stimulus that makes a standing fly jump* |
+| Reject conditions below V1 (off centerline > 5 m, engine N1 low or unequal) | **bitter** | bad, back off |
+| Pitch near tail-strike attitude (> 9° while on the wheels) | **bitter** | bad: an extra brake on over-rotation |
 
 | Readout | Control |
 |---|---|
-| DNp09 − MDN | throttle (unchanged from the MVP) |
+| DNp09 − MDN | throttle, written to **both** engines, smoothed over ~3 decisions (unchanged from the MVP) |
 | DNa01/DNa02, L − R | rudder and nosewheel |
-| DNp02 + DNp04 + DNp11 rate; a DNp01 spike means firm rotation | **elevator pitch-up: the rotation is the jump** |
+| DNp02 + DNp04 + DNp11 rate; a DNp01 spike means firm rotation | **elevator pitch-up: the rotation is the jump.** The rate sets the pitch rate, capped at 3°/s |
 | VS-driven DN, picked in the probe step | climb pitch hold after liftoff |
-| MDN sustained on the ground | reject: idle and brakes |
-| **Nerve-cord gate (standing)** | escape DNs drive rotation only while on the ground. After liftoff they're ignored, and the fly hands over at 500 ft AGL |
+| MDN sustained on the ground, **below V1 only** | reject: idle and max brakes |
+| **Nerve-cord gate (standing)** | escape DNs drive rotation only while on the wheels. After V1, MDN can't reject (like a real crew, we're committed). After liftoff the escape DNs are ignored, and the fly hands over at 1,000 ft AGL |
+| Scripted, not the fly | flaps 5 set before brake release; gear up at positive climb |
 
 - ➕ The most faithful to the biology (rotating is jumping), it demos best, and it extends the MVP's throttle path.
-- ➖ The DN directions for steering and pitch are still unproven (milestone 3), and the escape DNs might be too spiky to give a smooth rotation. Mitigation: low-pass the rate over 2–3 decisions.
+- ➖ The DN directions for steering and pitch are still unproven (milestone 3), and the escape DNs might be too spiky to give a smooth rotation, which is a tail-strike risk on a 737. Mitigation: low-pass the rate over 2–3 decisions and cap the pitch rate.
 
 ### Takeoff scorecard (1–5, higher is better)
 
@@ -123,21 +131,22 @@ Being on the glideslope and centerline maps to **sugar**, deviation to **bitter*
 |---|---|---|
 | Glideslope deviation (dots) | **VS cells** push-pull | pitch optic flow |
 | Localizer / centerline | **HS cells** L vs R | yaw optic flow |
-| Speed vs Vref (≈ 65 KIAS) | **sugar** near Vref / **bitter** off it. *Stretch:* ventral flow `GS/AGL` → **LPC1/LLPC1** | speed regulation. LPC1 is the biological channel, but only if the probe confirms it |
-| Time-to-contact `τ = AGL / sink rate`, below ~4 s | **LPLC2/LC4 looming**, rate ∝ 1/τ | *the runway rushing up: the cue that makes a flying fly land* |
-| Unstable approach (>1 dot, sink >1000 fpm below 500 ft, speed ±10 kt) | **bitter** | bad |
+| Speed vs Vref (≈ 140 KIAS at flaps 30, weight-dependent) | **sugar** near Vref / **bitter** off it. *Stretch:* ventral flow `GS/AGL` → **LPC1/LLPC1** | speed regulation. LPC1 is the biological channel, but only if the probe confirms it |
+| Time-to-contact `τ = AGL / sink rate`, below ~6 s (≈ 70 ft at a 700 fpm sink) | **LPLC2/LC4 looming**, rate ∝ 1/τ | *the runway rushing up: the cue that makes a flying fly land.* The ramp starts early so the flare can land at ~20–30 ft |
+| Unstable approach (>1 dot, sink >1000 fpm below 1,000 ft, speed off Vref by more than +10/−5 kt) | **bitter** | bad |
 
 | Readout | Control |
 |---|---|
-| DNp09 − MDN (or DNg02) | throttle |
+| DNp09 − MDN (or DNg02) | throttle, written to **both** engines, smoothed |
 | VS-driven DN, from the probe | elevator to track the glideslope |
 | DNa01/DNa02, L − R | aileron and rudder |
-| **DNp07 + DNp10** | **flare: pitch up, throttle to idle (the leg extension)** |
-| MDN sustained + bitter high | **go around** (back off) |
+| **DNp07 + DNp10** | **flare: pitch up ~2–3°, throttles to idle (the leg extension)** |
+| MDN sustained + bitter high, **above 50 ft AGL only** | **go around**: TOGA thrust and pitch up. Spool-up takes ~5 s, so it has to be decided high |
 | DNp01 (Giant Fibre) | **logged only.** *Nerve-cord gate (flying):* a flying fly decouples the jump, so the GF never acts here |
+| Scripted, not the fly | flaps 30 and gear down before the approach starts; speedbrakes, autobrake and reversers after touchdown |
 
 - ➕ The flare is a real fly reflex rather than a scripted height. It's a mirror of T-C: same looming, opposite behaviour. Using MDN for go-around matches what MDN does biologically.
-- ➖ Flare timing is unforgiving, and per-decision latency hurts most here. Mitigation: freeze the sim per decision (`/sim/freeze/master`), start from long shallow approaches (3 nm, 1000 ft), and feed τ in early so DNp07/10 ramp rather than snap.
+- ➖ Flare timing is unforgiving, a 737 at ~140 kt gives little time, and per-decision latency hurts most here. Mitigation: freeze the sim per decision (`/sim/freeze/master`), start from a stabilised 3° approach (≈ 3 nm, 1,000 ft, already configured) to a long runway (KSFO 28R), and feed τ in early so DNp07/10 ramp rather than snap.
 
 ### Landing scorecard
 
@@ -172,9 +181,15 @@ We compare each fly against a **fixed-gain PID baseline** on the same scenario: 
 |---|---|---|
 | 0 | **Probe table** (milestone 3, open loop): drive each stimulator above at 0/50/100/200 Hz and record DNp01/02/04/07/09/10/11, MDN, DNa01/02 L/R and DNg02 | Looming → DNp02/04/11 and DNp07/10 respond. HS left vs right → opposite DNa sign. One VS → DN pick for pitch |
 | 1 | **Speed:** prune to the sub-network within 3 hops of the stimulators and readouts, then time one 200 ms decision | ≤ 1 s per decision on CPU, or move to Colab/Modal |
-| 2 | **Takeoff fly T-C** in FlightGear, frozen per decision | Repeatable takeoff to 500 ft AGL, ±5 m centerline, 5/5 runs. Lesion LC4/LPLC2 → no rotation |
-| 3 | **Landing fly L-C** from 3 nm / 1000 ft | Touchdown in the zone, sink < 500 fpm, 3/5 runs. Go-around fires on a deliberately unstable approach. Lesion → no flare |
+| 2 | **Takeoff fly T-C**: 737-800 in FlightGear, frozen per decision | Repeatable takeoff to 1,000 ft AGL, ±5 m centerline, no tail strike, 5/5 runs. Lesion LC4/LPLC2 → no rotation |
+| 3 | **Landing fly L-C** from 3 nm / 1,000 ft | Touchdown in the zone (300–600 m past the threshold), sink < 500 fpm, 3/5 runs. Go-around fires on a deliberately unstable approach. Lesion → no flare |
 | 4 | Handover: Takeoff fly → (scripted cruise for now) → Landing fly | One full run, filmed with a neuron-activity panel |
 | 5 | Reach: Takeoff fly on **BANC**, reading the TTMn jump muscle | TTMn spikes at rotation |
+
+**Where the code starts** (from the existing `flight_simulator/` package):
+
+- `brain.py` `ConnectomeBrain` already runs the notebook's LIF on the Shiu data, but takes one input (looming) and gives one output (Giant Fibre). Generalise it to `run(inputs: {group: hz}) -> {readout: hz}`, keeping the equations exactly as they are. Then the Takeoff and Landing flies are two configs (stimulator rig + readouts + nerve-cord gate) sharing one loaded `W`.
+- `protocols/flybrain-controls.xml` writes only `engine[0]/throttle`. Add `engine[1]`, plus the brakes and the sim freeze. Add AGL altitude, ground speed and on-ground to `flybrain-state.xml`.
+- `core.py` `FlightController` is a conventional autopilot with neural triggers. That makes it our **T-A / L-A baseline**, not the deliverable.
 
 **Biggest risk:** step 0 finds no clean pitch DN. In that case pitch alone falls back to a **documented linear readout** over the ~1,300 DNs (a readout fit, not brain training), and everything else stays as above.
