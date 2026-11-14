@@ -265,4 +265,6 @@
 
   <!-- Running gag: the fly flight attendant and her snack cart (cabin_show.nas). -->
   <model><name>attendant</name><path>Aircraft/FlyCabin/Models/attendant.xml</path><offsets><x-m>0</x-m><y-m>0</y-m><z-m>0.100</z-m></offsets></model>
+  <!-- Running gag: the crying baby (a fly larva), on a parent's lap. -->
+  <model><name>baby</name><path>Aircraft/FlyCabin/Models/baby.xml</path><offsets><x-m>-5.790</x-m><y-m>-0.490</y-m><z-m>0.800</z-m></offsets></model>
 </PropertyList>

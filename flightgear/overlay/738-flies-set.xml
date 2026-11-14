@@ -119,6 +119,12 @@
         <serve-m type="double">0</serve-m>
         <item type="int">0</item>
       </attendant>
+      <!-- Running gag: the crying baby, a fly larva (cabin_show.nas). Display only. -->
+      <baby>
+        <crying type="bool">true</crying>
+        <wiggle-deg type="double">0</wiggle-deg>
+        <tear-m type="double">0</tear-m>
+      </baby>
     </cabin>
   </fruitfly>
 

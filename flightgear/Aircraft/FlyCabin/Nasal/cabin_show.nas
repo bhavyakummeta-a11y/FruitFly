@@ -18,6 +18,8 @@
 #   /fruitfly/view-request (string)  set by the session log page's view buttons: the
 #       name of a view to switch to. Cleared once handled.
 #   "Cabin: follow the snack cart" view: the camera rides along the aisle with the cart.
+#   The crying baby (bottom of this file): /fruitfly/cabin/baby/{crying,wiggle-deg,tear-m},
+#   and Sounds/baby-cry.wav while you watch from a cabin view.
 
 var att = props.globals.getNode("/fruitfly/cabin/attendant", 1);
 var served = props.globals.getNode("/fruitfly/cabin/served", 1);
@@ -150,4 +152,50 @@ setlistener("/fruitfly/view-request", func(n) {
     n.setValue("");
 }, 0, 0);
 
-print("FruitFly: cabin show loaded (flight attendant on duty)");
+# ---- the crying baby -----------------------------------------------------------
+# A fly larva on a parent's lap (row BABY_ROW_X, left aisle seat). It cries in fits,
+# wriggling with tears and an open mouth, and you hear it (Sounds/baby-cry.wav) only
+# in the cabin views. When the flight attendant serves its row it gets a pacifier and
+# goes quiet for a while, then starts again.
+var baby = props.globals.getNode("/fruitfly/cabin/baby", 1);
+var CRY_FILE = "baby-cry.wav";
+var CRY_LEN = 4.5;                 # seconds, the sample's length
+var cry_path = nil;
+var full = resolvepath("Aircraft/FlyCabin/Sounds/" ~ CRY_FILE);
+if (full != nil and full != "") {
+    var cut = size(full) - size(CRY_FILE);
+    cry_path = substr(full, 0, cut);
+} else {
+    print("FruitFly: Sounds/" ~ CRY_FILE ~ " not found - the baby cries silently");
+}
+var crying = 1;
+var mood_left = 25.0;              # seconds until the next change of mood
+var next_sob = 0.0;
+var bt = 0.0;
+var in_cabin = func { var n = view_name(); return size(n) >= 6 and substr(n, 0, 6) == "Cabin:"; };
+var update_baby = func {
+    bt += DT;
+    mood_left -= DT;
+    # the cart reaching the baby's row: pacifier, peace and quiet for a while
+    if (crying and math.abs(x - BABY_ROW_X) < 0.3 and att.getValue("item")) {
+        crying = 0;
+        mood_left = 20 + 15 * rand();
+    } elsif (mood_left <= 0) {
+        crying = !crying;
+        mood_left = crying ? 20 + 25 * rand() : 8 + 10 * rand();
+    }
+    baby.setBoolValue("crying", crying);
+    baby.setDoubleValue("wiggle-deg", crying ? 14 * math.sin(2 * math.pi * 2.2 * bt) * math.sin(0.7 * bt)
+                                             : 2 * math.sin(0.8 * bt));
+    baby.setDoubleValue("tear-m", crying ? math.mod(bt * 0.12, 0.10) : 0);
+    if (crying and cry_path != nil and bt >= next_sob and in_cabin()) {
+        var loud = view_name() == "Cabin: follow the snack cart" ? 0.8 : 0.6;
+        fgcommand("play-audio-sample", props.Node.new({path: cry_path, file: CRY_FILE,
+                                                        volume: loud, queue: "fruitfly-baby"}));
+        next_sob = bt + CRY_LEN;
+    }
+};
+var baby_timer = maketimer(DT, update_baby);
+baby_timer.start();
+
+print("FruitFly: cabin show loaded (flight attendant on duty, baby crying)");

@@ -47,9 +47,27 @@ class CabinGagModel(unittest.TestCase):
         for item in ('ItemWater', 'ItemPoop', 'ItemBanana', 'Cart'):
             self.assertIn(item, meshes)
 
-    def test_attendant_is_in_the_aircraft_model(self):
+    def test_attendant_and_baby_are_in_the_aircraft_model(self):
         top = (CABIN / 'Models/738-flies.xml').read_text()
         self.assertIn('Aircraft/FlyCabin/Models/attendant.xml', top)
+        self.assertIn('Aircraft/FlyCabin/Models/baby.xml', top)
+
+    def test_baby_objects_exist_and_its_row_is_known(self):
+        ac = (CABIN / 'Models/baby.ac').read_text()
+        meshes = set(re.findall(r'^name "([^"]+)"', ac, re.M))
+        named = {e.text for e in ET.parse(CABIN / 'Models/baby.xml').getroot().iter('object-name')}
+        self.assertEqual(named - meshes, set())
+        nas = (CABIN / 'Nasal/cabin_rows.nas').read_text()
+        self.assertIn(nas_floats(nas, 'BABY_ROW_X')[0], nas_floats(nas, 'ROWS'))
+
+    def test_baby_cry_sample_is_a_short_mono_wav(self):
+        import wave
+        with wave.open(str(CABIN / 'Sounds/baby-cry.wav')) as w:
+            self.assertEqual(w.getnchannels(), 1)
+            length = w.getnframes() / w.getframerate()
+        self.assertTrue(3 < length < 6, length)
+        nas = (CABIN / 'Nasal/cabin_show.nas').read_text()
+        self.assertIn(f'CRY_LEN = {length:.1f}', nas)
 
     def test_set_file_loads_the_show_and_the_follow_view(self):
         root = ET.parse(SET).getroot()
