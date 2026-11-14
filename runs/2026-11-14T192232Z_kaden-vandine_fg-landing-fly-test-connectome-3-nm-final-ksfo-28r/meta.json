@@ -1,0 +1,61 @@
+{
+  "run_id": "2026-11-14T192232Z_kaden-vandine_fg-landing-fly-test-connectome-3-nm-final-ksfo-28r",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 6.9
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: SPD; controller 2026-11-14T192239Z_kaden-vandine_flightgear-connectome is running",
+      "from_s": 6.9,
+      "to_s": 29.4
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the landing",
+      "detail": "run 2026-11-14T192239Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 29.4,
+      "to_s": 87.4
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 87.4,
+      "to_s": 104.4
+    }
+  ],
+  "name": "landing fly test: connectome, 3 nm final KSFO 28R",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 44733,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T19:22:32.144959+00:00",
+  "duration_s": 104,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 36,
+  "controller_runs": {
+    "2026-11-14T192239Z_kaden-vandine_flightgear-connectome": {
+      "exit_code": 0
+    },
+    "2026-11-14T191800Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T192127Z_michael-taylor_flightgear-connectome": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "fd4d653ead19f17f22eee6340cbcb1b7925fe6ff",
+    "branch": "main"
+  }
+}
