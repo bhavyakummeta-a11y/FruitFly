@@ -95,6 +95,7 @@ def run_flightgear(args, fly, log):
     ahead = args.final_nm * 1852.0 if args.phase == 'landing' else 0.0
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
     pilot = None
+    ap_guard = None
     if args.smooth:
         # Smooth mode: no freeze per brain trial. The whole sim runs in steady slow motion
         # and keeps flying on the last commands while the brain computes, so each decision
@@ -111,11 +112,15 @@ def run_flightgear(args, fly, log):
             raise ValueError('Start FlightGear on a stabilised approach above 300 ft for landing')
         if args.phase == 'landing':
             fly.trim_throttle = fly.throttle = args.approach_throttle
-            # In-air 737 start: the overlay's autopilot holds the plane until we say we're here.
-            from .flightgear import hand_over
-            if not hand_over(args.telemetry_port - 1):
-                print('WARNING: no telnet handover; the 737 autopilot stays on (start FlightGear with --telnet).',
-                      flush=True)
+        # No-autopilot rule: the fly never flies with the airplane autopilot on. In an in-air
+        # 737 start the overlay's autopilot holds the plane until the handover switches it off.
+        from .flightgear import AutopilotGuard, hand_over
+        ap_guard = AutopilotGuard(args.telemetry_port - 1)  # raises if it can't be verified (no telnet)
+        if not hand_over(args.telemetry_port - 1):
+            raise RuntimeError('FlightGear did not acknowledge the handover; the fly does not take the '
+                               'controls without it (no-autopilot rule).')
+        ap_guard.wait_off()
+        print('Handover: airplane autopilot confirmed OFF; the fly flies.', flush=True)
         previous = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
         body = None
@@ -158,6 +163,7 @@ def run_flightgear(args, fly, log):
             if isinstance(fly, TakeoffFly) and not s.on_ground and s.climb > 1 and s.agl > 10:
                 bridge.gear_down = False  # scripted checklist: gear up at positive climb
             log.append(row(fly, s, controls))
+            ap_guard.check()  # no-autopilot rule; raises if it can't be forced off
             if body:
                 last = fly.decisions[-1] if fly.decisions else None
                 rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
@@ -197,6 +203,11 @@ def run_flightgear(args, fly, log):
     finally:
         if pilot:
             pilot.close()
+        if ap_guard:
+            if ap_guard.violations:
+                print(f'NO-AUTOPILOT RULE: {len(ap_guard.violations)} autopilot engagement(s) were forced off '
+                      'during this run.', flush=True)
+            ap_guard.close()
         if args.smooth:
             _set_speed_up(args.telemetry_port - 1, 1.0)
         paused = bridge.close()

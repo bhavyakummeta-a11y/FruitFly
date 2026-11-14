@@ -105,25 +105,50 @@ setlistener("/controls/engines/engine[0]/throttle", func(n) {
 # Python controller sets /fruitfly/controller-connected (flightgear.hand_over),
 # then hands over - never sooner than 7 s after spawn, so the in-air start
 # can't re-engage it afterwards.
-# Set /fruitfly/keep-737-autopilot true to leave them on.
+#
+# NO-AUTOPILOT RULE (project owner, 2026-11-14): the fly NEVER uses the
+# airplane's autopilot or autothrottle. From the handover on, any attempt to
+# engage CMD A / CMD B / the autothrottle (keyboard, panel click, script) is
+# forced off at once and counted in /fruitfly/autopilot/violations. There is
+# no override. The Python controller checks the same properties
+# (flight_simulator/flightgear.py AutopilotGuard) and won't fly while they're on.
 var spawn_time = 0;
 var airborne_start = 0;
-var release_ap = func {
-    if (getprop("/fruitfly/keep-737-autopilot")) return;
+var ap_forbidden = props.globals.getNode("/fruitfly/autopilot/forbidden", 1);
+var ap_violations = props.globals.getNode("/fruitfly/autopilot/violations", 1);
+ap_forbidden.setBoolValue(0);
+ap_violations.setIntValue(0);
+var AP_ON = ["/autopilot/internal/CMDA", "/autopilot/internal/CMDB", "/autopilot/internal/SPD"];
+var ap_off = func {
     autopilot737.ap_disengage();
     foreach (var p; ["SPD", "SPD-SPEED", "SPD-N1", "SPD-RETARD", "LVLCHG"])
         setprop("/autopilot/internal/" ~ p, 0);
-    print("FruitFly: controller connected - 737 autopilot/autothrottle off, the fly is flying");
+};
+var enforce_no_ap = func {
+    if (!ap_forbidden.getBoolValue()) return;
+    var on = [];
+    foreach (var p; AP_ON) if (getprop(p)) append(on, p);
+    if (!size(on)) return;
+    ap_violations.setIntValue(ap_violations.getValue() + 1);
+    print("FruitFly NO-AUTOPILOT RULE: " ~ string.join(", ", on) ~ " engaged while the fly is flying - forced off");
+    settimer(ap_off, 0);  # outside the listener, so the 737's own listeners finish first
+};
+foreach (var p; AP_ON) setlistener(p, enforce_no_ap, 0, 0);
+var release_ap = func {
+    ap_off();
+    ap_forbidden.setBoolValue(1);
+    print("FruitFly: controller connected - 737 autopilot/autothrottle off and locked out, the fly is flying");
 };
 var hands_off = func {
     spawn_time = getprop("/sim/time/elapsed-sec") or 0;
     airborne_start = (getprop("/position/altitude-agl-ft") or 0) > 400;
-    if (airborne_start and !getprop("/fruitfly/keep-737-autopilot"))
+    if (airborne_start)
         print("FruitFly: 737 autopilot holds the plane until the fly-brain controller connects");
 };
 setlistener("/sim/signals/fdm-initialized", hands_off, 0, 0);
 setlistener("/fruitfly/controller-connected", func(n) {
-    if (!n.getBoolValue() or !airborne_start) return;
+    if (!n.getBoolValue()) return;
+    if (!airborne_start) { release_ap(); return; }  # runway start: lock out at once
     var wait = spawn_time + 7 - (getprop("/sim/time/elapsed-sec") or 0);
     if (wait > 0) settimer(release_ap, wait) else release_ap();
 }, 0, 0);

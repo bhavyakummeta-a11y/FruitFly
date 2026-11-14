@@ -47,6 +47,7 @@ def run(args, runlog=None):
     body = None
     pilot = None
     scene = None
+    ap_guard = None
     log_file = None
     try:
         if args.backend == 'flightgear':
@@ -122,12 +123,15 @@ def run(args, runlog=None):
             writer = csv.DictWriter(log_file, fields)
             writer.writeheader()
         if bridge:
-            from .flightgear import hand_over
-            if hand_over(args.telnet_port or args.telemetry_port - 1):
-                print('Handover sent: the 737 autopilot (if any) switches off, the controller flies.', flush=True)
-            else:
-                print('WARNING: no telnet handover. A 737 started in the air keeps its own autopilot on '
-                      'and will fight the controller; launch with --telnet (launch_fg does).', flush=True)
+            # No-autopilot rule: the fly never flies with the airplane autopilot on.
+            from .flightgear import AutopilotGuard, hand_over
+            telnet = args.telnet_port or args.telemetry_port - 1
+            ap_guard = AutopilotGuard(telnet)  # raises if the autopilot can't be verified (no telnet)
+            if not hand_over(telnet):
+                raise RuntimeError('FlightGear did not acknowledge the handover; the fly does not take the '
+                                   'controls without it (no-autopilot rule).')
+            ap_guard.wait_off()
+            print('Handover: airplane autopilot confirmed OFF; the controller flies.', flush=True)
             state = bridge.freeze(False)
         next_brain, next_display, next_print = 0.0, 0.0, 0.0
         escape, controls = 0.0, Controls()
@@ -217,6 +221,7 @@ def run(args, runlog=None):
                 print('STOP: collision with a configured obstacle or ground.', flush=True)
                 break
             if bridge:
+                ap_guard.check()  # no-autopilot rule; raises if it can't be forced off
                 bridge.send(controls)
                 state = bridge.read()
             else:
@@ -228,6 +233,8 @@ def run(args, runlog=None):
                   'minimum_clearance_m': round(minimum, 2) if math.isfinite(minimum) else None,
                   'minimum_altitude_m': round(min_altitude, 2),
                   'avoidance_activations': controller.activations}
+        if ap_guard:
+            result['autopilot_violations'] = len(ap_guard.violations)
         if hasattr(brain, 'plasticity'):
             result['learning'] = brain.plasticity.summary()
             result['learning_enabled'] = args.learn
@@ -247,6 +254,8 @@ def run(args, runlog=None):
                     body.close()
                 if pilot:
                     pilot.close()
+                if ap_guard:
+                    ap_guard.close()
                 if bridge:
                     bridge.close()
                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)

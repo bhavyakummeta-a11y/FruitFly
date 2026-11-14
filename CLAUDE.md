@@ -1,5 +1,19 @@
 # FruitFly: rules for every agent and teammate
 
+## No autopilot, ever (mandatory)
+
+**The fly never uses the airplane's autopilot or autothrottle**, on any aircraft
+(737 CMD A/B and A/T, C172 KAP140, FlightGear's generic `/autopilot/locks`).
+- Never write code, launch flags or protocols that engage an autopilot, and
+  never add an override. The 737's in-air start may hold the plane on its
+  autopilot only until the handover; from then on it is locked out.
+- It is enforced in the sim (`fruitfly.nas` forces it off and counts
+  `/fruitfly/autopilot/violations`), in the controllers (`AutopilotGuard` in
+  `flight_simulator/flightgear.py`: no telnet → no flying; autopilot on → forced
+  off; can't turn off → run stops) and by `tests/test_no_autopilot.py`.
+- Don't weaken or bypass any of the three. A design that needs the autopilot
+  (e.g. "autopilot flies the ILS") is out: ask the user instead.
+
 ## Ticket board: claim work before you start (mandatory)
 
 Several agents work in this repo at once, across checkouts and worktrees

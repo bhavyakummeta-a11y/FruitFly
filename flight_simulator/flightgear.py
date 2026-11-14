@@ -92,7 +92,7 @@ class CockpitFly:
 
 def hand_over(telnet_port, attempts=5):
     """Tell the 737 overlay (FlyCabin/Nasal/fruitfly.nas) that a controller is connected,
-    so it switches the 737's own autopilot off now rather than leaving it holding the plane.
+    so it switches the 737's own autopilot off now and keeps it off (no-autopilot rule).
     Returns True if FlightGear acknowledged. Harmless for aircraft without the overlay."""
     for _ in range(attempts):
         try:
@@ -109,6 +109,118 @@ def hand_over(telnet_port, attempts=5):
         except OSError:
             time.sleep(1)
     return False
+
+
+# ---------------------------------------------------------------- no-autopilot rule
+# RULE (project owner, 2026-11-14): the fly NEVER uses the airplane's autopilot or
+# autothrottle. While a fly-brain controller is connected, every aircraft autopilot
+# below must be off. AutopilotGuard enforces it from Python for every aircraft;
+# FlyCabin/Nasal/fruitfly.nas enforces it inside FlightGear for the 737.
+# Property -> value that means OFF. tests/test_no_autopilot.py lints against changes.
+AUTOPILOT_OFF = {
+    '/autopilot/internal/CMDA': '0',                  # 737 autopilot A (CMD A)
+    '/autopilot/internal/CMDB': '0',                  # 737 autopilot B (CMD B)
+    '/autopilot/internal/SPD': '0',                   # 737 autothrottle arm
+    '/autopilot/KAP140/locks/roll-axis': 'false',     # C172 KAP140 roll servo
+    '/autopilot/KAP140/locks/pitch-axis': 'false',    # C172 KAP140 pitch servo
+    '/autopilot/locks/heading': '',                   # FlightGear generic autopilot
+    '/autopilot/locks/altitude': '',
+    '/autopilot/locks/speed': '',
+}
+
+
+class AutopilotEngaged(RuntimeError):
+    """The airplane autopilot is on while the fly is (or is about to be) flying."""
+
+
+def autopilot_value_engaged(value):
+    """True if a telnet `get` reply means engaged. Missing nodes ('-ERR ...') and
+    empty / 0 / false mean off."""
+    v = (value or '').strip().lower()
+    if not v or v.startswith('-err') or v in ('false', 'off', 'none', 'nil'):
+        return False
+    try:
+        return float(v) != 0.0
+    except ValueError:
+        return True  # any other non-empty lock string (e.g. 'dg-heading-hold') is engaged
+
+
+class AutopilotGuard:
+    """Enforces the no-autopilot rule over FlightGear's telnet server, for any aircraft.
+
+    wait_off() before the fly takes the controls; check() every loop (rate-limited).
+    An engaged autopilot is forced off and recorded in `violations`; if it is still on
+    after that, AutopilotEngaged is raised and the controller must stop.
+    No telnet means the rule can't be verified, so the constructor raises.
+    """
+
+    def __init__(self, telnet_port, every=1.0, timeout=3.0):
+        try:
+            self.sock = socket.create_connection(('127.0.0.1', telnet_port), timeout=timeout)
+        except OSError as exc:
+            raise AutopilotEngaged(
+                f'Cannot verify the airplane autopilot is off (no FlightGear telnet on port {telnet_port}: '
+                f'{exc}). The fly never flies with the autopilot; start FlightGear with --telnet '
+                '(the project launchers do).') from exc
+        self.file = self.sock.makefile('rb')
+        self.sock.sendall(b'data\r\n')
+        self.every, self.next = every, 0.0
+        self.violations = []
+
+    def _get_all(self):
+        paths = list(AUTOPILOT_OFF)
+        self.sock.sendall(''.join(f'get {p}\r\n' for p in paths).encode())
+        return {p: self.file.readline().decode(errors='replace').strip() for p in paths}
+
+    def engaged(self):
+        """Autopilot properties that are currently on."""
+        return [p for p, v in self._get_all().items() if autopilot_value_engaged(v)]
+
+    def force_off(self, paths):
+        self.sock.sendall(''.join(f'set {p} {AUTOPILOT_OFF[p]}\r\n' for p in paths).encode())
+
+    def check(self, force=False):
+        if not force and time.monotonic() < self.next:
+            return
+        self.next = time.monotonic() + self.every
+        on = self.engaged()
+        if not on:
+            return
+        self.violations.append(on)
+        print(f'NO-AUTOPILOT RULE: airplane autopilot engaged while the fly is flying ({", ".join(on)}). '
+              'Forcing it off.', flush=True)
+        self.force_off(on)
+        time.sleep(0.2)
+        still = self.engaged()
+        if still:
+            raise AutopilotEngaged(f'Airplane autopilot could not be switched off ({", ".join(still)}); '
+                                   'stopping: the fly never flies with the autopilot.')
+
+    def wait_off(self, timeout=15.0):
+        """Before the fly takes the controls: wait for the handover to switch the autopilot
+        off (the 737 overlay may need up to 7 s after spawn), then force anything left off."""
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if not self.engaged():
+                return
+            time.sleep(0.25)
+        on = self.engaged()
+        self.force_off(on)
+        time.sleep(0.3)
+        still = self.engaged()
+        if still:
+            raise AutopilotEngaged(f'Airplane autopilot still on after handover ({", ".join(still)}); '
+                                   'the fly will not take the controls.')
+        print(f'NO-AUTOPILOT RULE: autopilot was still on after handover ({", ".join(on)}); forced off.',
+              flush=True)
+
+    def close(self):
+        try:
+            self.sock.sendall(b'quit\r\n')
+        except OSError:
+            pass
+        self.file.close()
+        self.sock.close()
 
 
 class FlightGear:

@@ -56,9 +56,9 @@ class Lint(unittest.TestCase):
     PATTERN = re.compile(r'(?<!`)--state=([A-Za-z0-9_.-]+)')
 
     def test_no_hardcoded_undefined_state(self):
-        files = subprocess.run(['git', 'ls-files', '*.py', '*.ps1', '*.sh', '*.bat'], cwd=ROOT,
-                               capture_output=True, text=True, check=True).stdout.split()
-        files = [f for f in files if not f.startswith('tests/')]
+        files = subprocess.run(['git', 'ls-files', '-z', '*.py', '*.ps1', '*.sh', '*.bat'], cwd=ROOT,
+                               capture_output=True, text=True, check=True).stdout.split('\0')
+        files = [f for f in files if f and not f.startswith('tests/')]  # -z: names may contain spaces
         common = None
         for ac in REPO_IDS:
             s = defined_states(find_set_xml(ac, [REPO_AIRCRAFT]))
