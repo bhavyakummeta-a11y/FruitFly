@@ -175,6 +175,8 @@ We compare each fly against a **fixed-gain PID baseline** on the same scenario: 
 
 ---
 
+> **Status (2026-11-14):** steps 0, 2 and 3 are implemented. See [TAKEOFF_LANDING.md](TAKEOFF_LANDING.md). The step-0 probe changed three things: DNp09 never fires (MN9 carries the throttle), bitter doesn't drive MDN (reject and go-around come from bitter suppressing MN9), and DNp10 is silent (the flare uses DNp07 alone). The steering readout is DNp15 (DNHS1) + DNa02, and the pitch readout is DNp20 (DNOVS1).
+
 ## 6. Build order
 
 | # | Step | Done when |

@@ -10,7 +10,7 @@ Runway frame: x metres along the runway (0 = threshold for landing, brake
 release point for takeoff), y metres right of centerline, heading error psi in
 radians clockwise from runway heading.
 """
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 import math
 
 from .core import Controls, clip
