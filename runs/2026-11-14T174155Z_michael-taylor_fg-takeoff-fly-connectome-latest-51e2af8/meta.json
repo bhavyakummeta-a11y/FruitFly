@@ -1,0 +1,52 @@
+{
+  "run_id": "2026-11-14T174155Z_michael-taylor_fg-takeoff-fly-connectome-latest-51e2af8",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "takeoff fly - CONNECTOME (latest 51e2af8)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 23928,
+  "fgfs_exit_code": 4294967295,
+  "started_utc": "2026-11-14T17:41:55.479697+00:00",
+  "duration_s": 233,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 29
+  },
+  "airplane_samples": 42,
+  "controller_runs": {
+    "2026-11-14T174432Z_michael-taylor_demo-standin": {
+      "fly": "Takeoff fly",
+      "brain": "PROBE-TABLE STAND-IN (no connectome)",
+      "phase": "takeoff",
+      "completed": true,
+      "time_s": 61.3,
+      "decisions": 117,
+      "max_centerline_m": 0.7,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "liftoff_x_m": 1676,
+      "rejected": false,
+      "agl_ft": 1003,
+      "ias_kt": 172.8,
+      "stop_x_m": null,
+      "events": [
+        "31.1s JUMP: escape DNs 229 Hz",
+        "31.6s JUMP: escape DNs 361 Hz",
+        "32.1s JUMP: escape DNs 470 Hz",
+        "...",
+        "36.5s JUMP: escape DNs 683 Hz",
+        "37.1s JUMP: escape DNs 684 Hz",
+        "37.6s JUMP: escape DNs 684 Hz"
+      ],
+      "exit_code": 0
+    }
+  },
+  "code": {
+    "commit": "4e0a47707398791ce078930c281dbdf4808afc18",
+    "branch": "main"
+  }
+}

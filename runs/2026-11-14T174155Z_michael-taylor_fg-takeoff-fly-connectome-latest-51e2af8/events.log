@@ -1,0 +1,88 @@
+12:41:56 [session] Session 'takeoff fly - CONNECTOME (latest 51e2af8)' watching fgfs pid 23928 (738-flies)
+12:41:56 [session] Live log page: http://127.0.0.1:8766/
+12:41:57 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+12:41:57 [fgfs] 0.04 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+12:41:57 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+12:41:57 [fgfs] 0.04 [ALRT]:general   affinity=none
+12:41:57 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+12:41:57 [fgfs] 0.39 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:41:57 [fgfs] 0.39 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:41:57 [fgfs] 0.40 [WARN]:general   Enabling ATI/AMD viewport hack
+12:41:57 [fgfs] 0.44 [ALRT]:view      affinity=none
+12:41:57 [session] Docked: log below and fly brain right of FlightGear
+12:42:05 [fgfs] 8.44 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+12:42:05 [fgfs] 8.44 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+12:42:05 [fgfs] 9.19 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:42:05 [fgfs] 9.24 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:42:08 [fgfs] 12.22 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+12:42:08 [fgfs] 12.28 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+12:42:08 [fgfs] 12.28 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+12:42:08 [fgfs] 12.28 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+12:42:08 [fgfs] 12.28 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+12:42:08 [fgfs] 12.83 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+12:42:09 [fgfs] 14.05 [WARN]:input     Unhandled HID usage page:d with usage 5
+12:42:09 [fgfs] 14.05 [WARN]:input     Unhandled HID usage page:d with usage e
+12:42:13 [session] Connected to property API on :8080
+12:42:13 [fgfs] 17.30 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+12:42:16 [session] Property API stopped answering
+12:42:16 [fgfs] 20.55 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:42:16 [fgfs] 20.71 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:42:19 [fgfs] 23.07 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:42:19 [fgfs] 23.49 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:42:19 [fgfs] 23.71 [ALRT]:flight    Failed to save initial FDM property state
+12:42:26 [session] Connected to property API on :8080
+12:42:36 [session] Property API stopped answering
+12:42:42 [session] Connected to property API on :8080
+12:44:35 [controller] Run started: 2026-11-14T174432Z_michael-taylor_demo-standin
+12:44:35 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T174432Z_michael-taylor_demo-standin
+12:44:35 [controller] PROBE-TABLE STAND-IN (no connectome)
+12:44:35 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+12:44:35 [controller]   zero points: steer=-34.0
+12:44:35 [controller] Takeoff fly: standing fly, looming -> jump = rotation
+12:44:35 [controller]    0.0s TAKEOFF ROLL         x=      0m agl=     0ft ias=  0.0kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]    5.0s TAKEOFF ROLL         x=     17m agl=     0ft ias= 17.2kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]   10.1s TAKEOFF ROLL         x=     96m agl=     0ft ias= 44.0kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]   15.1s TAKEOFF ROLL         x=    244m agl=     0ft ias= 70.5kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]   20.1s TAKEOFF ROLL         x=    458m agl=     0ft ias= 95.4kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]   25.1s TAKEOFF ROLL         x=    734m agl=     0ft ias=118.4kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]   30.1s V1                   x=   1066m agl=     0ft ias=139.5kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+12:44:35 [controller]   35.1s ROTATE               x=   1454m agl=     0ft ias=158.5kt pitch=  3.8° thr=1.00 | DNp07=33 DNp04=330 DNp20_L=12 DNp15_R=42
+12:44:35 [controller]   40.1s CLIMB                x=   1886m agl=     7ft ias=172.9kt pitch=  9.0° thr=1.00 | MN9=105 DNp20_L=64 DNp15_R=41
+12:44:35 [controller]   45.2s CLIMB                x=   2341m agl=   142ft ias=177.6kt pitch= 14.7° thr=1.00 | MN9=105 DNp20_L=35 DNp15_R=51
+12:44:35 [controller]   50.2s CLIMB                x=   2794m agl=   408ft ias=175.8kt pitch= 16.0° thr=1.00 | MN9=105 DNp20_L=25 DNp15_R=39
+12:44:35 [controller]   55.3s CLIMB                x=   3239m agl=   692ft ias=173.6kt pitch= 15.3° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=34
+12:44:35 [controller]   60.3s CLIMB                x=   3682m agl=   953ft ias=172.8kt pitch= 14.8° thr=1.00 | MN9=105 DNp20_L=33 DNp15_R=45
+12:44:35 [controller] {
+12:44:35 [controller]   "fly": "Takeoff fly",
+12:44:35 [controller]   "brain": "PROBE-TABLE STAND-IN (no connectome)",
+12:44:35 [controller]   "phase": "HANDOVER (1,000 ft)",
+12:44:35 [controller]   "completed": true,
+12:44:35 [controller]   "time_s": 61.3,
+12:44:35 [controller]   "decisions": 117,
+12:44:35 [controller]   "max_centerline_m": 0.7,
+12:44:35 [controller]   "tail_strike": false,
+12:44:35 [controller]   "stall": false,
+12:44:35 [controller]   "left_runway": false,
+12:44:35 [controller]   "liftoff_x_m": 1676,
+12:44:35 [controller]   "rejected": false,
+12:44:35 [controller]   "agl_ft": 1003,
+12:44:35 [controller]   "ias_kt": 172.8,
+12:44:35 [controller]   "stop_x_m": null,
+12:44:35 [controller]   "events": [
+12:44:35 [controller]     "31.1s JUMP: escape DNs 229 Hz",
+12:44:35 [controller]     "31.6s JUMP: escape DNs 361 Hz",
+12:44:35 [controller]     "32.1s JUMP: escape DNs 470 Hz",
+12:44:35 [controller]     "...",
+12:44:35 [controller]     "36.5s JUMP: escape DNs 683 Hz",
+12:44:35 [controller]     "37.1s JUMP: escape DNs 684 Hz",
+12:44:35 [controller]     "37.6s JUMP: escape DNs 684 Hz"
+12:44:35 [controller]   ],
+12:44:35 [controller]   "backend": "demo",
+12:44:35 [controller]   "wall_s": 0.1,
+12:44:35 [controller]   "success": true
+12:44:35 [controller] }
+12:44:35 [controller] Run finished: 2026-11-14T174432Z_michael-taylor_demo-standin exit=0
+12:44:59 [fgfs] 180.42 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+12:44:59 [fgfs] 180.42 [WARN]:io        Network:3172: errno: Domain error(33)
+12:45:03 [session] Property API stopped answering
+12:45:48 [session] FlightGear exited (code 4294967295) - crashed or force-closed
