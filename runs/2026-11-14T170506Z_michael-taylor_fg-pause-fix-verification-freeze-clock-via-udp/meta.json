@@ -1,0 +1,24 @@
+{
+  "run_id": "2026-11-14T170506Z_michael-taylor_fg-pause-fix-verification-freeze-clock-via-udp",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "pause fix verification (freeze clock via UDP)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 24720,
+  "fgfs_exit_code": 1,
+  "started_utc": "2026-11-14T17:05:06.066432+00:00",
+  "duration_s": 95,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 30
+  },
+  "airplane_samples": 45,
+  "controller_runs": {},
+  "code": {
+    "commit": "02e509fb41c6c74c3def80048b316e08c1b138c1",
+    "branch": "main"
+  }
+}
