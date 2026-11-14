@@ -1,0 +1,18 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T191139Z_kaden-vandine_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+
+=== START: Takeoff fly (standing)  ===
+    adapted: steer zero -18.8 Hz
+Waiting for FlightGear runway telemetry on localhost...
+
+=== HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1005 ft, 189 kt ===
+    adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+ 109.3s   leg -> crosswind
+WARNING: FlightGear did not acknowledge the end-of-run pause.
+Log written to runs/fg-mission6.csv (1856 rows)
+Plot written to runs/fg-mission6.png
+Error: No FlightGear telemetry; check UDP flags and protocol XML.

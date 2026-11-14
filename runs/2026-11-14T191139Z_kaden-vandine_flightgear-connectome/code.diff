@@ -1,0 +1,284 @@
+diff --git a/flightgear/Aircraft/FlyCabin/Models/fly-pilot.xml b/flightgear/Aircraft/FlyCabin/Models/fly-pilot.xml
+index 04d299c..4cd852d 100644
+--- a/flightgear/Aircraft/FlyCabin/Models/fly-pilot.xml
++++ b/flightgear/Aircraft/FlyCabin/Models/fly-pilot.xml
+@@ -3,15 +3,21 @@
+      The fly pilot in the captain's seat. Its brain is the controller flying the plane:
+      the Python controller writes /fruitfly/pilot/{active,power,steer,escape} from the
+      brain's descending-neuron rates, and fruitfly.nas turns them into the values below.
++     Its front legs hold the yoke and turn/push with it (/controls/flight/aileron and
++     /elevator, the same rotations as the 737's yoke1).
+      Display only - nothing here touches the flight controls. -->
+ <PropertyList>
+-  <path>fly.ac</path>
++  <path>fly-pilot.ac</path>
+   <!-- Hidden in the stock captain view (its eye point is inside the fly's head). -->
+   <animation>
+     <type>select</type>
+     <object-name>Body</object-name><object-name>AbdomenBands</object-name><object-name>Eyes</object-name>
+     <object-name>Legs</object-name><object-name>Head</object-name>
+     <object-name>WingR</object-name><object-name>WingL</object-name>
++    <object-name>ArmUpperL</object-name>
++    <object-name>ArmUpperR</object-name>
++    <object-name>ArmLowerL</object-name>
++    <object-name>ArmLowerR</object-name>
+     <condition><not><equals><property>/sim/current-view/view-number</property><value>0</value></equals></not></condition>
+   </animation>
+   <animation>
+@@ -56,4 +62,28 @@
+     <property>/fruitfly/pilot/hop-m</property>
+     <axis><x>0</x><y>0</y><z>1</z></axis>
+   </animation>
++  <!-- Front legs on the yoke. Same order and numbers as yoke1 in
++       Aircraft/737-800/Models/cockpit.xml, moved into this model's frame, so the claws
++       stay on the horns: the whole leg swings with the column (elevator), the lower leg
++       also turns with the wheel (aileron) about the hub; the elbow is on that axis. -->
++  <animation>
++    <type>rotate</type>
++    <object-name>ArmUpperL</object-name>
++    <object-name>ArmUpperR</object-name>
++    <object-name>ArmLowerL</object-name>
++    <object-name>ArmLowerR</object-name>
++    <property>/controls/flight/elevator</property>
++    <factor>14.0</factor>
++    <center><x-m>-0.485</x-m><y-m>0.510</y-m><z-m>-0.360</z-m></center>
++    <axis><x>0</x><y>-1</y><z>0</z></axis>
++  </animation>
++  <animation>
++    <type>rotate</type>
++    <object-name>ArmLowerL</object-name>
++    <object-name>ArmLowerR</object-name>
++    <property>/controls/flight/aileron</property>
++    <factor>87.0</factor>
++    <center><x-m>-0.210</x-m><y-m>-0.025</y-m><z-m>0.448</z-m></center>
++    <axis><x>-1</x><y>0</y><z>0</z></axis>
++  </animation>
+ </PropertyList>
+diff --git a/flightgear/tools/make_cabin.py b/flightgear/tools/make_cabin.py
+index abc5a9a..62ca7c3 100644
+--- a/flightgear/tools/make_cabin.py
++++ b/flightgear/tools/make_cabin.py
+@@ -7,6 +7,8 @@ Writes into flightgear/Aircraft/FlyCabin/Models/:
+   fly-group{0,1,2}.xml   the fly model with wing/head animations bound to
+                    /fruitfly/passengers/group[n]/... (three groups so the
+                    cabin doesn't move in lockstep)
++  fly-pilot.ac/.xml  the fly pilot in the captain's seat: rounder legs, front legs
++                   holding the 737's yoke and turning/pushing with it
+   738-flies.xml    top-level aircraft model: the stock 737-800 + cabin + flies
+   attendant.ac/.xml  the fly flight attendant + snack cart (running gag, no brain)
+   ../Nasal/cabin_rows.nas  row positions for the attendant script (cabin_show.nas)
+@@ -95,6 +97,37 @@ class Mesh:
+         for k in range(4):
+             self.quad(ra[k], ra[(k + 1) % 4], rb[(k + 1) % 4], rb[k])
+ 
++    def tube(self, a, b, ra, rb=None, sides=8):
++        """Round tube from a (radius ra) to b (radius rb, default ra), open ends."""
++        rb = ra if rb is None else rb
++        d = [b[i] - a[i] for i in range(3)]
++        n = math.sqrt(sum(c * c for c in d)) or 1.0
++        d = [c / n for c in d]
++        ref = (0, 0, 1) if abs(d[2]) < 0.9 else (1, 0, 0)
++        u = [d[1] * ref[2] - d[2] * ref[1], d[2] * ref[0] - d[0] * ref[2], d[0] * ref[1] - d[1] * ref[0]]
++        un = math.sqrt(sum(c * c for c in u))
++        u = [c / un for c in u]
++        v = [d[1] * u[2] - d[2] * u[1], d[2] * u[0] - d[0] * u[2], d[0] * u[1] - d[1] * u[0]]
++
++        def ring(p, r):
++            out = []
++            for k in range(sides):
++                t = 2 * math.pi * k / sides
++                cu, cv = math.cos(t) * r, math.sin(t) * r
++                out.append(tuple(p[i] + cu * u[i] + cv * v[i] for i in range(3)))
++            return out
++        ra_, rb_ = ring(a, ra), ring(b, rb)
++        for k in range(sides):
++            self.quad(ra_[k], ra_[(k + 1) % sides], rb_[(k + 1) % sides], rb_[k])
++
++    def limb(self, points, radii, joint=1.15):
++        """Jointed leg: tapered tubes through `points`, a small ball at each inner joint."""
++        for k in range(len(points) - 1):
++            self.tube(points[k], points[k + 1], radii[k], radii[k + 1])
++        for k in range(1, len(points) - 1):
++            r = radii[k] * joint
++            self.ellipsoid(points[k], (r, r, r), seg=8, rings=5)
++
+     def ellipsoid(self, c, r, seg=10, rings=7, pitch_deg=0.0):
+         """Ellipsoid with radii r=(rx,ry,rz), pitched about y (nose-down +)."""
+         cp, sp = math.cos(math.radians(pitch_deg)), math.sin(math.radians(pitch_deg))
+@@ -245,7 +278,9 @@ def build_cabin():
+ WING_ROOT_Y, WING_ROOT = 0.07, (0.13, 0.62)   # (x, z) of the wing hinge
+ 
+ 
+-def build_fly():
++def fly_meshes(pilot=False):
++    """The fly. pilot=True: round jointed mid/hind legs and no front legs (those are
++    the arms on the yoke, pilot_arms())."""
+     body, abd_band, eyes, legs = (Mesh("Body", "chitin"), Mesh("AbdomenBands", "band"),
+                                   Mesh("Eyes", "eye"), Mesh("Legs", "leg"))
+     head = Mesh("Head", "chitin")
+@@ -263,8 +298,11 @@ def build_fly():
+             hip = (hip_x, s * 0.12, hip_z)
+             knee = (-0.30 + 0.03 * k, s * spread, 0.22 + 0.04 * k)
+             foot = (-0.38 + 0.03 * k, s * (spread + 0.02), -0.40)
+-            legs.segment(hip, knee, 0.025)
+-            legs.segment(knee, foot, 0.02)
++            if not pilot:
++                legs.segment(hip, knee, 0.025)
++                legs.segment(knee, foot, 0.02)
++            elif k > 0:
++                legs.limb([hip, knee, foot], [0.024, 0.02, 0.012])
+ 
+     wings = []
+     for s, name in ((1, "WingR"), (-1, "WingL")):
+@@ -279,11 +317,73 @@ def build_fly():
+         w.poly(pts)
+         wings.append(w)
+ 
+-    materials = [("chitin", (0.72, 0.55, 0.30), 0), ("band", (0.22, 0.15, 0.10), 0),
++    return [body, abd_band, eyes, legs, head] + wings
++
++
++FLY_MATERIALS = [("chitin", (0.72, 0.55, 0.30), 0), ("band", (0.22, 0.15, 0.10), 0),
+                  ("eye", (0.78, 0.06, 0.04), 0), ("leg", (0.30, 0.22, 0.14), 0),
+                  ("wing", (0.85, 0.90, 0.95), 0.55)]
+-    write_ac(os.path.join(OUT, "fly.ac"), materials,
+-             [body, abd_band, eyes, legs, head] + wings)
++
++
++def build_fly():
++    write_ac(os.path.join(OUT, "fly.ac"), FLY_MATERIALS, fly_meshes())
++
++
++# ---- fly pilot: front legs on the captain's yoke ----------------------------------
++# The stock 737 captain yoke (Aircraft/737-800/Models/cockpit.xml, object yoke1; the
++# cockpit .ac is offset x -18.31), in FG model coords:
++YOKE_ELEVATOR_PIVOT = (-17.585, 0.0, 0.10)   # column pivot; rotate about -y, 14 deg/unit elevator
++YOKE_ELEVATOR_DEG = 14.0
++YOKE_HUB = (-17.31, -0.535, 0.908)           # wheel hub; rotate about -x, 87 deg/unit aileron
++YOKE_AILERON_DEG = 87.0
++# Wheel horns measured from cockpit.ac (yoke1 vertices): left/right grip y, grip height,
++# back face, front face and top of the horns.
++YOKE_GRIPS_Y = (-0.680, -0.390)
++YOKE_GRIP_Z, YOKE_BACK_X, YOKE_FRONT_X, YOKE_TOP_Z = 0.900, -17.500, -17.553, 0.951
++ARM_OBJECTS = ("ArmUpperL", "ArmUpperR", "ArmLowerL", "ArmLowerR")
++
++
++def pilot_local(p):
++    return tuple(p[i] - PILOT_SEAT[i] for i in range(3))
++
++
++def pilot_arm_points(s):
++    """Front leg of side s (-1 left, +1 right) in the pilot model's frame:
++    shoulder, elbow (upper arm) and elbow, wrist, over-the-horn, claw tip (lower arm)."""
++    _, hub_y, hub_z = pilot_local(YOKE_HUB)
++    grip_y = pilot_local((0, YOKE_GRIPS_Y[0 if s < 0 else 1], 0))[1]
++    back, front = pilot_local((YOKE_BACK_X, 0, 0))[0], pilot_local((YOKE_FRONT_X, 0, 0))[0]
++    gz, top = pilot_local((0, 0, YOKE_GRIP_Z))[2], pilot_local((0, 0, YOKE_TOP_Z))[2]
++    # Starts deep in the thorax (radius 0.17), so lean, hop and the column's fore/aft
++    # travel only move where the leg leaves the body, never open a gap.
++    shoulder = (-0.02, s * 0.03, 0.55)
++    # Both elbows sit exactly on the wheel's roll axis (staggered along it so they don't
++    # collide), so they stay put when the wheel turns and the upper arm never has to
++    # move with the aileron.
++    elbow = (-0.24 if s < 0 else -0.285, hub_y, hub_z)
++    wrist = (back + 0.012, grip_y, gz + 0.012)
++    over = ((back + front) / 2, grip_y, top + 0.02)
++    claw = (front - 0.010, grip_y, gz + 0.004)
++    return (shoulder, elbow), (elbow, wrist, over, claw)
++
++
++def pilot_arms():
++    meshes = []
++    for s, side in ((-1, "L"), (1, "R")):
++        (shoulder, elbow), (e, wrist, over, claw) = pilot_arm_points(s)
++        upper, lower = Mesh("ArmUpper" + side, "leg"), Mesh("ArmLower" + side, "leg")
++        coxa = (shoulder[0] - 0.09, shoulder[1] + s * 0.02, shoulder[2] - 0.02)
++        upper.limb([shoulder, coxa, elbow], [0.03, 0.028, 0.022])
++        upper.ellipsoid(elbow, (0.026,) * 3, seg=8, rings=5)          # knee joint
++        lower.limb([e, wrist, over, claw], [0.02, 0.014, 0.011, 0.007], joint=1.25)
++        for dy in (-0.012, 0.012):                                     # two tarsal claws
++            lower.tube(claw, (claw[0] + 0.012, claw[1] + dy, claw[2] - 0.03), 0.006, 0.002, sides=6)
++        meshes += [upper, lower]
++    return meshes
++
++
++def build_pilot():
++    write_ac(os.path.join(OUT, "fly-pilot.ac"), FLY_MATERIALS, fly_meshes(pilot=True) + pilot_arms())
+ 
+ 
+ # ---- flight attendant + snack cart (running gag, display only) ----------------
+@@ -535,15 +635,18 @@ PILOT_XML = """<?xml version="1.0"?>
+      The fly pilot in the captain's seat. Its brain is the controller flying the plane:
+      the Python controller writes /fruitfly/pilot/{{active,power,steer,escape}} from the
+      brain's descending-neuron rates, and fruitfly.nas turns them into the values below.
++     Its front legs hold the yoke and turn/push with it (/controls/flight/aileron and
++     /elevator, the same rotations as the 737's yoke1).
+      Display only - nothing here touches the flight controls. -->
+ <PropertyList>
+-  <path>fly.ac</path>
++  <path>fly-pilot.ac</path>
+   <!-- Hidden in the stock captain view (its eye point is inside the fly's head). -->
+   <animation>
+     <type>select</type>
+     <object-name>Body</object-name><object-name>AbdomenBands</object-name><object-name>Eyes</object-name>
+     <object-name>Legs</object-name><object-name>Head</object-name>
+     <object-name>WingR</object-name><object-name>WingL</object-name>
++{arms}
+     <condition><not><equals><property>/sim/current-view/view-number</property><value>0</value></equals></not></condition>
+   </animation>
+   <animation>
+@@ -588,6 +691,26 @@ PILOT_XML = """<?xml version="1.0"?>
+     <property>/fruitfly/pilot/hop-m</property>
+     <axis><x>0</x><y>0</y><z>1</z></axis>
+   </animation>
++  <!-- Front legs on the yoke. Same order and numbers as yoke1 in
++       Aircraft/737-800/Models/cockpit.xml, moved into this model's frame, so the claws
++       stay on the horns: the whole leg swings with the column (elevator), the lower leg
++       also turns with the wheel (aileron) about the hub; the elbow is on that axis. -->
++  <animation>
++    <type>rotate</type>
++{arms}
++    <property>/controls/flight/elevator</property>
++    <factor>{elev_deg}</factor>
++    <center><x-m>{px:.3f}</x-m><y-m>{py:.3f}</y-m><z-m>{pz:.3f}</z-m></center>
++    <axis><x>0</x><y>-1</y><z>0</z></axis>
++  </animation>
++  <animation>
++    <type>rotate</type>
++{lower}
++    <property>/controls/flight/aileron</property>
++    <factor>{ail_deg}</factor>
++    <center><x-m>{hx:.3f}</x-m><y-m>{hy:.3f}</y-m><z-m>{hz:.3f}</z-m></center>
++    <axis><x>-1</x><y>0</y><z>0</z></axis>
++  </animation>
+ </PropertyList>
+ """
+ 
+@@ -643,6 +766,16 @@ TOP_XML_HEAD = """<?xml version="1.0"?>
+ """
+ 
+ 
++def pilot_xml():
++    obj = lambda names: "\n".join(f"    <object-name>{n}</object-name>" for n in names)
++    px, py, pz = pilot_local(YOKE_ELEVATOR_PIVOT)
++    hx, hy, hz = pilot_local(YOKE_HUB)
++    return PILOT_XML.format(rx=WING_ROOT[0], ry=WING_ROOT_Y, rz=WING_ROOT[1],
++                            arms=obj(ARM_OBJECTS), lower=obj(ARM_OBJECTS[2:]),
++                            elev_deg=YOKE_ELEVATOR_DEG, ail_deg=YOKE_AILERON_DEG,
++                            px=px, py=py, pz=pz, hx=hx, hy=hy, hz=hz)
++
++
+ def main():
+     os.makedirs(OUT, exist_ok=True)
+     seats, rows = build_cabin()
+@@ -662,8 +795,9 @@ def main():
+     for g in range(3):
+         with open(os.path.join(OUT, f"fly-group{g}.xml"), "w", newline="\n") as f:
+             f.write(FLY_XML.format(g=g, rx=WING_ROOT[0], ry=WING_ROOT_Y, rz=WING_ROOT[1]))
++    build_pilot()
+     with open(os.path.join(OUT, "fly-pilot.xml"), "w", newline="\n") as f:
+-        f.write(PILOT_XML.format(rx=WING_ROOT[0], ry=WING_ROOT_Y, rz=WING_ROOT[1]))
++        f.write(pilot_xml())
+     rng = random.Random(SEED)
+     hide = "\n".join(f"    <object-name>{n}</object-name>" for n in CLEAR_VIEW_HIDE)
+     parts = [TOP_XML_HEAD.format(px=PILOT_SEAT[0], py=PILOT_SEAT[1], pz=PILOT_SEAT[2], hide=hide)]
