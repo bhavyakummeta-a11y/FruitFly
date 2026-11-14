@@ -1,0 +1,28 @@
+{
+  "fly": "Takeoff fly",
+  "brain": "CONNECTOME LIF (notebook model)",
+  "phase": "takeoff",
+  "completed": true,
+  "time_s": 39.6,
+  "decisions": 37,
+  "max_centerline_m": 28.6,
+  "tail_strike": false,
+  "stall": false,
+  "left_runway": false,
+  "liftoff_x_m": null,
+  "rejected": true,
+  "agl_ft": 0,
+  "ias_kt": 0.1,
+  "stop_x_m": 1213,
+  "events": [
+    "31.5s REJECT: bitter suppressed MN9 below V1"
+  ],
+  "decision_timing": {
+    "applied": 37,
+    "skipped": 1,
+    "latency_mean_s": 0.221,
+    "latency_max_s": 2.783
+  },
+  "speed_up_resets": 0,
+  "exit_code": 0
+}

@@ -1,0 +1,81 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T182703Z_michael-taylor_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the takeoff
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-18.8
+Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+Parking brake released: the fly has the airplane.
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 2.8s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.6deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.5kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=  3.9kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 10.8kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 17.7kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 24.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 31.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 37.9kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 44.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 50.7kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 56.9kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 63.4kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 69.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 75.8kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 82.2kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 88.0kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias= 94.6kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 99.5kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=104.8kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=110.0kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=115.3kt agl=    0ft pitch=-0.1deg thr=0.51
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=117.7kt agl=    0ft pitch=-0.2deg thr=0.28
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=115.2kt agl=    0ft pitch=-0.4deg thr=0.14
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=112.7kt agl=    0ft pitch=-0.5deg thr=0.63
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=111.9kt agl=    0ft pitch=-0.3deg thr=0.31
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=110.9kt agl=    0ft pitch=-0.4deg thr=0.18
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=107.8kt agl=    0ft pitch=-0.5deg thr=0.09
+  decision applied 0.0s after its state  REJECTED       ias=103.8kt agl=    0ft pitch=-0.4deg thr=0.00
+  decision applied 0.2s after its state  REJECTED       ias= 86.4kt agl=    0ft pitch=-0.8deg thr=0.00
+  decision applied 0.1s after its state  REJECTED       ias= 73.5kt agl=    0ft pitch=-0.7deg thr=0.00
+  decision applied 0.1s after its state  REJECTED       ias= 60.2kt agl=    0ft pitch=-0.7deg thr=0.00
+  decision applied 0.1s after its state  REJECTED       ias= 47.6kt agl=    0ft pitch=-0.8deg thr=0.00
+  decision applied 0.1s after its state  REJECTED       ias= 34.4kt agl=    0ft pitch=-0.7deg thr=0.00
+  decision applied 0.1s after its state  REJECTED       ias= 21.8kt agl=    0ft pitch=-0.7deg thr=0.00
+  decision applied 0.1s after its state  REJECTED       ias=  8.9kt agl=    0ft pitch=-0.7deg thr=0.00
+FlightGear paused (acknowledged), ailerons and rudder centred.
+{
+  "fly": "Takeoff fly",
+  "brain": "CONNECTOME LIF (notebook model)",
+  "phase": "REJECTED",
+  "completed": true,
+  "time_s": 39.6,
+  "decisions": 37,
+  "max_centerline_m": 28.6,
+  "tail_strike": false,
+  "stall": false,
+  "left_runway": false,
+  "liftoff_x_m": null,
+  "rejected": true,
+  "agl_ft": 0,
+  "ias_kt": 0.1,
+  "stop_x_m": 1213,
+  "events": [
+    "31.5s REJECT: bitter suppressed MN9 below V1"
+  ],
+  "decision_timing": {
+    "applied": 37,
+    "skipped": 1,
+    "latency_mean_s": 0.221,
+    "latency_max_s": 2.783
+  },
+  "speed_up_resets": 0,
+  "backend": "flightgear",
+  "wall_s": 40.5,
+  "success": true
+}
