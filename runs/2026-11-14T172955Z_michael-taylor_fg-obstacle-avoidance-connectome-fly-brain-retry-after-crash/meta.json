@@ -1,0 +1,35 @@
+{
+  "run_id": "2026-11-14T172955Z_michael-taylor_fg-obstacle-avoidance-connectome-fly-brain-retry-after-crash",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "obstacle avoidance - CONNECTOME fly brain, retry after crash",
+  "aircraft": "738-flies",
+  "fgfs_pid": 14068,
+  "fgfs_exit_code": 4294967295,
+  "started_utc": "2026-11-14T17:29:55.684509+00:00",
+  "duration_s": 738,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 55
+  },
+  "airplane_samples": 360,
+  "controller_runs": {
+    "2026-11-14T173025Z_michael-taylor_flightgear-connectome": {
+      "backend": "flightgear",
+      "brain": "connectome",
+      "elapsed_s": 90.12,
+      "collision": false,
+      "minimum_clearance_m": 294.8,
+      "minimum_altitude_m": 698.81,
+      "avoidance_activations": 1,
+      "exit_code": 0
+    }
+  },
+  "code": {
+    "commit": "4e0a47707398791ce078930c281dbdf4808afc18",
+    "branch": "main"
+  }
+}
