@@ -58,7 +58,8 @@ Add notes with `python -m flight_simulator.runlog note "..."`.
 
 def git(*args, cwd=ROOT, check=True, timeout=60):
     p = subprocess.run(['git', *args], cwd=cwd, capture_output=True, text=True,
-                       encoding='utf-8', errors='replace', timeout=timeout)
+                       encoding='utf-8', errors='replace', timeout=timeout,
+                       creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
     if check and p.returncode:
         raise RuntimeError(f'git {" ".join(args)}: {p.stderr.strip() or p.stdout.strip()}')
     return p.stdout.strip()
