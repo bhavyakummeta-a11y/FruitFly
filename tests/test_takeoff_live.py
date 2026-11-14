@@ -1,6 +1,7 @@
 import os
 import shutil
 import unittest
+from unittest import mock
 
 os.environ['FRUITFLY_NO_PUSH'] = '1'  # never commit test runs to the shared sim-logs branch
 
@@ -82,6 +83,28 @@ class TakeoffLiveTests(unittest.TestCase):
         with mock.patch.object(takeoff_live.os, 'replace', side_effect=PermissionError(5, 'denied')),                 mock.patch.object(takeoff_live.time, 'sleep'):
             stage.set('flying')          # gives up quietly, no exception
         shutil.rmtree(FakeRunLog.dir, ignore_errors=True)
+
+    def test_landing_stays_paused_until_autopilot_off(self):
+        """Every control packet carries 'paused' until the handover is confirmed."""
+        from flight_simulator import flightgear as fg
+        sent = []
+        saved = fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off, takeoff_landing.run_flightgear
+        try:
+            fg.RunwayFlightGear.send = lambda self, c, frozen=False: sent.append(frozen)
+            fg.AutopilotGuard.wait_off = lambda self: None
+
+            def fake_run(args, fly, log):     # the order takeoff_landing.run_flightgear uses
+                bridge = fg.RunwayFlightGear.__new__(fg.RunwayFlightGear)
+                bridge.send(None)             # 'idle + brakes' before the handover
+                fg.AutopilotGuard.__new__(fg.AutopilotGuard).wait_off()
+                bridge.send(None)             # the fly's first decision
+                return {'phase': 'APPROACH'}
+            takeoff_landing.run_flightgear = fake_run
+            with mock.patch.object(takeoff_live, 'freeze', return_value=True),                     mock.patch.object(takeoff_landing, 'main', lambda argv: takeoff_landing.run_flightgear(None, None, []) and 0):
+                takeoff_live.main(['landing', '--brain', 'standin', '--backend', 'flightgear'])
+        finally:
+            fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off, takeoff_landing.run_flightgear = saved
+        self.assertEqual(sent, [True, False])
 
     def test_fly_row_names_match_brain_page(self):
         row = takeoff_live.fly_row({'time': 1.0, 'phase': 'ROLL', 'in_sugar': 200, 'dn_MN9': 65, 'x': 3})

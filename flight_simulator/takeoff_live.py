@@ -196,6 +196,29 @@ def main(argv=None):
             watch_calibration(brain, stage, runlog)
         return brain
     tl.make_brain = made
+
+    def hold_paused_until_handover():
+        """Keep the in-air landing start paused through the handover.
+
+        takeoff_landing sends an 'idle + brakes' packet before the handover, and every
+        control packet carries the freeze flag, so FlightGear resumed seconds before the
+        fly had the controls: idle, neutral elevator, flaps 30 -> a -9 deg dive to ~280 ft
+        below the glideslope and an immediate go-around (2026-11-14). Force 'paused' on
+        every packet until the autopilot is confirmed off; the first packet after that
+        carries the fly's own decision and resumes the sim."""
+        from . import flightgear as fg
+        released = {'v': False}
+        send, wait_off = fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off
+
+        def held_send(self, controls, frozen=False):
+            return send(self, controls, frozen or not released['v'])
+
+        def wait_off_then_release(self, *a, **k):
+            out = wait_off(self, *a, **k)
+            released['v'] = True
+            print("FlightGear resumes with the fly's first controls: the fly has the approach.", flush=True)
+            return out
+        fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off = held_send, wait_off_then_release
     live = {}
     real = {'demo': tl.run_demo, 'flightgear': tl.run_flightgear}
 
@@ -207,9 +230,7 @@ def main(argv=None):
                     raise RuntimeError('Could not release the parking brake for the takeoff roll')
                 print('Parking brake released: the fly has the airplane.', flush=True)
             if paused and name == 'flightgear':
-                if not freeze(telnet, False):
-                    raise RuntimeError('Could not resume FlightGear for the approach')
-                print('FlightGear resumed: the fly has the approach.', flush=True)
+                hold_paused_until_handover()
             stage.set('flying', note='the fly brain has the controls')
             result = real[name](args, fly, live['log'])
             log.extend(live['log'])
@@ -218,11 +239,18 @@ def main(argv=None):
             return result
         return run
 
+    from . import flightgear as fg
+    originals = (tl.run_demo, tl.run_flightgear, tl.make_brain,
+                 fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off)
     tl.run_demo, tl.run_flightgear = wrap('demo'), wrap('flightgear')
     code = 1
     try:
         code = tl.main(argv)
     finally:
+        # Undo every patch, so a second run in the same process starts clean.
+        (tl.run_demo, tl.run_flightgear, make_brain_saved,
+         fg.RunwayFlightGear.send, fg.AutopilotGuard.wait_off) = originals
+        tl.make_brain = make_brain
         if 'log' in live:
             live['log'].close()
         stage.set('finished', exit_code=code)
