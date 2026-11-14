@@ -1,0 +1,52 @@
+{
+  "run_id": "2026-11-14T192059Z_michael-taylor_fg-obstacle-avoidance-connectome-all-3-tornadoes-6-min-lean-no-cockpit-fly-companion",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 29.3
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: CMDA, SPD; controller 2026-11-14T192127Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 29.3,
+      "to_s": 39.5
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+      "detail": "run 2026-11-14T192127Z_michael-taylor_flightgear-connectome. Neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input. Code decides: synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+      "from_s": 39.5,
+      "to_s": 74.6
+    }
+  ],
+  "name": "obstacle avoidance - CONNECTOME, all 3 tornadoes (6 min, lean: no cockpit fly/companion)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 26304,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T19:20:59.542532+00:00",
+  "duration_s": 75,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 43
+  },
+  "airplane_samples": 21,
+  "controller_runs": {
+    "2026-11-14T192127Z_michael-taylor_flightgear-connectome": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "fd4d653ead19f17f22eee6340cbcb1b7925fe6ff",
+    "branch": "main"
+  }
+}

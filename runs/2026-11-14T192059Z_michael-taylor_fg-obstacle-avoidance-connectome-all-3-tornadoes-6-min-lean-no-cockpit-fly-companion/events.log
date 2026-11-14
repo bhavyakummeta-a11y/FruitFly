@@ -1,0 +1,71 @@
+14:21:00 [session] Session 'obstacle avoidance - CONNECTOME, all 3 tornadoes (6 min, lean: no cockpit fly/companion)' watching fgfs pid 26304 (738-flies)
+14:21:00 [session] Live log page: http://127.0.0.1:8765/
+14:21:01 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+14:21:01 [fgfs] 0.04 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+14:21:01 [fgfs] 0.05 [ALRT]:view      Creating osgViewer::CompositeViewer
+14:21:01 [fgfs] 0.05 [ALRT]:general   affinity=none
+14:21:01 [fgfs] 0.05 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+14:21:01 [fgfs] 1.41 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:21:01 [fgfs] 1.41 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:21:01 [fgfs] 1.41 [WARN]:general   Enabling ATI/AMD viewport hack
+14:21:01 [fgfs] 1.45 [ALRT]:view      affinity=none
+14:21:04 [session] Docked: Log / Fly brain panel under FlightGear (top 75%)
+14:21:06 [fgfs] 9.04 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+14:21:06 [fgfs] 9.04 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+14:21:08 [fgfs] 9.97 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:21:08 [fgfs] 10.05 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:21:17 [fgfs] 19.36 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+14:21:17 [fgfs] 19.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+14:21:17 [fgfs] 19.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+14:21:17 [fgfs] 19.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+14:21:17 [fgfs] 19.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+14:21:17 [fgfs] 19.83 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+14:21:21 [fgfs] 20.71 [WARN]:input     Unhandled HID usage page:d with usage 5
+14:21:21 [fgfs] 20.71 [WARN]:input     Unhandled HID usage page:d with usage e
+14:21:21 [fgfs] 22.94 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+14:21:21 [fgfs] 23.07 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:21 [fgfs] 24.05 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:21:23 [fgfs] 24.23 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:21:24 [fgfs] 26.10 [ALRT]:nasal     Nasal runtime error: non-objects have no members
+14:21:24 [fgfs] 26.10 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 100
+14:21:24 [fgfs] 26.10 [ALRT]:nasal       called from: D:/FlightGear/data/Nasal/globals.nas, line 137
+14:21:24 [fgfs] 26.34 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:21:24 [fgfs] 26.73 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:21:24 [fgfs] 26.92 [ALRT]:flight    Failed to save initial FDM property state
+14:21:26 [session] Connected to property API on :8080
+14:21:27 [session] Video start failed: FlightGear did not answer (HTTP Error 404: Not Found)
+14:21:28 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: SPD)
+14:21:28 [fgfs] 29.01 [WARN]:network   JsonUriHandler: requested node not found: 'sim/video/is-encoding'
+14:21:28 [fgfs] 29.61 [WARN]:network   JsonUriHandler: requested node not found: 'sim/video/directory'
+14:21:28 [fgfs] 31.21 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:29 [controller] Run started: 2026-11-14T192127Z_michael-taylor_flightgear-connectome
+14:21:29 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T192127Z_michael-taylor_flightgear-connectome
+14:21:29 [controller] [control] FLY BRAIN (connectome) decides when to escape; code flies the airplane
+14:21:29 [controller] [control]   neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input
+14:21:29 [controller] [control]   code decides:   synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)
+14:21:29 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:21:32 [fgfs] 34.70 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:33 [controller] CONNECTOME LIF (notebook model)
+14:21:33 [controller] Real time: FlightGear stays at 1x and is not paused for brain trials; the plane flies on the last decision while the connectome works. A crash is data.
+14:21:33 [controller] Waiting for airborne FlightGear telemetry on localhost...
+14:21:35 [flightgear] Paused
+14:21:35 [fgfs] 37.87 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:35 [controller] FlightGear connected. Hold targets: 914 m (3000 ft, now 751 m), 113 m/s, current heading.
+14:21:37 [controller] Placed 3 obstacle tornadoes in FlightGear (telnet 5500).
+14:21:39 [control] IN CONTROL: FLY BRAIN (connectome) decides when to escape; code flies the airplane (run 2026-11-14T192127Z_michael-taylor_flightgear-connectome. Neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input. Code decides: synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController))
+14:21:39 [flightgear] Resumed
+14:21:39 [fgfs] 41.35 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:39 [controller] Handover: airplane autopilot confirmed OFF; the controller flies.
+14:21:39 [controller]    2.2s ENVELOPE BREACH (logged, run continues): altitude -163 m from target (>40)
+14:21:39 [controller]    2.2s ALTITUDE RECOVERY / AVOID altitude=  751.4m speed=118.1m/s escape=  0.0Hz clearance= 7100.0m
+14:21:42 [fgfs] 44.52 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:45 [fgfs] 47.68 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:48 [fgfs] 50.95 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:50 [controller]   12.7s ALTITUDE RECOVERY / AVOID altitude=  645.8m speed=129.5m/s escape=177.5Hz clearance= 5740.9m
+14:21:52 [fgfs] 54.86 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:21:56 [fgfs] 58.88 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:22:00 [fgfs] 62.73 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:22:00 [controller]   22.8s ALTITUDE RECOVERY / AVOID altitude=  769.8m speed=125.3m/s escape=  0.0Hz clearance= 4416.7m
+14:22:03 [session] Property API stopped answering
+14:22:04 [session] tail_controller skipped: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+14:22:04 [session] FlightGear exited (code 3221225477) - crashed or force-closed
