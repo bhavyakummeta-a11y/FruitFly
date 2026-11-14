@@ -1,0 +1,771 @@
+    0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+    0.07 [WARN]:aircraft  C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\fg_init.cxx:455: Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+    0.08 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:481: Creating osgViewer::CompositeViewer
+    0.08 [ALRT]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:488: affinity=none
+    0.08 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\renderer.cxx:500: Calling composite_viewer->setUseConfigureAffinity() with flag=0
+    0.68 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    0.68 [WARN]:osg       C:\GitLab-Runner\builds\flightgear\fgmeta\dist\include\simgear/scene/util/OsgIoCapture.hxx:59: osgXR: Failed to count OpenXR instance extensions: -51
+    0.69 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Main\main.cxx:793: Enabling ATI/AMD viewport hack
+    0.71 [ALRT]:view      C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Viewer\fg_os_osgviewer.cxx:456: affinity=none
+    8.94 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+    8.94 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\model\SGPickAnimation.cxx:457: Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+    9.99 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   10.05 [ALRT]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\TextureBuilder.cxx:238: Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+   12.13 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+   12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+   12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+   12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+   12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+   12.74 [WARN]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1882: ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+   14.02 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage 5
+   14.02 [WARN]:input     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Input\FGHIDUsage.cxx:355: Unhandled HID usage page:d with usage e
+   16.44 [WARN]:io        C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\scene\material\mipmap.cxx:276: mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+   18.16 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+   18.51 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+   20.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: non-objects have no members
+   20.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 100
+   20.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: D:/FlightGear/data/Nasal/globals.nas, line 137
+   20.89 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\canvas\elements\CanvasElement.cxx:608: Canvas: invalid clip: 124, 1024, 1024, 0
+   21.19 [WARN]:general   C:\GitLab-Runner\builds\flightgear\fgmeta\simgear\simgear\canvas\elements\CanvasElement.cxx:608: Canvas: invalid clip: 124, 1024, 1024, 0
+   21.40 [ALRT]:flight    C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\FDM\fdm_shell.cxx:192: Failed to save initial FDM property state
+   21.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   21.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   21.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   23.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   23.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   23.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   23.84 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   23.84 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   23.84 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   24.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   24.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   24.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   24.32 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   24.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   24.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   24.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   24.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   24.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   24.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   24.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   24.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   24.93 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   24.93 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   24.93 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   25.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   25.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   25.14 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   25.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   25.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   25.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   25.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   25.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   25.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   25.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   25.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   25.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   25.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   25.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   25.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   26.18 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   26.18 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   26.18 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   26.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   26.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   26.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   26.59 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   26.59 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   26.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   26.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   26.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   26.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   27.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   27.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   27.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   27.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   27.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   27.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   27.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   27.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   27.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   27.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   27.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   27.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   27.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   27.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   27.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   28.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   28.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   28.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   28.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   28.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   28.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   28.42 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   28.42 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   28.42 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   28.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   28.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   28.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   28.82 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   28.82 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   28.82 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   29.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   29.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   29.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   29.24 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   29.24 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   29.24 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   29.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   29.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   29.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   29.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   29.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   29.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   30.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   30.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   30.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   30.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   30.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   30.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   30.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   30.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   30.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   30.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   30.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   30.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   30.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   30.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   30.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   31.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   31.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   31.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   31.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   31.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   31.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   31.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   31.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   31.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   31.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   31.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   31.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   31.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   31.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   31.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   32.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   32.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   32.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   32.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   32.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   32.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   32.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   32.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   32.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   32.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   32.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   32.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   32.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   32.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   32.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   33.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   33.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   33.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   33.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   33.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   33.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   33.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   33.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   33.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   33.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   33.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   33.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   33.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   33.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   33.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   34.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   34.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   34.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   34.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   34.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   34.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   34.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   34.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   34.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   34.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   34.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   34.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   34.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   34.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   34.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   35.17 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   35.17 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   35.17 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   35.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   35.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   35.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   35.61 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   35.61 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   35.61 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   35.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   35.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   35.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   36.02 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   36.02 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   36.02 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   36.23 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   36.23 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   36.23 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   36.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   36.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   36.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   36.67 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   36.67 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   36.67 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   36.87 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   36.87 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   36.87 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   37.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   37.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   37.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   37.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   37.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   37.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   37.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   37.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   37.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   37.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   37.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   37.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   37.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   37.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   37.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   38.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   38.17 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   38.17 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   38.39 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   38.39 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   38.39 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   38.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   38.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   38.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   38.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   38.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   38.82 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   39.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   39.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   39.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   39.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   39.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   39.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   39.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   39.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   39.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   39.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   39.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   39.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   39.91 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   39.91 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   39.91 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   40.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   40.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   40.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   40.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   40.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   40.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   40.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   40.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   40.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   40.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   40.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   40.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   40.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   40.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   40.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   41.19 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   41.19 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   41.19 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   41.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   41.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   41.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   41.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   41.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   41.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   41.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   41.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   41.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   42.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   42.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   42.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   42.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   42.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   42.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   42.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   42.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   42.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   42.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   42.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   42.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   42.91 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   42.91 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   42.91 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   43.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   43.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   43.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   43.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   43.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   43.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   43.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   43.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   43.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   43.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   43.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   43.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   43.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   43.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   43.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   44.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   44.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   44.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   44.41 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   44.41 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   44.41 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   44.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   44.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   44.62 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   44.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   44.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   44.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   45.05 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   45.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   45.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   45.27 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   45.27 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   45.27 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   45.48 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   45.48 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   45.48 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   45.70 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   45.70 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   45.70 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   45.92 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   45.92 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   45.92 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   46.13 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   46.13 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   46.13 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   46.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   46.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   46.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   46.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   46.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   46.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   46.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   46.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   46.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   47.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   47.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   47.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   47.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   47.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   47.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   47.44 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   47.44 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   47.44 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   47.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   47.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   47.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   47.87 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   47.87 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   47.87 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   48.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   48.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   48.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   48.31 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   48.31 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   48.31 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   48.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   48.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   48.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   48.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   48.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   48.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   48.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   48.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   48.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   49.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   49.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   49.17 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   49.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   49.39 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   49.39 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   49.58 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   49.59 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   49.59 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   49.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   49.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   49.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   50.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   50.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   50.04 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   50.26 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   50.26 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   50.26 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   50.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   50.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   50.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   50.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   50.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   50.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   50.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   50.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   50.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   51.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   51.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   51.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   51.34 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   51.34 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   51.34 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   51.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   51.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   51.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   51.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   51.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   51.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   51.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   51.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   51.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   52.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   52.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   52.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   52.42 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   52.42 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   52.42 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   52.63 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   52.63 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   52.63 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   52.85 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   52.85 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   52.85 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   53.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   53.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   53.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   53.28 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   53.28 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   53.28 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   53.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   53.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   53.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   53.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   53.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   53.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   53.94 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   53.94 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   53.94 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   54.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   54.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   54.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   54.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   54.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   54.36 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   54.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   54.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   54.57 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   54.78 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   54.78 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   54.78 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   55.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   55.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   55.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   55.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   55.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   55.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   55.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   55.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   55.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   55.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   55.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   55.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   55.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   55.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   55.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   56.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   56.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   56.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   56.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   56.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   56.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   56.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   56.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   56.52 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   56.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   56.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   56.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   56.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   56.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   56.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   57.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   57.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   57.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   57.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   57.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   57.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   57.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   57.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   57.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   57.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   57.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   57.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   58.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   58.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   58.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   58.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   58.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   58.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   58.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   58.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   58.47 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   58.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   58.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   58.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   58.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   58.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   58.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   59.11 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   59.11 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   59.12 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   59.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   59.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   59.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   59.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   59.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   59.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   59.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   59.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   59.77 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   59.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   59.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   59.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   60.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   60.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   60.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   60.41 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   60.41 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   60.41 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   60.63 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   60.63 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   60.63 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   60.85 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   60.85 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   60.85 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   61.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   61.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   61.06 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   61.28 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   61.28 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   61.28 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   61.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   61.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   61.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   61.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   61.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   61.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   61.94 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   61.94 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   61.94 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   62.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   62.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   62.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   62.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   62.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   62.35 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   62.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   62.57 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   62.57 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   62.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   62.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   62.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   63.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   63.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   63.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   63.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   63.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   63.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   63.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   63.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   63.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   63.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   63.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   63.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   63.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   63.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   63.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   64.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   64.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   64.08 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   64.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   64.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   64.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   64.50 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   64.50 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   64.50 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   64.71 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   64.71 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   64.72 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   64.93 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   64.93 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   64.93 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   65.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   65.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   65.15 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   65.36 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   65.36 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   65.37 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   65.58 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   65.58 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   65.58 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   65.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   65.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   65.80 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   66.01 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   66.01 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   66.01 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   66.23 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   66.23 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   66.23 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   66.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   66.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   66.45 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   66.66 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   66.67 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   66.67 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   66.89 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   66.89 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   66.89 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   67.10 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   67.10 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   67.10 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   67.31 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   67.31 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   67.31 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   67.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   67.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   67.53 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   67.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   67.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   67.75 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   67.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   67.96 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   67.97 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   68.18 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   68.18 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   68.18 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   68.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   68.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   68.40 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   68.61 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   68.61 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   68.61 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   68.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   68.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   68.83 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   69.05 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   69.05 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   69.05 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   69.27 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   69.27 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   69.27 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   69.48 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   69.48 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   69.48 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   69.70 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   69.70 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   69.70 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   69.92 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   69.92 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   69.92 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   70.13 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   70.13 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   70.13 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   70.36 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   70.36 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   70.36 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   70.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   70.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   70.56 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   70.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   70.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   70.79 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   71.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   71.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   71.00 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   71.21 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   71.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   71.22 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   71.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   71.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   71.43 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   71.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   71.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   71.65 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   71.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   71.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   71.86 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   72.09 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   72.09 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   72.09 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   72.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   72.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   72.30 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   72.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   72.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   72.51 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   72.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   72.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   72.73 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   72.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   72.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   72.95 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   73.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   73.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   73.16 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   73.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   73.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   73.38 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   73.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   73.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   73.60 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   73.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   73.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   73.81 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   74.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   74.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   74.03 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   74.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   74.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   74.25 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   74.46 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   74.46 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   74.46 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   74.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   74.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   74.68 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   74.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   74.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   74.90 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   75.11 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   75.11 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   75.11 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   75.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   75.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   75.33 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   75.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   75.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   75.55 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   75.76 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   75.76 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   75.76 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   75.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   75.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   75.98 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+   76.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1489: Nasal runtime error: nil used in numeric context
+   76.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+   76.20 [ALRT]:nasal     C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Scripting\NasalSys.cxx:1505:   called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137

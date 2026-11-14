@@ -1,0 +1,796 @@
+12:26:29 [session] Session 'obstacle avoidance - CONNECTOME fly brain (latest a49150c)' watching fgfs pid 17936 (738-flies)
+12:26:29 [session] Live log page: http://127.0.0.1:8766/
+12:26:30 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+12:26:30 [fgfs] 0.07 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+12:26:30 [fgfs] 0.08 [ALRT]:view      Creating osgViewer::CompositeViewer
+12:26:30 [fgfs] 0.08 [ALRT]:general   affinity=none
+12:26:30 [fgfs] 0.08 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+12:26:30 [fgfs] 0.68 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:26:30 [fgfs] 0.68 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:26:30 [fgfs] 0.69 [WARN]:general   Enabling ATI/AMD viewport hack
+12:26:30 [fgfs] 0.71 [ALRT]:view      affinity=none
+12:26:34 [session] Docked: log below and fly brain right of FlightGear
+12:26:36 [fgfs] 8.94 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+12:26:36 [fgfs] 8.94 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+12:26:38 [fgfs] 9.99 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:26:38 [fgfs] 10.05 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:26:39 [fgfs] 12.13 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+12:26:39 [fgfs] 12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+12:26:39 [fgfs] 12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+12:26:39 [fgfs] 12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+12:26:39 [fgfs] 12.18 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+12:26:39 [fgfs] 12.74 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+12:26:41 [fgfs] 14.02 [WARN]:input     Unhandled HID usage page:d with usage 5
+12:26:41 [fgfs] 14.02 [WARN]:input     Unhandled HID usage page:d with usage e
+12:26:44 [fgfs] 16.44 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+12:26:46 [fgfs] 18.16 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:26:46 [fgfs] 18.51 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:26:47 [fgfs] 20.66 [ALRT]:nasal     Nasal runtime error: non-objects have no members
+12:26:47 [fgfs] 20.66 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 100
+12:26:47 [fgfs] 20.66 [ALRT]:nasal       called from: D:/FlightGear/data/Nasal/globals.nas, line 137
+12:26:49 [fgfs] 20.89 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:26:49 [fgfs] 21.19 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:26:49 [fgfs] 21.40 [ALRT]:flight    Failed to save initial FDM property state
+12:26:49 [fgfs] 21.98 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:49 [fgfs] 21.98 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:49 [fgfs] 21.98 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:50 [fgfs] 23.66 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:50 [fgfs] 23.66 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:50 [fgfs] 23.66 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:50 [fgfs] 23.84 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:50 [fgfs] 23.84 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:50 [fgfs] 23.84 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:52 [session] Connected to property API on :8080
+12:26:52 [fgfs] 24.14 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:52 [fgfs] 24.14 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:52 [fgfs] 24.14 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:52 [fgfs] 24.32 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:52 [fgfs] 24.33 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:52 [fgfs] 24.33 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:52 [fgfs] 24.52 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:52 [fgfs] 24.52 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:52 [fgfs] 24.52 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:52 [fgfs] 24.72 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:52 [fgfs] 24.72 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:52 [fgfs] 24.72 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:52 [fgfs] 24.93 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:52 [fgfs] 24.93 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:52 [fgfs] 24.93 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:52 [fgfs] 25.14 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:52 [fgfs] 25.14 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:52 [fgfs] 25.14 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 25.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 25.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 25.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 25.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 25.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 25.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 25.77 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 25.77 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 25.77 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 25.97 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 25.97 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 25.97 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 26.18 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 26.18 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 26.18 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 26.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 26.38 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 26.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:53 [fgfs] 26.59 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:53 [fgfs] 26.59 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:53 [fgfs] 26.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 26.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 26.80 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 26.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 27.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 27.00 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 27.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 27.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 27.20 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 27.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 27.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 27.40 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 27.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 27.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 27.60 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 27.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 27.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 27.80 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 27.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:55 [fgfs] 28.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:55 [fgfs] 28.00 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:55 [fgfs] 28.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 28.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 28.21 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 28.21 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 28.42 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 28.42 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 28.42 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 28.62 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 28.62 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 28.62 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 28.82 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 28.82 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 28.82 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 29.03 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 29.03 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 29.04 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 29.24 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 29.24 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 29.24 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 29.45 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 29.45 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 29.45 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:56 [fgfs] 29.96 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:56 [fgfs] 29.96 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:56 [fgfs] 29.96 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 30.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 30.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 30.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 30.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 30.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 30.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 30.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 30.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 30.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 30.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 30.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 30.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 30.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 30.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 30.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 31.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 31.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 31.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:58 [fgfs] 31.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:58 [fgfs] 31.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:58 [fgfs] 31.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 31.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 31.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 31.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 31.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 31.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 31.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 31.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 31.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 31.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 32.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 32.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 32.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 32.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 32.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 32.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 32.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 32.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 32.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:26:59 [fgfs] 32.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:26:59 [fgfs] 32.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:26:59 [fgfs] 32.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 32.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 32.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 32.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 33.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 33.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 33.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 33.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 33.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 33.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 33.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 33.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 33.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 33.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 33.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 33.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 33.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 33.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 33.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:01 [fgfs] 34.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:01 [fgfs] 34.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:01 [fgfs] 34.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 34.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 34.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 34.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 34.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 34.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 34.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 34.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 34.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 34.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 34.96 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 34.96 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 34.96 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 35.17 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 35.17 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 35.17 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 35.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 35.38 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 35.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:02 [fgfs] 35.61 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:02 [fgfs] 35.61 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:02 [fgfs] 35.61 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:04 [fgfs] 35.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:04 [fgfs] 35.81 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:04 [fgfs] 35.81 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:04 [fgfs] 36.02 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:04 [fgfs] 36.02 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:04 [fgfs] 36.02 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:04 [fgfs] 36.23 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:04 [fgfs] 36.23 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:04 [fgfs] 36.23 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:04 [fgfs] 36.45 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:04 [fgfs] 36.45 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:04 [fgfs] 36.45 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:04 [fgfs] 36.67 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:04 [fgfs] 36.67 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:04 [fgfs] 36.67 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:04 [fgfs] 36.87 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:04 [fgfs] 36.87 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:04 [fgfs] 36.87 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 37.08 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 37.08 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 37.08 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 37.30 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 37.30 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 37.30 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 37.52 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 37.52 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 37.52 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 37.73 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 37.73 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 37.73 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 37.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 37.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 37.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 38.16 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 38.17 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 38.17 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:05 [fgfs] 38.39 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:05 [fgfs] 38.39 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:05 [fgfs] 38.39 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 38.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 38.60 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 38.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 38.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 38.81 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 38.82 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 39.03 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 39.03 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 39.03 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 39.25 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 39.25 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 39.25 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 39.47 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 39.47 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 39.47 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 39.68 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 39.68 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 39.68 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:06 [fgfs] 39.91 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:06 [fgfs] 39.91 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:06 [fgfs] 39.91 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:08 [fgfs] 40.12 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:08 [fgfs] 40.12 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:08 [fgfs] 40.12 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:08 [fgfs] 40.33 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:08 [fgfs] 40.33 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:08 [fgfs] 40.33 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:08 [fgfs] 40.53 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:08 [fgfs] 40.53 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:08 [fgfs] 40.53 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:08 [fgfs] 40.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:08 [fgfs] 40.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:08 [fgfs] 40.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:08 [fgfs] 40.97 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:08 [fgfs] 40.97 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:08 [fgfs] 40.97 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:08 [fgfs] 41.19 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:08 [fgfs] 41.19 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:08 [fgfs] 41.19 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 41.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 41.40 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 41.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 41.62 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 41.62 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 41.62 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 41.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 41.83 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 41.83 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 42.04 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 42.04 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 42.04 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 42.25 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 42.25 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 42.25 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 42.47 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 42.47 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 42.47 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:09 [fgfs] 42.68 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:09 [fgfs] 42.68 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:09 [fgfs] 42.68 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:11 [fgfs] 42.91 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:11 [fgfs] 42.91 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:11 [fgfs] 42.91 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:11 [fgfs] 43.12 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:11 [fgfs] 43.12 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:11 [fgfs] 43.12 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:11 [fgfs] 43.33 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:11 [fgfs] 43.33 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:11 [fgfs] 43.33 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:11 [fgfs] 43.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:11 [fgfs] 43.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:11 [fgfs] 43.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:11 [fgfs] 43.77 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:11 [fgfs] 43.77 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:11 [fgfs] 43.77 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:11 [fgfs] 43.98 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:11 [fgfs] 43.98 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:11 [fgfs] 43.98 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 44.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 44.20 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 44.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 44.41 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 44.41 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 44.41 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 44.62 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 44.62 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 44.62 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 44.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 44.83 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 44.83 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 45.05 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 45.06 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 45.06 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 45.27 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 45.27 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 45.27 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:12 [fgfs] 45.48 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:12 [fgfs] 45.48 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:12 [fgfs] 45.48 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 45.70 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 45.70 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 45.70 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 45.92 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 45.92 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 45.92 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 46.13 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 46.13 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 46.13 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 46.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 46.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 46.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 46.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 46.56 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 46.56 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 46.79 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 46.79 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 46.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:14 [fgfs] 47.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:14 [fgfs] 47.00 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:14 [fgfs] 47.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:15 [fgfs] 47.22 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:15 [fgfs] 47.22 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:15 [fgfs] 47.22 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:15 [fgfs] 47.44 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:15 [fgfs] 47.44 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:15 [fgfs] 47.44 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:15 [fgfs] 47.65 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:15 [fgfs] 47.66 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:15 [fgfs] 47.66 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:15 [fgfs] 47.87 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:15 [fgfs] 47.87 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:15 [fgfs] 47.87 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:15 [fgfs] 48.08 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:15 [fgfs] 48.08 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:15 [fgfs] 48.08 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:15 [fgfs] 48.31 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:15 [fgfs] 48.31 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:15 [fgfs] 48.31 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 48.53 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 48.53 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 48.53 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 48.73 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 48.73 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 48.73 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 48.97 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 48.97 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 48.97 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 49.16 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 49.16 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 49.17 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 49.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 49.39 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 49.39 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 49.58 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 49.59 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 49.59 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [fgfs] 49.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:16 [fgfs] 49.80 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:16 [fgfs] 49.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:16 [controller] Run started: 2026-11-14T172715Z_michael-taylor_flightgear-connectome
+12:27:16 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T172715Z_michael-taylor_flightgear-connectome
+12:27:18 [fgfs] 50.04 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 50.04 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 50.04 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:18 [fgfs] 50.26 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 50.26 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 50.26 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:18 [fgfs] 50.47 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 50.47 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 50.47 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:18 [fgfs] 50.68 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 50.68 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 50.68 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:18 [fgfs] 50.90 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 50.90 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 50.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:18 [fgfs] 51.12 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 51.12 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 51.12 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:18 [fgfs] 51.34 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:18 [fgfs] 51.34 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:18 [fgfs] 51.34 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 51.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 51.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 51.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 51.77 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 51.77 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 51.77 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 51.98 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 51.98 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 51.98 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 52.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 52.20 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 52.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 52.42 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 52.42 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 52.42 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 52.63 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 52.63 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 52.63 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:19 [fgfs] 52.85 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:19 [fgfs] 52.85 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:19 [fgfs] 52.85 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 53.06 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 53.06 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 53.06 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 53.28 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 53.28 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 53.28 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 53.51 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 53.51 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 53.51 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 53.72 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 53.72 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 53.72 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 53.94 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 53.94 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 53.94 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 54.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 54.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 54.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [fgfs] 54.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:21 [fgfs] 54.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:21 [fgfs] 54.36 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:21 [controller] CONNECTOME LIF (notebook model)
+12:27:21 [controller] Connectome decisions run synchronously; FlightGear pauses during each trial.
+12:27:21 [controller] Waiting for airborne FlightGear telemetry on localhost...
+12:27:22 [fgfs] 54.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:22 [fgfs] 54.56 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:22 [fgfs] 54.57 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:22 [fgfs] 54.78 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:22 [fgfs] 54.78 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:22 [fgfs] 54.78 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:22 [fgfs] 55.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:22 [fgfs] 55.00 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:22 [fgfs] 55.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:22 [fgfs] 55.21 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:22 [fgfs] 55.22 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:22 [fgfs] 55.22 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:22 [fgfs] 55.43 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:22 [fgfs] 55.43 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:22 [fgfs] 55.43 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:22 [fgfs] 55.65 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:22 [fgfs] 55.65 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:22 [fgfs] 55.65 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:22 [controller] Waiting for the 737 autopilot to settle into steady flight before taking over...
+12:27:24 [fgfs] 55.86 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 55.86 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 55.86 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:24 [fgfs] 56.08 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 56.08 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 56.08 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:24 [fgfs] 56.30 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 56.30 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 56.30 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:24 [fgfs] 56.51 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 56.52 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 56.52 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:24 [fgfs] 56.73 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 56.73 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 56.73 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:24 [fgfs] 56.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 56.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 56.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:24 [fgfs] 57.16 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:24 [fgfs] 57.16 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:24 [fgfs] 57.16 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:25 [fgfs] 57.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:25 [fgfs] 57.38 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:25 [fgfs] 57.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:25 [fgfs] 57.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:25 [fgfs] 57.60 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:25 [fgfs] 57.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:25 [fgfs] 57.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:25 [fgfs] 57.81 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:25 [fgfs] 57.81 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:25 [fgfs] 58.03 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:25 [fgfs] 58.03 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:25 [fgfs] 58.03 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:25 [fgfs] 58.25 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:25 [fgfs] 58.25 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:25 [fgfs] 58.25 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:25 [fgfs] 58.47 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:25 [fgfs] 58.47 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:25 [fgfs] 58.47 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 58.68 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 58.68 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 58.68 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 58.90 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 58.90 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 58.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 59.11 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 59.11 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 59.12 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 59.33 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 59.33 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 59.33 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 59.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 59.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 59.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 59.77 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 59.77 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 59.77 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:27 [fgfs] 59.98 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:27 [fgfs] 59.98 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:27 [fgfs] 59.98 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:28 [fgfs] 60.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:28 [fgfs] 60.20 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:28 [fgfs] 60.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:28 [fgfs] 60.41 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:28 [fgfs] 60.41 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:28 [fgfs] 60.41 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:28 [fgfs] 60.63 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:28 [fgfs] 60.63 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:28 [fgfs] 60.63 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:28 [fgfs] 60.85 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:28 [fgfs] 60.85 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:28 [fgfs] 60.85 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:28 [fgfs] 61.06 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:28 [fgfs] 61.06 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:28 [fgfs] 61.06 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:28 [fgfs] 61.28 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:28 [fgfs] 61.28 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:28 [fgfs] 61.28 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 61.51 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 61.51 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 61.51 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 61.72 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 61.72 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 61.72 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 61.94 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 61.94 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 61.94 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 62.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 62.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 62.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 62.35 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 62.35 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 62.35 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 62.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 62.57 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 62.57 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:29 [fgfs] 62.79 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:29 [fgfs] 62.79 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:29 [fgfs] 62.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 63.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 63.00 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 63.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 63.21 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 63.21 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 63.21 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 63.43 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 63.43 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 63.43 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 63.65 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 63.65 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 63.65 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 63.86 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 63.86 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 63.86 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 64.08 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 64.08 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 64.08 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:31 [fgfs] 64.30 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:31 [fgfs] 64.30 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:31 [fgfs] 64.30 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:32 [fgfs] 64.50 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:32 [fgfs] 64.50 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:32 [fgfs] 64.50 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:32 [fgfs] 64.71 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:32 [fgfs] 64.71 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:32 [fgfs] 64.72 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:32 [fgfs] 64.93 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:32 [fgfs] 64.93 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:32 [fgfs] 64.93 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:32 [fgfs] 65.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:32 [fgfs] 65.15 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:32 [fgfs] 65.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:32 [fgfs] 65.36 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:32 [fgfs] 65.36 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:32 [fgfs] 65.37 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:32 [fgfs] 65.58 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:32 [fgfs] 65.58 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:32 [fgfs] 65.58 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 65.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 65.80 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 65.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 66.01 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 66.01 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 66.01 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 66.23 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 66.23 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 66.23 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 66.45 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 66.45 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 66.45 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 66.66 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 66.67 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 66.67 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 66.89 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 66.89 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 66.89 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:34 [fgfs] 67.10 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:34 [fgfs] 67.10 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:34 [fgfs] 67.10 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:35 [fgfs] 67.31 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:35 [fgfs] 67.31 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:35 [fgfs] 67.31 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:35 [fgfs] 67.53 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:35 [fgfs] 67.53 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:35 [fgfs] 67.53 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:35 [fgfs] 67.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:35 [fgfs] 67.75 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:35 [fgfs] 67.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:35 [fgfs] 67.96 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:35 [fgfs] 67.96 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:35 [fgfs] 67.97 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:35 [fgfs] 68.18 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:35 [fgfs] 68.18 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:35 [fgfs] 68.18 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:35 [fgfs] 68.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:35 [fgfs] 68.40 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:35 [fgfs] 68.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 68.61 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 68.61 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 68.61 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 68.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 68.83 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 68.83 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 69.05 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 69.05 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 69.05 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 69.27 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 69.27 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 69.27 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 69.48 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 69.48 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 69.48 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 69.70 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 69.70 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 69.70 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:36 [fgfs] 69.92 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:36 [fgfs] 69.92 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:36 [fgfs] 69.92 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:38 [fgfs] 70.13 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:38 [fgfs] 70.13 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:38 [fgfs] 70.13 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:38 [fgfs] 70.36 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:38 [fgfs] 70.36 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:38 [fgfs] 70.36 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:38 [fgfs] 70.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:38 [fgfs] 70.56 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:38 [fgfs] 70.56 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:38 [fgfs] 70.79 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:38 [fgfs] 70.79 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:38 [fgfs] 70.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:38 [fgfs] 71.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:38 [fgfs] 71.00 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:38 [fgfs] 71.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:38 [fgfs] 71.21 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:38 [fgfs] 71.22 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:38 [fgfs] 71.22 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 71.43 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 71.43 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 71.43 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 71.65 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 71.65 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 71.65 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 71.86 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 71.86 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 71.86 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 72.09 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 72.09 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 72.09 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 72.30 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 72.30 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 72.30 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 72.51 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 72.51 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 72.51 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:39 [fgfs] 72.73 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:39 [fgfs] 72.73 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:39 [fgfs] 72.73 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:41 [fgfs] 72.95 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:41 [fgfs] 72.95 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:41 [fgfs] 72.95 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:41 [fgfs] 73.16 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:41 [fgfs] 73.16 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:41 [fgfs] 73.16 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:41 [fgfs] 73.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:41 [fgfs] 73.38 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:41 [fgfs] 73.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:41 [fgfs] 73.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:41 [fgfs] 73.60 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:41 [fgfs] 73.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:41 [fgfs] 73.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:41 [fgfs] 73.81 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:41 [fgfs] 73.81 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:41 [fgfs] 74.03 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:41 [fgfs] 74.03 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:41 [fgfs] 74.03 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 74.25 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 74.25 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 74.25 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 74.46 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 74.46 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 74.46 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 74.68 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 74.68 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 74.68 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 74.90 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 74.90 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 74.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 75.11 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 75.11 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 75.11 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 75.33 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 75.33 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 75.33 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:42 [fgfs] 75.55 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:42 [fgfs] 75.55 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:42 [fgfs] 75.55 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:45 [flightgear] Resumed
+12:27:45 [fgfs] 75.76 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:45 [fgfs] 75.76 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:45 [fgfs] 75.76 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:45 [fgfs] 75.98 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:45 [fgfs] 75.98 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:45 [fgfs] 75.98 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:27:45 [fgfs] 76.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+12:27:45 [fgfs] 76.20 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+12:27:45 [fgfs] 76.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+12:28:05 [flightgear] Paused
+12:28:05 [controller] FlightGear connected. Initial altitude/heading/speed are the hold targets.
+12:28:07 [flightgear] Resumed
+12:28:07 [controller] Placed 3 obstacle towers in FlightGear (telnet 5500).
+12:28:07 [controller] Handover sent: the 737 autopilot (if any) switches off, the controller flies.
+12:28:07 [controller]   21.4s AVOID  altitude=  681.4m speed=114.6m/s escape=  0.0Hz clearance= 6669.5m
+12:28:09 [flightgear] Paused
+12:28:15 [flightgear] Resumed
+12:28:17 [flightgear] Paused
+12:28:45 [flightgear] Resumed
+12:28:47 [flightgear] Paused
+12:28:53 [flightgear] Resumed
+12:28:55 [session] Property API stopped answering
+12:28:56 [session] FlightGear exited (code 3221225477) - crashed or force-closed
