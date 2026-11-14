@@ -46,8 +46,9 @@ DEFAULT_AIRCRAFT = '738-flies'
 # In-air start speed. 100 kt is fine for the C172 but stalls a 737.
 START_KT = {'c172p': 100}
 PROTOCOLS = Path(__file__).resolve().parent / 'protocols'
-CRUISE_PROTOCOLS = ('flybrain-state.xml', 'flybrain-controls.xml', 'flybrain-controls-twin.xml')
 RUNWAY_PROTOCOLS = ('flybrain-runway-state.xml', 'flybrain-runway-controls.xml')
+# Installed on every launch so a protocol fix (e.g. the freeze/clock chunk) reaches FlightGear.
+ALL_PROTOCOLS = ('flybrain-state.xml', 'flybrain-controls.xml', 'flybrain-controls-twin.xml', *RUNWAY_PROTOCOLS)
 # Takeoff/landing start. 737 flap detents are 0.125 apart: flaps 5 = 0.375, flaps 30 = 0.875.
 AIRPORT, RUNWAY, FINAL_NM = 'KSFO', '28R', 3.0
 PHASE_ARGS = {
@@ -70,21 +71,21 @@ def fg_root(fg):
     return None if fg.is_file() else fg / 'data'
 
 
-def install_protocols(fg, names=RUNWAY_PROTOCOLS):
-    """Copy the selected protocols into $FG_ROOT/Protocol. Returns a problem or None."""
+def install_protocols(fg):
+    """Copy our generic protocols into $FG_ROOT/Protocol. Returns a problem or None."""
     root = fg_root(fg)
     if root is None:
         return ('FlightGear data folder unknown (AppImage or bare fgfs). Set FG_ROOT, or copy '
-                f'{", ".join(names)} from {PROTOCOLS} into <fg-root>/Protocol yourself.')
+                f'{", ".join(ALL_PROTOCOLS)} from {PROTOCOLS} into <fg-root>/Protocol yourself.')
     dest = root / 'Protocol'
     try:
-        for name in names:
+        for name in ALL_PROTOCOLS:
             src = PROTOCOLS / name
             if not (dest / name).exists() or (dest / name).read_bytes() != src.read_bytes():
                 shutil.copyfile(src, dest / name)
                 print(f'Installed {name} -> {dest}')
     except OSError as exc:
-        return (f'Could not copy the protocols into {dest} ({exc}). Copy {", ".join(names)} '
+        return (f'Could not copy the protocols into {dest} ({exc}). Copy {", ".join(ALL_PROTOCOLS)} '
                 f'from {PROTOCOLS} there yourself (an admin terminal may be needed).')
     return None
 
@@ -156,7 +157,7 @@ def main():
         base.mkdir(parents=True, exist_ok=True)
         env['FG_HOME'] = str(base)
     if not args.print:
-        problem = install_protocols(Path(args.fg), RUNWAY_PROTOCOLS if args.phase else CRUISE_PROTOCOLS)
+        problem = install_protocols(Path(args.fg))
         if problem:
             print('WARNING:', problem)
     print(' '.join(cmd))

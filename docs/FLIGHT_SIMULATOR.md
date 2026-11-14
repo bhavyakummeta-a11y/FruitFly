@@ -351,11 +351,12 @@ python -m flight_simulator --backend flightgear --brain reflex --seconds 360 --n
 Use `--fg` or `FG_INSTALL` if FlightGear is installed elsewhere. Existing manual
 launches must copy `flybrain-state.xml` and the chosen `flybrain-controls*.xml`
 from `flight_simulator/protocols` to FlightGear's `Protocol` directory and restart.
-Cruise pause commands/acknowledgements now use `/sim/freeze/clock`, because the
-shared FlightGear 2024 report found `/sim/freeze/master` insufficient. The wire
-field count is unchanged. The startup check reports an outdated protocol when
-telnet confirms that a purported pause did not freeze the clock. Takeoff/landing
-protocols are outside this cruise change.
+The shared pause fix sends both `/sim/freeze/master` and `/sim/freeze/clock`;
+cruise acknowledgements now read the actual clock freeze, because the
+shared FlightGear 2024 report found `/sim/freeze/master` insufficient. Control
+packets now have one additional clock-freeze field, so reinstalling is required. The startup check reports an outdated protocol when
+telnet confirms that a purported pause did not freeze the clock. The teammate’s pause fix also updates takeoff/landing control packets; the
+launcher refreshes all protocols together.
 
 Scenery setup happens while paused, before autopilot handover. Connectome mode
 still pauses during neural calculations by design; reflex mode does not. The

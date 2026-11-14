@@ -24,9 +24,10 @@ Changes:
   of clipping them to 0.2 s. Estimate attitude rates across gaps up to 2 s.
 - Prefer 250 m predicted clearance while retaining the 150 m hard minimum;
   tracking error should not immediately exhaust all feasible routes.
-- Use `/sim/freeze/clock` for cruise protocol commands and acknowledgements,
-  install cruise protocols from the launcher, and diagnose stale installed
-  protocols when the telnet clock check disagrees. Runway protocols are untouched.
+- Merge the teammate’s `7e003f2` pause fix: control packets now set both master
+  and clock freeze, and the launcher installs all updated protocols. Cruise
+  acknowledgements read clock freeze directly. Diagnose stale installed protocols
+  when the telnet clock check disagrees. Preserve the teammate’s runway pause fix.
 
 Validation (JSBSim 1.3.3; +0.10 elevator disturbance at 45–47 s):
 
@@ -38,7 +39,7 @@ Validation (JSBSim 1.3.3; +0.10 elevator disturbance at 45–47 s):
 
 All completed the three-obstacle course without an abort. The slower correction
 trades tighter altitude tracking for gentler response; it does not hold altitude
-exactly. 79 automated tests passed, including pitch slew/damping, rate estimation
+exactly. 88 automated tests passed after merging the shared pause, run-log and ticket updates, including pitch slew/damping, rate estimation
 with a 0.7 s gap, nonblocking display snapshots, and cruise pause XML. A 10-second
 real-time demo smoke test exercised the spawned renderer with the headless Agg
 backend and completed with no collision. No FlightGear window was opened.
