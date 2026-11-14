@@ -1,0 +1,43 @@
+{
+  "departure": "KLAX 25R",
+  "destination": "KBUR 08",
+  "route": "lax-burbank",
+  "minimum_clearance_m": 348.4,
+  "avoidance_count": 2,
+  "success": true,
+  "outcome": "landing_completed",
+  "termination_reason": "landing_completed",
+  "touchdown_x_m": 574.5364071637914,
+  "touchdown_sink_fpm": 262.82353120621957,
+  "stop_x_m": 1249.8790727058988,
+  "time_s": 791.7499999998277,
+  "handovers": [
+    {
+      "time": 0.0,
+      "to": "Takeoff fly",
+      "state": "standing",
+      "agl_ft": 0,
+      "ias_kt": 0,
+      "zero_steer": -18.75
+    },
+    {
+      "time": 56.5,
+      "to": "Circuit fly",
+      "state": "cruising",
+      "agl_ft": 1004,
+      "ias_kt": 176,
+      "zero_steer": -23.5
+    },
+    {
+      "time": 689.3,
+      "to": "Landing fly",
+      "state": "flying",
+      "agl_ft": 1130,
+      "ias_kt": 146,
+      "zero_steer": -26.25
+    }
+  ],
+  "ended_in": "Landing fly: ROLLOUT",
+  "wall_s": 486.5,
+  "exit_code": 0
+}
