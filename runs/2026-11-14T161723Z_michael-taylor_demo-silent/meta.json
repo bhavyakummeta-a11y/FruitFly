@@ -1,0 +1,34 @@
+{
+  "run_id": "2026-11-14T161723Z_michael-taylor_demo-silent",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:17:22.993502+00:00",
+  "command": "python -m flight_simulator --brain silent --seconds 10 --note 'verifying auto-push'",
+  "args": {
+    "backend": "demo",
+    "brain": "silent",
+    "data": "data/brain",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 10.0,
+    "seed": 0,
+    "plot": false,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "note": "verifying auto-push",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "487f40d7d60398d00a1b365220f27eae64f4a967",
+    "branch": "main",
+    "dirty": [],
+    "untracked": [
+      "flight_simulator/launch_fg.py"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "finished_utc": "2026-11-14T16:17:23.282563+00:00",
+  "exit_code": 0
+}

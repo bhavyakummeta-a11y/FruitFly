@@ -1,0 +1,10 @@
+{
+  "backend": "demo",
+  "brain": "silent",
+  "elapsed_s": 10.0,
+  "collision": false,
+  "minimum_clearance_m": 652.5,
+  "minimum_altitude_m": 900.0,
+  "avoidance_activations": 0,
+  "exit_code": 0
+}

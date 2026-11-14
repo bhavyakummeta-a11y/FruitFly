@@ -1,0 +1,12 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T161723Z_michael-taylor_demo-silent
+SILENCED ESCAPE (control experiment)
+   0.0s CRUISE altitude=  900.0m speed= 50.0m/s escape=  0.0Hz clearance= 1150.0m
+{
+  "backend": "demo",
+  "brain": "silent",
+  "elapsed_s": 10.0,
+  "collision": false,
+  "minimum_clearance_m": 652.5,
+  "minimum_altitude_m": 900.0,
+  "avoidance_activations": 0
+}
