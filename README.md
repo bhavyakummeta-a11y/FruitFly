@@ -23,6 +23,7 @@ Let Claude write the code. This doc is the ideas, the gotchas, and where to get 
 | [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) | **Our project:** fly brains controlling Microsoft Flight Simulator (takeoff / cruise / landing flies, barrel roll, dopamine learning) |
 | [`docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md`](docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md) | Reference notes: neural mappings, flight phases, and controller approaches |
 | [`docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md`](docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md) | Reference notes: proposed package layout, example code, and implementation prompt |
+| [`docs/MT_Proposed_Plan.pptx`](docs/MT_Proposed_Plan.pptx) | MT proposed plan deck: goals, architecture, one slide per milestone (goal / plan / done when / risk) |
 
 ---
 
