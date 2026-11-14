@@ -1,0 +1,57 @@
+{
+  "run_id": "2026-11-14T194458Z_michael-taylor_fg-takeoff-fly-to-2000-ft-connectome-period-0-25-screen-recorded-attempt-3",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 198.2
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 198.2,
+      "to_s": 204.0
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 204.0,
+      "to_s": 292.1
+    }
+  ],
+  "name": "takeoff fly to 2000 ft - CONNECTOME, period 0.25, screen-recorded (attempt 3)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 27772,
+  "fgfs_exit_code": 15,
+  "started_utc": "2026-11-14T19:44:58.929298+00:00",
+  "duration_s": 292,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 94
+  },
+  "airplane_samples": 130,
+  "controller_runs": {
+    "2026-11-14T194832Z_michael-taylor_flightgear-standin": {
+      "phase": "APPROACH",
+      "requested_phase": "landing",
+      "exit_code": 0
+    },
+    "2026-11-14T194009Z_paula-sof-a-contreras-villavicencio_flightgear-connectome": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "9923429f1174b16a613dcf000c59232fed02ff4c",
+    "branch": "main"
+  }
+}
