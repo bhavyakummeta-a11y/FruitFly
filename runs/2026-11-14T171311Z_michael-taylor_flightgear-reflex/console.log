@@ -1,0 +1,6 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T171311Z_michael-taylor_flightgear-reflex
+REFLEX BASELINE (no connectome)
+Waiting for airborne FlightGear telemetry on localhost...
+Waiting for the 737 autopilot to settle into steady flight before taking over...
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: Aircraft not in steady flight after 120 s (climb +1.6 m/s, bank -0 deg, pitch +6 deg).

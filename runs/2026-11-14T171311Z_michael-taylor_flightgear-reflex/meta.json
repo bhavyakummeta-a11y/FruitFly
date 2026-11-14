@@ -1,0 +1,62 @@
+{
+  "run_id": "2026-11-14T171311Z_michael-taylor_flightgear-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T17:13:11.565459+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain reflex --seconds 180 --note 'latest e2a3d22 (cruise damping + pause fix); reflex baseline; 738-flies'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "reflex",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_scene": false,
+    "note": "latest e2a3d22 (cruise damping + pause fix); reflex baseline; 738-flies",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "e2a3d22262d4da3cec8fdb8b06504a3b4066cda8",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/session.py"
+    ],
+    "untracked": [
+      "deck/",
+      "flight_simulator/brain_map.py",
+      "flight_simulator/dock.py",
+      "flight_simulator/media.py",
+      "flight_simulator/session_brain.html",
+      "flight_simulator/session_log.html"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "fg_sessions": [
+    {
+      "name": "obstacle avoidance - latest (e2a3d22 damping + pause fix)",
+      "run_id": "2026-11-14T171219Z_michael-taylor_fg-obstacle-avoidance-latest-e2a3d22-damping-pause-fix"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 30
+  },
+  "finished_utc": "2026-11-14T17:15:13.067339+00:00",
+  "exit_code": 1
+}
