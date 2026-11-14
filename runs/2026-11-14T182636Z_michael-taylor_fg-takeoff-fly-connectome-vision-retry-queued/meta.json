@@ -1,0 +1,84 @@
+{
+  "run_id": "2026-11-14T182636Z_michael-taylor_fg-takeoff-fly-connectome-vision-retry-queued",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 31.2
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the takeoff",
+      "detail": "run 2026-11-14T182703Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 31.2,
+      "to_s": 82.1
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 82.1,
+      "to_s": 85.2
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 85.2,
+      "to_s": 119.3
+    }
+  ],
+  "name": "takeoff fly - CONNECTOME + vision, retry (queued)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "fgfs_pid": 12044,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T18:26:36.616895+00:00",
+  "duration_s": 119,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 55
+  },
+  "airplane_samples": 53,
+  "controller_runs": {
+    "2026-11-14T182703Z_michael-taylor_flightgear-connectome": {
+      "fly": "Takeoff fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "takeoff",
+      "completed": true,
+      "time_s": 39.6,
+      "decisions": 37,
+      "max_centerline_m": 28.6,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "liftoff_x_m": null,
+      "rejected": true,
+      "agl_ft": 0,
+      "ias_kt": 0.1,
+      "stop_x_m": 1213,
+      "events": [
+        "31.5s REJECT: bitter suppressed MN9 below V1"
+      ],
+      "decision_timing": {
+        "applied": 37,
+        "skipped": 1,
+        "latency_mean_s": 0.221,
+        "latency_max_s": 2.783
+      },
+      "speed_up_resets": 0,
+      "exit_code": 0
+    }
+  },
+  "code": {
+    "commit": "4f63127e6d1f73cab0285e0e97d024610258add9",
+    "branch": "main"
+  }
+}
