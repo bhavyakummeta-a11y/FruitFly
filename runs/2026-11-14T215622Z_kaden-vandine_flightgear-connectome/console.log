@@ -1,0 +1,298 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T215622Z_kaden-vandine_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the landing
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-17.5
+Landing fly: flying fly, looming -> DNp07 = flare
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Landing handover: throttle 0.55, elevator -0.22, reference attitude 3.7 deg (plane at 0.4 deg, +110 fpm)
+NO-AUTOPILOT RULE: autopilot was still on after handover (/autopilot/internal/SPD); forced off.
+FlightGear resumes with the fly's first controls: the fly has the approach.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 0.0s after its state  APPROACH       ias=144.3kt agl=  993ft pitch= 0.4deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=143.5kt agl=  992ft pitch= 1.1deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=143.3kt agl=  989ft pitch= 1.6deg thr=0.54
+  decision applied 0.4s after its state  APPROACH       ias=143.3kt agl=  984ft pitch= 2.4deg thr=0.53
+  decision applied 0.2s after its state  APPROACH       ias=143.4kt agl=  982ft pitch= 2.6deg thr=0.58
+  decision applied 0.1s after its state  APPROACH       ias=143.6kt agl=  979ft pitch= 2.9deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=143.7kt agl=  975ft pitch= 3.1deg thr=0.58
+  decision applied 0.2s after its state  APPROACH       ias=144.1kt agl=  964ft pitch= 3.1deg thr=0.56
+  decision applied 0.3s after its state  APPROACH       ias=144.4kt agl=  958ft pitch= 3.1deg thr=0.56
+  decision applied 0.2s after its state  APPROACH       ias=144.5kt agl=  956ft pitch= 3.1deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=144.6kt agl=  953ft pitch= 3.1deg thr=0.59
+  decision applied 0.1s after its state  APPROACH       ias=144.8kt agl=  949ft pitch= 3.2deg thr=0.59
+  decision applied 0.2s after its state  APPROACH       ias=145.3kt agl=  940ft pitch= 3.3deg thr=0.58
+  decision applied 0.1s after its state  APPROACH       ias=145.4kt agl=  936ft pitch= 3.4deg thr=0.50
+  decision applied 0.8s after its state  APPROACH       ias=145.5kt agl=  923ft pitch= 3.4deg thr=0.53
+  decision applied 0.2s after its state  APPROACH       ias=145.6kt agl=  921ft pitch= 3.4deg thr=0.55
+  decision applied 0.3s after its state  APPROACH       ias=145.7kt agl=  915ft pitch= 3.5deg thr=0.59
+  decision applied 0.2s after its state  APPROACH       ias=145.8kt agl=  913ft pitch= 3.6deg thr=0.56
+  decision applied 0.1s after its state  APPROACH       ias=145.8kt agl=  910ft pitch= 3.6deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=145.9kt agl=  906ft pitch= 3.7deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=146.0kt agl=  901ft pitch= 3.7deg thr=0.52
+  decision applied 0.1s after its state  APPROACH       ias=146.0kt agl=  898ft pitch= 3.7deg thr=0.50
+  decision applied 0.2s after its state  APPROACH       ias=146.0kt agl=  893ft pitch= 3.7deg thr=0.56
+  decision applied 0.2s after its state  APPROACH       ias=145.9kt agl=  884ft pitch= 3.7deg thr=0.57
+  decision applied 0.1s after its state  APPROACH       ias=145.9kt agl=  882ft pitch= 3.7deg thr=0.58
+  decision applied 0.2s after its state  APPROACH       ias=146.1kt agl=  875ft pitch= 3.8deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  872ft pitch= 3.8deg thr=0.55
+  decision applied 0.4s after its state  APPROACH       ias=146.2kt agl=  866ft pitch= 3.8deg thr=0.46
+  decision applied 0.2s after its state  APPROACH       ias=146.2kt agl=  864ft pitch= 3.8deg thr=0.53
+  decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  861ft pitch= 3.7deg thr=0.57
+  decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  858ft pitch= 3.7deg thr=0.55
+  decision applied 0.2s after its state  APPROACH       ias=146.4kt agl=  849ft pitch= 3.8deg thr=0.54
+  decision applied 0.3s after its state  APPROACH       ias=146.4kt agl=  844ft pitch= 3.7deg thr=0.53
+  decision applied 0.2s after its state  APPROACH       ias=146.4kt agl=  843ft pitch= 3.7deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=146.4kt agl=  840ft pitch= 3.7deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  837ft pitch= 3.7deg thr=0.56
+  decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  830ft pitch= 3.7deg thr=0.53
+  decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  828ft pitch= 3.7deg thr=0.54
+  decision applied 0.8s after its state  APPROACH       ias=146.6kt agl=  818ft pitch= 3.8deg thr=0.56
+  decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  816ft pitch= 3.8deg thr=0.54
+  decision applied 0.3s after its state  APPROACH       ias=146.6kt agl=  812ft pitch= 3.8deg thr=0.51
+  decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  810ft pitch= 3.8deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  808ft pitch= 3.8deg thr=0.53
+  decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  805ft pitch= 3.8deg thr=0.52
+  decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  800ft pitch= 3.7deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  798ft pitch= 3.7deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  795ft pitch= 3.6deg thr=0.48
+  decision applied 0.4s after its state  APPROACH       ias=146.3kt agl=  788ft pitch= 3.4deg thr=0.47
+  decision applied 0.2s after its state  APPROACH       ias=146.3kt agl=  786ft pitch= 3.4deg thr=0.47
+  decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  784ft pitch= 3.3deg thr=0.47
+  decision applied 0.2s after its state  APPROACH       ias=146.1kt agl=  778ft pitch= 3.3deg thr=0.52
+  decision applied 0.1s after its state  APPROACH       ias=146.0kt agl=  775ft pitch= 3.3deg thr=0.52
+Landing fly: approach path re-anchored at 3.1 deg from 769 ft, 4308 m out
+  decision applied 0.4s after its state  APPROACH       ias=146.1kt agl=  769ft pitch= 3.3deg thr=0.50
+  decision applied 0.2s after its state  APPROACH       ias=146.1kt agl=  767ft pitch= 3.3deg thr=0.52
+  decision applied 0.1s after its state  APPROACH       ias=146.1kt agl=  764ft pitch= 3.2deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  761ft pitch= 3.2deg thr=0.52
+  decision applied 0.2s after its state  APPROACH       ias=146.3kt agl=  750ft pitch= 3.3deg thr=0.52
+  decision applied 0.3s after its state  APPROACH       ias=146.4kt agl=  745ft pitch= 3.3deg thr=0.59
+  decision applied 0.2s after its state  APPROACH       ias=146.4kt agl=  743ft pitch= 3.3deg thr=0.58
+  decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  741ft pitch= 3.3deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  737ft pitch= 3.3deg thr=0.51
+  decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  729ft pitch= 3.4deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  726ft pitch= 3.4deg thr=0.52
+  decision applied 0.8s after its state  APPROACH       ias=146.7kt agl=  714ft pitch= 3.5deg thr=0.57
+  decision applied 0.2s after its state  APPROACH       ias=146.7kt agl=  712ft pitch= 3.5deg thr=0.52
+  decision applied 0.2s after its state  APPROACH       ias=146.7kt agl=  705ft pitch= 3.5deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=146.7kt agl=  703ft pitch= 3.5deg thr=0.52
+  decision applied 0.4s after its state  APPROACH       ias=146.7kt agl=  696ft pitch= 3.6deg thr=0.53
+  decision applied 0.2s after its state  APPROACH       ias=146.7kt agl=  694ft pitch= 3.6deg thr=0.60
+  decision applied 0.1s after its state  APPROACH       ias=146.7kt agl=  692ft pitch= 3.6deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=146.8kt agl=  689ft pitch= 3.6deg thr=0.56
+  decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  679ft pitch= 3.6deg thr=0.52
+  decision applied 0.3s after its state  APPROACH       ias=147.0kt agl=  674ft pitch= 3.6deg thr=0.53
+  decision applied 0.2s after its state  APPROACH       ias=147.0kt agl=  672ft pitch= 3.5deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  670ft pitch= 3.4deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  667ft pitch= 3.3deg thr=0.49
+  decision applied 0.2s after its state  APPROACH       ias=147.0kt agl=  661ft pitch= 3.1deg thr=0.52
+  decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  659ft pitch= 3.1deg thr=0.51
+  decision applied 0.1s after its state  APPROACH       ias=147.1kt agl=  655ft pitch= 3.0deg thr=0.47
+  decision applied 0.4s after its state  APPROACH       ias=147.1kt agl=  646ft pitch= 3.0deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=147.1kt agl=  645ft pitch= 3.1deg thr=0.52
+  decision applied 0.3s after its state  APPROACH       ias=147.2kt agl=  638ft pitch= 3.0deg thr=0.50
+  decision applied 0.2s after its state  APPROACH       ias=147.2kt agl=  636ft pitch= 3.0deg thr=0.50
+  decision applied 0.2s after its state  APPROACH       ias=147.2kt agl=  632ft pitch= 2.9deg thr=0.54
+  decision applied 0.2s after its state  APPROACH       ias=147.3kt agl=  628ft pitch= 2.8deg thr=0.57
+  decision applied 0.2s after its state  APPROACH       ias=147.5kt agl=  623ft pitch= 2.7deg thr=0.53
+  decision applied 0.1s after its state  APPROACH       ias=147.6kt agl=  620ft pitch= 2.7deg thr=0.53
+  decision applied 0.1s after its state  APPROACH       ias=147.7kt agl=  616ft pitch= 2.7deg thr=0.55
+  decision applied 0.2s after its state  APPROACH       ias=148.2kt agl=  600ft pitch= 2.8deg thr=0.49
+  decision applied 0.1s after its state  APPROACH       ias=148.2kt agl=  593ft pitch= 2.9deg thr=0.52
+  decision applied 0.1s after its state  APPROACH       ias=148.3kt agl=  588ft pitch= 2.9deg thr=0.56
+  decision applied 0.4s after its state  APPROACH       ias=148.6kt agl=  580ft pitch= 2.6deg thr=0.45
+  decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  579ft pitch= 2.6deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  574ft pitch= 2.5deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  570ft pitch= 2.4deg thr=0.45
+  decision applied 0.4s after its state  APPROACH       ias=148.7kt agl=  560ft pitch= 2.4deg thr=0.46
+  decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  558ft pitch= 2.4deg thr=0.49
+  decision applied 0.4s after its state  APPROACH       ias=148.7kt agl=  551ft pitch= 2.5deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  549ft pitch= 2.5deg thr=0.51
+  decision applied 0.1s after its state  APPROACH       ias=148.8kt agl=  544ft pitch= 2.5deg thr=0.42
+  decision applied 0.4s after its state  APPROACH       ias=148.7kt agl=  536ft pitch= 2.5deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  534ft pitch= 2.5deg thr=0.46
+  decision applied 0.2s after its state  APPROACH       ias=148.6kt agl=  529ft pitch= 2.4deg thr=0.44
+  decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  526ft pitch= 2.4deg thr=0.46
+  decision applied 0.4s after its state  APPROACH       ias=148.6kt agl=  516ft pitch= 2.5deg thr=0.42
+  decision applied 0.1s after its state  APPROACH       ias=148.5kt agl=  514ft pitch= 2.5deg thr=0.42
+  decision applied 0.3s after its state  APPROACH       ias=148.4kt agl=  507ft pitch= 2.6deg thr=0.50
+  decision applied 0.2s after its state  APPROACH       ias=148.4kt agl=  504ft pitch= 2.6deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=148.4kt agl=  501ft pitch= 2.6deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=148.4kt agl=  497ft pitch= 2.6deg thr=0.52
+  decision applied 0.2s after its state  APPROACH       ias=148.6kt agl=  487ft pitch= 2.7deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  484ft pitch= 2.7deg thr=0.59
+  decision applied 0.8s after its state  APPROACH       ias=149.3kt agl=  470ft pitch= 2.8deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  469ft pitch= 2.9deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  461ft pitch= 3.0deg thr=0.44
+  decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  458ft pitch= 3.0deg thr=0.46
+  decision applied 0.4s after its state  APPROACH       ias=149.1kt agl=  450ft pitch= 3.0deg thr=0.52
+  decision applied 0.1s after its state  APPROACH       ias=149.1kt agl=  449ft pitch= 2.9deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=149.0kt agl=  445ft pitch= 2.9deg thr=0.50
+  decision applied 0.4s after its state  APPROACH       ias=149.0kt agl=  438ft pitch= 2.9deg thr=0.49
+  decision applied 0.4s after its state  APPROACH       ias=149.0kt agl=  433ft pitch= 2.9deg thr=0.49
+  decision applied 0.2s after its state  APPROACH       ias=149.0kt agl=  431ft pitch= 3.0deg thr=0.56
+  decision applied 0.3s after its state  APPROACH       ias=149.1kt agl=  426ft pitch= 3.1deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  425ft pitch= 3.1deg thr=0.57
+  decision applied 0.2s after its state  APPROACH       ias=149.3kt agl=  420ft pitch= 3.1deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  418ft pitch= 3.1deg thr=0.55
+  decision applied 0.1s after its state  APPROACH       ias=149.4kt agl=  413ft pitch= 3.1deg thr=0.39
+  decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  410ft pitch= 3.1deg thr=0.43
+  decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  407ft pitch= 3.0deg thr=0.45
+  decision applied 0.4s after its state  APPROACH       ias=149.0kt agl=  399ft pitch= 2.8deg thr=0.45
+  decision applied 0.2s after its state  APPROACH       ias=148.9kt agl=  397ft pitch= 2.8deg thr=0.44
+  decision applied 0.3s after its state  APPROACH       ias=148.8kt agl=  392ft pitch= 2.6deg thr=0.46
+  decision applied 0.1s after its state  APPROACH       ias=148.8kt agl=  391ft pitch= 2.6deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  387ft pitch= 2.6deg thr=0.49
+  decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  383ft pitch= 2.5deg thr=0.49
+  decision applied 0.2s after its state  APPROACH       ias=148.8kt agl=  375ft pitch= 2.5deg thr=0.46
+  decision applied 0.1s after its state  APPROACH       ias=148.8kt agl=  372ft pitch= 2.5deg thr=0.45
+  decision applied 0.8s after its state  APPROACH       ias=148.6kt agl=  359ft pitch= 2.3deg thr=0.49
+  decision applied 0.2s after its state  APPROACH       ias=148.6kt agl=  357ft pitch= 2.3deg thr=0.52
+  decision applied 0.3s after its state  APPROACH       ias=148.7kt agl=  351ft pitch= 2.2deg thr=0.51
+  decision applied 0.2s after its state  APPROACH       ias=148.8kt agl=  349ft pitch= 2.2deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=148.9kt agl=  346ft pitch= 2.2deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=148.9kt agl=  341ft pitch= 2.2deg thr=0.47
+  decision applied 0.2s after its state  APPROACH       ias=148.9kt agl=  335ft pitch= 2.2deg thr=0.53
+  decision applied 0.1s after its state  APPROACH       ias=149.0kt agl=  332ft pitch= 2.1deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=149.1kt agl=  328ft pitch= 2.1deg thr=0.46
+  decision applied 0.4s after its state  APPROACH       ias=149.1kt agl=  317ft pitch= 1.9deg thr=0.48
+  decision applied 0.2s after its state  APPROACH       ias=149.2kt agl=  314ft pitch= 1.9deg thr=0.42
+  decision applied 0.3s after its state  APPROACH       ias=149.1kt agl=  308ft pitch= 1.7deg thr=0.46
+  decision applied 0.2s after its state  APPROACH       ias=149.1kt agl=  305ft pitch= 1.7deg thr=0.47
+  decision applied 0.1s after its state  APPROACH       ias=149.1kt agl=  301ft pitch= 1.6deg thr=0.46
+  decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  297ft pitch= 1.6deg thr=0.44
+  decision applied 0.2s after its state  APPROACH       ias=149.2kt agl=  286ft pitch= 1.5deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  283ft pitch= 1.5deg thr=0.47
+  decision applied 0.8s after its state  APPROACH       ias=149.5kt agl=  265ft pitch= 1.4deg thr=0.41
+  decision applied 0.2s after its state  APPROACH       ias=149.6kt agl=  262ft pitch= 1.4deg thr=0.49
+  decision applied 0.3s after its state  APPROACH       ias=149.7kt agl=  255ft pitch= 1.3deg thr=0.43
+  decision applied 0.2s after its state  APPROACH       ias=149.7kt agl=  252ft pitch= 1.3deg thr=0.47
+  decision applied 0.1s after its state  APPROACH       ias=149.8kt agl=  248ft pitch= 1.3deg thr=0.50
+  decision applied 0.1s after its state  APPROACH       ias=149.9kt agl=  243ft pitch= 1.3deg thr=0.49
+  decision applied 0.1s after its state  APPROACH       ias=150.0kt agl=  235ft pitch= 1.3deg thr=0.49
+  decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  230ft pitch= 1.4deg thr=0.46
+  decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  225ft pitch= 1.4deg thr=0.44
+  decision applied 0.4s after its state  APPROACH       ias=150.3kt agl=  212ft pitch= 1.4deg thr=0.46
+  decision applied 0.2s after its state  APPROACH       ias=150.4kt agl=  209ft pitch= 1.4deg thr=0.48
+  decision applied 0.1s after its state  APPROACH       ias=150.4kt agl=  206ft pitch= 1.3deg thr=0.45
+  decision applied 0.1s after its state  APPROACH       ias=150.5kt agl=  200ft pitch= 1.3deg thr=0.54
+  decision applied 0.1s after its state  APPROACH       ias=150.6kt agl=  195ft pitch= 1.3deg thr=0.46
+  decision applied 0.1s after its state  APPROACH       ias=150.7kt agl=  190ft pitch= 1.3deg thr=0.43
+  decision applied 0.2s after its state  APPROACH       ias=150.8kt agl=  177ft pitch= 1.3deg thr=0.40
+  decision applied 0.1s after its state  APPROACH       ias=150.7kt agl=  173ft pitch= 1.2deg thr=0.39
+  decision applied 0.8s after its state  APPROACH       ias=150.6kt agl=  155ft pitch= 1.5deg thr=0.41
+  decision applied 0.1s after its state  APPROACH       ias=150.6kt agl=  154ft pitch= 1.5deg thr=0.45
+  decision applied 0.2s after its state  APPROACH       ias=150.6kt agl=  142ft pitch= 1.6deg thr=0.51
+  decision applied 0.1s after its state  APPROACH       ias=150.7kt agl=  138ft pitch= 1.6deg thr=0.47
+  decision applied 0.4s after its state  APPROACH       ias=150.8kt agl=  127ft pitch= 1.7deg thr=0.48
+  decision applied 0.2s after its state  APPROACH       ias=150.9kt agl=  125ft pitch= 1.7deg thr=0.42
+  decision applied 0.2s after its state  APPROACH       ias=150.8kt agl=  120ft pitch= 1.8deg thr=0.41
+  decision applied 0.8s after its state  APPROACH       ias=150.7kt agl=  104ft pitch= 2.0deg thr=0.33
+  decision applied 0.3s after its state  FINAL          ias=150.5kt agl=  100ft pitch= 2.1deg thr=0.29
+  decision applied 0.3s after its state  FLARE          ias=150.3kt agl=   94ft pitch= 2.1deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=150.1kt agl=   90ft pitch= 2.2deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=149.8kt agl=   85ft pitch= 2.3deg thr=0.00
+  decision applied 0.4s after its state  FLARE          ias=149.3kt agl=   78ft pitch= 2.4deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=148.9kt agl=   74ft pitch= 2.5deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=148.6kt agl=   73ft pitch= 2.7deg thr=0.00
+  decision applied 0.8s after its state  FLARE          ias=147.5kt agl=   62ft pitch= 3.4deg thr=0.00
+  decision applied 0.4s after its state  FLARE          ias=147.0kt agl=   57ft pitch= 3.8deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=146.6kt agl=   53ft pitch= 4.1deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=146.1kt agl=   49ft pitch= 4.4deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=145.7kt agl=   45ft pitch= 4.7deg thr=0.00
+  decision applied 0.5s after its state  FLARE          ias=144.8kt agl=   40ft pitch= 5.4deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=144.3kt agl=   37ft pitch= 5.8deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=143.8kt agl=   34ft pitch= 6.1deg thr=0.00
+  decision applied 0.8s after its state  FLARE          ias=142.3kt agl=   29ft pitch= 6.6deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=141.8kt agl=   27ft pitch= 6.8deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=141.2kt agl=   25ft pitch= 7.0deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=140.7kt agl=   24ft pitch= 7.2deg thr=0.00
+  decision applied 0.2s after its state  FLARE          ias=140.2kt agl=   23ft pitch= 7.2deg thr=0.00
+  decision applied 0.1s after its state  FLARE          ias=139.8kt agl=   23ft pitch= 7.2deg thr=0.00
+  decision applied 0.2s after its state  FLARE          ias=138.9kt agl=   21ft pitch= 7.0deg thr=0.00
+  decision applied 0.1s after its state  FLARE          ias=138.5kt agl=   21ft pitch= 6.9deg thr=0.00
+  decision applied 0.1s after its state  FLARE          ias=137.9kt agl=   20ft pitch= 6.6deg thr=0.00
+  decision applied 0.4s after its state  FLARE          ias=136.7kt agl=   18ft pitch= 5.8deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=136.3kt agl=   17ft pitch= 5.5deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=135.8kt agl=   16ft pitch= 5.2deg thr=0.00
+  decision applied 0.4s after its state  FLARE          ias=135.3kt agl=   14ft pitch= 4.9deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=134.9kt agl=   12ft pitch= 4.9deg thr=0.00
+  decision applied 0.3s after its state  FLARE          ias=134.5kt agl=    9ft pitch= 5.0deg thr=0.00
+  decision applied 0.4s after its state  FLARE          ias=134.1kt agl=    6ft pitch= 5.3deg thr=0.00
+  decision applied 0.4s after its state  FLARE          ias=133.7kt agl=    3ft pitch= 5.8deg thr=0.00
+  decision applied 0.8s after its state  ROLLOUT        ias=132.4kt agl=    1ft pitch= 6.2deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=132.1kt agl=    1ft pitch= 6.3deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=131.0kt agl=    1ft pitch= 6.0deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=130.4kt agl=    1ft pitch= 5.5deg thr=0.00
+  decision applied 0.4s after its state  ROLLOUT        ias=129.1kt agl=    1ft pitch= 4.2deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=128.8kt agl=    1ft pitch= 3.8deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=128.0kt agl=    1ft pitch= 2.9deg thr=0.00
+  decision applied 0.4s after its state  ROLLOUT        ias=126.3kt agl=    0ft pitch= 1.1deg thr=0.00
+  decision applied 0.4s after its state  ROLLOUT        ias=124.9kt agl=    0ft pitch= 0.0deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=124.5kt agl=    0ft pitch=-0.0deg thr=0.00
+  decision applied 0.3s after its state  ROLLOUT        ias=122.9kt agl=    0ft pitch=-0.2deg thr=0.00
+  decision applied 0.2s after its state  ROLLOUT        ias=122.2kt agl=    0ft pitch=-0.3deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=121.3kt agl=    0ft pitch=-0.4deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=120.3kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=118.8kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=117.8kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.1s after its state  ROLLOUT        ias=116.7kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.2s after its state  ROLLOUT        ias=112.8kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.2s after its state  ROLLOUT        ias=110.6kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.2s after its state  ROLLOUT        ias=109.5kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision applied 0.4s after its state  ROLLOUT        ias=107.6kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision stale 1.0s after its state  ROLLOUT        ias=107.2kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision stale 4.0s after its state  ROLLOUT        ias= 92.0kt agl=    0ft pitch=-0.5deg thr=0.00
+  decision stale 4.0s after its state  ROLLOUT        ias= 76.2kt agl=    0ft pitch=-0.6deg thr=0.00
+  decision stale 4.0s after its state  ROLLOUT        ias= 60.0kt agl=    0ft pitch=-0.6deg thr=0.00
+  decision stale 4.0s after its state  ROLLOUT        ias= 43.4kt agl=    0ft pitch=-0.6deg thr=0.00
+  decision stale 4.0s after its state  ROLLOUT        ias= 26.5kt agl=    0ft pitch=-0.6deg thr=0.00
+FlightGear paused (acknowledged), ailerons and rudder centred.
+{
+  "fly": "Landing fly",
+  "brain": "CONNECTOME LIF (notebook model)",
+  "phase": "ROLLOUT",
+  "completed": true,
+  "time_s": 113.2,
+  "decisions": 232,
+  "max_centerline_m": 13.3,
+  "tail_strike": false,
+  "stall": false,
+  "left_runway": false,
+  "touchdown_x_m": 617,
+  "touchdown_sink_fpm": 452,
+  "touchdown_pitch_deg": 5.8,
+  "go_around": false,
+  "flare_decisions": 26,
+  "safe_reject": false,
+  "takeoff_achieved": false,
+  "outcome": "landed",
+  "events": [
+    "68.5s FLARE: DNp07 3 Hz",
+    "68.8s FLARE: DNp07 4 Hz",
+    "69.1s FLARE: DNp07 6 Hz",
+    "...",
+    "78.7s FLARE: DNp07 21 Hz",
+    "79.1s FLARE: DNp07 23 Hz",
+    "79.5s FLARE: DNp07 26 Hz"
+  ],
+  "termination_reason": "phase_completed",
+  "decision_timing": {
+    "applied": 232,
+    "completed": 238,
+    "discarded": 6,
+    "skipped": 55,
+    "latency_mean_s": 0.23,
+    "latency_max_s": 0.833
+  },
+  "speed_up_resets": 0,
+  "requested_phase": "landing",
+  "backend": "flightgear",
+  "wall_s": 135.0,
+  "success": true
+}
