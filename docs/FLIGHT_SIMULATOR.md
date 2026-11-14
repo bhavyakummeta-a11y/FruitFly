@@ -562,3 +562,42 @@ and [generic I/O usage](https://github.com/FlightGear/flightgear/blob/next/docs-
 FlightGear documents its elapsed-time property in [Time](https://wiki.flightgear.org/Time).
 Neural data sources are the [Shiu model repository](https://github.com/philshiu/Drosophila_brain_model)
 and [FlyWire annotations](https://github.com/flyconnectome/flywire_annotations).
+
+
+## Takeoff steering and mission timing fix (2026-11-14)
+
+The 18:27 Windows takeoff log shows steering overshoot near 104 kt, followed by
+centerline bitter input and a rejected takeoff. It stopped before rotation;
+that is different from a simulator freeze or a successful takeoff.
+
+Ground steering now reduces authority as speed rises, damps yaw rate and limits
+rudder slew. Neurons still choose the steering demand; these are fixed code
+actuator rules. The default takeoff/landing and mission trial period is 0.25 s.
+Background results older than one second are discarded when airborne or above
+20 kt; ground steering demand fades as its sensory sample ages. Logs record
+accepted/discarded decisions and timing. Slow hardware can still miss decisions;
+this does not make the connectome faster.
+
+The below-V1 reject cue enters beyond 8 m centerline offset and clears inside
+4 m. Two raw suppressed MN9 trials latch rejection, avoiding delayed confirmation
+through smoothed firing rates. Rejection remains a protective response. A safe
+reject is logged separately from a successful takeoff or collision. Landing also
+has a fixed 9-degree flare pitch envelope with pitch-rate damping, leaving margin
+below the reduced model's 11-degree tail-strike attitude.
+
+Full missions pre-calibrate all three fly configurations during setup and share
+one background worker through handovers. No brain trial or in-flight calibration
+pauses FlightGear. The autopilot-off and 1x guards remain active. Time limits and
+interruptions end with an acknowledged-pause request, and logs retain the reason.
+Mission runs now write the automatic airplane and brain logs, including partial
+logs after interruption. Companion views remain available through the existing
+launcher.
+
+Validation includes delayed/noisy stand-in takeoffs, a mocked live mission with
+a busy brain, and a real-connectome takeoff in the reduced local model (1,003 ft,
+174 kt, 3.7 m maximum centerline deviation with the merged teammate roll model).
+The full suite passed 200 tests (five skipped); the subsequent scenery/camera
+sync passed its 26 relevant tests. These are not Windows FlightGear 737 flight validation. A full-mission
+stand-in CLI smoke run correctly reported a go-around rather than success;
+automatic landing is not guaranteed. Re-test the actual 737 and inspect its new
+termination reason and decision timing before drawing conclusions about it.

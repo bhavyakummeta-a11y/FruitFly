@@ -54,7 +54,9 @@ class TakeoffFlyTests(unittest.TestCase):
         self.assertTrue(r['completed'])
         self.assertIsNone(r['liftoff_x_m'])
         self.assertLess(r['stop_x_m'], 3600)
-        self.assertTrue(judge('takeoff', r))
+        self.assertFalse(judge('takeoff', r))
+        self.assertTrue(r['safe_reject'])
+        self.assertEqual(r['outcome'],'takeoff_rejected')
 
     def test_fault_after_v1_does_not_reject(self):
         r, _ = takeoff(fault_at_kt=140)
@@ -363,7 +365,17 @@ class SteeringBiasTests(unittest.TestCase):
         cal = [self.roll(True, s)[0]['ground_max_y'] for s in range(5)]
         raw = [self.roll(False, s)[0]['ground_max_y'] for s in range(5)]
         self.assertLess(max(cal), 8.0, cal)
-        self.assertLess(sum(cal), sum(raw), (cal, raw))
+        # Speed scheduling and yaw damping now keep both runs near the runway.
+        # Test calibration's bias removal directly, without conflating it with
+        # different random trials consumed by the two trajectories.
+        brain = StandInBrain(steer_bias=12.0)
+        fly = TakeoffFly(brain)
+        from flight_simulator.flies import steer_raw
+        resting = steer_raw(brain.run(fly.neutral_inputs(), fly.readouts))
+        before = abs(resting - fly.zero['steer'])
+        fly.calibrate()
+        self.assertLess(abs(resting - fly.zero['steer']), before)
+        self.assertLess(max(raw), 8.0, raw)
 
     def test_calibration_only_moves_steering_zero(self):
         _, fly = self.roll(True, 0)

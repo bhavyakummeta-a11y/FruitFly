@@ -154,7 +154,7 @@ def fly_command(args):
     cmd = [python, '-m', 'flight_simulator.takeoff_live', args.phase, '--brain', args.fly, *ports_args]
     # Always real time: the controller locks FlightGear at 1x and never pauses it for a
     # brain trial (project rules, gh #3 / #4). There is no speed or pause option.
-    return cmd + ['--period', '1.0']
+    return cmd + ['--period', '0.25']
 
 
 def main():

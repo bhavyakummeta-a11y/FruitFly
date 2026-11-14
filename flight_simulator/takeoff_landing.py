@@ -46,9 +46,9 @@ def judge(phase, r):
     if r['tail_strike'] or r['stall'] or r['left_runway']:
         return False
     if phase == 'takeoff':
-        return r['completed'] and (r['rejected'] or r['phase'].startswith('HANDOVER'))
+        return r['completed'] and not r['rejected'] and r['phase'].startswith('HANDOVER')
     if r['go_around']:
-        return r['completed']
+        return False
     x, sink = r['touchdown_x_m'], r['touchdown_sink_fpm']
     return (x is not None and TOUCHDOWN_ZONE[0] <= x <= TOUCHDOWN_ZONE[1]
             and sink is not None and sink < MAX_SINK_FPM)
@@ -92,6 +92,8 @@ def run_flightgear(args, fly, log):
     ap_guard = None
     speed_lock = None
     worker = fly.run_in_background()
+    body = None
+    reason = "time_limit"
     try:
         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
         s = bridge.read()
@@ -114,7 +116,7 @@ def run_flightgear(args, fly, log):
                                'controls without it (no-autopilot rule).')
         ap_guard.wait_off()
         print('Handover: airplane autopilot confirmed OFF; the fly flies.', flush=True)
-        previous = s.time
+        previous = start = s.time
         max_y, touchdown, liftoff, tail_strike = 0.0, None, None, False
         asym_since = None
         body = None
@@ -130,12 +132,12 @@ def run_flightgear(args, fly, log):
             from .fly_body import BodyLink
             body = BodyLink(args.body_port)
         while True:
-            # Never stop sending while airborne: FlightGear keeps the last controls
-            # it received, so an exit mid-air flies the plane on frozen surfaces.
-            # (2026-11-14 FG test: handover at 1,000 ft, controller exited, rudder
-            # -0.2 stayed latched, spiral dive into the ground.)
-            if (fly.status.done or s.time >= args.seconds) and s.on_ground:
-                break
+            # Keep flying after airborne phase completion until the run time limit.
+            # Cleanup requests an acknowledged pause so surfaces are not left latched.
+            if fly.status.done and s.on_ground:
+                reason='phase_completed';break
+            if s.time-start >= args.seconds:
+                reason='time_limit';break
             if fly.status.done and not fly.hold:
                 fly.hold = True
                 print(f'{fly.status.phase} reached in the air. No Cruise fly yet, so the {fly.name} keeps '
@@ -145,7 +147,7 @@ def run_flightgear(args, fly, log):
             controls = fly.step(s, max(s.time - previous, 1e-3))  # never waits for the brain
             if len(worker.records) > applied and args.brain == 'connectome':
                 rec = worker.records[-1]
-                print(f'  decision applied {rec["latency_s"]:.1f}s after its state  {fly.status.phase:14s} '
+                print(f'  decision {fly.last_decision_status} {rec["latency_s"]:.1f}s after its state  {fly.status.phase:14s} '
                       f'ias={s.speed / KT:5.1f}kt agl={s.agl / FT:5.0f}ft pitch={math.degrees(s.pitch):4.1f}deg '
                       f'thr={controls.throttle:.2f}', flush=True)
             if isinstance(fly, TakeoffFly) and not s.on_ground and s.climb > 1 and s.agl > 10:
@@ -154,6 +156,7 @@ def run_flightgear(args, fly, log):
             if worker.records:
                 entry['decision_started'] = round(worker.records[-1]['started'], 3)
                 entry['decision_latency_s'] = round(worker.records[-1]['latency_s'], 3)
+                entry['decision_accepted'] = worker.records[-1].get('accepted',True)
             entry['decisions_skipped'] = worker.skipped
             log.append(entry)
             ap_guard.check()  # no-autopilot rule; raises if it can't be forced off
@@ -173,6 +176,7 @@ def run_flightgear(args, fly, log):
                 s = bridge.read()
             except KeyboardInterrupt:
                 print('\nCtrl-C: pausing FlightGear.', flush=True)
+                reason='interrupted'
                 break
             if s.on_ground or s.agl < 100 * FT:
                 max_y = max(max_y, abs(s.y))
@@ -185,25 +189,33 @@ def run_flightgear(args, fly, log):
             if warning and s.time - asym_since >= 2.0:
                 print(warning, flush=True)
                 bridge.send(replace(controls, throttle=0.0, brake=1.0))
+                reason="engine_asymmetry"
                 break
             if s.on_ground and math.degrees(s.pitch) > 11:
                 tail_strike = True
+                reason="tail_strike"
                 break
             if s.on_ground and (abs(s.y) > 30 or s.x > RUNWAY_LENGTH):
+                reason="runway_departure"
                 break
         sim_like = type('FGResult', (), {})()
         sim_like.state = s
         sim_like.events = type('Ev', (), dict(
             liftoff_x=liftoff, tail_strike=tail_strike, stall=False,
-            left_runway=s.on_ground and abs(s.y) > 30,
+            left_runway=s.on_ground and (abs(s.y) > 30 or s.x > RUNWAY_LENGTH),
             touchdown_x=touchdown and touchdown[0],
             touchdown_sink_fpm=touchdown and touchdown[1],
             touchdown_pitch_deg=touchdown and touchdown[2]))()
         result = summarize(fly, sim_like, max_y)
+        result['termination_reason'] = reason
+        if reason in ('engine_asymmetry','interrupted','time_limit') and not fly.status.done:
+            result['outcome'] = reason
         result['decision_timing'] = worker.summary()
         result['speed_up_resets'] = len(speed_lock.events)
         return result
     finally:
+        if body: body.close()
+        worker.close(wait=0)
         if pilot:
             pilot.close()
         if ap_guard:
@@ -233,7 +245,7 @@ def main(argv=None):
                    help='standin only: add the connectome\'s spike-count noise (1-4 neurons per readout)')
     p.add_argument('--silence', nargs='+', default=[], choices=list(INPUTS) + list(READOUTS),
                    help='Lesion control: cut the outgoing synapses of these groups')
-    p.add_argument('--period', type=float, default=0.5, help='Seconds of sim time between brain trials')
+    p.add_argument('--period', type=float, default=0.25, help='Seconds of sim time between brain trials')
     p.add_argument('--seconds', type=float, default=200)
     p.add_argument('--fault-at-kt', type=float, help='Takeoff: inject a reject condition at this speed')
     p.add_argument('--offset-m', type=float, default=0.0, help='Initial centerline offset (demo)')

@@ -109,6 +109,12 @@ class PhaseFly:
         self.sensor_time = None
         self.applied_sensor_time = None
         self.sensor_inputs = {}
+        self.raw_inputs, self.raw_rates = {}, {}
+        self.ground_steer = 0.0
+        self.stale_decisions = 0
+        self.discarded_decisions = 0
+        self.last_decision_status = 'waiting'
+
 
     # Shared encoders -------------------------------------------------------
     def vs_inputs(self, s, pitch_target_deg, roll_target_deg=0.0):
@@ -175,10 +181,11 @@ class PhaseFly:
 
     def run_in_background(self):
         from .flightgear import DecisionWorker
-        self.worker = DecisionWorker(lambda inputs: (inputs, self.brain.run(inputs, self.readouts)))
+        self.worker = DecisionWorker(lambda owner, inputs: (owner, inputs, self.brain.run(inputs, self.readouts)))
         return self.worker
 
     def _apply(self, inputs, rates, s):
+        self.raw_inputs, self.raw_rates = dict(inputs), dict(rates)
         # One 200 ms trial reads 1-2 neurons per group, so rates jitter by +-20 Hz.
         # The nerve cord integrates: low-pass the DN rates across trials.
         if self.smoothed is None:
@@ -202,19 +209,34 @@ class PhaseFly:
         if self.worker is not None:
             done = self.worker.poll(s.time)
             if done:
-                self.applied_sensor_time = done[1]['started']
-                self._apply(*done[0], s)  # decided on an older state, applied now
+                (owner, inputs, rates), record = done
+                stale = record['latency_s'] > 1.0 and (not s.on_ground or s.speed > 20*KT)
+                record['accepted'] = owner == self.name and not stale
+                record['discard_reason'] = 'phase_changed' if owner != self.name else ('stale' if stale else '')
+                self.last_decision_status = record['discard_reason'] or 'applied'
+                if record['accepted']:
+                    self.applied_sensor_time = record['started']
+                    self._apply(inputs, rates, s)
+                else:
+                    self.discarded_decisions += 1
+                    self.stale_decisions += int(stale)
+                    self.next_decision = s.time
             if self.decision_due(s) and not self.worker.busy:
                 period = self.current_period(s)
                 missed = (s.time - self.next_decision) / period if self.next_decision > -1e8 else 0
-                self.worker.submit(s.time, self.sensory_inputs(s), missed=missed)
+                self.worker.submit(s.time, self.name, self.sensory_inputs(s), missed=missed)
                 self.next_decision = s.time + period
         elif self.decision_due(s):
             inputs = self.sensory_inputs(s)
             self.applied_sensor_time = s.time
             self._apply(inputs, self.brain.run(inputs, self.readouts), s)
+            self.last_decision_status = 'applied'
             self.next_decision = s.time + self.current_period(s)
         self.check(s)
+        if s.on_ground:
+            self.rudder = self.ground_rudder(s, dt)
+            if self.smoothed is None:
+                self.throttle, self.brake = 0.0, 1.0  # hold until the first real decision
         if self.vision_sink:
             from .vision import phase_scene
             frame = phase_scene(self, s, self.sensor_inputs)
@@ -225,6 +247,18 @@ class PhaseFly:
                                   self.applied_sensor_time, self.brain.name)
         return AirlinerControls(self.aileron, self.haltere(s, dt), self.rudder,
                                 self.throttle, self.brake)
+
+    def ground_rudder(self, s, dt):
+        """Code actuator conditioning: speed schedule, yaw damping, slew limit.
+
+        Direction demand is neural; this reflex does not calculate heading/position corrections.
+        """
+        gain = min(1.0, (30.0/max(s.speed,30.0))**2)
+        limit = max(.12, .6*gain)
+        age = 0.0 if self.applied_sensor_time is None else max(0,s.time-self.applied_sensor_time)
+        freshness = clip(2.0-age,0,1) if self.worker is not None else 1.0
+        target = clip(gain*freshness*self.ground_steer-2.0*s.yaw_rate,-limit,limit)
+        return self.rudder+clip(target-self.rudder,-.6*max(0,dt),.6*max(0,dt))
 
     def current_period(self, s):
         return self.period
@@ -248,6 +282,7 @@ class TakeoffFly(PhaseFly):
         super().__init__(brain, period)
         self.fault_at = None if fault_at_kt is None else fault_at_kt * KT
         self.rejected = False
+        self.off_centerline_latched = False
         self.low_appetite = 0
         self.status = Status('TAKEOFF ROLL')
         self.config_changed = None
@@ -256,7 +291,9 @@ class TakeoffFly(PhaseFly):
         airborne = not s.on_ground
         # Sugar: "go". Bitter: reject conditions while a reject is still allowed.
         fault = self.fault_at is not None and s.speed >= self.fault_at
-        off_centerline = abs(s.y) > 8.0
+        if abs(s.y)>8.0: self.off_centerline_latched=True
+        elif abs(s.y)<4.0: self.off_centerline_latched=False
+        off_centerline = self.off_centerline_latched
         bitter = 200.0 if (s.speed < V1 and not airborne and (fault or off_centerline)) else 0.0
         # Presented looming stimulus (not a visual cue): ramps over Vr-5..Vr+5 kt, wheels only.
         looming = 0.0 if airborne else clip(200 * (s.speed - (VR - 5 * KT)) / (10 * KT), 0, 200)
@@ -281,7 +318,9 @@ class TakeoffFly(PhaseFly):
             self.throttle, self.brake = (HOLD_THROTTLE if self.hold else 1.0), 0.0
         else:
             self.throttle, self.brake = clip(r['MN9'] / 90.0, 0, 1), 0.0
-            self.low_appetite = self.low_appetite + 1 if (r['MN9'] < 10 and s.speed > 20 * KT) else 0
+            # Confirm on raw, paired trial results, not the slowly decaying smoothing state.
+            mn9 = self.raw_rates.get('MN9', r['MN9'])
+            self.low_appetite = self.low_appetite + 1 if (mn9 < 10 and s.speed > 20 * KT) else 0
             if self.low_appetite >= 2:
                 self.rejected, note = True, 'REJECT: bitter suppressed MN9 below V1'
                 self.throttle, self.brake = 0.0, 1.0
@@ -293,7 +332,7 @@ class TakeoffFly(PhaseFly):
             note = f'JUMP: escape DNs {escape:.0f} Hz'
         # Steering: positive index = steer left.
         if s.on_ground:
-            self.rudder, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
+            self.ground_steer, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
         else:
             self.rudder = clip(-steer / (150.0 * HS_GAIN / 8.0), -AIR_RUDDER, AIR_RUDDER)
             self.aileron = clip(self.aileron_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -MAX_AILERON, MAX_AILERON)
@@ -378,7 +417,7 @@ class LandingFly(PhaseFly):
         if s.on_ground:
             # Scripted rollout checklist: idle, autobrake. The fly keeps the nose and centerline.
             self.throttle, self.brake = 0.0, 0.5
-            self.rudder, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
+            self.ground_steer, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
         else:
             self.brake = 0.0
             # Flying-state gate: DNp07 (landing) acts below 100 ft; DNp01/02/04/11
@@ -386,6 +425,10 @@ class LandingFly(PhaseFly):
             if s.agl < 100 * FT and not self.go_around:
                 flare = FLARE_GAIN * clip(r["DNp07"] / 20.0, 0, 1.6)
                 q_deg += flare
+                # Fixed flare-envelope rule: leave margin below the model's 11-degree
+                # tail strike attitude, including momentum from the current pitch rate.
+                q_deg = min(q_deg, 2.0 * (9.0 - math.degrees(s.pitch))
+                            - math.degrees(s.pitch_rate))
                 if flare > 0.3:
                     note = f'FLARE: DNp07 {r["DNp07"]:.0f} Hz'
             # Throttle from MN9 around the approach power. Go-around: MN9 collapses
@@ -522,7 +565,9 @@ def run_phase(fly, sim, seconds, dt=0.05, log=None, on_tick=None):
 
 def row(fly, s, c):
     last = fly.decisions[-1] if fly.decisions else None
-    data = {'time': round(s.time, 3), 'phase': fly.status.phase, 'x': s.x, 'y': s.y,
+    data = {'decision_started':None,'decision_latency_s':None,'decision_accepted':None,'decisions_skipped':0,
+            'decision_status':fly.last_decision_status, 'stale_decisions':fly.stale_decisions, 'discarded_decisions':fly.discarded_decisions,
+            'ground_steer_request':fly.ground_steer, 'time': round(s.time, 3), 'phase': fly.status.phase, 'x': s.x, 'y': s.y,
             'agl_ft': s.agl / FT, 'ias_kt': s.speed / KT, 'pitch_deg': math.degrees(s.pitch),
             'roll_deg': math.degrees(s.roll), 'climb_fpm': s.climb / FT * 60,
             'on_ground': s.on_ground, 'n1_left': s.n1_left, 'n1_right': s.n1_right, 'aileron': c.aileron, 'elevator': c.elevator,
@@ -557,6 +602,16 @@ def summarize(fly, sim, max_y=None):
                   'touchdown_pitch_deg': None if ev.touchdown_pitch_deg is None else round(ev.touchdown_pitch_deg, 1),
                   'go_around': fly.go_around,
                   'flare_decisions': sum(d.note.startswith('FLARE') for d in fly.decisions)})
-    notes = [f'{d.time:.1f}s {d.note}' for d in fly.decisions if d.note]
+    r['safe_reject'] = bool(isinstance(fly,TakeoffFly) and fly.rejected and s.on_ground and s.speed<1
+                            and not (ev.left_runway or ev.tail_strike or ev.stall))
+    r['takeoff_achieved'] = bool(isinstance(fly,TakeoffFly) and ev.liftoff_x is not None)
+    if ev.left_runway: r['outcome']='runway_departure'
+    elif ev.tail_strike: r['outcome']='tail_strike'
+    elif ev.stall: r['outcome']='stall'
+    elif isinstance(fly,TakeoffFly):
+        r['outcome']='takeoff_rejected' if fly.rejected else ('takeoff_achieved' if r['takeoff_achieved'] else 'no_takeoff')
+    else:
+        r['outcome']='go_around' if fly.go_around else ('landed' if ev.touchdown_x is not None else 'no_landing')
+    notes = [f'{d.time:.1f}s {d.note}'  for d in fly.decisions if d.note]
     r['events'] = notes[:3] + (['...'] if len(notes) > 6 else []) + notes[-3:] if len(notes) > 6 else notes
     return r

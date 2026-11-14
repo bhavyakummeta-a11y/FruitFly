@@ -154,7 +154,7 @@ class Lint(unittest.TestCase):
         self.assertEqual(problems, [], 'No-autopilot rule violated:\n' + '\n'.join(problems))
 
     def test_controllers_keep_the_guard(self):
-        for f in ('flight_simulator/__main__.py', 'flight_simulator/takeoff_landing.py'):
+        for f in ('flight_simulator/__main__.py', 'flight_simulator/takeoff_landing.py', 'flight_simulator/mission.py'):
             src = (ROOT / f).read_text()
             for needle in ('AutopilotGuard(', '.wait_off()', 'ap_guard.check()'):
                 self.assertIn(needle, src, f'{f} lost {needle}: the fly must not fly unguarded')

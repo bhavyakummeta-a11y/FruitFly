@@ -12,8 +12,8 @@ One connectome, three behavioural configurations, handed over in flight:
 | Circuit fly | cruising | right-hand traffic circuit back to the same runway | nothing yet: the obstacle-avoidance slot |
 | Landing fly | flying | 3 nm final -> touchdown -> rollout | leg extension (DNp07) = flare |
 
-At every handover the new fly adapts (calibrate()), and the haltere-reflex
-integrator and throttle carry over so the controls don't jump.
+Live runs calibrate all three configurations before flight and share one background
+brain worker. The haltere-reflex integrator and controls carry over at handover.
 
 The Circuit fly is a thin transit configuration, not the cruise/obstacle work:
 obstacle avoidance belongs to its own experiment (flight_simulator/__main__.py)
@@ -32,7 +32,7 @@ from .core import clip, wrap
 from .flies import (PhaseFly, TakeoffFly, LandingFly, StandInBrain, steer_index, row,
                     TONIC, HS_GAIN, MN9_APPROACH, MAX_AILERON)
 from .runway import (RunwaySim, FLAPS5, FLAPS5_GEAR_UP, FLAPS30, KT, FT, AIM_POINT, GLIDESLOPE,
-                     takeoff_start)
+                     takeoff_start, RUNWAY_LENGTH)
 
 # One airplane, one mass for the whole flight (flaps/gear are scripted config changes).
 MISSION_MASS = 60000.0
@@ -192,6 +192,8 @@ class Mission:
         self.config = CFG_TAKEOFF
         self.gear_down = True
         self.fly = None
+        self.worker = None
+        self.precalibrated = {}
         self.start_fly(TakeoffFly(brain, period), None)
 
     @property
@@ -203,17 +205,35 @@ class Mission:
         if old is not None:
             fly.elevator_i = old.elevator_i     # haltere reflex: no elevator jump
             fly.throttle = old.throttle
+            fly.q_cmd, fly.aileron, fly.rudder = old.q_cmd, old.aileron, old.rudder
+            fly.brake = old.brake
         self.say(f'\n=== {"START" if old is None else "HANDOVER"}: '
                  f'{"" if old is None else old.name + " (" + STATES[old.name] + ") -> "}'
                  f'{fly.name} ({STATES[fly.name]}) '
                  + ('' if s is None else f'at {s.agl / FT:.0f} ft, {s.speed / KT:.0f} kt') + ' ===')
-        zero = fly.calibrate() if self.calibrate else {}
+        if self.worker is not None:
+            fly.zero.update(self.precalibrated[fly.name])
+            fly.worker = self.worker
+            zero = fly.zero
+        else:
+            zero = fly.calibrate() if self.calibrate else {}
         if zero:
             self.say('    adapted: ' + ', '.join(f'{k} zero {v:.1f} Hz' for k, v in zero.items()))
         self.handovers.append({'time': 0.0 if s is None else round(s.time, 1), 'to': fly.name,
                                'state': STATES[fly.name], 'agl_ft': 0 if s is None else round(s.agl / FT),
                                'ias_kt': 0 if s is None else round(s.speed / KT), **{f'zero_{k}': v for k, v in zero.items()}})
         self.fly = fly
+
+    def prepare_realtime(self):
+        """Calibrate every phase before handover, then share a single background worker.
+
+        The brain is never used concurrently and no in-flight phase switch calibrates it.
+        """
+        self.precalibrated[self.fly.name] = dict(self.fly.zero)
+        for candidate in (CircuitFly(self.brain,self.period,self.legs),LandingFly(self.brain,self.period)):
+            if self.calibrate: candidate.calibrate()
+            self.precalibrated[candidate.name] = dict(candidate.zero)
+        self.worker = self.fly.run_in_background()
 
     def step(self, s, dt):
         """One sim step: handovers, scripted checklist, then the active fly."""
@@ -285,66 +305,99 @@ def summarize(mission, sim):
          'touchdown_y_m': round(s.y, 1) if landed else None,
          'go_around': getattr(mission.fly, 'go_around', False),
          'tail_strike': ev.tail_strike, 'stall': ev.stall, 'left_runway': ev.left_runway}
-    r['success'] = bool(landed and not (ev.tail_strike or ev.stall or ev.left_runway)
+    r['success'] = bool(mission.done and landed and not (ev.tail_strike or ev.stall or ev.left_runway)
                         and 0 <= ev.touchdown_x <= 900 and ev.touchdown_sink_fpm < 500)
+    r['safe_reject'] = bool(isinstance(mission.fly,TakeoffFly) and mission.fly.rejected and s.on_ground and s.speed<1 and not ev.left_runway)
+    r['outcome'] = ('runway_departure' if ev.left_runway else 'tail_strike' if ev.tail_strike else
+                    'stall' if ev.stall else 'takeoff_rejected' if r['safe_reject'] else
+                    'go_around' if r['go_around'] else 'landing_completed' if r['success'] else 'incomplete')
     return r
 
 
 def run_flightgear(mission, args, log):
-    """Whole flight in FlightGear, started on the runway (launch_fg --phase takeoff)."""
-    from .flightgear import RunwayFlightGear, engine_asymmetry
+    """Full mission at 1x. Calibration is on the ground; all flight trials are asynchronous."""
+    from .flightgear import RunwayFlightGear, engine_asymmetry, AutopilotGuard, SpeedLock, hand_over
     bridge = RunwayFlightGear(args.telemetry_port, args.control_port)
-    body = None
+    body = ap_guard = speed_lock = None
+    reason = 'time_limit'
     try:
+        print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
+        s = bridge.read()
+        if not s.on_ground:
+            raise ValueError('Start FlightGear on the runway: launch_fg --phase takeoff')
+        bridge.send(bridge.last_controls)  # idle + brakes during setup only
+        speed_lock = SpeedLock(args.telemetry_port-1)
+        ap_guard = AutopilotGuard(args.telemetry_port-1)
+        mission.prepare_realtime()  # all phase calibration happens before releasing control
+        if not hand_over(args.telemetry_port-1):
+            raise RuntimeError('FlightGear did not acknowledge mission handover')
+        ap_guard.wait_off()
         if not args.no_fly_body:
             from .fly_body import BodyLink
             body = BodyLink(args.body_port)
-        print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
-        s = bridge.read()
-        bridge.send(bridge.last_controls)  # idle + brakes until the fly's first decision
-        if not s.on_ground:
-            raise ValueError('Start FlightGear on the runway: python -m flight_simulator.launch_fg --phase takeoff')
-        previous, touchdown, asym_since = s.time, None, None
-        while not mission.done:
-            handing_over = (mission.fly.status.done and not isinstance(mission.fly, LandingFly)) \
-                or mission.fly.decision_due(s)
-            if handing_over:
-                s = bridge.freeze(True)         # also covers the adaptation trials at a handover
-            controls = mission.step(s, max(s.time - previous, 1e-3))
-            if handing_over:
-                s = bridge.freeze(False)
+        s = bridge.read()  # discard setup-era telemetry
+        start = previous = s.time
+        touchdown = asym_since = None
+        max_y = 0.0
+        while s.time-start < args.seconds:
+            if mission.done:
+                reason = 'takeoff_rejected' if isinstance(mission.fly,TakeoffFly) else ('go_around' if mission.fly.go_around else 'landing_completed')
+                break
+            controls = mission.step(s, max(s.time-previous,1e-3))
             bridge.gear_down = mission.gear_down
             bridge.flaps = FG_FLAPS[mission.config.name]
-            log.append(mission_row(mission, s, controls))
+            entry = mission_row(mission,s,controls)
+            if mission.worker.records:
+                record = mission.worker.records[-1]
+                entry.update(decision_started=record['started'],decision_latency_s=record['latency_s'],
+                             decision_accepted=record.get('accepted',True))
+            entry['decisions_skipped'] = mission.worker.skipped
+            log.append(entry)
+            ap_guard.check()
+            speed_lock.check()
             if body:
                 d = mission.fly.decisions[-1] if mission.fly.decisions else None
-                rates = {f'{k}_hz': v for k, v in (d.rates if d else {}).items()}
-                body.send(s, mission.phase, args.brain, rates.get('DNp01_hz', 0.0), rates)
+                rates = {f'{k}_hz':v for k,v in (d.rates if d else {}).items()}
+                body.send(s,mission.phase,args.brain,rates.get('DNp01_hz',0),rates)
             bridge.send(controls)
-            previous, was_ground = s.time, s.on_ground
+            previous,was_ground = s.time,s.on_ground
             try:
                 s = bridge.read()
             except KeyboardInterrupt:
-                print('\nCtrl-C: pausing FlightGear.', flush=True)
+                reason='interrupted'
                 break
-            warning = engine_asymmetry(s, controls.throttle)
-            asym_since = (asym_since or s.time) if warning else None
-            if warning and s.time - asym_since >= 2.0:
-                print(warning, flush=True)
-                bridge.send(replace(controls, throttle=0.0, brake=1.0))
+            if s.on_ground: max_y=max(max_y,abs(s.y))
+            warning = engine_asymmetry(s,controls.throttle)
+            asym_since=(s.time if asym_since is None else asym_since) if warning else None
+            if warning and s.time-asym_since>=2:
+                print(warning,flush=True)
+                bridge.send(replace(controls,throttle=0.0,brake=1.0))
+                reason='engine_asymmetry'
                 break
-            if not was_ground and s.on_ground and touchdown is None and isinstance(mission.fly, LandingFly):
-                touchdown = (round(s.x), round(-log[-1]['climb_fpm']))
-        return {'brain': getattr(mission.brain, 'name', '?'), 'ended_in': mission.phase,
-                'handovers': mission.handovers, 'touchdown_x_m': touchdown and touchdown[0],
-                'touchdown_sink_fpm': touchdown and touchdown[1],
-                'success': bool(touchdown and 0 <= touchdown[0] <= 900 and touchdown[1] < 500)}
+            if s.on_ground and math.degrees(s.pitch)>11:
+                reason='tail_strike';break
+            if s.on_ground and (abs(s.y)>30 or s.x>RUNWAY_LENGTH):
+                reason='runway_departure';break
+            if not was_ground and s.on_ground:
+                if not isinstance(mission.fly,LandingFly):
+                    reason='ground_contact';break
+                if touchdown is None:touchdown=(round(s.x),round(-entry['climb_fpm']))
+        success = bool(reason=='landing_completed' and touchdown and 0<=touchdown[0]<=900 and touchdown[1]<500)
+        return {'brain':getattr(mission.brain,'name','?'),'ended_in':mission.phase,
+                'handovers':mission.handovers,'touchdown_x_m':touchdown and touchdown[0],
+                'touchdown_sink_fpm':touchdown and touchdown[1], 'time_s':round(s.time-start,2),
+                'max_centerline_m':round(max_y,1),'outcome':reason,'termination_reason':reason,
+                'safe_reject':reason=='takeoff_rejected' and s.speed<1 and abs(s.y)<=30,
+                'success':success,'decision_timing':mission.worker.summary(),
+                'speed_up_resets':len(speed_lock.events)}
     finally:
-        if body:
-            body.close()
-        paused = bridge.close()
+        if body: body.close()
+        if ap_guard: ap_guard.close()
+        if speed_lock: speed_lock.close()
+        paused = bridge.close()  # only the end of the run pauses the aircraft
+        if mission.worker: mission.worker.close(wait=0)
         print('FlightGear paused (acknowledged), ailerons and rudder centred.' if paused else
-              'WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW.', flush=True)
+              'WARNING: FlightGear did not acknowledge the end-of-run pause.',flush=True)
 
 
 def save_log(log, args, brain):
@@ -368,7 +421,7 @@ def main(argv=None):
     p.add_argument('--data', default='data/brain')
     p.add_argument('--seed', type=int, default=0)
     p.add_argument('--noise-seed', type=int, help='standin only: add the connectome\'s spike-count noise')
-    p.add_argument('--period', type=float, default=0.5, help='Seconds of sim time between brain trials')
+    p.add_argument('--period', type=float, default=0.25, help='Seconds of sim time between brain trials')
     p.add_argument('--no-calibrate', action='store_true')
     p.add_argument('--seconds', type=float, default=1500)
     p.add_argument('--vision-port',type=int,default=5601,help='Synthetic visual cue stream; 0 disables')
@@ -380,8 +433,13 @@ def main(argv=None):
     p.add_argument('--body-port', type=int, default=5600)
     p.add_argument('--no-fly-body', action='store_true')
     args = p.parse_args(argv)
-    vision = None
+    if not math.isfinite(args.seconds) or args.seconds<=0 or not math.isfinite(args.period) or args.period<=0:
+        p.error('seconds and period must be finite and positive')
+    vision = runlog = log = None
+    code = 1
     try:
+        from .runlog import RunLog
+        runlog = RunLog(args, ['mission', *(argv if argv is not None else sys.argv[1:])])
         if args.brain == 'standin':
             brain = StandInBrain(noise_seed=args.noise_seed)
         else:
@@ -395,30 +453,37 @@ def main(argv=None):
         if args.vision_obstacles:
             from .__main__ import load_obstacles
             mission.vision_obstacles = load_obstacles(args.vision_obstacles)
-        log, start = [], time.monotonic()
+        from .takeoff_live import LiveLog
+        class MissionLog(LiveLog):
+            def append(self, entry):
+                self.fly = mission.fly
+                super().append(entry)
+        log = MissionLog(runlog, mission.fly)
+        start = time.monotonic()
         try:
             if args.backend == 'demo':
                 result = run_local(mission, args.seconds, log=log)
             else:
                 result = run_flightgear(mission, args, log)
-        except KeyboardInterrupt:
-            result = {'ended_in': mission.phase + ' (stopped)', 'handovers': mission.handovers,
-                      'success': False}
-            print('\nStopped: saving the log so far.', flush=True)
         finally:
-            save_log(log, args, brain)  # always, even after Ctrl-C or an error mid-flight
+            save_log(log, args, brain)  # preserve logs on interruption or errors too
         result['wall_s'] = round(time.monotonic() - start, 1)
+        runlog.result = result
+
         print(json.dumps(result, indent=2))
-        return 0 if result['success'] else 2
+        code = 0 if result['success'] else 2
+        return code
     except KeyboardInterrupt:
         print('\nStopped.')
-        return 0
+        code=130
+        return code
     except (OSError, ValueError, RuntimeError, ImportError, KeyError) as exc:
         print(f'Error: {exc}', file=sys.stderr)
         return 1
     finally:
-        if vision:
-            vision.close()
+        if vision: vision.close()
+        if log is not None: log.close()
+        if runlog: runlog.finish(code)
 
 
 if __name__ == '__main__':

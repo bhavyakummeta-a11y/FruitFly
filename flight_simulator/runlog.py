@@ -249,6 +249,13 @@ class Tee:
         return getattr(self.stream, name)
 
 
+def outcome_label(result, code):
+    if code in (0,2) and result.get('outcome'):
+        return result['outcome']
+    return {0:'completed',1:'error',2:'COLLISION' if result.get('collision') else 'failed',
+            130:'stopped (Ctrl-C)'}.get(code,f'exit {code}')
+
+
 class RunLog:
     """Context for one simulation run. Use start(), then finish() in a finally block."""
 
@@ -373,7 +380,7 @@ class RunLog:
 
     def _feedback(self, code, fg):
         r = self.result or {}
-        outcome = {0: 'completed', 1: 'error', 2: 'COLLISION', 130: 'stopped (Ctrl-C)'}.get(code, f'exit {code}')
+        outcome = outcome_label(r, code)
         rows = [('Outcome', outcome), ('Backend / brain', f'{self.args.backend} / {self.args.brain}'),
                 ('Elapsed', f"{r.get('elapsed_s', '?')} s"),
                 ('Min clearance', f"{r.get('minimum_clearance_m', '?')} m"),
@@ -467,7 +474,8 @@ def control_attribution(program, args):
                                       'rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)',
                     'code_decides': 'synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to '
                                     'controls, the behavioural-state gate (standing/flying), a fixed-gain '
-                                    'pitch-rate reflex (haltere stand-in), and phase handover (flies.py)'
+                                    'pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, '
+                                    'stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)'
                                     + ('; takeoff_live holds the parking brake while the brain calibrates and '
                                        'releases it at the handover' if program == 'flight_simulator.takeoff_live' else ''),
                     'autopilot': AUTOPILOT_RULE}
@@ -498,8 +506,8 @@ def control_attribution(program, args):
 
 
 def calling_program(argv):
-    if argv and argv[0] == 'takeoff_live':
-        return 'flight_simulator.takeoff_live'
+    if argv and argv[0] in ('takeoff_live','mission'):
+        return 'flight_simulator.'+argv[0]
     spec = getattr(sys.modules.get('__main__'), '__spec__', None)
     return getattr(spec, 'name', None) or 'flight_simulator.__main__'
 

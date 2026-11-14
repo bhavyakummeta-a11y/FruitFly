@@ -108,7 +108,11 @@ class LiveLog(list):
         super().append(entry)
         if self._air is None:
             self._air = open(self.runlog.dir / 'airplane.csv', 'w', newline='', encoding='utf-8')
-            self._air_writer = csv.DictWriter(self._air, list(entry), extrasaction='ignore')
+            from .brain import INPUTS
+            fields = list(entry)
+            fields += [f'in_{k}' for k in INPUTS if f'in_{k}' not in fields]
+            fields += [f'dn_{k}' for k in self.fly.readouts if f'dn_{k}' not in fields]
+            self._air_writer = csv.DictWriter(self._air, fields, extrasaction='ignore')
             self._air_writer.writeheader()
         self._air_writer.writerow(entry)
         self._air.flush()
@@ -177,7 +181,8 @@ def main(argv=None):
             stage.set('flying', note='the fly brain has the controls')
             result = real[name](args, fly, live['log'])
             log.extend(live['log'])
-            runlog.result = {**result, 'phase': ns.phase}
+            result['requested_phase'] = ns.phase
+            runlog.result = result  # main adds success/outcome to this same dictionary
             return result
         return run
 

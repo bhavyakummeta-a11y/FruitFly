@@ -354,8 +354,9 @@ class DecisionWorker:
         return box['result'], record
 
     def summary(self):
-        lat = [r['latency_s'] for r in self.records]
-        return {'applied': len(lat), 'skipped': self.skipped,
+        lat = [r['latency_s'] for r in self.records if r.get('accepted',True)]
+        return {'applied': len(lat), 'completed':len(self.records),
+                'discarded':len(self.records)-len(lat), 'skipped': self.skipped,
                 'latency_mean_s': round(sum(lat) / len(lat), 3) if lat else None,
                 'latency_max_s': round(max(lat), 3) if lat else None}
 

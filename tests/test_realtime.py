@@ -159,6 +159,12 @@ class Lint(unittest.TestCase):
         for needed in ('SpeedLock(', 'speed_lock.check()', 'run_in_background()'):
             self.assertIn(needed, src)
 
+    def test_mission_never_pauses_for_a_trial_or_handover(self):
+        src=self.src('mission.py')
+        self.assertNotIn('.freeze(',src)
+        for needed in ('SpeedLock(', 'speed_lock.check()', 'run_in_background()', 'prepare_realtime()'):
+            self.assertIn(needed,src)
+
     def test_cruise_controller_is_real_time_and_does_not_abort_on_envelope(self):
         src = self.src('__main__.py')
         self.assertNotIn('Flight departed the test envelope', src)
