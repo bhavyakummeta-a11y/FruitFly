@@ -45,6 +45,13 @@
         <node>/sim/freeze/master</node>
         <type>bool</type>
       </chunk>
+      <chunk>
+        <!-- /sim/freeze/master alone does not stop the FDM in FlightGear 2024;
+             its own pause command also sets /sim/freeze/clock. Same value as 'frozen'. -->
+        <name>frozen_clock</name>
+        <node>/sim/freeze/clock</node>
+        <type>bool</type>
+      </chunk>
     </input>
   </generic>
 </PropertyList>

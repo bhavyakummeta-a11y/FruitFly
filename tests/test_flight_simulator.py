@@ -126,7 +126,7 @@ class ProtocolTests(unittest.TestCase):
     def test_actual_udp_command_and_telemetry(self):
         self.bridge.send(Controls(.1, -.2, .3, .7), True)
         data, _ = self.sink.recvfrom(8192)
-        self.assertEqual([float(v) for v in data.decode().split(',')], [.1, -.2, .3, .7, 1])
+        self.assertEqual([float(v) for v in data.decode().split(',')], [.1, -.2, .3, .7, 1, 1])
         self.sink.sendto(b'1,37,-122,3000,0,0,0,100,0,0\n', self.bridge.rx.getsockname())
         self.assertAlmostEqual(self.bridge.read().altitude, 914.4)
 
@@ -140,10 +140,10 @@ class ProtocolTests(unittest.TestCase):
         self.bridge.engines = 2
         self.bridge.send(Controls(throttle=.72))
         data, _ = self.sink.recvfrom(8192)
-        self.assertEqual([float(v) for v in data.decode().split(',')], [0, 0, 0, .72, .72, 0])
+        self.assertEqual([float(v) for v in data.decode().split(',')], [0, 0, 0, .72, .72, 0, 0])
         chunks = ET.parse(ROOT / 'flight_simulator/protocols/flybrain-controls-twin.xml').findall('./generic/input/chunk')
         self.assertEqual(chunks[4].findtext('node'), '/controls/engines/engine[1]/throttle')
-        self.assertEqual(len(chunks), 6)
+        self.assertEqual(len(chunks), 7)
 
     def test_freeze_requires_ack(self):
         def reply():
@@ -164,7 +164,7 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual([x.findtext('name') for x in output],
                          ['elapsed', 'latitude', 'longitude', 'altitude', 'heading', 'roll', 'pitch', 'airspeed', 'climb', 'frozen'])
         self.assertEqual([x.findtext('name') for x in inputs],
-                         ['aileron', 'elevator', 'rudder', 'throttle', 'frozen'])
+                         ['aileron', 'elevator', 'rudder', 'throttle', 'frozen', 'frozen_clock'])
 
 
 
