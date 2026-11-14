@@ -1,0 +1,16 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T191800Z_michael-taylor_flightgear-connectome
+[control] FLY BRAIN (connectome) decides when to escape; code flies the airplane
+[control]   neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input
+[control]   code decides:   synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Real time: FlightGear stays at 1x and is not paused for brain trials; the plane flies on the last decision while the connectome works. A crash is data.
+Waiting for airborne FlightGear telemetry on localhost...
+FlightGear connected. Hold targets: 914 m (3000 ft, now 755 m), 113 m/s, current heading.
+Placed 3 obstacle tornadoes in FlightGear (telnet 5500).
+Handover: airplane autopilot confirmed OFF; the controller flies.
+   2.1s ENVELOPE BREACH (logged, run continues): altitude -160 m from target (>40)
+   2.1s ALTITUDE RECOVERY / AVOID altitude=  754.8m speed=118.0m/s escape=  0.0Hz clearance= 7082.8m
+  12.6s ALTITUDE RECOVERY / AVOID altitude=  640.7m speed=130.3m/s escape=192.5Hz clearance= 5723.7m
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: [WinError 10054] An existing connection was forcibly closed by the remote host
