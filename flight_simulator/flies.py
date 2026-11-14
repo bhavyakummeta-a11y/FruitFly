@@ -103,6 +103,12 @@ class PhaseFly:
         self.elevator_i = 0.0   # haltere reflex integrator
         self.throttle, self.brake, self.aileron, self.rudder = 0.0, 0.0, 0.0, 0.0
         self.status = Status('READY')
+        self.vision_obstacles = []
+        self.vision_sink = None
+        self.vision_frame = None
+        self.sensor_time = None
+        self.applied_sensor_time = None
+        self.sensor_inputs = {}
 
     # Shared encoders -------------------------------------------------------
     def vs_inputs(self, s, pitch_target_deg, roll_target_deg=0.0):
@@ -183,23 +189,40 @@ class PhaseFly:
         note = self.decode(self.smoothed, s)
         self.decisions.append(Decision(s.time, inputs, rates, note or ''))
 
+    def sensory_inputs(self, s):
+        from .vision import phase_scene
+        self.vision_frame = phase_scene(self, s, self.encode(s))
+        self.sensor_time = s.time
+        self.sensor_inputs = dict(self.vision_frame['inputs'])
+        return self.sensor_inputs
+
     def step(self, s, dt):
         """Called at the sim rate. Runs (or, with a worker, starts/collects) a brain trial
         when one is due."""
         if self.worker is not None:
             done = self.worker.poll(s.time)
             if done:
+                self.applied_sensor_time = done[1]['started']
                 self._apply(*done[0], s)  # decided on an older state, applied now
             if self.decision_due(s) and not self.worker.busy:
                 period = self.current_period(s)
                 missed = (s.time - self.next_decision) / period if self.next_decision > -1e8 else 0
-                self.worker.submit(s.time, self.encode(s), missed=missed)
+                self.worker.submit(s.time, self.sensory_inputs(s), missed=missed)
                 self.next_decision = s.time + period
         elif self.decision_due(s):
-            inputs = self.encode(s)
+            inputs = self.sensory_inputs(s)
+            self.applied_sensor_time = s.time
             self._apply(inputs, self.brain.run(inputs, self.readouts), s)
             self.next_decision = s.time + self.current_period(s)
         self.check(s)
+        if self.vision_sink:
+            from .vision import phase_scene
+            frame = phase_scene(self, s, self.sensor_inputs)
+            frame['inputs'] = self.sensor_inputs
+            frame['input_time'] = self.sensor_time
+            last = self.decisions[-1] if self.decisions else None
+            self.vision_sink.send(frame, last.inputs if last else None,
+                                  self.applied_sensor_time, self.brain.name)
         return AirlinerControls(self.aileron, self.haltere(s, dt), self.rudder,
                                 self.throttle, self.brake)
 
@@ -504,6 +527,14 @@ def row(fly, s, c):
             'roll_deg': math.degrees(s.roll), 'climb_fpm': s.climb / FT * 60,
             'on_ground': s.on_ground, 'n1_left': s.n1_left, 'n1_right': s.n1_right, 'aileron': c.aileron, 'elevator': c.elevator,
             'rudder': c.rudder, 'throttle': c.throttle, 'brake': c.brake}
+    data.update({f'vision_{k}':None for k in ('cross_track_m','heading_error_deg','altitude_error_m','obstacle_looming_hz')})
+    data.update(vision_sensor_time=fly.sensor_time,vision_applied_sensor_time=fly.applied_sensor_time,vision_alerts='')
+    if fly.vision_frame:
+        data.update({f'vision_{k}': fly.vision_frame[k] for k in
+                     ('cross_track_m','heading_error_deg','altitude_error_m','obstacle_looming_hz')})
+        data['vision_sensor_time'] = fly.sensor_time
+        data['vision_applied_sensor_time'] = fly.applied_sensor_time
+        data['vision_alerts'] = '|'.join(fly.vision_frame['alerts'])
     if last:
         data.update({f'in_{k}': v for k, v in last.inputs.items()})
         data.update({f'dn_{k}': v for k, v in last.rates.items()})

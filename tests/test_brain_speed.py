@@ -30,9 +30,11 @@ def random_brain(n, seed, density=0.02, integer=True):
 
 @unittest.skipIf(np is None, 'numpy/scipy not installed')
 class KernelEquivalence(unittest.TestCase):
+    kernel = staticmethod(B.lif_trial)
+
     def both(self, w, active, seed, ms=60):
         ref = B.lif_trial_reference(w, active, np.random.default_rng(seed), ms)
-        fast = B.lif_trial(w, active, np.random.default_rng(seed), ms)
+        fast = self.kernel(w, active, np.random.default_rng(seed), ms)
         return ref, fast
 
     def test_identical_counts_on_random_networks(self):
@@ -63,8 +65,49 @@ class KernelEquivalence(unittest.TestCase):
         self.assertTrue(np.array_equal(ref, fast))
         self.assertGreater(ref[4], 0)
 
-    def test_connectome_brain_uses_the_fast_kernel(self):
-        self.assertIs(B.ConnectomeBrain.trial, B.lif_trial)
+    def test_long_trial_crosses_many_delay_blocks(self):
+        w = random_brain(600, 11, density=0.04)
+        ref, fast = self.both(w, [(np.arange(20), 120.0)], 9, ms=200)
+        self.assertTrue(np.array_equal(ref, fast))
+        self.assertGreater(int(ref.sum()), 500)
+
+
+try:
+    import numba  # noqa: F401
+    HAVE_NUMBA = True
+except ImportError:
+    HAVE_NUMBA = False
+
+
+@unittest.skipIf(np is None or not HAVE_NUMBA, 'numba not installed (optional)')
+class NumbaKernelEquivalence(KernelEquivalence):
+    """The same checks for the compiled kernel."""
+    kernel = staticmethod(B.lif_trial_numba)
+
+
+@unittest.skipIf(np is None, 'numpy/scipy not installed')
+class KernelChoice(unittest.TestCase):
+    def setUp(self):
+        import os
+        self.saved = os.environ.pop('FRUITFLY_BRAIN_KERNEL', None)
+
+    def tearDown(self):
+        import os
+        os.environ.pop('FRUITFLY_BRAIN_KERNEL', None)
+        if self.saved is not None:
+            os.environ['FRUITFLY_BRAIN_KERNEL'] = self.saved
+
+    def test_best_kernel_is_never_the_slow_reference(self):
+        expected = ('numba', B.lif_trial_numba) if HAVE_NUMBA else ('numpy', B.lif_trial)
+        self.assertEqual(B.best_kernel(), expected)
+
+    def test_kernel_can_be_forced(self):
+        import os
+        os.environ['FRUITFLY_BRAIN_KERNEL'] = 'reference'
+        self.assertIs(B.best_kernel()[1], B.lif_trial_reference)
+        os.environ['FRUITFLY_BRAIN_KERNEL'] = 'gpu'
+        with self.assertRaises(ValueError):
+            B.best_kernel()
 
 
 @unittest.skipIf(np is None or not (DATA / 'Connectivity_783.parquet').is_file(),
@@ -82,14 +125,17 @@ class RealConnectome(unittest.TestCase):
                   'hs_left': 100.0, 'hs_right': 90.0}
         active = [(self.brain.groups[k], hz) for k, hz in inputs.items()]
         t = time.monotonic()
-        fast = B.lif_trial(self.brain.w, active, np.random.default_rng(5), 200)
-        fast_s = time.monotonic() - t
-        t = time.monotonic()
         ref = B.lif_trial_reference(self.brain.w, active, np.random.default_rng(5), 200)
         ref_s = time.monotonic() - t
-        self.assertTrue(np.array_equal(ref, fast), 'fast kernel changed the brain\'s spikes')
         self.assertGreater(int(ref.sum()), 1000)
-        self.assertLess(fast_s, ref_s / 2, f'fast kernel {fast_s:.2f}s vs reference {ref_s:.2f}s')
+        for kernel in [B.lif_trial] + ([B.lif_trial_numba] if HAVE_NUMBA else []):
+            with self.subTest(kernel=kernel.__name__):
+                t = time.monotonic()
+                fast = kernel(self.brain.w, active, np.random.default_rng(5), 200)
+                fast_s = time.monotonic() - t
+                self.assertTrue(np.array_equal(ref, fast), f'{kernel.__name__} changed the brain\'s spikes')
+                self.assertLess(fast_s, ref_s / 2, f'{kernel.__name__} {fast_s:.2f}s vs reference {ref_s:.2f}s')
+        self.assertEqual(self.brain.kernel, 'numba' if HAVE_NUMBA else 'numpy')
 
 
 if __name__ == '__main__':

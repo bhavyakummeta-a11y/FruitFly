@@ -187,6 +187,8 @@ class Mission:
         self.brain, self.period, self.calibrate, self.say = brain, period, calibrate, log
         self.legs = legs or circuit()
         self.handovers = []
+        self.vision_sink = None
+        self.vision_obstacles = []
         self.config = CFG_TAKEOFF
         self.gear_down = True
         self.fly = None
@@ -231,6 +233,8 @@ class Mission:
             self.gear_down, self.config = True, CFG_LANDING
             self.fly.throttle_trim = clip(self.fly.throttle_trim + 0.15, 0, 1)  # power for the extra drag
             self.say(f'{s.time:6.1f}s   checklist: flaps 30, gear down, +power')
+        self.fly.vision_sink = self.vision_sink
+        self.fly.vision_obstacles = self.vision_obstacles
         return self.fly.step(s, dt)
 
     @property
@@ -367,6 +371,8 @@ def main(argv=None):
     p.add_argument('--period', type=float, default=0.5, help='Seconds of sim time between brain trials')
     p.add_argument('--no-calibrate', action='store_true')
     p.add_argument('--seconds', type=float, default=1500)
+    p.add_argument('--vision-port',type=int,default=5601,help='Synthetic visual cue stream; 0 disables')
+    p.add_argument('--vision-obstacles',help='Obstacles JSON in runway coordinates and heights above runway')
     p.add_argument('--log', help='CSV of every step: state, controls, active fly, inputs, DN rates')
     p.add_argument('--plot', help='PNG of the whole flight with the handovers marked (needs matplotlib)')
     p.add_argument('--telemetry-port', type=int, default=5501)
@@ -374,6 +380,7 @@ def main(argv=None):
     p.add_argument('--body-port', type=int, default=5600)
     p.add_argument('--no-fly-body', action='store_true')
     args = p.parse_args(argv)
+    vision = None
     try:
         if args.brain == 'standin':
             brain = StandInBrain(noise_seed=args.noise_seed)
@@ -382,6 +389,12 @@ def main(argv=None):
             brain = ConnectomeBrain(args.data, seed=args.seed)
         print(brain.name, flush=True)
         mission = Mission(brain, args.period, calibrate=not args.no_calibrate)
+        from .vision import VisionPublisher
+        vision = VisionPublisher(args.vision_port)
+        mission.vision_sink = vision
+        if args.vision_obstacles:
+            from .__main__ import load_obstacles
+            mission.vision_obstacles = load_obstacles(args.vision_obstacles)
         log, start = [], time.monotonic()
         try:
             if args.backend == 'demo':
@@ -403,6 +416,9 @@ def main(argv=None):
     except (OSError, ValueError, RuntimeError, ImportError, KeyError) as exc:
         print(f'Error: {exc}', file=sys.stderr)
         return 1
+    finally:
+        if vision:
+            vision.close()
 
 
 if __name__ == '__main__':

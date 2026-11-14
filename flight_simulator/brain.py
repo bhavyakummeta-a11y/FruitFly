@@ -206,6 +206,176 @@ def lif_trial(w, active, rng, ms):
     return counts
 
 
+_compiled = None
+
+
+def _numba_kernel():
+    """Compile (once; cached on disk by numba) the loop used by lif_trial_numba()."""
+    global _compiled
+    if _compiled is not None:
+        return _compiled
+    import numba
+    import numpy as np
+
+    @numba.njit(cache=True)  # no fastmath: floating-point results must not change
+    def kernel(indptr, indices, data, group_idx, group_ptr, group_p, rand, steps):
+        # A spike reaches its targets DELAY steps later, so within a block of DELAY steps
+        # no neuron can influence another. Each neuron is therefore advanced a whole block
+        # at a time, with its state in registers, instead of sweeping every array every
+        # step. The arithmetic per neuron and step is the reference's, in the same order.
+        n = indptr.shape[0] - 1
+        local = np.full(n, -1, np.int64)     # neuron index -> slot in the compact arrays
+        glob = np.empty(n, np.int64)         # slot -> neuron index
+        v, g, last = np.full(n, V0), np.zeros(n), np.full(n, -1e9)
+        counts = np.zeros(n, np.int64)
+        # Summed weights arriving per step of this block / the next block. Step-major, so
+        # delivering one step's spikes writes into one row that fits in the cache.
+        now = np.zeros((DELAY, n))
+        later = np.zeros((DELAY, n))
+        mask = np.zeros(n, np.uint32)        # bit j set: fired at step j of this block
+        size = 0
+        members = group_idx.shape[0]
+        for j in range(members):
+            i = group_idx[j]
+            if local[i] < 0:
+                local[i] = size
+                glob[size] = i
+                size += 1
+        ndriven = size                       # stimulated neurons occupy slots 0..ndriven-1
+        # Per stimulated neuron: its Poisson draws (offset into a step's random numbers and
+        # probability), in group order like the reference.
+        kick_ptr = np.zeros(ndriven + 1, np.int64)
+        for j in range(members):
+            kick_ptr[local[group_idx[j]] + 1] += 1
+        for i in range(ndriven):
+            kick_ptr[i + 1] += kick_ptr[i]
+        kick_off = np.empty(members, np.int64)
+        kick_p = np.empty(members)
+        fill = kick_ptr[:ndriven].copy()
+        for gi in range(group_p.shape[0]):
+            for j in range(group_ptr[gi], group_ptr[gi + 1]):
+                i = local[group_idx[j]]
+                kick_off[fill[i]] = j
+                kick_p[fill[i]] = group_p[gi]
+                fill[i] += 1
+        decay = np.exp(-DT / TS)
+        CHUNK = 256
+        held = np.empty(2 * CHUNK, np.int64)   # refractory slots in the current chunk
+        held_v, held_g = np.empty(2 * CHUNK), np.empty(2 * CHUNK)
+        fired = np.empty(n, np.int64)
+        for base in range(0, steps, DELAY):
+            length = min(DELAY, steps - base)
+            block_size = size                # neurons touched during this block start next block
+            # Chunks of CHUNK neurons, step by step, so a chunk's state stays in the CPU
+            # cache. Every neuron in the chunk is updated in plain loops the compiler can
+            # vectorise; the few refractory ones are saved first and put back (exact).
+            t0 = base * DT
+            for c0 in range(0, block_size, CHUNK):
+                c1 = min(c0 + CHUNK, block_size)
+                m = c1 - c0
+                vc, gc, lc, mc = v[c0:c1], g[c0:c1], last[c0:c1], mask[c0:c1]
+                first_free = max(0, min(m, ndriven - c0))   # chunk slots below this are stimulated
+                nheld = 0
+                for i in range(m):
+                    mc[i] = 0
+                for i in range(first_free, m):
+                    if not ((t0 - lc[i]) > REF):
+                        held[nheld] = i
+                        nheld += 1
+                for j in range(length):
+                    k = base + j
+                    t = k * DT
+                    bit = np.uint32(1 << j)
+                    arriving = now[j, c0:c1]
+                    for i in range(m):
+                        gc[i] += arriving[i] * WSYN
+                    for i in range(m):
+                        arriving[i] = 0.0
+                    still = 0
+                    for q in range(nheld):
+                        i = held[q]
+                        if not ((t - lc[i]) > REF):
+                            held[still], held_v[still], held_g[still] = i, vc[i], gc[i]
+                            still += 1
+                    nheld = still
+                    for i in range(m):
+                        vc[i] += DT * (V0 - vc[i] + gc[i]) / TM
+                        gc[i] *= decay
+                    for q in range(nheld):
+                        vc[held[q]], gc[held[q]] = held_v[q], held_g[q]
+                    row = k * members
+                    for i in range(first_free):
+                        for q in range(kick_ptr[c0 + i], kick_ptr[c0 + i + 1]):
+                            if rand[row + kick_off[q]] < kick_p[q]:
+                                vc[i] += KICK
+                    for i in range(m):
+                        if vc[i] > VTH:
+                            vc[i], gc[i], lc[i] = V0, 0.0, t
+                            mc[i] |= bit
+                            if i >= first_free:
+                                held[nheld] = i
+                                nheld += 1
+            nfired = 0
+            for i in range(block_size):
+                if mask[i] != 0:
+                    fired[nfired] = glob[i]
+                    nfired += 1
+            if nfired:
+                firing = np.sort(fired[:nfired])   # the reference delivers in ascending neuron order
+                for j in range(length):
+                    bit = np.uint32(1 << j)
+                    for q in range(nfired):
+                        s = firing[q]
+                        if mask[local[s]] & bit:
+                            counts[s] += 1
+                            for e in range(indptr[s], indptr[s + 1]):
+                                target = local[indices[e]]
+                                if target < 0:
+                                    target = size
+                                    local[indices[e]] = size
+                                    glob[size] = indices[e]
+                                    size += 1
+                                later[j, target] += data[e]
+            now, later = later, now
+        return counts
+
+    _compiled = kernel
+    return kernel
+
+
+def lif_trial_numba(w, active, rng, ms):
+    """lif_trial() compiled with numba: same model, same arithmetic, same random stream,
+    identical spike counts (tests/test_brain_speed.py). Needs the optional numba package."""
+    import numpy as np
+    steps = int(ms / DT)
+    group_idx = np.concatenate([np.asarray(idx, np.int64) for idx, _ in active])
+    group_ptr = np.cumsum([0] + [len(idx) for idx, _ in active]).astype(np.int64)
+    group_p = np.array([hz * DT / 1000 for _, hz in active])
+    # One draw for the whole trial: the same numbers, in the same order, as the
+    # reference's rng.random(len(idx)) per step and group.
+    rand = rng.random(steps * len(group_idx))
+    return _numba_kernel()(w.indptr, w.indices, w.data, group_idx, group_ptr, group_p, rand, steps)
+
+
+KERNELS = {'reference': lif_trial_reference, 'numpy': lif_trial, 'numba': lif_trial_numba}
+
+
+def best_kernel():
+    """(name, function) of the fastest kernel available. All three give identical spikes.
+    FRUITFLY_BRAIN_KERNEL=reference|numpy|numba forces one."""
+    import os
+    forced = os.environ.get('FRUITFLY_BRAIN_KERNEL')
+    if forced:
+        if forced not in KERNELS:
+            raise ValueError(f'FRUITFLY_BRAIN_KERNEL must be one of {", ".join(KERNELS)}')
+        return forced, KERNELS[forced]
+    try:
+        import numba  # noqa: F401
+    except ImportError:
+        return 'numpy', lif_trial
+    return 'numba', lif_trial_numba
+
+
 class ConnectomeBrain:
     """Shiu whole-brain LIF on FlyWire 783.
 
@@ -277,10 +447,15 @@ class ConnectomeBrain:
         self.last_seconds = 0.0
         self.name = 'CONNECTOME LIF (notebook model)' + (
             f' | silenced: {", ".join(self.silenced)}' if self.silenced else '')
-
-    # The LIF kernel. lif_trial is the fast, bit-identical one; set this to
-    # lif_trial_reference to run the notebook loop as written.
-    trial = staticmethod(lif_trial)
+        # The LIF kernel: numba if installed, else numpy. Both reproduce the notebook loop
+        # (lif_trial_reference) spike for spike.
+        self.kernel, self.trial = best_kernel()
+        if self.kernel == 'numba':
+            # Compile (or load from numba's cache) now, not during the first decision.
+            tiny = sp.csr_matrix(([self.w.data[0]], ([0], [1])), shape=(2, 2), dtype=self.w.dtype)
+            tiny.indices, tiny.indptr = (tiny.indices.astype(self.w.indices.dtype),
+                                         tiny.indptr.astype(self.w.indptr.dtype))
+            self.trial(tiny, [(np.array([0]), 200.0)], np.random.default_rng(0), 1)
 
     def run(self, inputs, readouts=None):
         """Fresh 200 ms trial from rest. inputs: {group: Hz} -> {readout: Hz}."""

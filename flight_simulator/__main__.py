@@ -104,6 +104,9 @@ def run(args, runlog=None):
     scene = None
     ap_guard = None
     log_file = None
+    from .vision import scene as visual_scene, visual_escape, VisionPublisher
+    vision = VisionPublisher(args.vision_port)
+    applied_inputs, applied_time = {}, None
     try:
         if args.backend == 'flightgear':
             from .flightgear import FlightGear
@@ -156,13 +159,13 @@ def run(args, runlog=None):
                                  top=max(o.top, state.altitude+500)) for o in obstacles]
         controller.configure_course(obstacles, origin=(state.east, state.north))
         if bridge and not args.no_scene and not course.get('scenery'):
-            # Show the virtual cylinders as live towers inside FlightGear. A fixed
+            # Show the virtual cylinders as live tornadoes inside FlightGear. A fixed
             # scenery course (flightgear/SCENERY.md) already has its own towers.
             try:
                 from .fg_scene import ObstacleScene
                 scene = ObstacleScene(args.telnet_port or args.telemetry_port - 1)
                 n = scene.publish(obstacles, bridge.origin)
-                print(f'Placed {n} obstacle towers in FlightGear (telnet {scene.sock.getpeername()[1]}).', flush=True)
+                print(f'Placed {n} obstacle tornadoes in FlightGear (telnet {scene.sock.getpeername()[1]}).', flush=True)
             except OSError as exc:
                 scene = None
                 print(f'Obstacles not shown in FlightGear (telnet: {exc}); start it with --telnet=5500.', flush=True)
@@ -193,7 +196,7 @@ def run(args, runlog=None):
             state = bridge.freeze(False)
         if realtime:
             from .flightgear import DecisionWorker
-            worker = DecisionWorker(lambda hz: (hz, brain.escape(hz), dict(getattr(brain, 'last_activity', {}))))
+            worker = DecisionWorker(lambda cues: (cues, visual_escape(brain,cues), dict(getattr(brain, 'last_activity', {}))))
         next_brain, next_display, next_print = state.time, 0.0, 0.0
         latency = None
         escape, controls = 0.0, Controls()
@@ -206,12 +209,18 @@ def run(args, runlog=None):
         while args.seconds == 0 or state.time - start < args.seconds:
             tick = time.monotonic()
             stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
+            visual = visual_scene(state, obstacles, controller.heading, controller.guidance.origin, controller.altitude)
+            cues = visual['inputs'] if args.brain=='connectome' and not training else {'looming':stimulus.looming_hz}
+            visual['inputs'] = cues
+            visual['input_time'] = state.time
             terminal = state.altitude <= 0 or any(o.clearance(state) <= 0 for o in obstacles)
             if worker:
                 # Real time: collect a finished decision, start the next one, never wait.
                 done = worker.poll(state.time)
                 if done:
-                    (looming, escape, activity), record = done
+                    (applied_inputs, escape, activity), record = done
+                    applied_time = record["started"]
+                    looming = applied_inputs["looming"]
                     latency = record['latency_s']
                     if runlog:
                         runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
@@ -220,7 +229,7 @@ def run(args, runlog=None):
                                     'decision_latency_s': round(latency, 3),
                                     'brain_wall_s': round(record['brain_wall_s'], 3), **activity})
                 if state.time >= next_brain and not terminal and not worker.busy:
-                    worker.submit(state.time, stimulus.looming_hz, missed=(state.time - next_brain) / .5)
+                    worker.submit(state.time, cues, missed=(state.time - next_brain) / .5)
                     next_brain = state.time + .5
             elif state.time >= next_brain and not terminal:
                 if bridge and args.brain == 'connectome':  # training runs only (see `realtime`)
@@ -232,7 +241,8 @@ def run(args, runlog=None):
                     reward = flight_reward(previous_decision, state, controller.heading, distance,
                                            collision=distance <= 0 or state.altitude <= 0)
                     learning_event = brain.reinforce(reward)
-                escape = brain.escape(stimulus.looming_hz)
+                escape = brain.escape(stimulus.looming_hz) if training else visual_escape(brain,cues)
+                applied_inputs, applied_time = dict(cues), state.time
                 previous_decision = replace(state)
                 if runlog:
                     runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
@@ -247,6 +257,9 @@ def run(args, runlog=None):
                     print(f'{state.time:6.1f}s ENVELOPE BREACH (logged, run continues): {breach["detail"]}',
                           flush=True)
             controls = controller.update(state, stimulus, escape)
+            visual["phase"] = controller.phase
+            visual["planned_route"] = controller.guidance.path
+            vision.send(visual, applied_inputs, applied_time, brain.name)
             clearance = min((o.clearance(state) for o in obstacles), default=math.inf)
             minimum = min(minimum, clearance)
             min_altitude = min(min_altitude, state.altitude)
@@ -320,6 +333,7 @@ def run(args, runlog=None):
         print(json.dumps(result, indent=2))
         return 2 if collision else 0
     finally:
+        vision.close()
         if log_file:
             log_file.close()
         try:
@@ -356,6 +370,7 @@ def main():
     parser.add_argument('--learn', action='store_true', help='Experimental KC->MBON reward updates (connectome only)')
     parser.add_argument('--load-learning', help='Load a matching checkpoint; frozen unless --learn is given')
     parser.add_argument('--save-learning', default='runs/learning-checkpoint.npz', help='Checkpoint output when --learn is enabled')
+    parser.add_argument('--vision-port',type=int,default=5601,help='Synthetic fly-view UDP port; 0 disables display stream')
     parser.add_argument('--obstacles', default=str(ROOT / 'scenarios/obstacles.json'))
     parser.add_argument('--seconds', type=float, default=180, help='Active flight time; 0 runs until Ctrl-C')
     parser.add_argument('--seed', type=int, default=0)
@@ -366,11 +381,11 @@ def main():
     parser.add_argument('--log', help='CSV telemetry output path')
     parser.add_argument('--telemetry-port', type=int, default=5501)
     parser.add_argument('--control-port', type=int, default=5502)
-    parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle towers (default: telemetry port - 1)')
+    parser.add_argument('--telnet-port', type=int, help='FlightGear telnet port for in-sim obstacle tornadoes (default: telemetry port - 1)')
     parser.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window (python -m flight_simulator.fly_body)')
     parser.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
     parser.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
-    parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle towers in FlightGear')
+    parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle tornadoes in FlightGear')
     parser.add_argument('--note', help='Feedback note saved with this run log')
     parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')
     parser.add_argument('--no-runlog', action='store_true', help='Skip the run log entirely')

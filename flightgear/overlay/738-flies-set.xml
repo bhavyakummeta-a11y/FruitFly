@@ -64,6 +64,23 @@
         <z-offset-m archive="y">-16.75</z-offset-m>
       </config>
     </view>
+    <!-- Running gag: rides along the aisle with the fly flight attendant's snack cart
+         (cabin_show.nas moves it with the cart), looking forward at her. -->
+    <view n="133">
+      <name>Cabin: follow the snack cart</name>
+      <type>lookfrom</type>
+      <internal archive="y">true</internal>
+      <config>
+        <from-model type="bool">true</from-model>
+        <from-model-idx type="int">0</from-model-idx>
+        <default-field-of-view-deg type="double">65</default-field-of-view-deg>
+        <pitch-offset-deg>-14</pitch-offset-deg>
+        <heading-offset-deg>0</heading-offset-deg>
+        <x-offset-m archive="y">0.0</x-offset-m>
+        <y-offset-m archive="y">1.60</y-offset-m>
+        <z-offset-m archive="y">-10.5</z-offset-m>
+      </config>
+    </view>
   </sim>
 
   <fruitfly>
@@ -88,11 +105,40 @@
       <group n="1"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>
       <group n="2"><flap-norm type="double">0</flap-norm><head-turn-deg type="double">0</head-turn-deg></group>
     </passengers>
+    <!-- The session log page's view buttons write a view name here (cabin_show.nas).
+         Changes only what the viewer sees, never the fly pilot. -->
+    <view-request type="string"></view-request>
+    <!-- Running gag: the fly flight attendant (cabin_show.nas). Display only. -->
+    <cabin>
+      <attendant>
+        <x-m type="double">-13.1</x-m>
+        <bob-m type="double">0</bob-m>
+        <turn-deg type="double">180</turn-deg>
+        <stride-deg type="double">0</stride-deg>
+        <flap-norm type="double">0</flap-norm>
+        <serve-m type="double">0</serve-m>
+        <item type="int">0</item>
+      </attendant>
+      <!-- Running gag: the crying baby, a fly larva (cabin_show.nas). Display only. -->
+      <baby>
+        <crying type="bool">true</crying>
+        <wiggle-deg type="double">0</wiggle-deg>
+        <tear-m type="double">0</tear-m>
+      </baby>
+    </cabin>
   </fruitfly>
 
   <nasal>
     <fruitfly>
       <file>Aircraft/FlyCabin/Nasal/fruitfly.nas</file>
     </fruitfly>
+    <fruitfly_cabin>
+      <file>Aircraft/FlyCabin/Nasal/cabin_rows.nas</file>
+      <file>Aircraft/FlyCabin/Nasal/cabin_show.nas</file>
+    </fruitfly_cabin>
+    <!-- Lightning and thunder for the "storm" weather. Visuals and sound only. -->
+    <fruitfly_storm>
+      <file>Aircraft/FlyCabin/Nasal/storm.nas</file>
+    </fruitfly_storm>
   </nasal>
 </PropertyList>
