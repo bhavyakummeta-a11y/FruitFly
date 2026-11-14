@@ -1,0 +1,181 @@
+14:00:53 [session] Session 'landing fly - CONNECTOME, latest main, clear weather (retry after stage-file fix)' watching fgfs pid 22588 (738-flies)
+14:00:53 [session] Live log page: http://127.0.0.1:8765/
+14:00:54 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+14:00:54 [fgfs] 0.03 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+14:00:54 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+14:00:54 [fgfs] 0.04 [ALRT]:general   affinity=none
+14:00:54 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+14:00:54 [fgfs] 1.35 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:00:54 [fgfs] 1.35 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:00:54 [fgfs] 1.36 [WARN]:general   Enabling ATI/AMD viewport hack
+14:00:54 [fgfs] 1.40 [ALRT]:view      affinity=none
+14:00:55 [session] Docked: log below and fly brain right of FlightGear
+14:01:01 [fgfs] 9.69 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+14:01:01 [fgfs] 9.69 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+14:01:01 [fgfs] 10.51 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:01:02 [fgfs] 10.59 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:01:05 [fgfs] 13.83 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+14:01:05 [fgfs] 13.88 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+14:01:05 [fgfs] 13.88 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+14:01:05 [fgfs] 13.88 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+14:01:05 [fgfs] 13.88 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+14:01:05 [fgfs] 14.39 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+14:01:08 [session] Connected to property API on :8080
+14:01:08 [fgfs] 15.49 [WARN]:input     Unhandled HID usage page:d with usage 5
+14:01:08 [fgfs] 15.49 [WARN]:input     Unhandled HID usage page:d with usage e
+14:01:08 [fgfs] 17.93 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:08 [fgfs] 17.99 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+14:01:11 [session] Property API stopped answering
+14:01:11 [fgfs] 20.57 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:01:12 [fgfs] 20.77 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:01:14 [fgfs] 23.15 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:01:14 [fgfs] 23.50 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:01:14 [fgfs] 23.69 [ALRT]:flight    Failed to save initial FDM property state
+14:01:17 [fgfs] 26.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:01:17 [fgfs] 26.81 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 108
+14:01:19 [session] Connected to property API on :8080
+14:01:19 [controller] Run started: 2026-11-14T190118Z_michael-taylor_flightgear-connectome
+14:01:19 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T190118Z_michael-taylor_flightgear-connectome
+14:01:19 [controller] [control] FLY BRAIN (connectome) flying the landing
+14:01:19 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+14:01:19 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+14:01:19 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:01:21 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: CMDA, SPD; controller 2026-11-14T190118Z_michael-taylor_flightgear-connectome is running)
+14:01:21 [fgfs] 31.01 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:25 [fgfs] 34.19 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:25 [controller] CONNECTOME LIF (notebook model)
+14:01:25 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+14:01:28 [fgfs] 37.46 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:28 [controller]   zero points: steer=-17.5
+14:01:28 [controller] Landing fly: flying fly, looming -> DNp07 = flare
+14:01:28 [controller] Waiting for FlightGear runway telemetry on localhost...
+14:01:28 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+14:01:29 [session] tail_controller skipped: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+14:01:31 [control] IN CONTROL: FLY BRAIN (connectome) flying the landing (run 2026-11-14T190118Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+14:01:31 [fgfs] 40.63 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:31 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+14:01:31 [controller]   decision stale 2.7s after its state  APPROACH       ias=143.6kt agl=  638ft pitch= 5.0deg thr=0.55
+14:01:31 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.4kt agl=  637ft pitch= 5.2deg thr=0.23
+14:01:31 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=142.8kt agl=  634ft pitch= 5.3deg thr=1.00
+14:01:31 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=141.6kt agl=  629ft pitch= 4.3deg thr=1.00
+14:01:31 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=141.5kt agl=  627ft pitch= 3.9deg thr=1.00
+14:01:33 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=141.3kt agl=  625ft pitch= 3.4deg thr=1.00
+14:01:33 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=141.4kt agl=  623ft pitch= 3.4deg thr=1.00
+14:01:33 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=141.9kt agl=  618ft pitch= 4.4deg thr=1.00
+14:01:33 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=142.9kt agl=  615ft pitch= 5.5deg thr=1.00
+14:01:34 [fgfs] 43.91 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:34 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=143.7kt agl=  613ft pitch= 6.2deg thr=1.00
+14:01:34 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=145.4kt agl=  609ft pitch= 7.6deg thr=1.00
+14:01:34 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=146.9kt agl=  606ft pitch= 8.8deg thr=1.00
+14:01:34 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=147.3kt agl=  606ft pitch= 9.0deg thr=1.00
+14:01:34 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=149.2kt agl=  605ft pitch=10.4deg thr=1.00
+14:01:36 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=149.9kt agl=  606ft pitch=10.9deg thr=1.00
+14:01:36 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=150.4kt agl=  607ft pitch=11.2deg thr=1.00
+14:01:36 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=151.6kt agl=  612ft pitch=12.1deg thr=1.00
+14:01:36 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=152.0kt agl=  615ft pitch=12.5deg thr=1.00
+14:01:36 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=152.6kt agl=  619ft pitch=12.9deg thr=1.00
+14:01:38 [fgfs] 47.26 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=153.3kt agl=  626ft pitch=13.4deg thr=1.00
+14:01:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=153.9kt agl=  635ft pitch=13.8deg thr=1.00
+14:01:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=154.3kt agl=  643ft pitch=14.1deg thr=1.00
+14:01:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=154.9kt agl=  656ft pitch=14.5deg thr=1.00
+14:01:38 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=155.2kt agl=  665ft pitch=14.8deg thr=1.00
+14:01:39 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=155.4kt agl=  671ft pitch=14.9deg thr=1.00
+14:01:39 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=155.8kt agl=  686ft pitch=15.1deg thr=1.00
+14:01:39 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=156.1kt agl=  697ft pitch=15.2deg thr=1.00
+14:01:39 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=156.3kt agl=  704ft pitch=15.2deg thr=1.00
+14:01:41 [fgfs] 50.56 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:41 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=157.1kt agl=  737ft pitch=15.5deg thr=1.00
+14:01:41 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=157.5kt agl=  756ft pitch=15.7deg thr=1.00
+14:01:41 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=157.6kt agl=  761ft pitch=15.7deg thr=1.00
+14:01:41 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=157.8kt agl=  772ft pitch=15.8deg thr=1.00
+14:01:41 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.0kt agl=  783ft pitch=15.9deg thr=1.00
+14:01:43 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.4kt agl=  808ft pitch=15.8deg thr=1.00
+14:01:43 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.7kt agl=  821ft pitch=15.7deg thr=1.00
+14:01:43 [controller]   decision applied 0.5s after its state  GO-AROUND      ias=158.8kt agl=  827ft pitch=15.7deg thr=1.00
+14:01:45 [fgfs] 54.42 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:45 [controller]   decision applied 0.8s after its state  GO-AROUND      ias=159.8kt agl=  880ft pitch=16.0deg thr=1.00
+14:01:45 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=159.9kt agl=  884ft pitch=16.0deg thr=1.00
+14:01:45 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.1kt agl=  895ft pitch=16.1deg thr=1.00
+14:01:45 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.5kt agl=  911ft pitch=16.0deg thr=1.00
+14:01:45 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.7kt agl=  924ft pitch=15.9deg thr=1.00
+14:01:45 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.0kt agl=  935ft pitch=15.9deg thr=1.00
+14:01:46 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.6kt agl=  960ft pitch=15.7deg thr=1.00
+14:01:46 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.9kt agl=  974ft pitch=15.6deg thr=1.00
+14:01:48 [fgfs] 57.61 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:48 [controller]   decision applied 0.8s after its state  GO-AROUND      ias=162.9kt agl= 1014ft pitch=15.4deg thr=1.00
+14:01:48 [controller] GO-AROUND reached in the air. No Cruise fly yet, so the Landing fly keeps flying: wings level, 10 deg climb, climb power. Press Ctrl-C to pause FlightGear and exit.
+14:01:48 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.0kt agl= 1020ft pitch=15.4deg thr=0.70
+14:01:48 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.4kt agl= 1045ft pitch=15.0deg thr=0.70
+14:01:48 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.9kt agl= 1057ft pitch=14.6deg thr=0.70
+14:01:48 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=161.0kt agl= 1079ft pitch=13.8deg thr=0.70
+14:01:50 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.8kt agl= 1083ft pitch=13.6deg thr=0.70
+14:01:50 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.4kt agl= 1095ft pitch=13.2deg thr=0.70
+14:01:50 [controller]   decision applied 0.8s after its state  GO-AROUND      ias=159.3kt agl= 1127ft pitch=12.0deg thr=0.70
+14:01:52 [fgfs] 61.64 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:52 [controller]   decision applied 0.7s after its state  GO-AROUND      ias=158.9kt agl= 1143ft pitch=11.4deg thr=0.70
+14:01:52 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=158.7kt agl= 1152ft pitch=11.0deg thr=0.70
+14:01:52 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=158.5kt agl= 1158ft pitch=10.5deg thr=0.70
+14:01:52 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=158.4kt agl= 1168ft pitch= 9.5deg thr=0.70
+14:01:52 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=158.4kt agl= 1172ft pitch= 9.2deg thr=0.70
+14:01:52 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.4kt agl= 1177ft pitch= 9.1deg thr=0.70
+14:01:52 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=158.5kt agl= 1186ft pitch= 9.0deg thr=0.70
+14:01:54 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=158.6kt agl= 1191ft pitch= 8.9deg thr=0.70
+14:01:54 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.6kt agl= 1192ft pitch= 8.9deg thr=0.70
+14:01:54 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.7kt agl= 1195ft pitch= 8.8deg thr=0.70
+14:01:54 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.9kt agl= 1200ft pitch= 8.9deg thr=0.70
+14:01:55 [fgfs] 65.00 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=159.0kt agl= 1203ft pitch= 9.0deg thr=0.70
+14:01:55 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=159.3kt agl= 1207ft pitch= 9.0deg thr=0.70
+14:01:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=159.3kt agl= 1208ft pitch= 9.0deg thr=0.70
+14:01:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=159.5kt agl= 1210ft pitch= 9.0deg thr=0.70
+14:01:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=159.6kt agl= 1212ft pitch= 9.0deg thr=0.70
+14:01:57 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=160.1kt agl= 1216ft pitch= 9.0deg thr=0.70
+14:01:57 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.2kt agl= 1217ft pitch= 9.0deg thr=0.70
+14:01:57 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.4kt agl= 1219ft pitch= 9.0deg thr=0.70
+14:01:57 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.5kt agl= 1220ft pitch= 9.1deg thr=0.70
+14:01:59 [fgfs] 68.42 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:01:59 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=160.7kt agl= 1222ft pitch= 9.1deg thr=0.70
+14:01:59 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=161.0kt agl= 1225ft pitch= 9.1deg thr=0.70
+14:01:59 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.1kt agl= 1226ft pitch= 9.1deg thr=0.70
+14:01:59 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.3kt agl= 1228ft pitch= 9.1deg thr=0.70
+14:01:59 [session] Viewer camera -> Cockpit View (display only; the fly pilot is unaffected)
+14:02:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.7kt agl= 1232ft pitch= 9.2deg thr=0.70
+14:02:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.8kt agl= 1233ft pitch= 9.3deg thr=0.70
+14:02:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.1kt agl= 1236ft pitch= 9.4deg thr=0.70
+14:02:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.2kt agl= 1238ft pitch= 9.5deg thr=0.70
+14:02:02 [fgfs] 71.65 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:02:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.3kt agl= 1239ft pitch= 9.5deg thr=0.70
+14:02:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.4kt agl= 1242ft pitch= 9.6deg thr=0.70
+14:02:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.5kt agl= 1244ft pitch= 9.6deg thr=0.70
+14:02:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.6kt agl= 1245ft pitch= 9.7deg thr=0.70
+14:02:04 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.8kt agl= 1252ft pitch= 9.8deg thr=0.70
+14:02:04 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=162.9kt agl= 1254ft pitch= 9.8deg thr=0.70
+14:02:04 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.0kt agl= 1258ft pitch= 9.9deg thr=0.70
+14:02:04 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.1kt agl= 1261ft pitch=10.0deg thr=0.70
+14:02:05 [fgfs] 74.88 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:02:05 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.1kt agl= 1264ft pitch=10.0deg thr=0.70
+14:02:05 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.2kt agl= 1267ft pitch=10.0deg thr=0.70
+14:02:05 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.2kt agl= 1270ft pitch=10.0deg thr=0.70
+14:02:05 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.3kt agl= 1273ft pitch= 9.9deg thr=0.70
+14:02:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.4kt agl= 1281ft pitch= 9.8deg thr=0.70
+14:02:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.4kt agl= 1284ft pitch= 9.7deg thr=0.70
+14:02:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.5kt agl= 1289ft pitch= 9.8deg thr=0.70
+14:02:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.5kt agl= 1292ft pitch= 9.9deg thr=0.70
+14:02:07 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=163.6kt agl= 1295ft pitch=10.0deg thr=0.70
+14:02:09 [fgfs] 78.15 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:02:09 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.6kt agl= 1299ft pitch=10.0deg thr=0.70
+14:02:09 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.6kt agl= 1302ft pitch=10.0deg thr=0.70
+14:02:09 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.6kt agl= 1305ft pitch=10.0deg thr=0.70
+14:02:10 [fgfs] 79.39 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+14:02:10 [fgfs] 79.39 [WARN]:io        Network:4576: errno: Domain error(33)
+14:02:10 [fgfs] 79.39 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+14:02:10 [fgfs] 79.39 [WARN]:io        Network:4560: errno: Domain error(33)
+14:02:10 [fgfs] 79.39 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+14:02:10 [fgfs] 79.39 [WARN]:io        Network:4304: errno: Domain error(33)
+14:02:10 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.7kt agl= 1317ft pitch=10.0deg thr=0.70
+14:02:10 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=163.8kt agl= 1324ft pitch=10.1deg thr=0.70
+14:02:12 [fgfs] 81.36 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:02:12 [session] tail_controller skipped: JSONDecodeError('Extra data: line 1 column 2 (char 1)')
+14:02:13 [session] Property API stopped answering
+14:02:18 [session] FlightGear exited (code 3221226356) - crashed or force-closed

@@ -1,0 +1,102 @@
+{
+  "run_id": "2026-11-14T185446Z_kaden-vandine_fg-liftoff-check-of-77ee8da-teammate-steering-async-mission-connectome",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 24.4
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+      "detail": "run 2026-11-14T185508Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)",
+      "from_s": 24.4,
+      "to_s": 381.5
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 381.5,
+      "to_s": 386.0
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 386.0,
+      "to_s": 398.7
+    }
+  ],
+  "name": "liftoff check of 77ee8da (teammate steering + async mission), connectome",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 31322,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T18:54:46.330095+00:00",
+  "duration_s": 399,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 220,
+  "controller_runs": {
+    "2026-11-14T185508Z_kaden-vandine_flightgear-connectome": {
+      "brain": "CONNECTOME LIF (notebook model)",
+      "ended_in": "Circuit fly: CIRCUIT: downwind",
+      "handovers": [
+        {
+          "time": 0.0,
+          "to": "Takeoff fly",
+          "state": "standing",
+          "agl_ft": 0,
+          "ias_kt": 0,
+          "zero_steer": -18.75
+        },
+        {
+          "time": 58.1,
+          "to": "Circuit fly",
+          "state": "cruising",
+          "agl_ft": 1004,
+          "ias_kt": 184,
+          "zero_steer": -22.5,
+          "zero_pitch": 107.0,
+          "zero_roll": -43.0,
+          "zero_MN9": 65.0
+        }
+      ],
+      "touchdown_x_m": null,
+      "touchdown_sink_fpm": null,
+      "time_s": 346.7,
+      "max_centerline_m": 3.8,
+      "outcome": "interrupted",
+      "termination_reason": "interrupted",
+      "safe_reject": false,
+      "success": false,
+      "decision_timing": {
+        "applied": 818,
+        "completed": 832,
+        "discarded": 14,
+        "skipped": 202,
+        "latency_mean_s": 0.197,
+        "latency_max_s": 0.975
+      },
+      "speed_up_resets": 0,
+      "wall_s": 353.2,
+      "exit_code": 2
+    },
+    "2026-11-14T184958Z_bhavya-shree-reddy-kummeta_demo-standin": null,
+    "2026-11-14T185223Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T185243Z_michael-taylor_flightgear-connectome": null
+  },
+  "code": {
+    "commit": "b551b4c88520e3e242265e4b3ba384d4073568c5",
+    "branch": "main"
+  }
+}

@@ -1,0 +1,86 @@
+13:54:46 [session] Session 'liftoff check of 77ee8da (teammate steering + async mission), connectome' watching fgfs pid 31322 (738-flies)
+13:54:46 [session] Live log page: http://127.0.0.1:8765/
+13:54:53 [session] Connected to property API on :8080
+13:55:09 [controller] Run started: 2026-11-14T185508Z_kaden-vandine_flightgear-connectome
+13:55:09 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T185508Z_kaden-vandine_flightgear-connectome
+13:55:09 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+13:55:09 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+13:55:09 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)
+13:55:09 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+13:55:10 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-14T185508Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py))
+13:55:10 [controller] CONNECTOME LIF (notebook model)
+13:55:12 [controller] === START: Takeoff fly (standing)  ===
+13:55:12 [controller]     adapted: steer zero -18.8 Hz
+13:55:12 [controller] Waiting for FlightGear runway telemetry on localhost...
+13:55:55 [session] Property API stopped answering
+13:56:01 [session] Connected to property API on :8080
+13:56:30 [session] Property API stopped answering
+13:56:37 [session] Connected to property API on :8080
+13:56:56 [session] Property API stopped answering
+13:57:01 [session] Connected to property API on :8080
+13:57:01 [controller] === HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1004 ft, 184 kt ===
+13:57:01 [controller]     adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+13:57:01 [controller]  108.9s   leg -> crosswind
+13:57:10 [session] Property API stopped answering
+13:57:14 [session] Connected to property API on :8080
+13:57:15 [session] Property API stopped answering
+13:57:18 [session] Connected to property API on :8080
+13:57:20 [session] Property API stopped answering
+13:57:25 [session] Connected to property API on :8080
+13:57:29 [session] Property API stopped answering
+13:57:34 [session] Connected to property API on :8080
+13:57:46 [controller]  153.8s   leg -> downwind
+13:58:17 [session] Property API stopped answering
+13:58:21 [session] Connected to property API on :8080
+14:01:04 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+14:01:04 [controller] Log written to runs/fg-mission5.csv (3754 rows)
+14:01:06 [flightgear] Paused
+14:01:06 [controller] Plot written to runs/fg-mission5.png
+14:01:06 [controller] {
+14:01:06 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+14:01:06 [controller]   "ended_in": "Circuit fly: CIRCUIT: downwind",
+14:01:06 [controller]   "handovers": [
+14:01:06 [controller]     {
+14:01:06 [controller]       "time": 0.0,
+14:01:06 [controller]       "to": "Takeoff fly",
+14:01:06 [controller]       "state": "standing",
+14:01:06 [controller]       "agl_ft": 0,
+14:01:06 [controller]       "ias_kt": 0,
+14:01:06 [controller]       "zero_steer": -18.75
+14:01:06 [controller]     },
+14:01:06 [controller]     {
+14:01:06 [controller]       "time": 58.1,
+14:01:06 [controller]       "to": "Circuit fly",
+14:01:06 [controller]       "state": "cruising",
+14:01:06 [controller]       "agl_ft": 1004,
+14:01:06 [controller]       "ias_kt": 184,
+14:01:06 [controller]       "zero_steer": -22.5,
+14:01:06 [controller]       "zero_pitch": 107.0,
+14:01:06 [controller]       "zero_roll": -43.0,
+14:01:06 [controller]       "zero_MN9": 65.0
+14:01:06 [controller]     }
+14:01:06 [controller]   ],
+14:01:06 [controller]   "touchdown_x_m": null,
+14:01:06 [controller]   "touchdown_sink_fpm": null,
+14:01:06 [controller]   "time_s": 346.7,
+14:01:06 [controller]   "max_centerline_m": 3.8,
+14:01:06 [controller]   "outcome": "interrupted",
+14:01:06 [controller]   "termination_reason": "interrupted",
+14:01:06 [controller]   "safe_reject": false,
+14:01:06 [controller]   "success": false,
+14:01:06 [controller]   "decision_timing": {
+14:01:06 [controller]     "applied": 818,
+14:01:06 [controller]     "completed": 832,
+14:01:06 [controller]     "discarded": 14,
+14:01:06 [controller]     "skipped": 202,
+14:01:06 [controller]     "latency_mean_s": 0.197,
+14:01:06 [controller]     "latency_max_s": 0.975
+14:01:06 [controller]   },
+14:01:06 [controller]   "speed_up_resets": 0,
+14:01:06 [controller]   "wall_s": 353.2
+14:01:06 [controller] }
+14:01:06 [controller] Run finished: 2026-11-14T185508Z_kaden-vandine_flightgear-connectome exit=2
+14:01:07 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+14:01:12 [control] IN CONTROL: Nobody: no controller running and no control inputs
+14:01:13 [session] Property API stopped answering
+14:01:14 [session] FlightGear exited (code None)

@@ -1,0 +1,44 @@
+{
+  "brain": "CONNECTOME LIF (notebook model)",
+  "ended_in": "Circuit fly: CIRCUIT: downwind",
+  "handovers": [
+    {
+      "time": 0.0,
+      "to": "Takeoff fly",
+      "state": "standing",
+      "agl_ft": 0,
+      "ias_kt": 0,
+      "zero_steer": -18.75
+    },
+    {
+      "time": 58.1,
+      "to": "Circuit fly",
+      "state": "cruising",
+      "agl_ft": 1004,
+      "ias_kt": 184,
+      "zero_steer": -22.5,
+      "zero_pitch": 107.0,
+      "zero_roll": -43.0,
+      "zero_MN9": 65.0
+    }
+  ],
+  "touchdown_x_m": null,
+  "touchdown_sink_fpm": null,
+  "time_s": 346.7,
+  "max_centerline_m": 3.8,
+  "outcome": "interrupted",
+  "termination_reason": "interrupted",
+  "safe_reject": false,
+  "success": false,
+  "decision_timing": {
+    "applied": 818,
+    "completed": 832,
+    "discarded": 14,
+    "skipped": 202,
+    "latency_mean_s": 0.197,
+    "latency_max_s": 0.975
+  },
+  "speed_up_resets": 0,
+  "wall_s": 353.2,
+  "exit_code": 2
+}
