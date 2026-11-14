@@ -159,7 +159,7 @@ class ConnectomeBrain:
             # is zero, and there is no other drive or spontaneous noise.
             self.calls += 1
             self.last_seconds = time.monotonic() - start
-            return {name: 0.0 for name in readouts}
+            return self._record(inputs, {name: 0.0 for name in readouts})
         dt, v0, vth, tm, ts, ref = 0.1, -52.0, -45.0, 20.0, 5.0, 2.2
         wsyn, kick, delay = 0.275, 250 * 0.275, int(1.8 / 0.1)
         rng = np.random.default_rng(self.seed + self.calls)
@@ -187,10 +187,24 @@ class ConnectomeBrain:
                 ring[slot] += np.asarray(self.w[spikes].sum(0)).ravel() * wsyn
         self.last_seconds = time.monotonic() - start
         seconds = self.ms / 1000
-        return {name: float(counts[self.groups[name]].mean() / seconds) for name in readouts}
+        return self._record(inputs, {name: float(counts[self.groups[name]].mean() / seconds)
+                                     for name in readouts})
+
+    def _record(self, inputs, rates):
+        """Keep the last trial's inputs and readout rates for the fly-activity log."""
+        self.last_activity = {**{f'in_{k}_hz': v for k, v in inputs.items()},
+                              **{f'{k}_hz': v for k, v in rates.items()},
+                              'trial_s': round(self.last_seconds, 3)}
+        return rates
 
     def escape(self, looming_hz):
-        """Original API: Giant Fibre rate for a looming input."""
+        """Original API: Giant Fibre rate for a looming input.
+
+        Reads out every non-empty descending group (same cost: one trial) so the
+        fly-activity log captures the whole DN population, not just DNp01."""
         if not math.isfinite(looming_hz) or not 0 <= looming_hz <= 200:
             raise ValueError('Input rate must be in 0–200 Hz')
-        return self.run({'looming': looming_hz}, ['DNp01'])['DNp01']
+        readouts = [n for n in READOUTS if len(self.groups[n])]
+        if 'DNp01' not in readouts:
+            readouts.append('DNp01')
+        return self.run({'looming': looming_hz}, readouts)['DNp01']
