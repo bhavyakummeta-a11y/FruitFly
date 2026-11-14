@@ -1,0 +1,78 @@
+13:15:25 [session] Session 'takeoff fly - CONNECTOME + new fly vision + faster brain (b6b746b)' watching fgfs pid 18848 (738-flies)
+13:15:25 [session] Live log page: http://127.0.0.1:8766/
+13:15:27 [session] Docked: log below and fly brain right of FlightGear
+13:15:58 [session] Connected to property API on :8080
+13:16:02 [session] Property API stopped answering
+13:16:15 [session] Connected to property API on :8080
+13:16:15 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+13:16:15 [controller] Run started: 2026-11-14T181613Z_michael-taylor_flightgear-connectome
+13:16:15 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T181613Z_michael-taylor_flightgear-connectome
+13:16:15 [controller] [control] FLY BRAIN (connectome) flying the takeoff
+13:16:15 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+13:16:15 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+13:16:15 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+13:16:18 [control] IN CONTROL: FLY BRAIN (connectome) flying the takeoff (run 2026-11-14T181613Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+13:16:18 [controller] Run started: 2026-11-14T181618Z_michael-taylor_demo-standin
+13:16:23 [controller] CONNECTOME LIF (notebook model)
+13:16:23 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+13:16:38 [controller]   zero points: steer=-18.8
+13:16:38 [controller] Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+13:16:38 [controller] Parking brake released: the fly has the airplane.
+13:16:38 [controller] Waiting for FlightGear runway telemetry on localhost...
+13:16:40 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+13:16:40 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+13:16:42 [controller]   decision applied 3.0s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:42 [controller]   decision applied 1.0s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:44 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:44 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  0.4kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:46 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias=  3.8kt agl=    0ft pitch=-0.5deg thr=1.00
+13:16:48 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 12.9kt agl=    0ft pitch=-0.4deg thr=1.00
+13:16:48 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 19.7kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:49 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 26.4kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:49 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 35.5kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:52 [controller]   decision applied 0.8s after its state  TAKEOFF ROLL   ias= 43.6kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:52 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 49.0kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:54 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 56.8kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:54 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 63.3kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:57 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias= 69.6kt agl=    0ft pitch=-0.3deg thr=1.00
+13:16:57 [controller]   decision applied 0.7s after its state  TAKEOFF ROLL   ias= 78.1kt agl=    0ft pitch=-0.2deg thr=1.00
+13:17:00 [controller]   decision applied 0.5s after its state  TAKEOFF ROLL   ias= 83.2kt agl=    0ft pitch=-0.2deg thr=0.98
+13:17:00 [controller]   decision applied 0.7s after its state  TAKEOFF ROLL   ias= 89.5kt agl=    0ft pitch=-0.2deg thr=1.00
+13:17:00 [controller]   decision applied 0.8s after its state  TAKEOFF ROLL   ias= 97.9kt agl=    0ft pitch=-0.2deg thr=1.00
+13:17:02 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias=102.9kt agl=    0ft pitch=-0.2deg thr=0.52
+13:17:02 [controller]   decision applied 0.6s after its state  TAKEOFF ROLL   ias=104.7kt agl=    0ft pitch=-0.4deg thr=0.26
+13:17:02 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+13:17:02 [controller] {
+13:17:02 [controller]   "fly": "Takeoff fly",
+13:17:02 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+13:17:02 [controller]   "phase": "TAKEOFF ROLL",
+13:17:02 [controller]   "completed": false,
+13:17:02 [controller]   "time_s": 24.5,
+13:17:02 [controller]   "decisions": 20,
+13:17:02 [controller]   "max_centerline_m": 30.9,
+13:17:02 [controller]   "tail_strike": false,
+13:17:02 [controller]   "stall": false,
+13:17:02 [controller]   "left_runway": true,
+13:17:02 [controller]   "liftoff_x_m": null,
+13:17:02 [controller]   "rejected": false,
+13:17:02 [controller]   "agl_ft": 0,
+13:17:02 [controller]   "ias_kt": 104.6,
+13:17:02 [controller]   "stop_x_m": null,
+13:17:02 [controller]   "events": [],
+13:17:02 [controller]   "decision_timing": {
+13:17:02 [controller]     "applied": 20,
+13:17:02 [controller]     "skipped": 1,
+13:17:02 [controller]     "latency_mean_s": 0.731,
+13:17:02 [controller]     "latency_max_s": 2.975
+13:17:02 [controller]   },
+13:17:02 [controller]   "speed_up_resets": 0,
+13:17:02 [controller]   "backend": "flightgear",
+13:17:02 [controller]   "wall_s": 25.6,
+13:17:02 [controller]   "success": false
+13:17:02 [controller] }
+13:17:02 [controller] Run finished: 2026-11-14T181613Z_michael-taylor_flightgear-connectome exit=2
+13:17:04 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+13:17:04 [flightgear] Paused
+13:17:09 [control] IN CONTROL: Nobody: no controller running and no control inputs
+13:17:48 [session] Property API stopped answering
+13:17:54 [session] FlightGear exited (code 3221226356) - crashed or force-closed
