@@ -107,3 +107,9 @@ The combined suite passed 143 tests (one skipped). A local connectome cruise
 smoke test and the stand-in landing scenario completed successfully. Runway and
 obstacle previews were rendered and inspected without opening FlightGear.
 Live Windows FlightGear testing of the expanded sensory mix is still needed.
+
+## Optional camera comparison
+
+[Camera-vision prototype](CAMERA_VISION.md) detects tower/runway candidates from
+screenshots and compares proposed cues with this synthetic stream. It is an
+observer only; it does not replace these brain inputs or fly the aircraft.
