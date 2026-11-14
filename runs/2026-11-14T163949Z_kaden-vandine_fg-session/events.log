@@ -1,0 +1,5 @@
+11:39:49 [session] Session 2026-11-14T163949Z_kaden-vandine_fg-session watching fgfs pid 168033 (instance 0, 738-flies)
+11:39:49 [session] Live log page: http://127.0.0.1:8765/
+11:40:06 [session] Connected to property API on :8080
+11:40:51 [session] Property API stopped answering
+11:40:52 [session] FlightGear exited (code None)

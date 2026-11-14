@@ -1,0 +1,21 @@
+{
+  "run_id": "2026-11-14T163949Z_kaden-vandine_fg-session",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "label": "instance 0, 738-flies",
+  "fgfs_pid": 168033,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T16:39:49.810649+00:00",
+  "duration_s": 63,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 40,
+  "controller_runs": {},
+  "code": {
+    "commit": "e8e35d4689a0b4e4add52192a119786136c915ae",
+    "branch": "main"
+  }
+}
