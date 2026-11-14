@@ -1,0 +1,2 @@
+# Optional headless aerodynamic validation (not needed for FlightGear).
+jsbsim==1.3.3

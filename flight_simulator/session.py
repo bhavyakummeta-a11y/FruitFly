@@ -91,7 +91,15 @@ class Process:
 
     def alive(self):
         if os.name != 'nt':
-            return Path(f'/proc/{self.pid}').exists()
+            # macOS has no /proc. Signal 0 probes existence on POSIX without
+            # sending a signal; never use this branch on Windows.
+            try:
+                os.kill(self.pid, 0)
+            except ProcessLookupError:
+                return False
+            except PermissionError:
+                return True
+            return True
         import ctypes
         code = ctypes.c_ulong()
         self.k.GetExitCodeProcess(self.h, ctypes.byref(code))

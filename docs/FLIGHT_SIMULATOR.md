@@ -15,17 +15,26 @@ The course has a fixed geographic origin, so visual objects and collision
 checks stay aligned even when Python connects after the aircraft has moved.
 The ordinary default JSON remains a virtual-only course.
 
-## Local update: bounded turns and companion view
+## Cruise rules and companion view (2026-11-14)
 
-Avoidance now latches one heading target at most 35 degrees from the initial
-cruise heading. It holds that target until the triggering obstacle is behind the
-airplane, then returns to cruise. Repeated escape spikes do not renew an endless
-bank command. Bank targets are limited to 18 degrees, and bank/surface changes
-are rate-limited. Roll and pitch damping are reduced from the first prototype.
-The controller retains the initial trimmed pitch for FlightGear altitude hold.
+Mandatory rules now run alongside the brain. Every half second the controller
+checks candidate turns against **all configured obstacles**, with 150 m predicted
+clearance. It rejoins the original course after avoidance, including cross-track
+correction. Neural escape activity can prefer a safe turn side; it cannot disable
+obstacle protection. Silent mode also receives these rules.
+
+Altitude hold uses vertical-speed feedback, integral trim and bank lift
+compensation. A sinking aircraft retains power even if its airspeed increases.
+Bank targets are limited to 18 degrees, reduced to 10 degrees during altitude
+recovery and 5 degrees at low speed. Surface and bank demands are rate-limited.
+If no predicted route meets the constraints, the run stops and requests a
+FlightGear pause instead of choosing an unsafe route. These are assisted autopilot
+rules, not a learned ability of the fly to stabilize an aircraft.
 
 The companion window has a **3D virtual obstacle view on the left** and **the
-full flight path on the right**, including all configured obstacles. It opens by
+full flight path on the right**, including all configured obstacles, the predicted
+route and the original cruise direction. An altitude chart below compares actual
+altitude with the held target. It opens by
 default with `--backend flightgear`; use `--no-plot` to disable it. For the local
 demo, use `--plot --realtime`. It is a separate window, not embedded in FlightGear.
 
@@ -36,8 +45,7 @@ demo, use `--plot --realtime`. It is a separate window, not embedded in FlightGe
 FlightGear now reads the latest queued telemetry instead of replaying stale
 states. It stops and sends a pause request if heading deviates by over 90 degrees,
 bank exceeds 50 degrees, pitch exceeds 25 degrees, speed falls below 70% of the
-starting speed, or altitude falls 150 m below the starting altitude. Avoidance
-also stops if an obstacle has not been passed after 90 seconds. These are test
+starting speed, or altitude differs by more than 40 m from the starting altitude. These are test
 abort conditions, not stall protection or a terrain-avoidance system.
 
 For the supplied default course, FlightGear rotates the course ahead of the
@@ -75,7 +83,7 @@ The shared controller still requires live validation with the selected aircraft.
 
 - **Connectome mode:** the starter notebook's LIF equations run on the downloaded
   Shiu connectivity. A geometric looming proxy stimulates LC4/LPLC2. Measured
-  DNp01 (Giant Fibre) spikes activate an avoidance turn.
+  DNp01 (Giant Fibre) spikes request an avoidance turn, subject to cruise rules.
 - **Direction decoder:** obstacle bearing determines left/right. This is a design
   choice, not a learned lateralized neural response.
 - **Conventional controller:** holds altitude, speed, and heading, and executes
@@ -83,7 +91,7 @@ The shared controller still requires live validation with the selected aircraft.
 - **Reflex mode:** a deterministic threshold replaces the brain for integration
   tests. It is labeled as a non-neural baseline everywhere. It is never a silent
   fallback when the real data is missing.
-- **Silent mode:** disables escape to test whether the escape channel affects
+- **Silent mode:** disables escape while retaining mandatory cruise rules to test whether the escape channel affects
   obstacle avoidance.
 
 This implements the assisted alternative in the reference notes. The direct
@@ -117,8 +125,7 @@ python3 -m unittest discover -s tests -v
 ```
 
 Exit status 0 means the requested run completed, 2 means collision, and 1 means
-configuration/runtime error. A silent-brain collision is expected in the supplied
-course. Success in one course is not a general collision-avoidance guarantee.
+configuration/runtime error. Silent mode now avoids obstacles through the rules. Success in one course is not a general collision-avoidance guarantee.
 
 ## Run the actual connectome
 
@@ -301,7 +308,26 @@ with `--obstacles path.json`. Logs include aircraft state, input rate, measured
 escape rate, phase, controls, and obstacle clearance. Use matched scenarios and
 seeds for baseline/connectome comparisons.
 
-## Bounded-turn regression results (2026-11-14)
+## Cruise-rule validation
+
+See [the log analysis and C172 validation](notes/CRUISE_RULES_2026-11-14.md).
+To reproduce the aerodynamic checks without opening FlightGear:
+
+```sh
+.venv/bin/pip install -r requirements-validation.txt
+.venv/bin/python -m flight_simulator.validate_cruise --seconds 240
+.venv/bin/python -m flight_simulator.validate_cruise --seconds 240 --disturbance --output runs/jsbsim-disturbance.csv
+```
+
+The companion opens by default on a FlightGear controller run. Start with an
+already airborne aircraft, running engine, sufficient speed and the matching
+project launcher/protocol. Target altitude is captured when the controller starts;
+it is MSL hold, not terrain following. These checks use JSBSim's C172P model, not
+the installed FlightGear aircraft or the team's Boeing. Wind, engine failure and
+unmapped scenery obstacles are not covered. No exact-altitude or universal
+collision-avoidance guarantee follows from these results.
+
+## Historical bounded-turn results, superseded by cruise rules (2026-11-14)
 
 Both modes completed 180 seconds in the reduced local model without collision,
 with one avoidance activation followed by a return to the original heading.
@@ -317,7 +343,7 @@ The updated companion was rendered and visually inspected. These results do not
 verify live FlightGear aircraft behavior; no FlightGear installation is available
 on the development machine.
 
-## Original validation before the bounded-turn update (2026-11-14)
+## Historical original validation before the bounded-turn update (2026-11-14)
 
 Using the supplied three-obstacle course, 180 seconds of local simulated flight,
 and seed 0:
