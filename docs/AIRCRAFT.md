@@ -12,19 +12,14 @@ Alternatives we considered: the CRJ700 (smaller and more forgiving), the Q400 (a
 
 ## Getting it into FlightGear
 
-Our install is FlightGear **2024.1.4**, and the 737-800 is not bundled. Install it from FGAddon:
-
-1. Open the FlightGear launcher, then **Aircraft → Browse**.
-2. Search for **737-800** and install the Boeing 737-800 (the `737-800YV` package).
-3. Select it and start on a long runway, for example at KSFO.
-
-From the command line:
+Everything lives in [`flightgear/`](../flightgear/README.md):
 
 ```
-fgfs --aircraft=737-800YV --airport=KSFO --telnet=5401 --httpd=8080
+python flightgear/setup_aircraft.py   # downloads the stock FGAddon 737-800 (package id 738) + installs our overlay
+python flightgear/launch.py           # KSFO 28R, telnet 5500, httpd 8080
 ```
 
-> TODO: confirm the exact aircraft ID after installing. Check the package's `*-set.xml` file names.
+Aircraft IDs: `738-flies` is ours, with the cabin and fly passengers. `738` is the stock plane.
 
 ## What changes from the Cessna
 
@@ -33,20 +28,17 @@ fgfs --aircraft=737-800YV --airport=KSFO --telnet=5401 --httpd=8080
 | Engines | 1 piston | 2 turbofans. Write **both** `/controls/engines/engine[0]/throttle` and `engine[1]/throttle`. |
 | Spool-up | Instant | The engines take several seconds to respond, so the fly's throttle decisions show up late. |
 | Takeoff | ~55 kt rotate | Rotate at roughly 140–150 kt, depending on weight. Takeoff needs flaps 5 and a much longer roll. |
-| Systems | None | The engines may need to be started first (see the TODO below). The autopilot and autothrottle must be **off** so they don't fly the plane instead of the fly. |
+| Systems | None | The plane spawns cold and dark. Set `/fruitfly/autostart` to `true` to run the 737's own autostart. The parking brake is on. The autopilot and autothrottle must stay **off** so they don't fly the plane instead of the fly. |
 
 The neuron-to-control decoder (DNp09 → throttle up, MDN → throttle down) stays the same. The gains and timing will need retuning for the slower engines and longer takeoff.
 
-> TODO: decide how to start the engines, either with an auto-start menu option or by spawning in the "running" state.
-
 ## Fly passengers
 
-Plan for rendering the cabin with fruit fly passengers:
+**Built (2026-11-14).** The stock 737-800 has a cockpit but no passenger cabin, so we made one with [`flightgear/tools/make_cabin.py`](../flightgear/tools/make_cabin.py):
 
-1. **Check the cabin.** Confirm how much passenger cabin the 737-800 model actually renders. If the seats are missing, we add our own.
-2. **Fly model.** Make a low-poly *Drosophila* model (`.ac` or glTF, a few hundred polygons).
-3. **Seat the flies.** Add `<model>` entries to an overlay of the aircraft's `-set.xml` or model XML, placing a grid of flies at the seat positions.
-4. **Cabin camera.** Add a "Cabin" view to `<sim><view>` so the demo can cut to the passengers.
-5. **Stretch goal: live passengers.** Bind fly animations (wing flap, leg twitch) to properties that our Python bridge writes from the brain's firing rates. The passengers would then visibly react to what the brain is doing.
+- **Cabin shell:** floor, walls with window holes, ceiling and overhead bins.
+- **Seats:** 29 rows of 3+3, 174 seats in all, with 166 occupied by low-poly *Drosophila*. The flies have tan bodies, dark abdomen stripes, red compound eyes and translucent wings.
+- **Live passengers:** Their wings and heads move with `/fruitfly/passengers/activity` (0..1). Drive it from the brain's firing rates so the passengers visibly react to what the brain is doing. This is display only.
+- **Cabin views:** Two cabin views are added to the sim. Cycle with **v**.
 
-Put our overlay files in this repo under `flightgear/`. Don't edit the downloaded aircraft directly, so teammates can reproduce the setup.
+Still to do: check it in the running sim and tune the look. See the TODOs in [flightgear/README.md](../flightgear/README.md).

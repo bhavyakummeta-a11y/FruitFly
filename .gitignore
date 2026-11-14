@@ -16,3 +16,10 @@ __pycache__/
 .venv/
 data/brain/
 runs/
+
+# FlightGear: stock aircraft is downloaded by flightgear/setup_aircraft.py
+flightgear/Aircraft/737-800/
+flightgear/downloads/
+
+# Local checkout of the sim-logs branch (flight_simulator/runlog.py)
+.sim-logs/
