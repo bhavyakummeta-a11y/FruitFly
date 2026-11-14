@@ -1,0 +1,41 @@
+{
+  "run_id": "2026-11-14T164449Z_kaden-vandine_flightgear-connectome",
+  "who": "Kaden VanDine",
+  "started_utc": "2026-11-14T16:44:49.002207+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain connectome --seconds 180 --no-plot --no-push",
+  "args": {
+    "backend": "flightgear",
+    "brain": "connectome",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "obstacles": "/home/kaden/fruitfly/FruitFly/scenarios/obstacles.json",
+    "seconds": 180.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": true,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "no_scene": false,
+    "note": null,
+    "no_push": true,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "161336b402bc0f7f2305cde1d4931abf6f8e8164",
+    "branch": "main",
+    "dirty": [],
+    "untracked": [
+      "FruitFly/"
+    ]
+  },
+  "python": "3.14.4",
+  "platform": "Linux 7.0.0-43-generic",
+  "finished_utc": "2026-11-14T16:44:56.432324+00:00",
+  "exit_code": 1
+}
