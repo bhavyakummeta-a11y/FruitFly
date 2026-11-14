@@ -50,6 +50,7 @@ def main():
     parser.add_argument('--aircraft', default=DEFAULT_AIRCRAFT, help='738-flies (default), 738 = stock 737, c172p')
     parser.add_argument('--fg', default=str(DEFAULT_FG), help='FlightGear install dir (or set FG_INSTALL)')
     parser.add_argument('--print', action='store_true', help='Only print the command')
+    parser.add_argument('--no-log', action='store_true', help='Do not start the session log / live page')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
     args = parser.parse_args()
     if not 0 <= args.instance <= 50:
@@ -64,7 +65,11 @@ def main():
     p = ports(args.instance)
     print(f'Controller flags: --telemetry-port {p["telemetry"]} --control-port {p["control"]}')
     if not args.print:
-        subprocess.Popen(cmd, env=env)
+        proc = subprocess.Popen(cmd, env=env)
+        if not args.no_log:
+            from .session import spawn
+            spawn(proc.pid, p['httpd'], p['telemetry'], env.get('FG_HOME'),
+                  label=f'instance {args.instance}, {args.aircraft}')
     return 0
 
 

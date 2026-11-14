@@ -6,7 +6,8 @@ Every `python -m flight_simulator ...` run creates one folder:
         meta.json            args, code commit + dirty files, Python, FlightGear version
         code.diff            uncommitted changes to tracked files (so the run is reproducible)
         console.log          everything the run printed
-        telemetry.csv        per-step state + controls (telemetry.csv.gz if large)
+        airplane.csv         per-step aircraft state + controls (.csv.gz if large)
+        fly_activity.csv     every brain decision: looming input, escape output, neuron-group rates
         result.json          summary: collision, min clearance, exit code...
         fgfs_warnings.log    FlightGear backend only: WARN/ALERT/Nasal lines from fgfs.log
         feedback.md          summary + your notes
@@ -25,6 +26,7 @@ Opt out for one run with `--no-push` (still logs locally) or `--no-runlog`;
 or set FRUITFLY_NO_PUSH=1.
 """
 import argparse
+import csv
 from datetime import datetime, timezone
 import gzip
 import json
@@ -157,6 +159,7 @@ class RunLog:
     def __init__(self, args, argv, auto_push=True):
         self.args, self.argv, self.auto_push = args, list(argv), auto_push
         self.result = None
+        self._fly = None
         self.started = time.time()
         who = git('config', 'user.name', check=False) or os.environ.get('USERNAME', 'unknown')
         self.id = run_id(args.backend, args.brain, who)
@@ -215,12 +218,22 @@ class RunLog:
         (self.dir / 'fgfs_warnings.log').write_text('\n'.join(kept) + '\n', encoding='utf-8')
         return info
 
-    def _compress_telemetry(self):
-        csv = self.dir / 'telemetry.csv'
-        if csv.exists() and csv.stat().st_size > GZIP_OVER:
-            with open(csv, 'rb') as src, gzip.open(str(csv) + '.gz', 'wb') as dst:
-                shutil.copyfileobj(src, dst)
-            csv.unlink()
+    def fly(self, row):
+        """Append one fly-activity row (brain inputs/outputs) to fly_activity.csv."""
+        if self._fly is None:
+            self._fly = open(self.dir / 'fly_activity.csv', 'w', newline='', encoding='utf-8')
+            self._fly_writer = csv.DictWriter(self._fly, list(row), extrasaction='ignore')
+            self._fly_writer.writeheader()
+        self._fly_writer.writerow(row)
+        self._fly.flush()
+
+    def _compress_logs(self):
+        for name in ('airplane.csv', 'fly_activity.csv'):
+            path = self.dir / name
+            if path.exists() and path.stat().st_size > GZIP_OVER:
+                with open(path, 'rb') as src, gzip.open(str(path) + '.gz', 'wb') as dst:
+                    shutil.copyfileobj(src, dst)
+                path.unlink()
 
     def _feedback(self, code, fg):
         r = self.result or {}
@@ -257,7 +270,9 @@ class RunLog:
         self._meta['exit_code'] = code
         self._dump('meta.json', self._meta)
         self._dump('result.json', {**(self.result or {}), 'exit_code': code})
-        self._compress_telemetry()
+        if self._fly:
+            self._fly.close()
+        self._compress_logs()
         outcome = self._feedback(code, fg)
         if self.base == ROOT:
             return

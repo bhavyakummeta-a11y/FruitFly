@@ -196,5 +196,29 @@ class RunLogHelpers(unittest.TestCase):
         self.assertFalse(str(fg_home(5501)).endswith('instance0'))
 
 
+
+class SessionLogHelpers(unittest.TestCase):
+    def test_process_watch_sees_exit(self):
+        import subprocess, sys
+        from flight_simulator.session import Process
+        p = subprocess.Popen([sys.executable, '-c', 'pass'])
+        watch = Process(p.pid)
+        p.wait()
+        self.assertFalse(watch.alive())
+        self.assertEqual(watch.code, 0)
+
+    def test_runlog_fly_rows(self):
+        import csv, tempfile
+        from pathlib import Path
+        from flight_simulator.runlog import RunLog
+        log = RunLog.__new__(RunLog)
+        log._fly, log.dir = None, Path(tempfile.mkdtemp())
+        log.fly({'time': 0.5, 'looming_hz': 12.0, 'escape_hz': 0.0})
+        log.fly({'time': 1.0, 'looming_hz': 40.0, 'escape_hz': 50.0})
+        log._fly.close()
+        rows = list(csv.DictReader(open(log.dir / 'fly_activity.csv')))
+        self.assertEqual([r['escape_hz'] for r in rows], ['0.0', '50.0'])
+
+
 if __name__ == '__main__':
     unittest.main()
