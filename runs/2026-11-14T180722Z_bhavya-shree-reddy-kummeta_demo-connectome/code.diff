@@ -1,0 +1,292 @@
+diff --git a/flight_simulator/__main__.py b/flight_simulator/__main__.py
+index 05b6b3a..5d9a065 100644
+--- a/flight_simulator/__main__.py
++++ b/flight_simulator/__main__.py
+@@ -104,6 +104,9 @@ def run(args, runlog=None):
+     scene = None
+     ap_guard = None
+     log_file = None
++    from .vision import scene as visual_scene, visual_escape, VisionPublisher
++    vision = VisionPublisher(args.vision_port)
++    applied_inputs, applied_time = {}, None
+     try:
+         if args.backend == 'flightgear':
+             from .flightgear import FlightGear
+@@ -193,7 +196,7 @@ def run(args, runlog=None):
+             state = bridge.freeze(False)
+         if realtime:
+             from .flightgear import DecisionWorker
+-            worker = DecisionWorker(lambda hz: (hz, brain.escape(hz), dict(getattr(brain, 'last_activity', {}))))
++            worker = DecisionWorker(lambda cues: (cues, visual_escape(brain,cues), dict(getattr(brain, 'last_activity', {}))))
+         next_brain, next_display, next_print = state.time, 0.0, 0.0
+         latency = None
+         escape, controls = 0.0, Controls()
+@@ -206,12 +209,18 @@ def run(args, runlog=None):
+         while args.seconds == 0 or state.time - start < args.seconds:
+             tick = time.monotonic()
+             stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
++            visual = visual_scene(state, obstacles, controller.heading, controller.guidance.origin, controller.altitude)
++            cues = visual['inputs'] if args.brain=='connectome' and not training else {'looming':stimulus.looming_hz}
++            visual['inputs'] = cues
++            visual['input_time'] = state.time
+             terminal = state.altitude <= 0 or any(o.clearance(state) <= 0 for o in obstacles)
+             if worker:
+                 # Real time: collect a finished decision, start the next one, never wait.
+                 done = worker.poll(state.time)
+                 if done:
+-                    (looming, escape, activity), record = done
++                    (applied_inputs, escape, activity), record = done
++                    applied_time = record["started"]
++                    looming = applied_inputs["looming"]
+                     latency = record['latency_s']
+                     if runlog:
+                         runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
+@@ -220,7 +229,7 @@ def run(args, runlog=None):
+                                     'decision_latency_s': round(latency, 3),
+                                     'brain_wall_s': round(record['brain_wall_s'], 3), **activity})
+                 if state.time >= next_brain and not terminal and not worker.busy:
+-                    worker.submit(state.time, stimulus.looming_hz, missed=(state.time - next_brain) / .5)
++                    worker.submit(state.time, cues, missed=(state.time - next_brain) / .5)
+                     next_brain = state.time + .5
+             elif state.time >= next_brain and not terminal:
+                 if bridge and args.brain == 'connectome':  # training runs only (see `realtime`)
+@@ -232,7 +241,8 @@ def run(args, runlog=None):
+                     reward = flight_reward(previous_decision, state, controller.heading, distance,
+                                            collision=distance <= 0 or state.altitude <= 0)
+                     learning_event = brain.reinforce(reward)
+-                escape = brain.escape(stimulus.looming_hz)
++                escape = brain.escape(stimulus.looming_hz) if training else visual_escape(brain,cues)
++                applied_inputs, applied_time = dict(cues), state.time
+                 previous_decision = replace(state)
+                 if runlog:
+                     runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
+@@ -247,6 +257,8 @@ def run(args, runlog=None):
+                     print(f'{state.time:6.1f}s ENVELOPE BREACH (logged, run continues): {breach["detail"]}',
+                           flush=True)
+             controls = controller.update(state, stimulus, escape)
++            visual["phase"] = controller.phase
++            vision.send(visual, applied_inputs, applied_time, brain.name)
+             clearance = min((o.clearance(state) for o in obstacles), default=math.inf)
+             minimum = min(minimum, clearance)
+             min_altitude = min(min_altitude, state.altitude)
+@@ -320,6 +332,7 @@ def run(args, runlog=None):
+         print(json.dumps(result, indent=2))
+         return 2 if collision else 0
+     finally:
++        vision.close()
+         if log_file:
+             log_file.close()
+         try:
+@@ -356,6 +369,7 @@ def main():
+     parser.add_argument('--learn', action='store_true', help='Experimental KC->MBON reward updates (connectome only)')
+     parser.add_argument('--load-learning', help='Load a matching checkpoint; frozen unless --learn is given')
+     parser.add_argument('--save-learning', default='runs/learning-checkpoint.npz', help='Checkpoint output when --learn is enabled')
++    parser.add_argument('--vision-port',type=int,default=5601,help='Synthetic fly-view UDP port; 0 disables display stream')
+     parser.add_argument('--obstacles', default=str(ROOT / 'scenarios/obstacles.json'))
+     parser.add_argument('--seconds', type=float, default=180, help='Active flight time; 0 runs until Ctrl-C')
+     parser.add_argument('--seed', type=int, default=0)
+diff --git a/flight_simulator/flies.py b/flight_simulator/flies.py
+index 0fd3f3c..df006c5 100644
+--- a/flight_simulator/flies.py
++++ b/flight_simulator/flies.py
+@@ -100,6 +100,12 @@ class PhaseFly:
+         self.elevator_i = 0.0   # haltere reflex integrator
+         self.throttle, self.brake, self.aileron, self.rudder = 0.0, 0.0, 0.0, 0.0
+         self.status = Status('READY')
++        self.vision_obstacles = []
++        self.vision_sink = None
++        self.vision_frame = None
++        self.sensor_time = None
++        self.applied_sensor_time = None
++        self.sensor_inputs = {}
+ 
+     # Shared encoders -------------------------------------------------------
+     def vs_inputs(self, s, pitch_target_deg, roll_target_deg=0.0):
+@@ -174,23 +180,40 @@ class PhaseFly:
+         note = self.decode(self.smoothed, s)
+         self.decisions.append(Decision(s.time, inputs, rates, note or ''))
+ 
++    def sensory_inputs(self, s):
++        from .vision import phase_scene
++        self.vision_frame = phase_scene(self, s, self.encode(s))
++        self.sensor_time = s.time
++        self.sensor_inputs = dict(self.vision_frame['inputs'])
++        return self.sensor_inputs
++
+     def step(self, s, dt):
+         """Called at the sim rate. Runs (or, with a worker, starts/collects) a brain trial
+         when one is due."""
+         if self.worker is not None:
+             done = self.worker.poll(s.time)
+             if done:
++                self.applied_sensor_time = done[1]['started']
+                 self._apply(*done[0], s)  # decided on an older state, applied now
+             if self.decision_due(s) and not self.worker.busy:
+                 period = self.current_period(s)
+                 missed = (s.time - self.next_decision) / period if self.next_decision > -1e8 else 0
+-                self.worker.submit(s.time, self.encode(s), missed=missed)
++                self.worker.submit(s.time, self.sensory_inputs(s), missed=missed)
+                 self.next_decision = s.time + period
+         elif self.decision_due(s):
+-            inputs = self.encode(s)
++            inputs = self.sensory_inputs(s)
++            self.applied_sensor_time = s.time
+             self._apply(inputs, self.brain.run(inputs, self.readouts), s)
+             self.next_decision = s.time + self.current_period(s)
+         self.check(s)
++        if self.vision_sink:
++            from .vision import phase_scene
++            frame = phase_scene(self, s, self.sensor_inputs)
++            frame['inputs'] = self.sensor_inputs
++            frame['input_time'] = self.sensor_time
++            last = self.decisions[-1] if self.decisions else None
++            self.vision_sink.send(frame, last.inputs if last else None,
++                                  self.applied_sensor_time, self.brain.name)
+         return AirlinerControls(self.aileron, self.haltere(s, dt), self.rudder,
+                                 self.throttle, self.brake)
+ 
+@@ -490,6 +513,14 @@ def row(fly, s, c):
+             'roll_deg': math.degrees(s.roll), 'climb_fpm': s.climb / FT * 60,
+             'on_ground': s.on_ground, 'aileron': c.aileron, 'elevator': c.elevator,
+             'rudder': c.rudder, 'throttle': c.throttle, 'brake': c.brake}
++    data.update({f'vision_{k}':None for k in ('cross_track_m','heading_error_deg','altitude_error_m','obstacle_looming_hz')})
++    data.update(vision_sensor_time=fly.sensor_time,vision_applied_sensor_time=fly.applied_sensor_time,vision_alerts='')
++    if fly.vision_frame:
++        data.update({f'vision_{k}': fly.vision_frame[k] for k in
++                     ('cross_track_m','heading_error_deg','altitude_error_m','obstacle_looming_hz')})
++        data['vision_sensor_time'] = fly.sensor_time
++        data['vision_applied_sensor_time'] = fly.applied_sensor_time
++        data['vision_alerts'] = '|'.join(fly.vision_frame['alerts'])
+     if last:
+         data.update({f'in_{k}': v for k, v in last.inputs.items()})
+         data.update({f'dn_{k}': v for k, v in last.rates.items()})
+diff --git a/flight_simulator/mission.py b/flight_simulator/mission.py
+index 3f8644c..e1a635a 100644
+--- a/flight_simulator/mission.py
++++ b/flight_simulator/mission.py
+@@ -183,6 +183,8 @@ class Mission:
+         self.brain, self.period, self.calibrate, self.say = brain, period, calibrate, log
+         self.legs = legs or circuit()
+         self.handovers = []
++        self.vision_sink = None
++        self.vision_obstacles = []
+         self.config = CFG_TAKEOFF
+         self.gear_down = True
+         self.fly = None
+@@ -227,6 +229,8 @@ class Mission:
+             self.gear_down, self.config = True, CFG_LANDING
+             self.fly.throttle_trim = clip(self.fly.throttle_trim + 0.15, 0, 1)  # power for the extra drag
+             self.say(f'{s.time:6.1f}s   checklist: flaps 30, gear down, +power')
++        self.fly.vision_sink = self.vision_sink
++        self.fly.vision_obstacles = self.vision_obstacles
+         return self.fly.step(s, dt)
+ 
+     @property
+@@ -342,6 +346,8 @@ def main(argv=None):
+     p.add_argument('--period', type=float, default=0.5, help='Seconds of sim time between brain trials')
+     p.add_argument('--no-calibrate', action='store_true')
+     p.add_argument('--seconds', type=float, default=1500)
++    p.add_argument('--vision-port',type=int,default=5601,help='Synthetic visual cue stream; 0 disables')
++    p.add_argument('--vision-obstacles',help='Obstacles JSON in runway coordinates and heights above runway')
+     p.add_argument('--log', help='CSV of every step: state, controls, active fly, inputs, DN rates')
+     p.add_argument('--plot', help='PNG of the whole flight with the handovers marked (needs matplotlib)')
+     p.add_argument('--telemetry-port', type=int, default=5501)
+@@ -349,6 +355,7 @@ def main(argv=None):
+     p.add_argument('--body-port', type=int, default=5600)
+     p.add_argument('--no-fly-body', action='store_true')
+     args = p.parse_args(argv)
++    vision = None
+     try:
+         if args.brain == 'standin':
+             brain = StandInBrain(noise_seed=args.noise_seed)
+@@ -357,6 +364,12 @@ def main(argv=None):
+             brain = ConnectomeBrain(args.data, seed=args.seed)
+         print(brain.name, flush=True)
+         mission = Mission(brain, args.period, calibrate=not args.no_calibrate)
++        from .vision import VisionPublisher
++        vision = VisionPublisher(args.vision_port)
++        mission.vision_sink = vision
++        if args.vision_obstacles:
++            from .__main__ import load_obstacles
++            mission.vision_obstacles = load_obstacles(args.vision_obstacles)
+         log, start = [], time.monotonic()
+         if args.backend == 'demo':
+             result = run_local(mission, args.seconds, log=log)
+@@ -381,6 +394,9 @@ def main(argv=None):
+     except (OSError, ValueError, RuntimeError, ImportError, KeyError) as exc:
+         print(f'Error: {exc}', file=sys.stderr)
+         return 1
++    finally:
++        if vision:
++            vision.close()
+ 
+ 
+ if __name__ == '__main__':
+diff --git a/flight_simulator/runlog.py b/flight_simulator/runlog.py
+index f2f18bc..714e8c5 100644
+--- a/flight_simulator/runlog.py
++++ b/flight_simulator/runlog.py
+@@ -450,7 +450,7 @@ def control_attribution(program, args):
+             return {'kind': 'FLY_BRAIN', 'label': f'FLY BRAIN (connectome) flying the {what.strip()}',
+                     'neurons_decide': 'pitch (jump/rotation, flare), steering and roll through descending-neuron '
+                                       'rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)',
+-                    'code_decides': 'sensory encoding of the aircraft state, the fixed decoder from DN rates to '
++                    'code_decides': 'synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to '
+                                     'controls, the behavioural-state gate (standing/flying), a fixed-gain '
+                                     'pitch-rate reflex (haltere stand-in), and phase handover (flies.py)'
+                                     + ('; takeoff_live holds the parking brake while the brain calibrates and '
+@@ -463,8 +463,8 @@ def control_attribution(program, args):
+     # obstacle avoidance: python -m flight_simulator
+     if brain == 'connectome':
+         return {'kind': 'FLY_BRAIN', 'label': 'FLY BRAIN (connectome) decides when to escape; code flies the airplane',
+-                'neurons_decide': 'when to avoid: the Giant Fibre (DNp01) rate in response to looming',
+-                'code_decides': 'turn direction (from obstacle geometry), holding altitude, speed and heading, '
++                'neurons_decide': 'escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input',
++                'code_decides': 'synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, '
+                                 'and flying the avoidance turn (conventional FlightController)',
+                 'autopilot': AUTOPILOT_RULE}
+     if brain == 'reflex':
+diff --git a/flight_simulator/takeoff_landing.py b/flight_simulator/takeoff_landing.py
+index 83cb243..452bc0e 100644
+--- a/flight_simulator/takeoff_landing.py
++++ b/flight_simulator/takeoff_landing.py
+@@ -238,6 +238,8 @@ def main(argv=None):
+     p.add_argument('--approach-throttle', type=float, default=0.55, help='FlightGear landing: approach power')
+     p.add_argument('--telemetry-port', type=int, default=5501)
+     p.add_argument('--control-port', type=int, default=5502)
++    p.add_argument('--vision-port',type=int,default=5601,help='Synthetic fly-view UDP port; 0 disables display stream')
++    p.add_argument('--vision-obstacles',help='Known obstacles JSON in runway coordinates: east=right, north=along; heights above runway')
+     p.add_argument('--log', help='CSV of every sim step, incl. sensory inputs and DN rates')
+     p.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window')
+     p.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
+@@ -249,6 +251,7 @@ def main(argv=None):
+     args = p.parse_args(argv)
+     if not math.isfinite(args.seconds) or args.seconds <= 0 or args.period <= 0:
+         p.error('--seconds and --period must be positive')
++    vision = None
+     try:
+         brain = make_brain(args)
+         print(brain.name, flush=True)
+@@ -256,6 +259,12 @@ def main(argv=None):
+             fly = TakeoffFly(brain, args.period, fault_at_kt=args.fault_at_kt)
+         else:
+             fly = LandingFly(brain, args.period)
++        from .vision import VisionPublisher
++        vision = VisionPublisher(args.vision_port)
++        fly.vision_sink = vision
++        if args.vision_obstacles:
++            from .__main__ import load_obstacles
++            fly.vision_obstacles = load_obstacles(args.vision_obstacles)
+         if not args.no_calibrate:
+             print('Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...', flush=True)
+             cal = fly.calibrate()
+@@ -289,6 +298,9 @@ def main(argv=None):
+     except (OSError, ValueError, RuntimeError, ImportError, KeyError) as exc:
+         print(f'Error: {exc}', file=sys.stderr)
+         return 1
++    finally:
++        if vision:
++            vision.close()
+ 
+ 
+ if __name__ == '__main__':

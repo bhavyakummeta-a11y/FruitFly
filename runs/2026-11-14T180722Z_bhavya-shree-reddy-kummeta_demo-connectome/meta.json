@@ -1,0 +1,60 @@
+{
+  "run_id": "2026-11-14T180722Z_bhavya-shree-reddy-kummeta_demo-connectome",
+  "who": "Bhavya Shree Reddy Kummeta",
+  "started_utc": "2026-11-14T18:07:21.994011+00:00",
+  "command": "python -m flight_simulator --brain connectome --seconds 1 --vision-port 0 --no-fly-body --log runs/vision-connectome.csv --note 'Synthetic visual-input integration check, local demo'",
+  "args": {
+    "backend": "demo",
+    "brain": "connectome",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "vision_port": 0,
+    "obstacles": "/Users/Bhavya_1/FruitFly/scenarios/obstacles.json",
+    "seconds": 1.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": "runs/vision-connectome.csv",
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": true,
+    "no_cockpit_fly": false,
+    "no_scene": false,
+    "note": "Synthetic visual-input integration check, local demo",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "4f2ea9664e95eb8d299b78999ecd90e39e391956",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/__main__.py",
+      " M flight_simulator/flies.py",
+      " M flight_simulator/mission.py",
+      " M flight_simulator/runlog.py",
+      " M flight_simulator/takeoff_landing.py"
+    ],
+    "untracked": [
+      "flight_simulator/vision.py",
+      "flight_simulator/vision_view.py",
+      "tests/test_vision.py"
+    ]
+  },
+  "python": "3.10.6",
+  "platform": "Darwin 25.6.0",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+    "neurons_decide": "escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input",
+    "code_decides": "synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "finished_utc": "2026-11-14T18:07:29.400213+00:00",
+  "exit_code": 0
+}
