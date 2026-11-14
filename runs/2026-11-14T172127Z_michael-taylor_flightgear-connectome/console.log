@@ -1,0 +1,6 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T172127Z_michael-taylor_flightgear-connectome
+CONNECTOME LIF (notebook model)
+Connectome decisions run synchronously; FlightGear pauses during each trial.
+Waiting for airborne FlightGear telemetry on localhost...
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: Start FlightGear in stable flight, at least 35 m/s and wings near level.
