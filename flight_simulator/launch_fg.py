@@ -59,7 +59,11 @@ PHASE_ARGS = {
                 '--prop:bool:/sim/presets/running=true',
                 '--prop:bool:/fruitfly/ground-autostart=true'],
     'landing': [f'--offset-distance={FINAL_NM}', '--altitude=1000', '--vc=145', '--in-air',
-                '--prop:/controls/flight/flaps=0.875', '--prop:bool:/controls/gear/gear-down=true'],
+                '--prop:/controls/flight/flaps=0.875', '--prop:bool:/controls/gear/gear-down=true',
+                # Spawn paused: unflown, the 737 sank ~300 ft below the glideslope while
+                # FlightGear loaded and the brain calibrated, so the fly had to go around at
+                # once. takeoff_live unpauses at the handover (a setup pause, allowed).
+                '--enable-freeze'],
 }
 
 
