@@ -353,11 +353,15 @@ class SteeringBiasTests(unittest.TestCase):
         fly = TakeoffFly(StandInBrain(noise_seed=seed, steer_bias=12.0))
         if calibrate:
             fly.calibrate()
-        return run_phase(fly, sim, 150), fly
+        log = []
+        r = run_phase(fly, sim, 150, log=log)
+        # Steering on the runway is what the calibration is about: measure the ground roll only.
+        r['ground_max_y'] = max(abs(x['y']) for x in log if x['on_ground'])
+        return r, fly
 
     def test_calibration_removes_standing_offset(self):
-        cal = [self.roll(True, s)[0]['max_centerline_m'] for s in range(5)]
-        raw = [self.roll(False, s)[0]['max_centerline_m'] for s in range(5)]
+        cal = [self.roll(True, s)[0]['ground_max_y'] for s in range(5)]
+        raw = [self.roll(False, s)[0]['ground_max_y'] for s in range(5)]
         self.assertLess(max(cal), 8.0, cal)
         self.assertLess(sum(cal), sum(raw), (cal, raw))
 

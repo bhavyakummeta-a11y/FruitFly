@@ -46,6 +46,9 @@ HOLD_PITCH = 10.0      # deg: after the phase ends in the air, keep flying (no C
 HOLD_THROTTLE = 0.7    # scripted climb power while holding
 VS_PITCH_GAIN = 12.0   # Hz of VS drive per deg of pitch error (1-neuron DNp20 readouts: see HS_GAIN)
 VS_ROLL_GAIN = 8.0     # Hz of VS push-pull per deg of bank
+ROLL_DAMP_S = 2.0      # s: roll-rate term in what the VS cells see (rotation sensing)
+MAX_AILERON = 0.35     # FG 737 rolls ~25 deg/s at 0.6 (spoilers): full deflection made the loop bang-bang
+AIL_PER_HZ = 0.008     # aileron per Hz of the VS roll readout (~0.07 per deg of bank error)
 HS_GAIN = 16.0         # Hz of HS push-pull per deg of drift: high enough that the 1-neuron
                        # steering readout's +-13 Hz trial noise doesn't swamp the signal
 
@@ -105,7 +108,10 @@ class PhaseFly:
     def vs_inputs(self, s, pitch_target_deg, roll_target_deg=0.0):
         """VS cells: pitch error drives both sides; roll error drives them apart."""
         pitch_error = pitch_target_deg - math.degrees(s.pitch)
-        left, right = tonic_pair(roll_target_deg - math.degrees(s.roll), VS_ROLL_GAIN)
+        # VS cells sense rotation, so the roll RATE is part of what they see: it damps the roll loop
+        # (FlightGear's 737 has ~10x less roll damping than the first reduced model).
+        roll_seen = math.degrees(s.roll + ROLL_DAMP_S * s.roll_rate)
+        left, right = tonic_pair(roll_target_deg - roll_seen, VS_ROLL_GAIN)
         bump = VS_PITCH_GAIN * pitch_error
         return {'vs_left': clip(left + bump, 0, 200), 'vs_right': clip(right + bump, 0, 200)}
 
@@ -118,6 +124,9 @@ class PhaseFly:
     def pitch_rate_from_vs(self, r):
         """DNp20 pair sum above its zero point -> nose-up rate, deg/s."""
         return 0.049 * 6.0 / VS_PITCH_GAIN * (r['DNp20_L'] + r['DNp20_R'] - self.zero['pitch'])
+
+    def aileron_from_vs(self, r):
+        return AIL_PER_HZ * self.roll_from_vs(r)
 
     def roll_from_vs(self, r):
         return (r['DNp20_L'] - r['DNp20_R']) - self.zero['roll']
@@ -264,7 +273,7 @@ class TakeoffFly(PhaseFly):
             self.rudder, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
         else:
             self.rudder = clip(-steer / (150.0 * HS_GAIN / 8.0), -AIR_RUDDER, AIR_RUDDER)
-            self.aileron = clip(0.004 * 4.0 / VS_ROLL_GAIN * self.roll_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -0.5, 0.5)
+            self.aileron = clip(self.aileron_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -MAX_AILERON, MAX_AILERON)
         return note
 
     def check(self, s):
@@ -368,7 +377,7 @@ class LandingFly(PhaseFly):
                         self.go_around, note = True, 'GO-AROUND: bitter suppressed MN9'
                         self.throttle = 1.0
             self.rudder = clip(-steer / (150.0 * HS_GAIN / 8.0), -AIR_RUDDER, AIR_RUDDER)
-            self.aileron = clip(0.004 * 4.0 / VS_ROLL_GAIN * self.roll_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -0.5, 0.5)
+            self.aileron = clip(self.aileron_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -MAX_AILERON, MAX_AILERON)
         self.q_cmd = math.radians(clip(q_deg, -3.0, 3.0))
         return note
 

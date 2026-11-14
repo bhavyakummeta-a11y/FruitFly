@@ -152,7 +152,12 @@ class RunwaySim:
         else:
             s.speed = max(1.0, s.speed + ((thrust - drag) / cfg.mass - G * math.sin(s.gamma)) * dt)
             s.gamma += (lift - weight * math.cos(s.gamma)) / (cfg.mass * s.speed) * dt
-            s.roll_rate += (1.5 * c.aileron * ratio - 2.0 * s.roll_rate) * dt
+            # Roll, as measured on FlightGear's 737 (aileron step test, 2026-11-14): a rate command
+            # that is weak near centre and strong at larger deflections (roll spoilers), about
+            # 1 deg/s at 0.15 and 5.3 deg/s at 0.3; the rate builds over ~1 s, and the bank then
+            # stays put (no self-levelling, no spiral).
+            rate_target = 0.85 * c.aileron * abs(c.aileron) * ratio
+            s.roll_rate += (rate_target - s.roll_rate) / 0.9 * dt  # ~1 s to build up (re-read of the step test)
             s.roll = clip(s.roll + s.roll_rate * dt, -1.0, 1.0)
             s.yaw_rate = G * math.tan(s.roll) / s.speed + 0.03 * c.rudder
 

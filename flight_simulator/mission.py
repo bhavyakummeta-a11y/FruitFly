@@ -30,7 +30,7 @@ import time
 
 from .core import clip, wrap
 from .flies import (PhaseFly, TakeoffFly, LandingFly, StandInBrain, steer_index, row,
-                    TONIC, HS_GAIN, VS_ROLL_GAIN, MN9_APPROACH)
+                    TONIC, HS_GAIN, MN9_APPROACH, MAX_AILERON)
 from .runway import (RunwaySim, FLAPS5, FLAPS5_GEAR_UP, FLAPS30, KT, FT, AIM_POINT, GLIDESLOPE,
                      takeoff_start)
 
@@ -43,6 +43,8 @@ FG_FLAPS = {CFG_TAKEOFF.name: 0.375, CFG_CIRCUIT.name: 0.375, CFG_LANDING.name: 
 
 BANK_PER_HZ = 0.22     # deg of bank target per Hz of steering index (25 deg when HS saturates)
 MAX_BANK = 25.0
+STEER_FULL = 114.0     # Hz of steering index that asks for full bank (HS saturated)
+BANK_SHAPE = 1.5       # 1 = linear; >1 = gentler for small track errors
 LOOKAHEAD = 1500.0     # m, cross-track look-ahead on circuit legs
 HANDOVER_X = -5556.0   # 3 nm before the threshold
 YAW_DAMPING = 1.0      # s: turn-rate term in the HS track error
@@ -147,12 +149,14 @@ class CircuitFly(PhaseFly):
 
     def decode(self, r, s):
         steer = steer_index(r, self.zero['steer'])    # positive = steer left
-        self.bank_target = clip(-BANK_PER_HZ * steer, -MAX_BANK, MAX_BANK)
+        # Gentle near zero (where the 1-neuron steering noise lives), full bank for big errors.
+        x = clip(-steer / STEER_FULL, -1.0, 1.0)
+        self.bank_target = MAX_BANK * math.copysign(abs(x) ** BANK_SHAPE, x)
         if self.obstacle_slot:
             override = self.obstacle_slot(s, r)
             if override is not None:
                 self.bank_target = clip(override, -MAX_BANK, MAX_BANK)
-        self.aileron = clip(0.004 * 4.0 / VS_ROLL_GAIN * self.roll_from_vs(r), -0.6, 0.6)
+        self.aileron = clip(self.aileron_from_vs(r), -MAX_AILERON, MAX_AILERON)
         self.rudder = 0.0
         self.q_cmd = math.radians(clip(self.pitch_rate_from_vs(r), -3.0, 3.0))
         # Throttle: MN9 around its zero, plus a slow trim (a fixed reflex, like a trim wheel).
@@ -339,6 +343,20 @@ def run_flightgear(mission, args, log):
               'WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW.', flush=True)
 
 
+def save_log(log, args, brain):
+    if args.log and log:
+        Path(args.log).parent.mkdir(parents=True, exist_ok=True)
+        fields = sorted({k for r in log for k in r}, key=lambda k: (k.startswith(('in_', 'dn_')), k))
+        with open(args.log, 'w', newline='') as f:
+            w = csv.DictWriter(f, fields)
+            w.writeheader()
+            w.writerows(log)
+        print(f'Log written to {args.log} ({len(log)} rows)', flush=True)
+    if args.plot and log:
+        from .plot_run import plot
+        print(f'Plot written to {plot(log, args.plot, "Full flight: " + brain.name)}', flush=True)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--brain', choices=['connectome', 'standin'], required=True)
@@ -365,21 +383,18 @@ def main(argv=None):
         print(brain.name, flush=True)
         mission = Mission(brain, args.period, calibrate=not args.no_calibrate)
         log, start = [], time.monotonic()
-        if args.backend == 'demo':
-            result = run_local(mission, args.seconds, log=log)
-        else:
-            result = run_flightgear(mission, args, log)
+        try:
+            if args.backend == 'demo':
+                result = run_local(mission, args.seconds, log=log)
+            else:
+                result = run_flightgear(mission, args, log)
+        except KeyboardInterrupt:
+            result = {'ended_in': mission.phase + ' (stopped)', 'handovers': mission.handovers,
+                      'success': False}
+            print('\nStopped: saving the log so far.', flush=True)
+        finally:
+            save_log(log, args, brain)  # always, even after Ctrl-C or an error mid-flight
         result['wall_s'] = round(time.monotonic() - start, 1)
-        if args.log and log:
-            Path(args.log).parent.mkdir(parents=True, exist_ok=True)
-            fields = sorted({k for r in log for k in r}, key=lambda k: (k.startswith(('in_', 'dn_')), k))
-            with open(args.log, 'w', newline='') as f:
-                w = csv.DictWriter(f, fields)
-                w.writeheader()
-                w.writerows(log)
-        if args.plot and log:
-            from .plot_run import plot
-            print(f'Plot written to {plot(log, args.plot, "Full flight: " + brain.name)}', flush=True)
         print(json.dumps(result, indent=2))
         return 0 if result['success'] else 2
     except KeyboardInterrupt:
