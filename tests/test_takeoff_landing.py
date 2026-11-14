@@ -342,5 +342,30 @@ class SafeExitTests(unittest.TestCase):
             bridge.tx.close()
 
 
+class SteeringBiasTests(unittest.TestCase):
+    """2026-11-14: the FG takeoff didn't follow the runway, and the connectome landing
+    went around 40 m left of centerline. Cause: the steering zero point shifts when all
+    senses are on (-37 Hz probed alone, ~-29 Hz in flight), so the fly held a standing
+    left offset. calibrate() re-measures it with the fly's own neutral stimulus mix."""
+
+    def roll(self, calibrate, seed):
+        sim = RunwaySim(takeoff_start(y=3.0), FLAPS5, yaw_disturbance=0.004)
+        fly = TakeoffFly(StandInBrain(noise_seed=seed, steer_bias=12.0))
+        if calibrate:
+            fly.calibrate()
+        return run_phase(fly, sim, 150), fly
+
+    def test_calibration_removes_standing_offset(self):
+        cal = [self.roll(True, s)[0]['max_centerline_m'] for s in range(5)]
+        raw = [self.roll(False, s)[0]['max_centerline_m'] for s in range(5)]
+        self.assertLess(max(cal), 8.0, cal)
+        self.assertLess(sum(cal), sum(raw), (cal, raw))
+
+    def test_calibration_only_moves_steering_zero(self):
+        _, fly = self.roll(True, 0)
+        self.assertEqual(set(fly.calibration), {'steer'})
+        self.assertGreater(fly.zero['steer'], STEER_ZERO)  # biased left -> zero moves up
+
+
 if __name__ == '__main__':
     unittest.main()

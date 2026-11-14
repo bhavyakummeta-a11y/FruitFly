@@ -44,6 +44,10 @@ JUMP_RATE = 2.5        # deg/s nose-up at full escape activity (FG 737 lifted of
 AIR_RUDDER = 0.1       # max rudder in the air (0.3 held after handover rolled the FG 737 over)
 HOLD_PITCH = 10.0      # deg: after the phase ends in the air, keep flying (no Cruise fly yet)
 HOLD_THROTTLE = 0.7    # scripted climb power while holding
+VS_PITCH_GAIN = 12.0   # Hz of VS drive per deg of pitch error (1-neuron DNp20 readouts: see HS_GAIN)
+VS_ROLL_GAIN = 8.0     # Hz of VS push-pull per deg of bank
+HS_GAIN = 16.0         # Hz of HS push-pull per deg of drift: high enough that the 1-neuron
+                       # steering readout's +-13 Hz trial noise doesn't swamp the signal
 
 
 @dataclass
@@ -67,9 +71,13 @@ def tonic_pair(signal, gain):
     return clip(TONIC + gain * signal, 0, 200), clip(TONIC - gain * signal, 0, 200)
 
 
-def steer_index(r):
+def steer_raw(r):
     """Positive = the fly steers LEFT (left HS -> left DNp15/DNa02, measured)."""
-    return (r['DNp15_L'] + r['DNa02_L']) - (r['DNp15_R'] + r['DNa02_R']) - STEER_ZERO
+    return (r['DNp15_L'] + r['DNa02_L']) - (r['DNp15_R'] + r['DNa02_R'])
+
+
+def steer_index(r, zero=STEER_ZERO):
+    return steer_raw(r) - zero
 
 
 class PhaseFly:
@@ -79,6 +87,11 @@ class PhaseFly:
 
     def __init__(self, brain, period=0.5):
         self.brain, self.period = brain, period
+        # Zero points ("no error" readouts). Defaults from the single-sense probe;
+        # calibrate() re-measures them with this fly's full stimulus mix, because
+        # the senses interact (connectome steering zero moved -37 -> ~-29 Hz in flight).
+        self.zero = {'steer': STEER_ZERO, 'pitch': PITCH_ZERO, 'roll': ROLL_ZERO, 'MN9': MN9_APPROACH}
+        self.calibration = None
         self.next_decision = -1e9
         self.decisions = []
         self.smoothed = None
@@ -92,8 +105,8 @@ class PhaseFly:
     def vs_inputs(self, s, pitch_target_deg):
         """VS cells: pitch error drives both sides; roll error drives them apart."""
         pitch_error = pitch_target_deg - math.degrees(s.pitch)
-        left, right = tonic_pair(-math.degrees(s.roll), 4.0)
-        bump = 6.0 * pitch_error
+        left, right = tonic_pair(-math.degrees(s.roll), VS_ROLL_GAIN)
+        bump = VS_PITCH_GAIN * pitch_error
         return {'vs_left': clip(left + bump, 0, 200), 'vs_right': clip(right + bump, 0, 200)}
 
     def hs_inputs(self, s, drift_deg, gain):
@@ -104,10 +117,32 @@ class PhaseFly:
     # Shared decoders -------------------------------------------------------
     def pitch_rate_from_vs(self, r):
         """DNp20 pair sum above its zero point -> nose-up rate, deg/s."""
-        return 0.049 * (r['DNp20_L'] + r['DNp20_R'] - PITCH_ZERO)
+        return 0.049 * 6.0 / VS_PITCH_GAIN * (r['DNp20_L'] + r['DNp20_R'] - self.zero['pitch'])
 
     def roll_from_vs(self, r):
-        return (r['DNp20_L'] - r['DNp20_R']) - ROLL_ZERO
+        return (r['DNp20_L'] - r['DNp20_R']) - self.zero['roll']
+
+    def neutral_inputs(self):
+        """This fly's stimulus mix when nothing is wrong (tonic VS/HS, phase sugar)."""
+        return {'sugar': self.neutral_sugar, 'bitter': 0.0, 'looming': 0.0,
+                'vs_left': TONIC, 'vs_right': TONIC, 'hs_left': TONIC, 'hs_right': TONIC}
+
+    def calibrate(self, trials=20):
+        """Sensory adaptation for steering: average the steering readout over `trials`
+        brain trials of this fly's neutral stimulus and use it as the zero point.
+        Not a fit: no gain changes.
+
+        Only steering is re-measured. On the connectome its zero moved from -37 Hz
+        (HS probed alone) to about -29 Hz with all senses on, which made both flies
+        hold a standing left offset. Pitch and roll zeros from the probe held the
+        glideslope within 0.06 deg on the connectome, and re-estimating them from a
+        few noisy trials made things worse. MN9 keeps its in-flight mean (65 Hz)."""
+        total = 0.0
+        for _ in range(trials):
+            total += steer_raw(self.brain.run(self.neutral_inputs(), self.readouts))
+        self.calibration = {'steer': total / trials}
+        self.zero.update(self.calibration)
+        return self.calibration
 
     def haltere(self, s, dt):
         """Fixed-gain pitch-rate reflex (the fly's haltere loop): executes q_cmd."""
@@ -147,6 +182,7 @@ class PhaseFly:
 class TakeoffFly(PhaseFly):
     """A STANDING fly: something looms as the plane nears Vr, the fly jumps,
     and the jump is the rotation."""
+    neutral_sugar = 200.0
     name = 'Takeoff fly'
 
     def __init__(self, brain, period=0.5, fault_at_kt=None):
@@ -170,13 +206,13 @@ class TakeoffFly(PhaseFly):
         drift = math.degrees(s.psi + math.atan2(s.y, 150.0)) + 0.5 * math.degrees(s.yaw_rate)
         inputs = {'sugar': 200.0, 'bitter': bitter, 'looming': looming}
         inputs.update(self.vs_inputs(s, pitch_target))
-        inputs.update(self.hs_inputs(s, drift, 8.0))
+        inputs.update(self.hs_inputs(s, drift, HS_GAIN))
         return inputs
 
     def decode(self, r, s):
         note = ''
         escape = r['DNp02'] + r['DNp04'] + r['DNp11']
-        steer = steer_index(r)
+        steer = steer_index(r, self.zero['steer'])
         committed = s.speed >= V1 or not s.on_ground
         # Throttle: MN9 ("go for it"). Nerve-cord gate: past V1 we are committed,
         # because looming suppresses MN9 (escape overrides feeding, measured).
@@ -198,10 +234,10 @@ class TakeoffFly(PhaseFly):
             note = f'JUMP: escape DNs {escape:.0f} Hz'
         # Steering: positive index = steer left.
         if s.on_ground:
-            self.rudder, self.aileron = clip(-steer / 50.0, -1, 1), 0.0
+            self.rudder, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
         else:
-            self.rudder = clip(-steer / 150.0, -AIR_RUDDER, AIR_RUDDER)
-            self.aileron = clip(0.004 * self.roll_from_vs(r) - 0.002 * steer, -0.5, 0.5)
+            self.rudder = clip(-steer / (150.0 * HS_GAIN / 8.0), -AIR_RUDDER, AIR_RUDDER)
+            self.aileron = clip(0.004 * 4.0 / VS_ROLL_GAIN * self.roll_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -0.5, 0.5)
         return note
 
     def check(self, s):
@@ -220,6 +256,7 @@ class TakeoffFly(PhaseFly):
 class LandingFly(PhaseFly):
     """A FLYING fly: the runway rushes up, the fly extends its legs, and that
     leg extension is the flare."""
+    neutral_sugar = TONIC
     name = 'Landing fly'
 
     def __init__(self, brain, period=0.5, final_period=0.25, trim_pitch=None, trim_throttle=0.3,
@@ -260,20 +297,20 @@ class LandingFly(PhaseFly):
         bitter = 200.0 if (self.unstable(s) and not self.go_around) else 0.0
         tau = s.time_to_contact()
         looming = 0.0 if (s.on_ground or self.go_around) else clip(200 * (1 - tau / LOOM_TAU), 0, 200)
-        drift = math.degrees(s.psi + math.atan2(s.y, 1500.0)) + 2.0 * math.degrees(s.yaw_rate)
+        drift = math.degrees(s.psi + math.atan2(s.y, 600.0)) + 2.0 * math.degrees(s.yaw_rate)
         inputs = {'sugar': sugar, 'bitter': bitter, 'looming': looming}
         inputs.update(self.vs_inputs(s, pitch_target))
-        inputs.update(self.hs_inputs(s, drift, 8.0))
+        inputs.update(self.hs_inputs(s, drift, HS_GAIN))
         return inputs
 
     def decode(self, r, s):
         note = ''
-        steer = steer_index(r)
+        steer = steer_index(r, self.zero['steer'])
         q_deg = self.pitch_rate_from_vs(r)
         if s.on_ground:
             # Scripted rollout checklist: idle, autobrake. The fly keeps the nose and centerline.
             self.throttle, self.brake = 0.0, 0.5
-            self.rudder, self.aileron = clip(-steer / 50.0, -1, 1), 0.0
+            self.rudder, self.aileron = clip(-steer / (50.0 * HS_GAIN / 8.0), -1, 1), 0.0
         else:
             self.brake = 0.0
             # Flying-state gate: DNp07 (landing) acts below 100 ft; DNp01/02/04/11
@@ -288,14 +325,14 @@ class LandingFly(PhaseFly):
             if self.go_around:
                 self.throttle = HOLD_THROTTLE if self.hold else 1.0
             else:
-                self.throttle = clip(self.trim_throttle + 0.005 * (r['MN9'] - MN9_APPROACH), 0, 1)
+                self.throttle = clip(self.trim_throttle + 0.005 * (r['MN9'] - self.zero['MN9']), 0, 1)
                 if s.agl > 100 * FT:
                     self.low_appetite = self.low_appetite + 1 if r['MN9'] < 5 else 0
                     if self.low_appetite >= 2:
                         self.go_around, note = True, 'GO-AROUND: bitter suppressed MN9'
                         self.throttle = 1.0
-            self.rudder = clip(-steer / 150.0, -AIR_RUDDER, AIR_RUDDER)
-            self.aileron = clip(0.004 * self.roll_from_vs(r) - 0.002 * steer, -0.5, 0.5)
+            self.rudder = clip(-steer / (150.0 * HS_GAIN / 8.0), -AIR_RUDDER, AIR_RUDDER)
+            self.aileron = clip(0.004 * 4.0 / VS_ROLL_GAIN * self.roll_from_vs(r) - 0.002 * 8.0 / HS_GAIN * steer, -0.5, 0.5)
         self.q_cmd = math.radians(clip(q_deg, -3.0, 3.0))
         return note
 
@@ -324,8 +361,11 @@ class StandInBrain:
     ``silence`` lesions as ConnectomeBrain."""
     name = 'PROBE-TABLE STAND-IN (no connectome)'
 
-    def __init__(self, silence=(), noise_seed=None):
+    def __init__(self, silence=(), noise_seed=None, steer_bias=0.0):
         import random
+        # steer_bias: extra left-steer Hz whenever HS is driven, like the connectome's
+        # context-dependent zero shift (-37 Hz probed alone, ~-29 Hz with all senses on).
+        self.steer_bias = steer_bias
         self.silenced = set(silence)
         self.rng = None if noise_seed is None else random.Random(noise_seed)
         if self.rng:
@@ -364,6 +404,8 @@ class StandInBrain:
                * f(hz['bitter'], [0, 50, 100, 200], [1, .69, .27, 0])
                * f(loom, [0, 100, 200], [1, .08, 0]))
         steer_l = f(hz['hs_left'] - 0.6 * hz['hs_right'], [0, 50, 100, 200], [0, 10, 25, 80])
+        if hz['hs_left'] or hz['hs_right']:
+            steer_l += self.steer_bias
         steer_r = f(hz['hs_right'] - 0.3 * hz['hs_left'], [0, 50, 100, 200], [0, 30, 60, 135])
         out = {name: 0.0 for name in READOUTS}
         out.update({

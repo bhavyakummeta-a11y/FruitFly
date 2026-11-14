@@ -12,6 +12,8 @@ Both are the **same FlyWire 783 connectome** running Shiu's LIF model unchanged,
 
 ## Quick start
 
+Step-by-step instructions, including FlightGear: **[RUN_TAKEOFF_LANDING.md](RUN_TAKEOFF_LANDING.md)**.
+
 ```sh
 # Fast and offline: the probe-table stand-in (NOT a fly brain), standard library only
 python3 -m flight_simulator.takeoff_landing takeoff --brain standin
@@ -72,7 +74,8 @@ Corrections to the plan that came out of the probe:
 
 ## The three layers
 
-1. **Stimulator rig** (`encode` in [flies.py](../flight_simulator/flies.py)): sim state → sense rates, always clipped to 0–200 Hz. VS and HS use push-pull around a **tonic 100 Hz** resting rate, so "no error" is 100/100 and the readout zero points come from the probe.
+1. **Stimulator rig** (`encode` in [flies.py](../flight_simulator/flies.py)): sim state → sense rates, always clipped to 0–200 Hz. VS and HS use push-pull around a **tonic 100 Hz** resting rate, so "no error" is 100/100. The drive is strong (HS 16 Hz and VS pitch 12 Hz per degree of error, VS roll 8 Hz per degree) because steering and pitch are each read from **one neuron per side**: a 200 ms trial measures that rate only in 5 Hz steps, ±13–20 Hz from trial to trial.
+   Before each phase the fly **adapts**: 20 trials of its own "nothing is wrong" stimulus mix set the steering zero point (`calibrate()`, about 70 s on the connectome; skip with `--no-calibrate`). The steering zero moves with context, from −37 Hz with HS probed alone to about −29 Hz with every sense on, and without adaptation both flies held a standing left offset. The pitch and roll zeros come from the probe, and the MN9 zero (65 Hz) from the connectome's in-flight approach average.
 2. **Brain** (`ConnectomeBrain.run` in [brain.py](../flight_simulator/brain.py)): one fresh 200 ms trial from rest per decision, with all senses stimulated together.
 3. **Nerve-cord layer** (`decode`, `haltere`): descending-neuron rates → commands, plus the state gates. A fixed-gain **pitch-rate reflex** executes the brain's pitch-rate command, the way a fly's halteres stabilise its wingbeat without the brain.
 
@@ -106,6 +109,19 @@ See the table below (filled in from the connectome runs in `runs/connectome/`).
 
 <!-- RESULTS -->
 
+### What the first FlightGear test taught us (2026-11-14)
+
+Michael's run "737 takeoff fly test" (sim-logs `ccc23d3`, code `161336b`):
+
+| Seen | Cause | Fix |
+|---|---|---|
+| Good roll, lift-off, 15° climb to ~985 ft, then a spiral dive into the ground at 271 kt | At HANDOVER the controller **exited**. FlightGear keeps the last controls it received (rudder −0.2, aileron −0.08), and the single pause packet never took effect | The fly keeps flying after its phase ends (10° climb, wings level) until Ctrl-C. On exit it centres the ailerons and rudder and waits for a confirmed pause |
+| Didn't follow the runway: drifted 5.5 m left on the roll, 11 m in the climb, rudder flipping sign every sample | Steering zero-point bias plus 1-neuron readout noise | Pre-flight adaptation (`calibrate()`), DN-rate low-pass, HS drive 8 → 16 Hz/deg |
+| Lift-off at 10.9° (the tail strikes at 11°) | Rotation of 3°/s plus the FG 737's lag | Jump capped at 2.5°/s |
+| AGL reads 7.95 ft parked | `altitude-agl-ft` is the CG height | Offset subtracted (it matters for the flare) |
+
+The connectome landing went around for the same reasons: first the pitch noise sank it below the glideslope, then the steering bias carried it 40 m left. With all of the above, the noisy stand-in (spike-count noise plus a steering bias like the connectome's) takes off 40/40 times (median 3 m off centerline) and lands 37/40 (median 157–203 fpm).
+
 ## FlightGear
 
 **Always pull first** (`git pull`), so you have the latest launcher, protocols and aircraft. Run `python flightgear/setup_aircraft.py` once.
@@ -135,7 +151,7 @@ Notes:
 - If FlightGear is installed somewhere unusual, add `--fg <install dir>` or set `FG_INSTALL`. If the protocols can't be copied (for example under `C:\Program Files` without admin rights, or with the Linux AppImage), the launcher prints a warning and the copy has to be done by hand.
 - `--instance 1` runs a second FlightGear on other ports. The launcher prints the matching `--telemetry-port/--control-port` flags.
 
-FlightGear is frozen (`/sim/freeze/master`) during every brain trial and resumed afterwards. **The FlightGear path has not been flown live yet** (FlightGear isn't installed on the dev machine): the parsing and wire format are unit-tested, but the gains were tuned on the reduced local model. Expect to retune `--approach-throttle`, the VS pitch gain, and the rudder gains against the JSBSim 737. Also check that rudder steers the nosewheel on the ground in the 738-flies model.
+FlightGear is frozen (`/sim/freeze/master`) during every brain trial and resumed afterwards. The FlightGear path has been flown live once, for takeoff (see above). The fixes from that run haven't been flown yet, and the gains were tuned on the reduced local model. Run with `--log runs/fg-<phase>.csv` so the brain's inputs and DN rates are captured; a FlightGear session log alone doesn't include them. Expect to retune `--approach-throttle`, the VS pitch gain, and the rudder gains against the JSBSim 737. Also check that rudder steers the nosewheel on the ground in the 738-flies model.
 
 ## Honest limits
 

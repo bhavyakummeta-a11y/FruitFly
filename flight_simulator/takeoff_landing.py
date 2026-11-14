@@ -167,6 +167,8 @@ def main(argv=None):
     p.add_argument('--backend', choices=['demo', 'flightgear'], default='demo')
     p.add_argument('--data', default='data/brain')
     p.add_argument('--seed', type=int, default=0)
+    p.add_argument('--no-calibrate', action='store_true',
+                   help='Skip the pre-flight adaptation trials that measure the zero points')
     p.add_argument('--noise-seed', type=int,
                    help='standin only: add the connectome\'s spike-count noise (1-4 neurons per readout)')
     p.add_argument('--silence', nargs='+', default=[], choices=list(INPUTS) + list(READOUTS),
@@ -197,6 +199,10 @@ def main(argv=None):
             fly = TakeoffFly(brain, args.period, fault_at_kt=args.fault_at_kt)
         else:
             fly = LandingFly(brain, args.period)
+        if not args.no_calibrate:
+            print('Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...', flush=True)
+            cal = fly.calibrate()
+            print('  zero points: ' + ', '.join(f'{k}={v:.1f}' for k, v in cal.items()), flush=True)
         print(f'{fly.name}: ' + ('standing fly, looming -> jump = rotation' if args.phase == 'takeoff'
                                  else 'flying fly, looming -> DNp07 = flare'), flush=True)
         log = []
