@@ -1,0 +1,51 @@
+{
+  "run_id": "2026-11-14T191042Z_michael-taylor_fg-landing-fly-connectome-paused-through-handover-26b50af-clear-weather",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.9,
+      "to_s": 32.0
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: SPD; controller 2026-11-14T191114Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 32.0,
+      "to_s": 60.8
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the landing",
+      "detail": "run 2026-11-14T191114Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 60.8,
+      "to_s": 123.4
+    }
+  ],
+  "name": "landing fly - CONNECTOME, paused through handover (26b50af), clear weather",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 27872,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T19:10:42.042206+00:00",
+  "duration_s": 123,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 503
+  },
+  "airplane_samples": 42,
+  "controller_runs": {
+    "2026-11-14T191114Z_michael-taylor_flightgear-connectome": null
+  },
+  "code": {
+    "commit": "26b50af802103bf840189b507e3bb508828bfcbb",
+    "branch": "main"
+  }
+}

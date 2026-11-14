@@ -1,0 +1,638 @@
+14:10:42 [session] Session 'landing fly - CONNECTOME, paused through handover (26b50af), clear weather' watching fgfs pid 27872 (738-flies)
+14:10:42 [session] Live log page: http://127.0.0.1:8765/
+14:10:44 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+14:10:44 [fgfs] 0.03 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+14:10:44 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+14:10:44 [fgfs] 0.04 [ALRT]:general   affinity=none
+14:10:44 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+14:10:44 [fgfs] 1.46 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:10:44 [fgfs] 1.46 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:10:44 [fgfs] 1.46 [WARN]:general   Enabling ATI/AMD viewport hack
+14:10:44 [fgfs] 1.48 [WARN]:osg       Warning: GraphicsWindowWin32::grabFocus() - Failed grabbing the focus
+14:10:44 [fgfs] 1.48 [ALRT]:view      affinity=none
+14:10:45 [session] Docked: log below and fly brain right of FlightGear
+14:10:53 [fgfs] 11.73 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+14:10:53 [fgfs] 11.73 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+14:10:55 [fgfs] 13.08 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:10:55 [fgfs] 13.17 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:10:58 [fgfs] 15.99 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+14:10:58 [fgfs] 16.04 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+14:10:58 [fgfs] 16.04 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+14:10:58 [fgfs] 16.04 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+14:10:58 [fgfs] 16.04 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+14:10:58 [fgfs] 16.49 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+14:11:01 [session] Connected to property API on :8080
+14:11:01 [fgfs] 17.48 [WARN]:input     Unhandled HID usage page:d with usage 5
+14:11:01 [fgfs] 17.48 [WARN]:input     Unhandled HID usage page:d with usage e
+14:11:01 [fgfs] 19.91 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:04 [fgfs] 20.28 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+14:11:05 [session] Property API stopped answering
+14:11:07 [fgfs] 24.90 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:11:07 [fgfs] 25.16 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:11:10 [fgfs] 27.75 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:11:10 [fgfs] 28.17 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:11:10 [fgfs] 28.44 [ALRT]:flight    Failed to save initial FDM property state
+14:11:14 [session] Connected to property API on :8080
+14:11:14 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: SPD)
+14:11:14 [fgfs] 30.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 30.56 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 30.56 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 30.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 30.84 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 30.84 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 31.04 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 31.04 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 31.04 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 31.26 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 31.26 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 31.26 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 31.50 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 31.50 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 31.50 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 31.73 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 31.73 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 31.73 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 31.96 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 31.96 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 31.97 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 32.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 32.20 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 32.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:14 [fgfs] 32.36 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:14 [fgfs] 32.43 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:14 [fgfs] 32.43 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:14 [fgfs] 32.43 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 32.63 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 32.63 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 32.63 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 32.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 32.83 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 32.83 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 33.03 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 33.03 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 33.04 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 33.24 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 33.24 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 33.24 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 33.43 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 33.43 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 33.44 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 33.65 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 33.65 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 33.65 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [fgfs] 33.84 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:15 [fgfs] 33.84 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:15 [fgfs] 33.84 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:15 [controller] Run started: 2026-11-14T191114Z_michael-taylor_flightgear-connectome
+14:11:15 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T191114Z_michael-taylor_flightgear-connectome
+14:11:15 [controller] [control] FLY BRAIN (connectome) flying the landing
+14:11:15 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+14:11:15 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+14:11:15 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:11:17 [fgfs] 34.04 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 34.04 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 34.04 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 34.24 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 34.24 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 34.24 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 34.43 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 34.43 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 34.44 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 34.64 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 34.64 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 34.64 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 34.84 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 34.85 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 34.85 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 35.05 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 35.05 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 35.06 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 35.25 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 35.26 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 35.26 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 35.49 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 35.49 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 35.49 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 35.72 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 35.72 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 35.75 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:17 [fgfs] 35.75 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:17 [fgfs] 35.90 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:17 [fgfs] 35.90 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:17 [fgfs] 35.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 36.09 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 36.09 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 36.09 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 36.29 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 36.29 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 36.29 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 36.49 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 36.49 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 36.49 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 36.70 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 36.70 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 36.70 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 36.90 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 36.90 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 36.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 37.09 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 37.09 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 37.09 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:18 [fgfs] 37.29 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:18 [fgfs] 37.29 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:18 [fgfs] 37.29 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 37.51 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 37.51 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 37.51 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 37.70 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 37.70 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 37.70 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 37.89 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 37.90 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 37.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 38.10 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 38.10 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 38.10 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 38.29 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 38.29 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 38.29 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 38.49 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 38.49 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 38.49 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 38.70 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 38.70 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 38.70 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 38.89 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:20 [fgfs] 38.90 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:20 [fgfs] 38.90 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:20 [fgfs] 38.92 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:22 [fgfs] 39.10 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 39.10 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 39.10 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 39.30 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 39.30 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 39.30 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 39.49 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 39.49 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 39.49 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 39.70 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 39.70 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 39.70 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 39.91 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 39.91 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 39.91 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 40.10 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 40.10 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 40.10 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 40.31 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 40.32 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 40.32 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [fgfs] 40.50 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:22 [fgfs] 40.51 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:22 [fgfs] 40.51 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:22 [controller] CONNECTOME LIF (notebook model)
+14:11:22 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+14:11:23 [fgfs] 40.71 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 40.71 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 40.71 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 40.91 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 40.91 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 40.91 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 41.11 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 41.11 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 41.11 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 41.32 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 41.32 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 41.32 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 41.51 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 41.51 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 41.51 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 41.72 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 41.72 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 41.72 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 41.92 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 41.92 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 41.92 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 42.12 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:23 [fgfs] 42.12 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:23 [fgfs] 42.13 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:23 [fgfs] 42.15 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:25 [fgfs] 42.33 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 42.33 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 42.33 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 42.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 42.56 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 42.56 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 42.76 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 42.76 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 42.76 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 42.96 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 42.96 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 42.96 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 43.16 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 43.16 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 43.16 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 43.36 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 43.36 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 43.36 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 43.56 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 43.56 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 43.56 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [fgfs] 43.76 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:25 [fgfs] 43.76 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:25 [fgfs] 43.76 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:25 [controller]   zero points: steer=-17.5
+14:11:25 [controller] Landing fly: flying fly, looming -> DNp07 = flare
+14:11:25 [controller] Waiting for FlightGear runway telemetry on localhost...
+14:11:25 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+14:11:27 [fgfs] 43.96 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 43.96 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 43.96 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 44.19 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 44.19 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 44.19 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 44.37 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 44.38 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 44.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 44.57 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 44.57 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 44.57 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 44.77 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 44.77 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 44.77 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 44.97 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 44.97 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 44.97 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 45.17 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 45.18 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 45.18 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [fgfs] 45.38 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:27 [fgfs] 45.39 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:27 [fgfs] 45.39 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:27 [fgfs] 45.39 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:27 [session] tail_controller skipped: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+14:11:28 [fgfs] 45.59 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 45.59 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 45.59 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:28 [fgfs] 45.78 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 45.78 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 45.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:28 [fgfs] 45.99 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 45.99 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 45.99 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:28 [fgfs] 46.19 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 46.19 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 46.19 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:28 [fgfs] 46.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 46.39 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 46.39 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:28 [fgfs] 46.58 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 46.58 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 46.59 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:28 [fgfs] 46.78 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:28 [fgfs] 46.78 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:28 [fgfs] 46.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 46.98 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 46.98 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 46.98 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 47.18 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 47.18 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 47.18 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 47.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 47.38 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 47.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 47.59 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 47.59 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 47.59 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 47.78 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 47.78 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 47.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 47.99 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 47.99 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 47.99 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 48.19 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 48.19 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 48.19 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 48.39 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 48.39 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 48.39 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:30 [fgfs] 48.52 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:30 [fgfs] 48.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:30 [fgfs] 48.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:30 [fgfs] 48.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 48.79 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 48.79 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 48.79 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 49.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 49.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 49.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 49.19 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 49.19 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 49.19 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 49.39 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 49.39 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 49.39 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 49.59 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 49.59 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 49.59 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 49.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 49.80 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 49.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:31 [fgfs] 49.99 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:31 [fgfs] 49.99 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:31 [fgfs] 49.99 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 50.19 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 50.19 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 50.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 50.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 50.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 50.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 50.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 50.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 50.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 50.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 50.81 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 50.82 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 51.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 51.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 51.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 51.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 51.21 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 51.21 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 51.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 51.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 51.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 51.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 51.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 51.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:33 [fgfs] 51.66 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:33 [fgfs] 51.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:33 [fgfs] 51.80 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:33 [fgfs] 51.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 52.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 52.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 52.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 52.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 52.20 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 52.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 52.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 52.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 52.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 52.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 52.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 52.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 52.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 52.80 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 52.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 53.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 53.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 53.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:34 [fgfs] 53.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:34 [fgfs] 53.20 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:34 [fgfs] 53.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 53.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 53.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 53.41 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 53.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 53.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 53.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 53.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 53.80 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 53.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 54.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 54.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 54.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 54.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 54.20 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 54.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 54.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 54.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 54.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 54.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 54.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 54.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 54.80 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:36 [fgfs] 54.80 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:36 [fgfs] 54.80 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:36 [fgfs] 54.83 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:37 [fgfs] 55.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 55.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 55.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 55.20 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 55.20 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 55.20 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 55.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 55.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 55.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 55.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 55.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 55.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 55.81 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 55.81 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 55.81 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 56.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 56.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 56.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 56.21 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 56.21 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 56.21 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:37 [fgfs] 56.40 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:37 [fgfs] 56.40 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:37 [fgfs] 56.40 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 56.60 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 56.60 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 56.60 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 56.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 56.83 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 56.83 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 57.06 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 57.06 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 57.06 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 57.30 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 57.30 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 57.30 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 57.53 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 57.53 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 57.53 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 57.76 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 57.76 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 57.76 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:39 [fgfs] 57.99 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:39 [fgfs] 58.00 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:39 [fgfs] 58.00 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:39 [fgfs] 58.00 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:41 [fgfs] 58.23 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:41 [fgfs] 58.23 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:41 [fgfs] 58.23 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:41 [fgfs] 58.46 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:41 [fgfs] 58.46 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:41 [fgfs] 58.47 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:41 [fgfs] 58.68 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:41 [fgfs] 58.69 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:41 [fgfs] 58.69 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:41 [fgfs] 58.91 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:41 [fgfs] 58.91 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:41 [fgfs] 58.91 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:41 [fgfs] 59.15 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:41 [fgfs] 59.15 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:41 [fgfs] 59.15 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:41 [fgfs] 59.38 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:41 [fgfs] 59.38 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:41 [fgfs] 59.38 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [control] IN CONTROL: FLY BRAIN (connectome) flying the landing (run 2026-11-14T191114Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+14:11:42 [fgfs] 59.62 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 59.62 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 59.62 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 59.83 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 59.83 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 59.83 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 60.06 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 60.06 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 60.06 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 60.29 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 60.29 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 60.29 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 60.52 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 60.52 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 60.52 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 60.75 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 60.76 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 60.76 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 60.99 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 60.99 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 60.99 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [fgfs] 61.15 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:42 [fgfs] 61.22 [ALRT]:nasal     Nasal runtime error: nil used in numeric context
+14:11:42 [fgfs] 61.22 [ALRT]:nasal       at C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 153
+14:11:42 [fgfs] 61.22 [ALRT]:nasal       called from: C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Nasal/controls.nas, line 137
+14:11:42 [controller] NO-AUTOPILOT RULE: autopilot was still on after handover (/autopilot/internal/SPD); forced off.
+14:11:42 [controller] FlightGear resumes with the fly's first controls: the fly has the approach.
+14:11:42 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+14:11:45 [flightgear] Resumed
+14:11:45 [controller]   decision applied 0.0s after its state  APPROACH       ias=144.3kt agl=  993ft pitch= 0.4deg thr=0.53
+14:11:45 [controller]   decision applied 0.2s after its state  APPROACH       ias=143.7kt agl=  993ft pitch= 0.4deg thr=0.53
+14:11:45 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.6kt agl=  991ft pitch= 0.3deg thr=0.56
+14:11:45 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.5kt agl=  989ft pitch= 0.3deg thr=0.54
+14:11:45 [controller]   decision applied 0.2s after its state  APPROACH       ias=143.9kt agl=  981ft pitch= 0.1deg thr=0.57
+14:11:45 [controller]   decision applied 0.2s after its state  APPROACH       ias=144.2kt agl=  977ft pitch= 0.1deg thr=0.56
+14:11:47 [fgfs] 65.78 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:47 [controller]   decision applied 0.3s after its state  APPROACH       ias=144.7kt agl=  969ft pitch=-0.0deg thr=0.57
+14:11:47 [controller]   decision applied 1.0s after its state  APPROACH       ias=146.2kt agl=  948ft pitch=-0.7deg thr=0.58
+14:11:47 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  943ft pitch=-0.9deg thr=0.60
+14:11:47 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.0kt agl=  938ft pitch=-1.1deg thr=0.54
+14:11:47 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.2kt agl=  923ft pitch=-1.4deg thr=0.53
+14:11:47 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.7kt agl=  916ft pitch=-1.4deg thr=0.53
+14:11:50 [controller]   decision applied 0.5s after its state  APPROACH       ias=149.7kt agl=  898ft pitch=-1.3deg thr=0.49
+14:11:50 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.1kt agl=  892ft pitch=-1.2deg thr=0.41
+14:11:50 [controller]   decision applied 0.4s after its state  APPROACH       ias=150.7kt agl=  878ft pitch=-1.2deg thr=0.48
+14:11:50 [controller]   decision applied 0.9s after its state  APPROACH       ias=152.0kt agl=  846ft pitch=-1.3deg thr=0.43
+14:11:50 [controller]   decision applied 0.2s after its state  APPROACH       ias=152.3kt agl=  839ft pitch=-1.3deg thr=0.45
+14:11:51 [fgfs] 70.18 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:51 [controller]   decision applied 0.2s after its state  APPROACH       ias=152.8kt agl=  829ft pitch=-1.3deg thr=0.44
+14:11:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=153.6kt agl=  812ft pitch=-1.2deg thr=0.47
+14:11:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=154.2kt agl=  799ft pitch=-1.0deg thr=0.45
+14:11:51 [controller]   decision applied 0.2s after its state  APPROACH       ias=154.8kt agl=  787ft pitch=-0.9deg thr=0.47
+14:11:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=155.4kt agl=  774ft pitch=-0.8deg thr=0.35
+14:11:53 [controller]   decision applied 0.1s after its state  APPROACH       ias=155.9kt agl=  763ft pitch=-0.7deg thr=0.29
+14:11:53 [controller]   decision applied 0.8s after its state  APPROACH       ias=157.2kt agl=  715ft pitch=-0.4deg thr=0.26
+14:11:53 [controller]   decision applied 0.1s after its state  APPROACH       ias=157.4kt agl=  709ft pitch=-0.4deg thr=0.24
+14:11:55 [fgfs] 73.43 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.0kt agl=  688ft pitch=-0.2deg thr=1.00
+14:11:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.3kt agl=  676ft pitch= 0.0deg thr=1.00
+14:11:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=158.8kt agl=  663ft pitch= 0.3deg thr=1.00
+14:11:55 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=159.6kt agl=  646ft pitch= 0.9deg thr=1.00
+14:11:56 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=160.7kt agl=  631ft pitch= 1.7deg thr=1.00
+14:11:56 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=161.6kt agl=  622ft pitch= 2.2deg thr=1.00
+14:11:56 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=166.0kt agl=  593ft pitch= 4.5deg thr=1.00
+14:11:56 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=167.2kt agl=  585ft pitch= 5.4deg thr=1.00
+14:11:58 [fgfs] 76.99 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:11:58 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=170.0kt agl=  569ft pitch= 7.9deg thr=1.00
+14:11:58 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=171.0kt agl=  564ft pitch= 8.6deg thr=1.00
+14:11:58 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=172.1kt agl=  559ft pitch= 9.3deg thr=1.00
+14:11:58 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=173.5kt agl=  555ft pitch= 9.9deg thr=1.00
+14:11:58 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=174.3kt agl=  553ft pitch=10.2deg thr=1.00
+14:11:58 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=175.2kt agl=  553ft pitch=10.8deg thr=1.00
+14:12:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=177.2kt agl=  557ft pitch=12.3deg thr=1.00
+14:12:00 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=177.9kt agl=  561ft pitch=13.0deg thr=1.00
+14:12:01 [fgfs] 80.26 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:02 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=178.8kt agl=  571ft pitch=14.2deg thr=1.00
+14:12:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=179.2kt agl=  577ft pitch=14.6deg thr=1.00
+14:12:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=179.6kt agl=  586ft pitch=15.0deg thr=1.00
+14:12:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.0kt agl=  599ft pitch=15.4deg thr=1.00
+14:12:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.3kt agl=  609ft pitch=15.7deg thr=1.00
+14:12:02 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.4kt agl=  618ft pitch=15.9deg thr=1.00
+14:12:03 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.9kt agl=  660ft pitch=16.3deg thr=1.00
+14:12:03 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=181.0kt agl=  670ft pitch=16.5deg thr=1.00
+14:12:03 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=181.0kt agl=  688ft pitch=16.7deg thr=1.00
+14:12:06 [fgfs] 84.49 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:06 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=181.1kt agl=  704ft pitch=16.9deg thr=1.00
+14:12:06 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=181.1kt agl=  721ft pitch=17.0deg thr=1.00
+14:12:06 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=181.1kt agl=  747ft pitch=17.0deg thr=1.00
+14:12:06 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=181.0kt agl=  761ft pitch=17.0deg thr=1.00
+14:12:06 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=181.0kt agl=  772ft pitch=17.1deg thr=1.00
+14:12:06 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=181.0kt agl=  790ft pitch=17.1deg thr=1.00
+14:12:06 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.7kt agl=  847ft pitch=17.2deg thr=1.00
+14:12:07 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=180.6kt agl=  875ft pitch=17.1deg thr=1.00
+14:12:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.6kt agl=  884ft pitch=17.0deg thr=1.00
+14:12:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.5kt agl=  903ft pitch=16.9deg thr=1.00
+14:12:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.5kt agl=  923ft pitch=16.9deg thr=1.00
+14:12:07 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=180.4kt agl=  946ft pitch=16.8deg thr=1.00
+14:12:09 [fgfs] 87.78 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:09 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=180.3kt agl=  971ft pitch=16.8deg thr=1.00
+14:12:09 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=180.3kt agl=  990ft pitch=16.7deg thr=1.00
+14:12:09 [controller] GO-AROUND reached in the air. No Cruise fly yet, so the Landing fly keeps flying: wings level, 10 deg climb, climb power. Press Ctrl-C to pause FlightGear and exit.
+14:12:09 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=180.1kt agl= 1054ft pitch=16.5deg thr=0.70
+14:12:09 [controller]   decision applied 0.3s after its state  GO-AROUND      ias=179.1kt agl= 1081ft pitch=16.2deg thr=0.70
+14:12:11 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=178.8kt agl= 1088ft pitch=16.1deg thr=0.70
+14:12:11 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=178.1kt agl= 1104ft pitch=15.7deg thr=0.70
+14:12:11 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=177.2kt agl= 1124ft pitch=15.2deg thr=0.70
+14:12:11 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=176.0kt agl= 1151ft pitch=14.4deg thr=0.70
+14:12:11 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=175.4kt agl= 1165ft pitch=14.0deg thr=0.70
+14:12:13 [fgfs] 91.39 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:13 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=174.8kt agl= 1179ft pitch=13.7deg thr=0.70
+14:12:13 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=173.0kt agl= 1223ft pitch=12.8deg thr=0.70
+14:12:13 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=172.5kt agl= 1237ft pitch=12.5deg thr=0.70
+14:12:13 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=171.7kt agl= 1258ft pitch=11.7deg thr=0.70
+14:12:13 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=171.4kt agl= 1268ft pitch=11.3deg thr=0.70
+14:12:14 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=170.9kt agl= 1282ft pitch=10.9deg thr=0.70
+14:12:14 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=170.5kt agl= 1296ft pitch=10.5deg thr=0.70
+14:12:14 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=170.2kt agl= 1306ft pitch=10.3deg thr=0.70
+14:12:14 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=170.0kt agl= 1315ft pitch=10.1deg thr=0.70
+14:12:16 [fgfs] 95.17 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:16 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.5kt agl= 1337ft pitch= 9.7deg thr=0.70
+14:12:16 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.4kt agl= 1344ft pitch= 9.5deg thr=0.70
+14:12:16 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.2kt agl= 1356ft pitch= 9.2deg thr=0.70
+14:12:16 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.1kt agl= 1361ft pitch= 9.1deg thr=0.70
+14:12:16 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=169.0kt agl= 1373ft pitch= 8.9deg thr=0.70
+14:12:18 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=168.9kt agl= 1376ft pitch= 8.8deg thr=0.70
+14:12:18 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=168.9kt agl= 1381ft pitch= 8.7deg thr=0.70
+14:12:18 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=168.9kt agl= 1385ft pitch= 8.7deg thr=0.70
+14:12:18 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=168.9kt agl= 1398ft pitch= 8.6deg thr=0.70
+14:12:18 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.0kt agl= 1402ft pitch= 8.6deg thr=0.70
+14:12:20 [fgfs] 99.13 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:21 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.0kt agl= 1408ft pitch= 8.5deg thr=0.70
+14:12:21 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.0kt agl= 1412ft pitch= 8.5deg thr=0.70
+14:12:21 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.0kt agl= 1415ft pitch= 8.5deg thr=0.70
+14:12:21 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.1kt agl= 1420ft pitch= 8.5deg thr=0.70
+14:12:21 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.1kt agl= 1423ft pitch= 8.6deg thr=0.70
+14:12:21 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.1kt agl= 1426ft pitch= 8.7deg thr=0.70
+14:12:23 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=169.4kt agl= 1444ft pitch= 8.6deg thr=0.70
+14:12:23 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.4kt agl= 1446ft pitch= 8.6deg thr=0.70
+14:12:23 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.5kt agl= 1449ft pitch= 8.7deg thr=0.70
+14:12:27 [session] Property API stopped answering
+14:12:27 [fgfs] 103.79 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+14:12:27 [fgfs] 103.79 [WARN]:io        Network:4472: errno: Domain error(33)
+14:12:27 [fgfs] 103.79 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+14:12:27 [fgfs] 103.79 [WARN]:io        Network:4908: errno: Domain error(33)
+14:12:27 [fgfs] 103.79 [WARN]:io        isNonBlockingError: WSAGetLastError():10054
+14:12:27 [fgfs] 103.79 [WARN]:io        Network:4156: errno: Domain error(33)
+14:12:27 [fgfs] 104.46 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:12:27 [controller]   decision applied 0.5s after its state  GO-AROUND      ias=169.6kt agl= 1454ft pitch= 9.0deg thr=0.70
+14:12:27 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.6kt agl= 1456ft pitch= 9.0deg thr=0.70
+14:12:27 [controller]   decision applied 0.1s after its state  GO-AROUND      ias=169.6kt agl= 1458ft pitch= 9.1deg thr=0.70
+14:12:27 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.6kt agl= 1461ft pitch= 9.2deg thr=0.70
+14:12:27 [controller]   decision applied 0.4s after its state  GO-AROUND      ias=169.6kt agl= 1468ft pitch= 9.0deg thr=0.70
+14:12:27 [controller]   decision applied 0.2s after its state  GO-AROUND      ias=169.7kt agl= 1471ft pitch= 8.9deg thr=0.70
+14:12:27 [session] Viewer camera -> Chase View (display only; the fly pilot is unaffected)
+14:12:28 [session] tail_controller skipped: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+14:12:35 [session] FlightGear exited (code 3221226356) - crashed or force-closed
