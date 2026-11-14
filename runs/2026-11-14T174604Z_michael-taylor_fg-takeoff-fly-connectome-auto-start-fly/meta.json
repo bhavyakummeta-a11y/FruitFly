@@ -1,0 +1,51 @@
+{
+  "run_id": "2026-11-14T174604Z_michael-taylor_fg-takeoff-fly-connectome-auto-start-fly",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "takeoff fly - CONNECTOME, auto start (--fly)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 20836,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T17:46:04.335614+00:00",
+  "duration_s": 228,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 27
+  },
+  "airplane_samples": 58,
+  "controller_runs": {
+    "2026-11-14T174635Z_michael-taylor_flightgear-connectome": {
+      "fly": "Takeoff fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "takeoff",
+      "completed": false,
+      "time_s": 5.8,
+      "decisions": 0,
+      "max_centerline_m": 30.4,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": true,
+      "liftoff_x_m": null,
+      "rejected": false,
+      "agl_ft": 0,
+      "ias_kt": 13.8,
+      "stop_x_m": null,
+      "events": [],
+      "decision_timing": {
+        "applied": 0,
+        "skipped": 0,
+        "latency_mean_s": null,
+        "latency_max_s": null
+      },
+      "speed_up_resets": 0,
+      "exit_code": 2
+    }
+  },
+  "code": {
+    "commit": "53e8ae2d8baccaad4d7462bf7e0d0c77df802952",
+    "branch": "main"
+  }
+}

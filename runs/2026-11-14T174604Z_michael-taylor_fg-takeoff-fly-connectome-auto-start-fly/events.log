@@ -1,0 +1,75 @@
+12:46:05 [session] Session 'takeoff fly - CONNECTOME, auto start (--fly)' watching fgfs pid 20836 (738-flies)
+12:46:05 [session] Live log page: http://127.0.0.1:8765/
+12:46:06 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+12:46:06 [fgfs] 0.03 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+12:46:06 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+12:46:06 [fgfs] 0.04 [ALRT]:general   affinity=none
+12:46:06 [fgfs] 0.04 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+12:46:06 [fgfs] 1.35 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:46:06 [fgfs] 1.35 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:46:06 [fgfs] 1.35 [WARN]:general   Enabling ATI/AMD viewport hack
+12:46:06 [fgfs] 1.39 [ALRT]:view      affinity=none
+12:46:07 [session] Docked: log below and fly brain right of FlightGear
+12:46:15 [fgfs] 10.53 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+12:46:15 [fgfs] 10.53 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+12:46:16 [fgfs] 11.54 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:46:16 [fgfs] 11.70 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:46:18 [fgfs] 14.35 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+12:46:18 [fgfs] 14.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+12:46:18 [fgfs] 14.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+12:46:18 [fgfs] 14.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+12:46:18 [fgfs] 14.40 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+12:46:20 [fgfs] 14.89 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+12:46:20 [fgfs] 16.08 [WARN]:input     Unhandled HID usage page:d with usage 5
+12:46:20 [fgfs] 16.08 [WARN]:input     Unhandled HID usage page:d with usage e
+12:46:24 [session] Connected to property API on :8080
+12:46:24 [fgfs] 19.59 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+12:46:27 [session] Property API stopped answering
+12:46:27 [fgfs] 23.07 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:46:27 [fgfs] 23.40 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:46:30 [fgfs] 26.21 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:46:30 [fgfs] 26.62 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:46:30 [fgfs] 26.91 [ALRT]:flight    Failed to save initial FDM property state
+12:46:39 [session] Connected to property API on :8080
+12:46:39 [controller] Run started: 2026-11-14T174635Z_michael-taylor_flightgear-connectome
+12:46:39 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T174635Z_michael-taylor_flightgear-connectome
+12:46:45 [controller] CONNECTOME LIF (notebook model)
+12:46:45 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+12:49:19 [controller]   zero points: steer=-18.8
+12:49:19 [controller] Takeoff fly: standing fly, looming -> jump = rotation
+12:49:19 [controller] Waiting for FlightGear runway telemetry on localhost...
+12:49:21 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+12:49:21 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+12:49:25 [flightgear] Paused
+12:49:25 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+12:49:25 [controller] {
+12:49:25 [controller]   "fly": "Takeoff fly",
+12:49:25 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+12:49:25 [controller]   "phase": "TAKEOFF ROLL",
+12:49:25 [controller]   "completed": false,
+12:49:25 [controller]   "time_s": 5.8,
+12:49:25 [controller]   "decisions": 0,
+12:49:25 [controller]   "max_centerline_m": 30.4,
+12:49:25 [controller]   "tail_strike": false,
+12:49:25 [controller]   "stall": false,
+12:49:25 [controller]   "left_runway": true,
+12:49:25 [controller]   "liftoff_x_m": null,
+12:49:25 [controller]   "rejected": false,
+12:49:25 [controller]   "agl_ft": 0,
+12:49:25 [controller]   "ias_kt": 13.8,
+12:49:25 [controller]   "stop_x_m": null,
+12:49:25 [controller]   "events": [],
+12:49:25 [controller]   "decision_timing": {
+12:49:25 [controller]     "applied": 0,
+12:49:25 [controller]     "skipped": 0,
+12:49:25 [controller]     "latency_mean_s": null,
+12:49:25 [controller]     "latency_max_s": null
+12:49:25 [controller]   },
+12:49:25 [controller]   "speed_up_resets": 0,
+12:49:25 [controller]   "backend": "flightgear",
+12:49:25 [controller]   "wall_s": 6.1,
+12:49:25 [controller]   "success": false
+12:49:25 [controller] }
+12:49:25 [controller] Run finished: 2026-11-14T174635Z_michael-taylor_flightgear-connectome exit=2
+12:49:47 [session] Property API stopped answering
+12:49:51 [session] FlightGear exited (code 3221226356) - crashed or force-closed
