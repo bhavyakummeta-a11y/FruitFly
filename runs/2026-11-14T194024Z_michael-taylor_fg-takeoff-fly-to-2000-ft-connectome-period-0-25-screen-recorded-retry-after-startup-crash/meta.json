@@ -1,0 +1,46 @@
+{
+  "run_id": "2026-11-14T194024Z_michael-taylor_fg-takeoff-fly-to-2000-ft-connectome-period-0-25-screen-recorded-retry-after-startup-crash",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.9,
+      "to_s": 42.4
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the takeoff",
+      "detail": "run 2026-11-14T194100Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 42.4,
+      "to_s": 113.8
+    }
+  ],
+  "name": "takeoff fly to 2000 ft - CONNECTOME, period 0.25, screen-recorded (retry after startup crash)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 26088,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T19:40:24.760001+00:00",
+  "duration_s": 114,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 51
+  },
+  "airplane_samples": 31,
+  "controller_runs": {
+    "2026-11-14T194100Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T194100Z_michael-taylor_flightgear-connectome-2": null
+  },
+  "videos": [],
+  "code": {
+    "commit": "83f564196166141c6bfb1f8718e84ebced4aa94c",
+    "branch": "main"
+  }
+}
