@@ -197,10 +197,12 @@ def pid_alive(pid):
 
 
 def read_lock(path):
+    """A session lock's contents (dict), or None for anything else (e.g. runlog's git.lock)."""
     try:
-        return json.loads(path.read_text(encoding='utf-8'))
+        info = json.loads(path.read_text(encoding='utf-8'))
     except (OSError, ValueError):
         return None
+    return info if isinstance(info, dict) else None
 
 
 def detached(cmd, log_name):
@@ -288,8 +290,10 @@ def watchdog():
                 print(f'{datetime.now():%H:%M:%S} fgfs pid {pid} has no logger; attaching', flush=True)
                 spawn(pid)
             for lock in locks.glob('*.lock'):   # loggers that died without cleaning up
+                if not lock.stem.isdigit():      # <fgfs pid>.lock only; git.lock is runlog's push lock
+                    continue
                 info = read_lock(lock)
-                if info and not pid_alive(info.get('watcher_pid')) and not pid_alive(info.get('fgfs_pid')):
+                if isinstance(info, dict) and not pid_alive(info.get('watcher_pid')) and not pid_alive(info.get('fgfs_pid')):
                     lock.unlink(missing_ok=True)
         except Exception as exc:  # keep watching no matter what
             print(f'{datetime.now():%H:%M:%S} watchdog error: {exc!r}', flush=True)
