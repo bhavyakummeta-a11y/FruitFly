@@ -1,0 +1,48 @@
+{
+  "run_id": "2026-11-14T163037Z_michael-taylor_flightgear-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:30:37.926799+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain reflex --seconds 240 --no-push --no-plot",
+  "args": {
+    "backend": "flightgear",
+    "brain": "reflex",
+    "data": "data/brain",
+    "obstacles": "C:\\Users\\micha\\FruitFly-obst\\scenarios\\obstacles.json",
+    "seconds": 240.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": true,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "no_scene": false,
+    "note": null,
+    "no_push": true,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "fc249f1fefd9c25ec39a2eb94a9fd1081f2f38e8",
+    "branch": "obstacles-in-fg",
+    "dirty": [
+      "M flight_simulator/__main__.py"
+    ],
+    "untracked": [
+      "flight_simulator/fg_scene.py",
+      "flightgear/Aircraft/FlyCabin/Models/Obstacles/",
+      "flightgear/tools/make_obstacles.py"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 31
+  },
+  "finished_utc": "2026-11-14T16:31:00.921854+00:00",
+  "exit_code": 1
+}
