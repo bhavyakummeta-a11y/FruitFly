@@ -1,0 +1,13 @@
+﻿# Secrets: FlyWire / CAVE tokens never go in this public repo
+.env
+*.token
+cave-secret.json
+**/chunkedgraph-secret.json
+
+# Python / notebooks
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# Large downloaded data
+*.parquet
