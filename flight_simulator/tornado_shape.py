@@ -5,7 +5,8 @@ One definition for both places a tornado is drawn: the live obstacle models
 Unit size: the obstacle cylinder has radius 1 and height 1; z is height, 0..1.
 
 The funnel never leaves the cylinder the fly avoids. It is as wide as the
-cylinder at the top and narrows towards the ground.
+cylinder at the top and narrows towards the ground. Everything that makes it
+look violent (the twisted, ragged surface) only ever cuts INTO the funnel.
 """
 import math
 
@@ -22,14 +23,27 @@ def funnel_centre(z):
             0.8 * slack * 0.35 * math.sin(1.6 * math.pi * z + 1.0))
 
 
+def ragged(theta, z):
+    """0..1 factor on the funnel radius: twisted rope-like ridges plus torn, uneven
+    patches. Always <= 1 (it only cuts inwards) and exactly 1 at the top rim."""
+    ridges = 0.5 + 0.5 * math.sin(5 * theta + 14 * math.pi * z)            # five twisting ropes
+    torn = 0.5 + 0.5 * math.sin(13 * theta - 31 * z + 2.0 * math.sin(7 * theta + 40 * z))
+    depth = (0.16 * ridges + 0.10 * torn) * (1.0 - z ** 6)                   # fades out at the rim
+    return 1.0 - depth
+
+
 def funnel_rings(levels, sides):
     """levels+1 rings of `sides` (x, y, z) points from the ground (z=0) to the top (z=1)."""
     rings = []
     for level in range(levels + 1):
         z = level / levels
         r, (cx, cy) = funnel_radius(z), funnel_centre(z)
-        rings.append([(cx + r * math.cos(2 * math.pi * k / sides),
-                       cy + r * math.sin(2 * math.pi * k / sides), z) for k in range(sides)])
+        ring = []
+        for k in range(sides):
+            theta = 2 * math.pi * k / sides
+            rr = r * ragged(theta, z)
+            ring.append((cx + rr * math.cos(theta), cy + rr * math.sin(theta), z))
+        rings.append(ring)
     return rings
 
 

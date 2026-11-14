@@ -55,8 +55,8 @@ def tornado_model(radius, height, segments=32, levels=24):
     Same shape as the live obstacle tornadoes (tornado_shape.py). AC3D is Y-up."""
     rings = funnel_rings(levels, segments)
     lines = ['AC3Db',
-             'MATERIAL "dark" rgb 0.20 0.21 0.23 amb 0.20 0.21 0.23 emis 0 0 0 spec 0 0 0 shi 0 trans 0',
-             'MATERIAL "mid" rgb 0.38 0.39 0.42 amb 0.38 0.39 0.42 emis 0 0 0 spec 0 0 0 shi 0 trans 0',
+             'MATERIAL "dark" rgb 0.05 0.05 0.07 amb 0.05 0.05 0.07 emis 0 0 0 spec 0 0 0 shi 0 trans 0',
+             'MATERIAL "mid" rgb 0.15 0.15 0.18 amb 0.15 0.15 0.18 emis 0 0 0 spec 0 0 0 shi 0 trans 0',
              'OBJECT world', 'kids 1', 'OBJECT poly', 'name "fly-obstacle-tornado"',
              f'numvert {(levels+1)*segments}']
     for ring in rings:

@@ -5,7 +5,7 @@
 
   <animation>
     <type>select</type>
-    <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Cap</object-name><object-name>Debris</object-name><object-name>Bolt</object-name><object-name>Ring</object-name>
+    <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Cap</object-name><object-name>Scud</object-name><object-name>Debris</object-name><object-name>Vortices</object-name><object-name>Chunks</object-name><object-name>Bolt</object-name><object-name>Ring</object-name>
     <condition><property>/fruitfly/obstacles/obstacle[27]/visible</property></condition>
   </animation>
 
@@ -26,7 +26,7 @@
   <!-- radius: x and y; height: z. Unit tornado, so scale = metres. -->
   <animation>
     <type>scale</type>
-    <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Cap</object-name><object-name>Debris</object-name><object-name>Bolt</object-name><object-name>Ring</object-name>
+    <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Cap</object-name><object-name>Scud</object-name><object-name>Debris</object-name><object-name>Vortices</object-name><object-name>Chunks</object-name><object-name>Bolt</object-name><object-name>Ring</object-name>
     <property>/fruitfly/obstacles/obstacle[27]/radius-m</property>
     <x-factor>1</x-factor><x-offset>0</x-offset>
     <y-factor>1</y-factor><y-offset>0</y-offset>
@@ -34,14 +34,35 @@
   </animation>
   <animation>
     <type>scale</type>
-    <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Cap</object-name><object-name>Debris</object-name><object-name>Bolt</object-name>
+    <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Cap</object-name><object-name>Scud</object-name><object-name>Debris</object-name><object-name>Vortices</object-name><object-name>Chunks</object-name><object-name>Bolt</object-name>
     <property>/fruitfly/obstacles/obstacle[27]/height-m</property>
     <x-factor>0</x-factor><x-offset>1</x-offset>
     <y-factor>0</y-factor><y-offset>1</y-offset>
     <z-factor>1</z-factor><z-offset>0</z-offset>
   </animation>
 
-  <!-- The funnel turns with sim time (it stops when the sim is paused). -->
+
+  <!-- Turns with sim time (120 deg/s; stops when the sim is paused). -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Vortices</object-name>
+    <property>/sim/time/elapsed-sec</property>
+    <factor>120</factor>
+    <center><x-m>0</x-m><y-m>0</y-m><z-m>0</z-m></center>
+    <axis><x>0</x><y>0</y><z>1</z></axis>
+  </animation>
+
+  <!-- Turns with sim time (85 deg/s; stops when the sim is paused). -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Chunks</object-name>
+    <property>/sim/time/elapsed-sec</property>
+    <factor>85</factor>
+    <center><x-m>0</x-m><y-m>0</y-m><z-m>0</z-m></center>
+    <axis><x>0</x><y>0</y><z>1</z></axis>
+  </animation>
+
+  <!-- Turns with sim time (50 deg/s; stops when the sim is paused). -->
   <animation>
     <type>rotate</type>
     <object-name>Dark</object-name><object-name>Mid</object-name><object-name>Debris</object-name>
@@ -51,13 +72,33 @@
     <axis><x>0</x><y>0</y><z>1</z></axis>
   </animation>
 
-  <!-- Pale glow while the fly's looming input comes from this obstacle. -->
+  <!-- Turns with sim time (-6 deg/s; stops when the sim is paused). -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Scud</object-name>
+    <property>/sim/time/elapsed-sec</property>
+    <factor>-6</factor>
+    <center><x-m>0</x-m><y-m>0</y-m><z-m>0</z-m></center>
+    <axis><x>0</x><y>0</y><z>1</z></axis>
+  </animation>
+
+  <!-- Blood-red glow while the fly's looming input comes from this obstacle. -->
   <animation>
     <type>material</type>
-    <object-name>Dark</object-name><object-name>Mid</object-name>
+    <object-name>Dark</object-name><object-name>Vortices</object-name>
     <emission>
       <factor-prop>/fruitfly/obstacles/obstacle[27]/threat</factor-prop>
-      <red>0.55</red><green>0.65</green><blue>0.95</blue>
+      <red>1.0</red><green>0.10</green><blue>0.04</blue>
+    </emission>
+  </animation>
+
+  <!-- Lightning lights the funnel and the cloud (storm.nas). -->
+  <animation>
+    <type>material</type>
+    <object-name>Mid</object-name><object-name>Cap</object-name><object-name>Scud</object-name>
+    <emission>
+      <factor-prop>/fruitfly/storm/light</factor-prop>
+      <red>0.75</red><green>0.80</green><blue>1.0</blue>
     </emission>
   </animation>
 </PropertyList>

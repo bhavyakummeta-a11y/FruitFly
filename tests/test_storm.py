@@ -20,8 +20,9 @@ class TornadoModel(unittest.TestCase):
         """The fly avoids a cylinder of radius 1, height 1 (unit model). Nothing the
         viewer sees as 'tornado' may stick out of it, or the picture would lie."""
         meshes = {m.name: m for m in M.tornado_meshes()}
-        self.assertEqual(set(meshes), {'Dark', 'Mid', 'Cap', 'Debris', 'Bolt', 'Ring'})
-        for name in ('Dark', 'Mid', 'Cap', 'Debris', 'Bolt'):
+        self.assertEqual(set(meshes), {'Dark', 'Mid', 'Cap', 'Scud', 'Debris', 'Vortices', 'Chunks', 'Bolt', 'Ring'})
+        self.assertEqual(set(M.INSIDE), set(meshes) - {'Ring'})
+        for name in M.INSIDE:
             for x, y, z in meshes[name].verts:
                 self.assertLessEqual((x * x + y * y) ** 0.5, 1.0 + 1e-9, name)
                 self.assertTrue(-1e-9 <= z <= 1.0 + 1e-9, name)
@@ -49,14 +50,17 @@ class TornadoModel(unittest.TestCase):
             types = [t.firstChild.data for t in doc.getElementsByTagName('type')]
             for needed in ('select', 'scale', 'rotate', 'material'):
                 self.assertIn(needed, types)
+            self.assertEqual(types.count('rotate'), len(set(M.SPIN.values())))
+            self.assertIn('/fruitfly/storm/light', text)
             self.assertIn(f'/fruitfly/obstacles/obstacle[{i}]/visible', text)
             self.assertIn(f'<equals><property>/fruitfly/storm/bolt</property><value>{i}</value></equals>', text)
             self.assertNotIn('tower', text)
 
     def test_ac_file_objects(self):
         ac = (MODELS / 'tornado.ac').read_text()
-        self.assertEqual(re.findall(r'^name "(\w+)"', ac, re.M), ['Dark', 'Mid', 'Cap', 'Debris', 'Bolt', 'Ring'])
-        self.assertEqual(len(re.findall(r'^MATERIAL ', ac, re.M)), 6)
+        self.assertEqual(re.findall(r'^name "(\w+)"', ac, re.M),
+                         ['Dark', 'Mid', 'Cap', 'Scud', 'Debris', 'Vortices', 'Chunks', 'Bolt', 'Ring'])
+        self.assertEqual(len(re.findall(r'^MATERIAL ', ac, re.M)), 9)
 
 
 class StormWeather(unittest.TestCase):
@@ -100,8 +104,15 @@ class StormScript(unittest.TestCase):
     def test_storm_nas_is_visuals_and_sound_only(self):
         nas = (NASAL / 'storm.nas').read_text(encoding='utf-8')
         code = '\n'.join(line.split('#')[0] for line in nas.splitlines())
-        for banned in ('/controls', 'wind', 'turbulence', '/fdm', '/environment/config', 'gust'):
+        # The only 'wind' allowed is the name of FlightGear's sound sample for the roar.
+        code = code.replace('"wind1.wav"', '"<roar sample>"')
+        for banned in ('/controls', 'wind', 'turbulence', '/fdm/', '/environment/config', 'gust', 'jsbsim',
+                       '/velocities', '/orientation', '/position'):
             self.assertNotIn(banned, code, f'storm.nas must not touch {banned}')
+        # Every property it writes is a storm display value or FlightGear's lightning flash.
+        for path in re.findall(r'setprop\("([^"]+)"', code):
+            self.assertTrue(path.startswith('/environment/lightning/'), path)
+        self.assertIn('fdm-initialized', code)   # nothing runs while FlightGear is loading
         self.assertIn('/environment/lightning/flash', code)
         self.assertIn('play-audio-sample', code)
         self.assertIn('/fruitfly/obstacles/count', code)

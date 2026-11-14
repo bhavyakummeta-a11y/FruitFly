@@ -255,13 +255,14 @@ add a sensor integration later. MSL altitude hold does not follow terrain.
 ### Obstacles inside FlightGear
 
 With `--backend flightgear`, the controller connects to FlightGear's telnet
-property server and places a tornado at every obstacle cylinder: a dark, slowly
-turning funnel with a debris skirt and a cap cloud. The tornado is display only.
+property server and places a tornado at every obstacle cylinder: a near-black,
+ragged, twisting funnel with torn cloud hanging from its cap, three thin suction
+vortices circling its foot, wreckage flying round it and a dust skirt. The tornado is display only.
 The fly avoids the cylinder, and the funnel stays inside it: it is as wide as the
 cylinder at the top and narrows towards the ground, and the dark ring on the
 ground is the cylinder's true footprint. Position, radius, bottom and top are the
 cylinder's, after the default course has been rotated and scaled. The tornado
-that the fly's looming input currently comes from glows pale blue, more strongly
+that the fly's looming input currently comes from glows blood red, more strongly
 as time-to-contact shrinks. Re-running the controller in the same FlightGear
 session moves the existing tornadoes instead of adding more. This works for any course and any
 aircraft, including custom `--obstacles` files. It is skipped for a fixed
@@ -276,14 +277,16 @@ scenery course (`"scenery"` in its JSON), whose tornadoes are already in the sce
 ### Storm weather (looks only)
 
 Both launchers start FlightGear in a thunderstorm by default (`--weather storm`):
-gray overcast at 5,000 ft, heavy rain, and, with the 738-flies aircraft, lightning
-flashes with thunder (`FlyCabin/Nasal/storm.nas`). A bolt appears beside one of the
-tornadoes at each strike. `--weather clear` gives fair weather.
+gray overcast at 5,000 ft and heavy rain. With the 738-flies aircraft,
+`FlyCabin/Nasal/storm.nas` adds lightning every 3-10 s with thunder: forked bolts
+appear beside a tornado, every funnel is lit by the flash, and a roar grows
+louder as the airplane nears a tornado. The script starts 5 s after the flight
+model is up, not while FlightGear is loading. `--weather clear` gives fair weather.
 
 **The weather never acts on the airplane.** Wind is calm (METAR `00000KT`, plus
 `--wind=0@0`), there are no gusts and turbulence is 0 in both profiles, and the
-storm script touches nothing but the lightning flash, the bolt and the thunder
-sound. `tests/test_storm.py` checks this. The fly's sensing is computed from
+storm script touches nothing but the lightning flash, the bolt, the funnels'
+glow and sound. `tests/test_storm.py` checks this. The fly's sensing is computed from
 geometry, not from the picture, so rain and cloud don't change what it senses.
 The [camera-vision prototype](CAMERA_VISION.md) does look at the picture. It now
 looks for dark tornado funnels under a gray sky as well as the older red towers;
