@@ -8,13 +8,13 @@
 :root {
   --surface: #fcfcfb; --panel: #ffffff; --border: #e4e3df;
   --text: #0b0b0b; --text-2: #52514e; --muted: #8a8984;
-  --good: #0ca30c; --warn: #b07800; --bad: #e34948;
+  --good: #0ca30c; --warn: #b07800; --bad: #e34948; --fly: #eb6834;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --surface: #1a1a19; --panel: #222220; --border: #383835;
     --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88;
-    --good: #0ca30c; --warn: #fab219; --bad: #e66767;
+    --good: #0ca30c; --warn: #fab219; --bad: #e66767; --fly: #ff8a4c;
   }
 }
 * { box-sizing: border-box; }
@@ -27,6 +27,13 @@ h1 { font-size: 13px; margin: 0; line-height: 1.25; overflow: hidden; text-overf
 .status { font-weight: 600; }
 .status::before { content: "●  "; }
 .status.ok { color: var(--good); } .status.wait { color: var(--warn); } .status.done { color: var(--text-2); }
+.control { border-left: 4px solid var(--muted); padding: 2px 0 2px 7px; }
+.control small { display: block; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; }
+.control b { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25; }
+.control.fly_brain { border-color: var(--fly); } .control.fly_brain b { color: var(--text); }
+.control.autopilot { border-color: var(--bad); } .control.autopilot b { color: var(--bad); }
+.control.no_fly_brain, .control.unattributed, .control.llm, .control.human, .control.script { border-color: var(--warn); }
+.row.control .src { font-weight: 700; color: var(--text); }
 dl { display: grid; grid-template-columns: auto 1fr; gap: 1px 8px; margin: 0; }
 dt { color: var(--text-2); } dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 form { display: flex; flex-direction: column; gap: 4px; padding: 6px; border: 1px solid var(--warn); border-radius: 6px; }
@@ -47,6 +54,7 @@ main { display: flex; flex-direction: column; min-width: 0; }
 <aside>
   <h1 id="title">FruitFly session</h1>
   <span id="status" class="status wait">Connecting…</span>
+  <div id="control" class="control nobody" title=""><small>In control</small><b>–</b></div>
   <form id="name-form" hidden>
     <label for="name-input"><b>No session name.</b> Name it:</label>
     <input id="name-input" maxlength="120" placeholder="what is this session testing?" required>
@@ -56,6 +64,7 @@ main { display: flex; flex-direction: column; min-width: 0; }
 </aside>
 <main>
   <div class="toolbar">
+    <label><input type="checkbox" data-src="control" checked> control</label>
     <label><input type="checkbox" data-src="session" checked> session</label>
     <label><input type="checkbox" data-src="fgfs" checked> FlightGear</label>
     <label><input type="checkbox" data-src="controller" checked> controller</label>
@@ -77,6 +86,10 @@ function render(d) {
   st.textContent = d.paused ? 'FlightGear paused' : d.status;
   st.className = 'status ' + (d.status.startsWith('FlightGear closed') ? 'done' : d.connected ? 'ok' : 'wait');
   document.getElementById('title').textContent = d.name || 'Unnamed FlightGear session';
+  const c = d.control || {}, box = document.getElementById('control');
+  box.className = 'control ' + String(c.who || 'nobody').toLowerCase();
+  box.querySelector('b').textContent = c.label || '–';
+  box.title = c.detail || '';
   const form = document.getElementById('name-form');
   if (form.hidden === !!d.name) form.hidden = !!d.name;
   const fg = d.flightgear || {};

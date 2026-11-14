@@ -142,6 +142,13 @@ function render(d) {
   const mode = document.getElementById('mode'), detail = document.getElementById('detail');
   const t = d.trial || {};
   finished = d.status && d.status.startsWith('FlightGear closed');
+  if (d.autopilot && d.autopilot.length) {
+    mode.className = 'baseline'; mode.style.color = 'var(--bad)';
+    mode.textContent = 'AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying';
+    detail.textContent = 'engaged: ' + d.autopilot.join(', ');
+    canvas.style.opacity = .3; bars('', []); return;
+  }
+  mode.style.color = '';
   if (!d.run || (!d.active && !t.idx)) {
     mode.className = 'idle'; mode.textContent = 'Fly brain idle: no controller is flying the airplane';
     detail.textContent = 'Start one with python -m flight_simulator --backend flightgear --brain connectome';
@@ -152,7 +159,7 @@ function render(d) {
     spikes = [];
   } else {
     mode.className = '';
-    mode.textContent = d.active ? 'Connectome LIF is flying (FlyWire, 138,639 neurons)' : 'Connectome run finished (last trial shown)';
+    mode.textContent = d.active ? ((d.control && d.control.label) || 'FLY BRAIN (connectome) is flying') : 'Connectome run finished (last trial shown)';
     detail.textContent = t.idx ? `trial at t = ${Number(t.time).toFixed(1)} s · ${t.idx.length.toLocaleString()} neurons fired`
                                : 'waiting for the first brain trial…';
     if (t.seq !== lastSeq) { lastSeq = t.seq; setTrial(t); }

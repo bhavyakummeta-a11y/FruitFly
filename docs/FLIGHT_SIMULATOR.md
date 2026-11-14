@@ -337,6 +337,28 @@ python -m flight_simulator.session status                # what is being logged 
   files are written but never committed, so they cannot ride along with someone
   else's push.
 
+#### Who is flying: control attribution in every log
+
+Every log states what is controlling the airplane, so a fly-brain flight can't
+be confused with code, the autopilot or a person:
+
+- **Controller runs** print and record (console, `meta.json` `control`,
+  `feedback.md` "Who was flying") which kind of controller ran: `FLY_BRAIN`
+  (connectome neurons decide, with what code still decides spelled out) or
+  `NO_FLY_BRAIN` (reflex/silent baselines, the probe-table stand-in). The table
+  is `control_attribution()` in `flight_simulator/runlog.py`.
+- **FlightGear sessions** keep a control timeline (live "In control" line,
+  `[control]` events, `in_control` + `autopilot` columns in `airplane.csv`,
+  `control_timeline` in `meta.json`, and a time table in `feedback.md`):
+  1. `AUTOPILOT`: the airplane's own autopilot is engaged (read every second from
+     the same property list `AutopilotGuard` enforces); always wins.
+  2. A running controller run: its `FLY_BRAIN` / `NO_FLY_BRAIN` attribution.
+  3. A declared LLM agent / human / script: `python -m flight_simulator.session
+     control llm --who "<name>" --note "..."` (then `control end`).
+  4. `UNATTRIBUTED`: controls moving with nothing declared (human or external
+     program, not the fly brain).
+  5. `NOBODY`: no controller and no inputs.
+
 #### Companion windows: log below, fly brain to the right (Windows)
 
 When FlightGear's window appears, the session logger makes room on that monitor
