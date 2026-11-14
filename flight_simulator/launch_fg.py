@@ -146,8 +146,12 @@ def fly_command(args):
     # The connectome needs the project venv (requirements-brain.txt) if there is one.
     venv = REPO / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
     python = str(venv) if venv.exists() else sys.executable
-    cmd = [python, '-m', 'flight_simulator.takeoff_live', args.phase, '--brain', args.fly,
-           '--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
+    ports_args = ['--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
+    if not args.phase:
+        # In-air start: the obstacle-avoidance controller (python -m flight_simulator). It takes
+        # over as soon as the plane is flying and holds the spawn preset (ticket #1).
+        return [python, '-m', 'flight_simulator', '--brain', args.fly, *ports_args]
+    cmd = [python, '-m', 'flight_simulator.takeoff_live', args.phase, '--brain', args.fly, *ports_args]
     # Always real time: the controller locks FlightGear at 1x and never pauses it for a
     # brain trial (project rules, gh #3 / #4). There is no speed or pause option.
     return cmd + ['--period', '1.0']
@@ -168,8 +172,8 @@ def main():
     from .fg_weather import add_argument as add_weather_argument
     add_weather_argument(parser)
     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
-                        help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
-                             '(default brain: connectome)')
+                        help='Start the fly-brain controller as soon as FlightGear is ready (default brain: '
+                             'connectome): takeoff/landing with --phase, obstacle avoidance from the in-air start without')
     parser.add_argument('--no-wait', action='store_true',
                         help='One FlightGear at a time: exit instead of queueing if a sim is running')
     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
@@ -178,6 +182,8 @@ def main():
         args.instance = 0 if args.phase else 1
     if not 0 <= args.instance <= 50:
         parser.error('--instance must be 0..50')
+    if args.fly == 'standin' and not args.phase:
+        parser.error('--fly standin is for takeoff/landing (--phase); obstacle avoidance flies the connectome')
     if not args.print and not (args.name or '').strip():
         parser.error('A FlightGear session needs a name: --name "what this session is testing"')
     cmd = command(args)
@@ -226,7 +232,7 @@ def main():
         queue, turn = wait_for_turn(args.name, wait=not args.no_wait)
         ensure_watchdog()
         queue.running(turn, subprocess.Popen(cmd, env=env).pid)
-        if args.phase and args.fly:
+        if args.fly:
             print('Waiting for FlightGear to load, then the fly brain takes the controls...', flush=True)
             if not wait_ready(p['telnet']):
                 print('FlightGear did not finish loading; start the controller by hand:\n    '

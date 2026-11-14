@@ -115,13 +115,14 @@ def run(args, runlog=None):
                 bridge.origin = course_origin
             print('Waiting for airborne FlightGear telemetry on localhost...', flush=True)
             state = bridge.read()
-            from .flightgear import SpeedLock, telnet_get, wait_until_steady
+            from .flightgear import SpeedLock, telnet_get, takeover_targets, wait_until_flying
             # 1x rule (gh #3): raises if FlightGear can't be put and kept at 1x sim speed.
             speed_lock = SpeedLock(args.telnet_port or args.telemetry_port - 1)
-            aircraft =telnet_get(args.telnet_port or args.telemetry_port - 1, '/sim/aircraft') or ''
-            if aircraft.startswith('738'):
-                # The 737 overlay keeps its autopilot on until hand_over(); let it settle first.
-                state = wait_until_steady(bridge, state)
+            # Ticket #1: take over as soon as the plane is flying, and hold the spawn preset
+            # (e.g. 3,000 ft / 220 kt) rather than waiting minutes for the 737 autopilot to
+            # climb back from the in-air-start sag.
+            state = wait_until_flying(bridge, state)
+            hold_altitude, hold_speed = takeover_targets(args.telnet_port or args.telemetry_port - 1, state)
             if state.speed < 35 or abs(state.roll) > .35:
                 raise ValueError('Start FlightGear in stable flight, at least 35 m/s and wings near level.')
             if course_origin is not None and math.hypot(state.east, state.north) > 20000:
@@ -132,8 +133,9 @@ def run(args, runlog=None):
             if clock_paused is not None and clock_paused.lower() in ("false", "0"):
                 raise RuntimeError("Outdated cruise pause protocol: reinstall flybrain-state and flybrain-controls "
                                    "from flight_simulator/protocols and restart FlightGear.")
-            controller = FlightController(state.altitude, state.heading, state.speed, state.pitch)
-            print('FlightGear connected. Initial altitude/heading/speed are the hold targets.', flush=True)
+            controller = FlightController(hold_altitude, state.heading, hold_speed, state.pitch)
+            print(f'FlightGear connected. Hold targets: {hold_altitude:.0f} m ({hold_altitude / 0.3048:.0f} ft, '
+                  f'now {state.altitude:.0f} m), {hold_speed:.0f} m/s, current heading.', flush=True)
         else:
             sim = DemoSimulator()
             state = sim.state
@@ -295,7 +297,21 @@ def run(args, runlog=None):
                 if scene:
                     scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
                 if view:
-                    view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading, controller=controller)
+                    try:
+                        view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading, controller=controller)
+                    except RuntimeError as exc:
+                        # Display only: a closed or crashed companion window must not end a
+                        # live fly-brain run (it stopped one 3 s after the handover). Ctrl-C stops.
+                        # In the local demo, closing the window is still how you stop.
+                        if not bridge:
+                            raise
+                        print(f'{exc.args[0].split(";")[0]}; the flight continues without it (Ctrl-C to stop).',
+                              flush=True)
+                        try:
+                            view.close()
+                        except Exception:
+                            pass
+                        view = None
                 next_display = state.time + .2
             if collision:
                 if args.learn:

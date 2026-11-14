@@ -22,25 +22,33 @@ def telnet_get(telnet_port, path, timeout=3):
         return None
 
 
-def wait_until_steady(bridge, state, hold=3.0, timeout=120.0, climb=1.5, roll_deg=5.0, pitch_deg=8.0):
-    """Keep reading telemetry (the 737 autopilot is still flying) until the plane has been
-    level, wings-level and not climbing/descending for `hold` seconds. The controller adopts
-    the state at that moment as its hold targets, so taking over mid-recovery (e.g. climbing
-    back after the in-air-start sag) would immediately leave the test envelope."""
-    print('Waiting for the 737 autopilot to settle into steady flight before taking over...', flush=True)
-    start, since = time.monotonic(), None
+def wait_until_flying(bridge, state, timeout=30.0, min_speed=35.0, roll_deg=20.0):
+    """Take over as soon as the plane is actually flying: airborne speed, wings within
+    `roll_deg`. No waiting for level flight (ticket #1): the in-air start sags ~150 m and
+    the 737 autopilot needed 2-3 minutes to climb back, so the fly got the airplane late
+    or not at all. The controller holds the spawn preset instead (takeover_targets)."""
+    start = time.monotonic()
     while time.monotonic() - start < timeout:
-        steady = (abs(state.climb) < climb and abs(state.roll) < math.radians(roll_deg)
-                  and abs(state.pitch) < math.radians(pitch_deg))
-        if steady:
-            since = state.time if since is None else since
-            if state.time - since >= hold:
-                return state
-        else:
-            since = None
+        if state.speed >= min_speed and abs(state.roll) < math.radians(roll_deg):
+            return state
         state = bridge.read()
-    raise RuntimeError(f'Aircraft not in steady flight after {timeout:.0f} s (climb {state.climb:+.1f} m/s, '
-                       f'bank {math.degrees(state.roll):+.0f} deg, pitch {math.degrees(state.pitch):+.0f} deg).')
+    raise RuntimeError(f'Aircraft not flying after {timeout:.0f} s (speed {state.speed:.0f} m/s, '
+                       f'bank {math.degrees(state.roll):+.0f} deg).')
+
+
+def takeover_targets(telnet_port, state):
+    """Hold targets for an immediate takeover: the spawn preset altitude and airspeed
+    (what the launch asked for, e.g. 3,000 ft / 220 kt), not the state mid-sag.
+    Falls back to the current state if FlightGear doesn't report a usable preset."""
+    def preset(path, low):
+        try:
+            value = float(telnet_get(telnet_port, path) or 'nan')
+        except ValueError:
+            return None
+        return value if math.isfinite(value) and value > low else None
+    alt_ft, kt = preset('/sim/presets/altitude-ft', 100), preset('/sim/presets/airspeed-kt', 60)
+    return (alt_ft * 0.3048 if alt_ft else state.altitude,
+            kt * 0.514444 if kt else state.speed)
 
 
 class CockpitFly:
