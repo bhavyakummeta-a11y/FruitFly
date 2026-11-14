@@ -1,0 +1,131 @@
+{
+  "run_id": "2026-11-14T212517Z_kaden-vandine_fg-landing-fix-test-approach-elevator-0-22-pitch-3-7-paula-s-measured-trim-connectome",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 6.6
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: SPD; controller 2026-11-14T212524Z_kaden-vandine_flightgear-connectome is running",
+      "from_s": 6.6,
+      "to_s": 31.4
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the landing",
+      "detail": "run 2026-11-14T212524Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 31.4,
+      "to_s": 159.9
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 159.9,
+      "to_s": 166.2
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 166.2,
+      "to_s": 253.0
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 253.0,
+      "to_s": 259.2
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 259.2,
+      "to_s": 377.3
+    }
+  ],
+  "name": "landing fix test: approach elevator -0.22 / pitch 3.7 (Paula's measured trim), connectome",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 67079,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T21:25:17.391826+00:00",
+  "duration_s": 377,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 208,
+  "controller_runs": {
+    "2026-11-14T212524Z_kaden-vandine_flightgear-connectome": {
+      "fly": "Landing fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "ROLLOUT",
+      "completed": true,
+      "time_s": 118.0,
+      "decisions": 244,
+      "max_centerline_m": 26.7,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "touchdown_x_m": 855,
+      "touchdown_sink_fpm": 651,
+      "touchdown_pitch_deg": 3.6,
+      "go_around": false,
+      "flare_decisions": 20,
+      "safe_reject": false,
+      "takeoff_achieved": false,
+      "outcome": "landed",
+      "events": [
+        "68.7s FLARE: DNp07 5 Hz",
+        "69.5s FLARE: DNp07 9 Hz",
+        "70.1s FLARE: DNp07 13 Hz",
+        "...",
+        "81.9s FLARE: DNp07 9 Hz",
+        "82.5s FLARE: DNp07 16 Hz",
+        "82.9s FLARE: DNp07 24 Hz"
+      ],
+      "termination_reason": "phase_completed",
+      "decision_timing": {
+        "applied": 244,
+        "completed": 250,
+        "discarded": 6,
+        "skipped": 66,
+        "latency_mean_s": 0.228,
+        "latency_max_s": 1.0
+      },
+      "speed_up_resets": 0,
+      "requested_phase": "landing",
+      "backend": "flightgear",
+      "wall_s": 139.9,
+      "success": false,
+      "exit_code": 2
+    },
+    "2026-11-14T212940Z_kaden-vandine_flightgear-standin": {
+      "phase": "APPROACH",
+      "requested_phase": "landing",
+      "exit_code": 0
+    },
+    "2026-11-14T213050Z_kaden-vandine_flightgear-standin": {
+      "phase": "APPROACH",
+      "requested_phase": "landing",
+      "exit_code": 0
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "feaefd52d7682f58f8916dd2c3e0c48a87de3563",
+    "branch": "main"
+  }
+}
