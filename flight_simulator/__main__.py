@@ -55,6 +55,11 @@ def run(args, runlog=None):
                 bridge.origin = course_origin
             print('Waiting for airborne FlightGear telemetry on localhost...', flush=True)
             state = bridge.read()
+            from .flightgear import telnet_get, wait_until_steady
+            aircraft = telnet_get(args.telnet_port or args.telemetry_port - 1, '/sim/aircraft') or ''
+            if aircraft.startswith('738'):
+                # The 737 overlay keeps its autopilot on until hand_over(); let it settle first.
+                state = wait_until_steady(bridge, state)
             if state.speed < 35 or abs(state.roll) > .35:
                 raise ValueError('Start FlightGear in stable flight, at least 35 m/s and wings near level.')
             if course_origin is not None and math.hypot(state.east, state.north) > 20000:
@@ -139,12 +144,20 @@ def run(args, runlog=None):
                 next_brain = state.time + .5
                 if bridge and args.brain == 'connectome':
                     state = bridge.freeze(False)
-            if bridge and (abs(wrap(state.heading-controller.heading)) > math.radians(90)
-                           or abs(state.roll) > math.radians(50)
-                           or abs(state.pitch) > math.radians(25)
-                           or state.speed < .70 * controller.speed
-                           or abs(state.altitude-controller.altitude) > 40):
-                raise RuntimeError('Flight departed the test envelope (heading, bank, pitch, speed or altitude); pausing. Check aircraft controls and trim.')
+            if bridge:
+                limits = {
+                    f'heading off by {math.degrees(abs(wrap(state.heading-controller.heading))):.0f} deg (>90)':
+                        abs(wrap(state.heading-controller.heading)) > math.radians(90),
+                    f'bank {math.degrees(state.roll):+.0f} deg (>50)': abs(state.roll) > math.radians(50),
+                    f'pitch {math.degrees(state.pitch):+.0f} deg (>25)': abs(state.pitch) > math.radians(25),
+                    f'speed {state.speed:.0f} m/s (<70% of {controller.speed:.0f})': state.speed < .70 * controller.speed,
+                    f'altitude {state.altitude-controller.altitude:+.0f} m from target (>40)':
+                        abs(state.altitude-controller.altitude) > 40,
+                }
+                broken = [name for name, hit in limits.items() if hit]
+                if broken:
+                    raise RuntimeError('Flight departed the test envelope: ' + '; '.join(broken)
+                                       + '. Pausing. Check aircraft controls and trim.')
             controls = controller.update(state, stimulus, escape)
             clearance = min((o.clearance(state) for o in obstacles), default=math.inf)
             minimum = min(minimum, clearance)

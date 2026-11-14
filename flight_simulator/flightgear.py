@@ -7,6 +7,42 @@ from .core import State, Controls, wrap
 from .scenery import to_local
 
 
+def telnet_get(telnet_port, path, timeout=3):
+    """Read one property over FlightGear's telnet server; None if unreachable."""
+    try:
+        with socket.create_connection(('127.0.0.1', telnet_port), timeout=timeout) as s:
+            s.sendall(b'data\r\nget ' + path.encode() + b'\r\n')
+            reply = b''
+            deadline = time.monotonic() + timeout
+            while b'\n' not in reply and time.monotonic() < deadline:
+                reply += s.recv(256)
+            s.sendall(b'quit\r\n')
+            return reply.decode(errors='replace').strip()
+    except OSError:
+        return None
+
+
+def wait_until_steady(bridge, state, hold=3.0, timeout=120.0, climb=1.5, roll_deg=5.0, pitch_deg=8.0):
+    """Keep reading telemetry (the 737 autopilot is still flying) until the plane has been
+    level, wings-level and not climbing/descending for `hold` seconds. The controller adopts
+    the state at that moment as its hold targets, so taking over mid-recovery (e.g. climbing
+    back after the in-air-start sag) would immediately leave the test envelope."""
+    print('Waiting for the 737 autopilot to settle into steady flight before taking over...', flush=True)
+    start, since = time.monotonic(), None
+    while time.monotonic() - start < timeout:
+        steady = (abs(state.climb) < climb and abs(state.roll) < math.radians(roll_deg)
+                  and abs(state.pitch) < math.radians(pitch_deg))
+        if steady:
+            since = state.time if since is None else since
+            if state.time - since >= hold:
+                return state
+        else:
+            since = None
+        state = bridge.read()
+    raise RuntimeError(f'Aircraft not in steady flight after {timeout:.0f} s (climb {state.climb:+.1f} m/s, '
+                       f'bank {math.degrees(state.roll):+.0f} deg, pitch {math.degrees(state.pitch):+.0f} deg).')
+
+
 def hand_over(telnet_port, attempts=5):
     """Tell the 737 overlay (FlyCabin/Nasal/fruitfly.nas) that a controller is connected,
     so it switches the 737's own autopilot off now rather than leaving it holding the plane.
