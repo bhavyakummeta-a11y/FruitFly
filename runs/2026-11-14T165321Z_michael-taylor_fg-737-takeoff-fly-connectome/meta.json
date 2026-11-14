@@ -1,0 +1,24 @@
+{
+  "run_id": "2026-11-14T165321Z_michael-taylor_fg-737-takeoff-fly-connectome",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "737 takeoff fly - connectome",
+  "aircraft": "738-flies",
+  "fgfs_pid": 10872,
+  "fgfs_exit_code": 3221226356,
+  "started_utc": "2026-11-14T16:53:21.690415+00:00",
+  "duration_s": 203,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 29
+  },
+  "airplane_samples": 101,
+  "controller_runs": {},
+  "code": {
+    "commit": "e8355dc5deca7f154c0308534045dae9c6550aac",
+    "branch": "main"
+  }
+}
