@@ -1,0 +1,43 @@
+{
+  "run_id": "2026-11-14T193710Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T19:37:10.405015+00:00",
+  "command": "python -m flight_simulator takeoff_live takeoff --brain connectome --backend flightgear --period 1.0",
+  "args": {
+    "phase": "takeoff",
+    "brain": "connectome",
+    "backend": "flightgear",
+    "telemetry_port": 5501,
+    "stop_at_ft": 2000.0,
+    "screen_record": true
+  },
+  "code": {
+    "commit": "83f564196166141c6bfb1f8718e84ebced4aa94c",
+    "branch": "HEAD",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the takeoff",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "takeoff fly to 2000 ft - CONNECTOME, screen-recorded, FG screenshots off",
+      "run_id": "2026-11-14T193636Z_michael-taylor_fg-takeoff-fly-to-2000-ft-connectome-screen-recorded-fg-screenshots-off"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 42
+  },
+  "finished_utc": "2026-11-14T19:38:01.921159+00:00",
+  "exit_code": 2
+}
