@@ -186,6 +186,7 @@ class RunwayFlightGear(FlightGear):
         self.agl_offset_ft = None
         self.ahead_m = ahead_m
         self.gear_down = True
+        self.flaps = 0.375  # flaps 5 (737 detent); set by the scripted checklist
         from .runway import AirlinerControls
         self.last_controls = AirlinerControls()
 
@@ -239,7 +240,7 @@ class RunwayFlightGear(FlightGear):
         self.last_controls = c
         brake = getattr(c, 'brake', 0.0)
         data = (f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{c.throttle:.7f},{c.throttle:.7f},'
-                f'{brake:.7f},{brake:.7f},{int(self.gear_down)},{int(frozen)},{int(frozen)}\n')
+                f'{brake:.7f},{brake:.7f},{int(self.gear_down)},{int(frozen)},{int(frozen)},{self.flaps:.3f}\n')
         self.tx.sendto(data.encode('ascii'), self.address)
 
     def close(self):

@@ -9,6 +9,7 @@ There are three ways to run them, from fastest to most real:
 | **A. Offline check** | stand-in (probe table, **not** a fly) | reduced local 737 model | under 1 s | check the code works |
 | **B. Real brain, local plane** | connectome (FlyWire 783) | reduced local 737 model | 8–15 min | test the fly brain without FlightGear |
 | **C. Real brain in FlightGear** | connectome | FlightGear 737-800 | 10–20 min | the demo |
+| **Full flight** (takeoff → circuit → landing) | either | local or FlightGear | 1.5–2 h with the connectome | the whole demo in one go |
 
 Commands below use `python`. On Linux/WSL use `python3`. Once the venv exists, use `.venv\Scripts\python` (Windows) or `.venv/bin/python` (Linux).
 
@@ -140,6 +141,43 @@ This starts the 737 in the air, 3 nm out on final for 28R. **Wait until it's fly
 The runway position comes from the launcher's start point (`--final-nm 3`). If you started somewhere else, give the threshold yourself: `--runway LAT LON TRUE_HEADING`. If the plane gains or loses speed on the approach, adjust `--approach-throttle` (default 0.55).
 
 What happens: the plane follows the glideslope. Near 90 ft the runway looms, DNp07 fires and the plane **flares** (nose up, throttle to idle), then touches down and brakes. If the approach becomes unstable, the fly loses its appetite (bitter suppresses MN9) and **goes around**, and keeps flying until you press Ctrl-C.
+
+### Full flight: takeoff, circuit, landing
+
+One flight, three fly configurations of the same brain, handed over in the air:
+
+| Fly | Brain state | Flies |
+|---|---|---|
+| Takeoff fly | standing | brake release → 1,000 ft |
+| Circuit fly | cruising | right-hand traffic circuit at 2,000–3,000 ft (stays over the bay at KSFO 28R) |
+| Landing fly | flying | 3 nm final → flare → touchdown → rollout |
+
+**Terminal 1:** start on the runway, exactly as for takeoff:
+
+```sh
+python -m flight_simulator.launch_fg --phase takeoff --name "full flight test"
+```
+
+**Terminal 2:** once both engines are at idle:
+
+```sh
+.venv\Scripts\python -m flight_simulator.mission --brain connectome --backend flightgear --log runs/fg-mission.csv --plot runs/fg-mission.png
+```
+
+What happens:
+
+1. The Takeoff fly takes off. At 1,000 ft the terminal prints `=== HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) ===`.
+2. FlightGear freezes for about 70 s while the Circuit fly **adapts** (20 trials of its neutral stimulus), then the flight continues.
+3. The Circuit fly flies upwind, crosswind, downwind, base and final. On final the checklist sets flaps 30 and gear down.
+4. Once established about 3 nm out: `=== HANDOVER: Circuit fly (cruising) -> Landing fly (flying) ===`, then another adaptation pause, then the approach, flare and landing.
+
+A full flight is about 10 minutes of flying, which is roughly 1,250 brain trials, so allow **1.5–2 hours** with the connectome. To check the whole sequence first, use the fast stand-in: `--brain standin`.
+
+The plot marks each handover with a solid line and the fly's name. In the neuron heatmap you can see the brain switch: the escape neurons (DNp01/02/04/11) fire for the Takeoff fly's jump, the steering and pitch neurons carry the circuit, and DNp07 fires for the Landing fly's flare.
+
+**Obstacle avoidance is not part of this flight.** It's a separate experiment with its own owner. `CircuitFly.obstacle_slot` is where it can plug in.
+
+Local version (no FlightGear): `.venv/bin/python -m flight_simulator.mission --brain connectome --log runs/mission.csv --plot runs/mission.png`
 
 ### Running a second FlightGear at the same time
 

@@ -190,7 +190,7 @@ class RunwayProtocolTests(unittest.TestCase):
     def test_send_both_engines_and_brakes(self):
         self.bridge.send(AirlinerControls(.1, -.2, .3, .7, .5), True)
         data, _ = self.sink.recvfrom(8192)
-        self.assertEqual([float(v) for v in data.decode().split(',')], [.1, -.2, .3, .7, .7, .5, .5, 1, 1, 1])
+        self.assertEqual([float(v) for v in data.decode().split(',')], [.1, -.2, .3, .7, .7, .5, .5, 1, 1, 1, .375])
 
     def test_protocol_xml_matches_wire_order(self):
         state = [c.find('name').text for c in ET.parse(PROTOCOLS / 'flybrain-runway-state.xml').iter('chunk')]
@@ -198,7 +198,7 @@ class RunwayProtocolTests(unittest.TestCase):
                                  'airspeed', 'climb', 'wow', 'frozen'])
         controls = [c.find('name').text for c in ET.parse(PROTOCOLS / 'flybrain-runway-controls.xml').iter('chunk')]
         self.assertEqual(controls, ['aileron', 'elevator', 'rudder', 'throttle0', 'throttle1',
-                                    'brake_left', 'brake_right', 'gear_down', 'frozen', 'frozen_clock'])
+                                    'brake_left', 'brake_right', 'gear_down', 'frozen', 'frozen_clock', 'flaps'])
 
     def test_landing_threshold_from_final_start(self):
         # Spawned 3 nm before the threshold of a 090 runway: the first packet is at x = -5556 m.
@@ -327,7 +327,7 @@ class SafeExitTests(unittest.TestCase):
         fields = [float(v) for v in sink.recvfrom(8192)[0].decode().split(',')]
         self.assertEqual(fields[0], 0.0)    # aileron centred
         self.assertEqual(fields[2], 0.0)    # rudder centred
-        self.assertEqual(fields[-1], 1.0)   # freeze requested
+        self.assertEqual(fields[-2], 1.0)   # freeze requested
         sink.close()
 
     def test_agl_offset_from_parked_aircraft(self):

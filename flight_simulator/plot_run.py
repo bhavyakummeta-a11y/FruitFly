@@ -51,6 +51,17 @@ def phase_changes(rows):
     return out
 
 
+def fly_changes(rows):
+    """[(time, fly, brain_state)] at every change of the fly in charge (mission logs only)."""
+    out, last = [], None
+    for r in rows:
+        fly = r.get('fly')
+        if fly and fly != last:
+            last = fly
+            out.append((_num(r['time']), fly, r.get('brain_state', '')))
+    return out
+
+
 def phase_strip(ax, changes, end):
     """Flight phases as alternating bands, names centred; narrow bands stagger onto a second row."""
     from matplotlib.patches import Rectangle
@@ -136,6 +147,17 @@ def plot(rows, out, title=None):
     for when, _ in phase_changes(rows)[1:]:
         for ax in axes:
             ax.axvline(when, color=INK_2, linewidth=0.8, linestyle=(0, (3, 3)), alpha=0.7)
+
+    # Full-flight logs (mission --log) say which fly configuration was in charge:
+    # mark each brain handover with a solid line and the new fly's name and state.
+    handovers = fly_changes(rows)
+    for i, (when, fly, state) in enumerate(handovers):
+        if i:
+            for ax in axes:
+                ax.axvline(when, color=INK, linewidth=1.6)
+        ax_brain.annotate(f'{fly}\n({state})' if state else fly, xy=(when, 1), xycoords=('data', 'axes fraction'),
+                          xytext=(4, -4), textcoords='offset points', va='top', fontsize=8.5,
+                          color=INK, bbox={'facecolor': SURFACE, 'edgecolor': 'none', 'alpha': 0.85, 'pad': 1.5})
 
     fig.suptitle(title or 'Fly-brain run', x=0.125, ha='left', fontsize=13, color=INK, y=0.94)
     out = Path(out)

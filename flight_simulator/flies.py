@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 import math
 
 from .core import clip
-from .runway import AirlinerControls, KT, FT, FLAPS5_GEAR_UP
+from .runway import AirlinerControls, KT, FT, FLAPS5_GEAR_UP, AIM_POINT, GLIDESLOPE
 
 # --- Calibration measured on the connectome (FlyWire 783, Shiu LIF), 2026-11-14 ---
 # Zero points: readouts with the tonic 100 Hz VS/HS drive that encodes "no error".
@@ -102,10 +102,10 @@ class PhaseFly:
         self.status = Status('READY')
 
     # Shared encoders -------------------------------------------------------
-    def vs_inputs(self, s, pitch_target_deg):
+    def vs_inputs(self, s, pitch_target_deg, roll_target_deg=0.0):
         """VS cells: pitch error drives both sides; roll error drives them apart."""
         pitch_error = pitch_target_deg - math.degrees(s.pitch)
-        left, right = tonic_pair(-math.degrees(s.roll), VS_ROLL_GAIN)
+        left, right = tonic_pair(roll_target_deg - math.degrees(s.roll), VS_ROLL_GAIN)
         bump = VS_PITCH_GAIN * pitch_error
         return {'vs_left': clip(left + bump, 0, 200), 'vs_right': clip(right + bump, 0, 200)}
 
@@ -276,8 +276,17 @@ class LandingFly(PhaseFly):
     def unstable(self, s):
         # Judged between 1,000 and 100 ft; below 100 ft the pilot flies the flare by eye.
         return (100 * FT < s.agl < 1000 * FT and not s.on_ground and
-                (abs(s.glideslope_error()) > 0.7 or abs(s.y) > 40
+                (self.off_glideslope(s) or abs(s.y) > 40
                  or not -8 * KT <= s.speed - VREF <= 15 * KT))
+
+    @staticmethod
+    def off_glideslope(s):
+        """More than 0.7 deg off, but never stricter than 10 m in height: the same height
+        error is a growing angle near the runway (a full flight went around at 118 ft
+        while only 8.6 m high and converging)."""
+        distance = max(AIM_POINT - s.x, 1.0)
+        height_error = s.agl - distance * math.tan(GLIDESLOPE)
+        return abs(height_error) > max(10.0, distance * math.tan(math.radians(0.7)))
 
     def encode(self, s):
         if self.trim_pitch_deg is None:

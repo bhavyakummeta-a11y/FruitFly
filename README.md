@@ -30,6 +30,7 @@ Let Claude write the code. This doc is the ideas, the gotchas, and where to get 
 | [`docs/TAKEOFF_LANDING_PLAN.md`](docs/TAKEOFF_LANDING_PLAN.md) | Takeoff fly vs Landing fly: 3 plans each, scored, with the pick (escape-jump takeoff, looming-flare landing) |
 | [`docs/TAKEOFF_LANDING.md`](docs/TAKEOFF_LANDING.md) | **Implemented** Takeoff fly and Landing fly: step-0 probe results, channels, how to run (`python -m flight_simulator.takeoff_landing`) |
 | [`docs/RUN_TAKEOFF_LANDING.md`](docs/RUN_TAKEOFF_LANDING.md) | **How to run** the Takeoff and Landing flies: setup, offline check, real connectome, FlightGear step by step, troubleshooting |
+| [`flight_simulator/mission.py`](flight_simulator/mission.py) | **Full flight**: Takeoff fly → Circuit fly → Landing fly in one flight, brain handovers in the air (`python -m flight_simulator.mission`) |
 | [`docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md`](docs/notes/FLY_BRAIN_AIRPLANE_CONCEPT.md) | Reference notes: neural mappings, flight phases, and controller approaches |
 | [`docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md`](docs/notes/FLY_BRAIN_AIRPLANE_IMPLEMENTATION.md) | Reference notes: proposed package layout, example code, and implementation prompt |
 | [`docs/MT_Proposed_Plan.pptx`](docs/MT_Proposed_Plan.pptx) | MT proposed plan deck: goals, architecture, one slide per milestone (goal / plan / done when / risk) |

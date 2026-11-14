@@ -122,6 +122,28 @@ Michael's run "737 takeoff fly test" (sim-logs `ccc23d3`, code `161336b`):
 
 The connectome landing went around for the same reasons: first the pitch noise sank it below the glideslope, then the steering bias carried it 40 m left. With all of the above, the noisy stand-in (spike-count noise plus a steering bias like the connectome's) takes off 40/40 times (median 3 m off centerline) and lands 37/40 (median 157–203 fpm).
 
+## Full flight: three flies, one brain
+
+`python -m flight_simulator.mission` ([mission.py](../flight_simulator/mission.py)) flies takeoff, a right-hand traffic circuit and landing as one flight. The connectome stays loaded throughout, and at each handover the next **fly configuration** takes over:
+
+| Handover | When | Brain change |
+|---|---|---|
+| Takeoff fly → **Circuit fly** | 1,000 ft after takeoff | standing → cruising: looming no longer means "jump" (unused, reserved for obstacle avoidance); HS steering now sets a **bank target** (up to 25°) instead of rudder |
+| Circuit fly → **Landing fly** | established ~3 nm out (< 30 m off the centerline, < 5° bank, on the glideslope) | cruising → flying: looming means "extend the legs" (DNp07 = flare), bitter can call a go-around |
+
+At every handover the new fly re-adapts its steering zero point. The haltere-reflex integrator and throttle carry over, and the Landing fly starts from the attitude that flies the 3° glideslope at the current angle of attack.
+
+The Circuit fly uses the same senses as the others:
+- **HS:** track error (heading + cross-track over 1.5 km + 1 s × turn rate).
+- **VS:** climb-angle error (both sides) and bank error (left vs right).
+- **Sugar:** speed error.
+- **Readouts:** the steering readout sets the bank target, the VS roll readout flies it, the VS pitch readout drives the haltere pitch-rate reflex, and MN9 sets the throttle around a slow, fixed-rate trim.
+- **Scripted (never the fly):** the legs, altitudes and speeds of the circuit, gear up after takeoff, and flaps 30 + gear down + extra power at the start of final.
+
+Results with the noisy stand-in (spike-count noise ± a steering bias like the connectome's): **16/20 full flights land** (61–266 fpm, within 6 m of the centerline); 3 of the other 4 go around.
+
+Two bugs found on the way, both now covered by tests: the runway-relative heading wasn't wrapped, so after a 360° circuit the Landing fly thought it was 360° off and steered one way; and the glideslope check measured the error only as an angle, which near the runway is stricter than any real criterion.
+
 ## FlightGear
 
 **Always pull first** (`git pull`), so you have the latest launcher, protocols and aircraft. Run `python flightgear/setup_aircraft.py` once.

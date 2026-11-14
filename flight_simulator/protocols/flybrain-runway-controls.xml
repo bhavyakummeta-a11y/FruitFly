@@ -72,6 +72,14 @@
         <node>/sim/freeze/clock</node>
         <type>bool</type>
       </chunk>
+      <chunk>
+        <!-- Scripted checklist (never the fly): 0.375 = flaps 5, 0.875 = flaps 30 on the 737. -->
+        <name>flaps</name>
+        <node>/controls/flight/flaps</node>
+        <type>float</type>
+        <min>0</min>
+        <max>1</max>
+      </chunk>
     </input>
   </generic>
 </PropertyList>

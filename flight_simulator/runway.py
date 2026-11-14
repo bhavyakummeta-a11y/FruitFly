@@ -13,7 +13,7 @@ radians clockwise from runway heading.
 from dataclasses import dataclass
 import math
 
-from .core import Controls, clip
+from .core import Controls, clip, wrap
 
 G, RHO = 9.81, 1.225
 KT, FT, FPM = 0.514444, 0.3048, 0.3048 / 60
@@ -154,7 +154,7 @@ class RunwaySim:
             s.roll = clip(s.roll + s.roll_rate * dt, -1.0, 1.0)
             s.yaw_rate = G * math.tan(s.roll) / s.speed + 0.03 * c.rudder
 
-        s.psi += s.yaw_rate * dt
+        s.psi = wrap(s.psi + s.yaw_rate * dt)  # keep in [-pi, pi): a full circuit is 360 deg
         horizontal = s.speed * math.cos(s.gamma)
         s.x += horizontal * math.cos(s.psi) * dt
         s.y += horizontal * math.sin(s.psi) * dt
