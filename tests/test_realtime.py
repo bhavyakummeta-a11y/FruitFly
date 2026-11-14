@@ -2,6 +2,7 @@
 envelope breaches are logged, not fatal (gh #5). No FlightGear needed."""
 from pathlib import Path
 import math
+import os
 import socket
 import sys
 import time
@@ -30,6 +31,24 @@ class SpeedLockTests(unittest.TestCase):
         fg, lock = self.lock({'/sim/speed-up': '8'})
         self.assertEqual(float(fg.props['/sim/speed-up']), 1.0)
         self.assertEqual(lock.events, [])
+
+    def test_half_speed_when_asked_and_held(self):
+        # Project owner, 2026-11-14: half speed gives the fly brain 2x sim time per decision.
+        fg, lock = self.lock({'/sim/speed-up': '1'}, speed=0.5)
+        self.assertEqual(float(fg.props['/sim/speed-up']), 0.5)
+        fg.props['/sim/speed-up'] = '1'
+        lock.check(force=True)
+        self.assertEqual(float(fg.props['/sim/speed-up']), 0.5)
+        os.environ['FRUITFLY_SIM_SPEED'] = '0.5'
+        try:
+            fg2, lock2 = self.lock({'/sim/speed-up': '1'})
+            self.assertEqual(float(fg2.props['/sim/speed-up']), 0.5)
+        finally:
+            del os.environ['FRUITFLY_SIM_SPEED']
+
+    def test_never_faster_than_real_time(self):
+        with self.assertRaisesRegex(RuntimeError, 'never faster than real time'):
+            SpeedLock(1, speed=2.0)
 
     def test_drift_is_reset_and_recorded(self):
         fg, lock = self.lock({'/sim/speed-up': '1'})

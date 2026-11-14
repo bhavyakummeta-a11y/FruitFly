@@ -1,5 +1,6 @@
 """FlightGear generic UDP bridge. Protocol XML is shipped alongside this module."""
 import math
+import os
 import socket
 import select
 import time
@@ -237,19 +238,27 @@ class AutopilotGuard:
 # brain works. A brain that is too slow flies on its last decision; a crash is data.
 
 class SpeedLock:
-    """Holds /sim/speed-up at 1 over FlightGear's telnet server (gh #3).
+    """Holds /sim/speed-up at the run's sim speed over FlightGear's telnet server (gh #3).
 
-    The constructor sets and verifies 1x and raises if it can't. check() (rate-limited)
-    resets any drift and records it in `events` as (wall time, value found)."""
+    1x by default. FRUITFLY_SIM_SPEED=0.5 runs the sim at half speed (project owner,
+    2026-11-14: give the fly brain twice the sim time per decision); allowed 0.1-1, never
+    faster than real time. The constructor sets and verifies the speed and raises if it
+    can't. check() (rate-limited) resets any drift and records it in `events` as
+    (wall time, value found)."""
 
     PATH = '/sim/speed-up'
 
-    def __init__(self, telnet_port, every=3.0, timeout=3.0):
+    def __init__(self, telnet_port, every=3.0, timeout=3.0, speed=None):
+        if speed is None:
+            speed = float(os.environ.get('FRUITFLY_SIM_SPEED') or 1.0)
+        if not 0.1 <= speed <= 1.0:
+            raise RuntimeError(f'Sim speed {speed}x not allowed: 0.1-1 (never faster than real time).')
+        self.speed = speed
         try:
             self.sock = socket.create_connection(('127.0.0.1', telnet_port), timeout=timeout)
         except OSError as exc:
-            raise RuntimeError(f'Cannot lock FlightGear at 1x speed (no telnet on port {telnet_port}: {exc}). '
-                               'Start FlightGear with --telnet (the project launchers do).') from exc
+            raise RuntimeError(f'Cannot lock FlightGear at {speed:g}x speed (no telnet on port {telnet_port}: '
+                               f'{exc}). Start FlightGear with --telnet (the project launchers do).') from exc
         self.file = self.sock.makefile('rb')
         self.sock.sendall(b'data\r\n')
         self.every, self.next = every, time.monotonic() + every
@@ -257,23 +266,25 @@ class SpeedLock:
         found = self._get()
         self._set()
         now = self._get()
-        if not self._is_one(now):
+        if not self._is_target(now):
             self.close()
-            raise RuntimeError(f'FlightGear would not go to 1x sim speed ({self.PATH} = {now!r}).')
-        if not self._is_one(found):
-            print(f'1x RULE: FlightGear was at {found}x sim speed; set to 1x.', flush=True)
+            raise RuntimeError(f'FlightGear would not go to {speed:g}x sim speed ({self.PATH} = {now!r}).')
+        if not self._is_target(found):
+            print(f'SIM SPEED: FlightGear was at {found}x; set to {speed:g}x.', flush=True)
+        if speed != 1.0:
+            print(f'SIM SPEED: running at {speed:g}x real time (FRUITFLY_SIM_SPEED), so the fly brain gets '
+                  f'{1 / speed:g}x the sim time per decision.', flush=True)
 
     def _get(self):
         self.sock.sendall(f'get {self.PATH}\r\n'.encode())
         return self.file.readline().decode(errors='replace').strip()
 
     def _set(self):
-        self.sock.sendall(f'set {self.PATH} 1\r\n'.encode())
+        self.sock.sendall(f'set {self.PATH} {self.speed:g}\r\n'.encode())
 
-    @staticmethod
-    def _is_one(value):
+    def _is_target(self, value):
         try:
-            return abs(float(value) - 1.0) < 1e-6
+            return abs(float(value) - self.speed) < 1e-6
         except (TypeError, ValueError):
             return False
 
@@ -282,13 +293,13 @@ class SpeedLock:
             return
         self.next = time.monotonic() + self.every
         value = self._get()
-        if self._is_one(value):
+        if self._is_target(value):
             return
         self.events.append((time.time(), value))
-        print(f'1x RULE: sim speed was changed to {value}x during the run; reset to 1x.', flush=True)
+        print(f'SIM SPEED: changed to {value}x during the run; reset to {self.speed:g}x.', flush=True)
         self._set()
-        if not self._is_one(self._get()):
-            raise RuntimeError(f'FlightGear would not return to 1x sim speed ({self.PATH} = {value!r}).')
+        if not self._is_target(self._get()):
+            raise RuntimeError(f'FlightGear would not return to {self.speed:g}x sim speed ({self.PATH} = {value!r}).')
 
     def close(self):
         try:
