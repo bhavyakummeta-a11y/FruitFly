@@ -1,0 +1,88 @@
+12:12:20 [session] Session 'obstacle avoidance - latest (e2a3d22 damping + pause fix)' watching fgfs pid 24536 (738-flies)
+12:12:20 [session] Live log page: http://127.0.0.1:8765/
+12:12:21 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+12:12:21 [fgfs] 1.13 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+12:12:21 [fgfs] 1.16 [ALRT]:view      Creating osgViewer::CompositeViewer
+12:12:21 [fgfs] 1.17 [ALRT]:general   affinity=none
+12:12:21 [fgfs] 1.17 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+12:12:22 [fgfs] 2.55 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:12:22 [fgfs] 2.55 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+12:12:22 [fgfs] 2.59 [WARN]:general   Enabling ATI/AMD viewport hack
+12:12:22 [fgfs] 2.62 [ALRT]:view      affinity=none
+12:12:23 [session] Docked: log below and fly brain right of FlightGear
+12:12:38 [fgfs] 17.82 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+12:12:38 [fgfs] 17.82 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+12:12:38 [fgfs] 18.77 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:12:39 [fgfs] 18.94 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+12:12:42 [fgfs] 21.92 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+12:12:42 [fgfs] 22.21 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+12:12:42 [fgfs] 22.21 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+12:12:42 [fgfs] 22.21 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+12:12:42 [fgfs] 22.21 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+12:12:42 [controller] Run started: 2026-11-14T170612Z_bhavya-shree-reddy-kummeta_demo-reflex
+12:12:42 [controller] [runlog] /Users/Bhavya_1/FruitFly/.sim-logs/runs/2026-11-14T170612Z_bhavya-shree-reddy-kummeta_demo-reflex
+12:12:42 [controller] REFLEX BASELINE (no connectome)
+12:12:42 [controller]    0.0s AVOID  altitude=  900.0m speed= 50.0m/s escape=  0.0Hz clearance= 1150.0m
+12:12:42 [controller] {
+12:12:42 [controller]   "backend": "demo",
+12:12:42 [controller]   "brain": "reflex",
+12:12:42 [controller]   "elapsed_s": 10.0,
+12:12:42 [controller]   "collision": false,
+12:12:42 [controller]   "minimum_clearance_m": 663.3,
+12:12:42 [controller]   "minimum_altitude_m": 900.0,
+12:12:42 [controller]   "avoidance_activations": 1
+12:12:42 [controller] }
+12:12:42 [controller] Run finished: 2026-11-14T170612Z_bhavya-shree-reddy-kummeta_demo-reflex exit=0
+12:12:45 [fgfs] 25.72 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+12:12:47 [fgfs] 27.34 [WARN]:input     Unhandled HID usage page:d with usage 5
+12:12:47 [fgfs] 27.34 [WARN]:input     Unhandled HID usage page:d with usage e
+12:12:51 [session] Connected to property API on :8080
+12:12:51 [fgfs] 31.72 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+12:12:52 [session] Property API stopped answering
+12:12:52 [fgfs] 32.88 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:12:52 [fgfs] 33.06 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+12:12:55 [fgfs] 35.18 [ALRT]:nasal     Nasal runtime error: non-objects have no members
+12:12:55 [fgfs] 35.18 [ALRT]:nasal       at C:/Users/micha/FruitFly/flightgear/Aircraft/737-800/Nasal/autostart.nas, line 100
+12:12:55 [fgfs] 35.18 [ALRT]:nasal       called from: D:/FlightGear/data/Nasal/globals.nas, line 137
+12:12:55 [fgfs] 35.45 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:12:55 [fgfs] 35.96 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+12:12:55 [fgfs] 36.18 [ALRT]:flight    Failed to save initial FDM property state
+12:12:58 [session] Connected to property API on :8080
+12:13:12 [controller] Run started: 2026-11-14T171311Z_michael-taylor_flightgear-reflex
+12:13:12 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T171311Z_michael-taylor_flightgear-reflex
+12:13:12 [controller] REFLEX BASELINE (no connectome)
+12:13:12 [controller] Waiting for airborne FlightGear telemetry on localhost...
+12:13:14 [controller] Waiting for the 737 autopilot to settle into steady flight before taking over...
+12:14:39 [controller] Run started: 2026-11-14T170000Z_michael-taylor_media
+12:15:13 [flightgear] Paused
+12:15:13 [controller] Sent FlightGear pause request on exit. Verify pause in the simulator.
+12:15:13 [controller] Error: Aircraft not in steady flight after 120 s (climb +1.6 m/s, bank -0 deg, pitch +6 deg).
+12:15:13 [controller] Run finished: 2026-11-14T171311Z_michael-taylor_flightgear-reflex exit=1
+12:15:36 [flightgear] Resumed
+12:16:31 [controller] Run started: 2026-11-14T171630Z_michael-taylor_flightgear-reflex
+12:16:31 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T171630Z_michael-taylor_flightgear-reflex
+12:16:31 [controller] REFLEX BASELINE (no connectome)
+12:16:31 [controller] Waiting for airborne FlightGear telemetry on localhost...
+12:16:31 [controller] Waiting for the 737 autopilot to settle into steady flight before taking over...
+12:16:34 [flightgear] Paused
+12:16:34 [controller] FlightGear connected. Initial altitude/heading/speed are the hold targets.
+12:16:35 [controller] Placed 3 obstacle towers in FlightGear (telnet 5500).
+12:16:37 [flightgear] Resumed
+12:16:37 [controller] Handover sent: the 737 autopilot (if any) switches off, the controller flies.
+12:16:37 [controller]    3.0s AVOID  altitude=  928.8m speed=113.6m/s escape=  0.0Hz clearance= 6555.3m
+12:16:48 [controller]   13.0s AVOID  altitude=  932.8m speed=115.0m/s escape=  0.0Hz clearance= 5345.5m
+12:16:57 [controller]   23.0s AVOID  altitude=  929.8m speed=114.8m/s escape=  0.0Hz clearance= 4133.1m
+12:17:07 [controller]   33.0s AVOID  altitude=  925.0m speed=114.0m/s escape=  0.0Hz clearance= 2934.2m
+12:17:17 [controller]   43.0s AVOID  altitude=  925.1m speed=113.3m/s escape=  0.0Hz clearance= 1761.3m
+12:17:27 [controller]   53.0s RECOVER altitude=  927.6m speed=113.1m/s escape=  0.0Hz clearance=  660.8m
+12:17:37 [controller]   63.0s RECOVER altitude=  929.1m speed=113.4m/s escape=  0.0Hz clearance=  512.7m
+12:17:47 [controller]   73.0s RECOVER altitude=  930.1m speed=113.6m/s escape=  0.0Hz clearance= 1576.1m
+12:17:57 [controller]   83.0s RECOVER altitude=  930.8m speed=113.7m/s escape=  0.0Hz clearance= 2732.5m
+12:18:07 [controller]   93.0s RECOVER altitude=  930.0m speed=113.7m/s escape=  0.0Hz clearance= 3911.8m
+12:18:16 [controller]  103.1s RECOVER altitude=  928.4m speed=113.7m/s escape=  0.0Hz clearance= 4946.7m
+12:18:27 [controller]  113.1s RECOVER altitude=  927.8m speed=113.6m/s escape=  0.0Hz clearance= 3765.1m
+12:18:33 [controller] Run started: 2026-11-14T171833Z_michael-taylor_flightgear-connectome
+12:18:35 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T171833Z_michael-taylor_flightgear-connectome
+12:18:36 [controller]  123.1s RECOVER altitude=  928.8m speed=113.5m/s escape=  0.0Hz clearance= 2588.0m
+12:18:42 [session] Property API stopped answering
+12:18:43 [session] FlightGear exited (code 3221225477) - crashed or force-closed

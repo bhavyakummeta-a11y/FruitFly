@@ -1,0 +1,41 @@
+{
+  "run_id": "2026-11-14T171219Z_michael-taylor_fg-obstacle-avoidance-latest-e2a3d22-damping-pause-fix",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "name": "obstacle avoidance - latest (e2a3d22 damping + pause fix)",
+  "aircraft": "738-flies",
+  "fgfs_pid": 24536,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T17:12:19.361369+00:00",
+  "duration_s": 384,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 30
+  },
+  "airplane_samples": 235,
+  "controller_runs": {
+    "2026-11-14T170612Z_bhavya-shree-reddy-kummeta_demo-reflex": {
+      "backend": "demo",
+      "brain": "reflex",
+      "elapsed_s": 10.0,
+      "collision": false,
+      "minimum_clearance_m": 663.3,
+      "minimum_altitude_m": 900.0,
+      "avoidance_activations": 1,
+      "exit_code": 0
+    },
+    "2026-11-14T171311Z_michael-taylor_flightgear-reflex": {
+      "exit_code": 1
+    },
+    "2026-11-14T170000Z_michael-taylor_media": null,
+    "2026-11-14T171630Z_michael-taylor_flightgear-reflex": null,
+    "2026-11-14T171833Z_michael-taylor_flightgear-connectome": null
+  },
+  "code": {
+    "commit": "b8d07288e222435b83d9c272aaab099aac99782d",
+    "branch": "main"
+  }
+}
