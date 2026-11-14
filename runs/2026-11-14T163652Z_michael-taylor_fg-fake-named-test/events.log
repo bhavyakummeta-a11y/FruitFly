@@ -1,9 +1,0 @@
-11:36:53 [session] Session 'fake named test' watching fgfs pid 8904
-11:36:53 [session] Live log page: http://127.0.0.1:8765/
-11:36:53 [session] Connected to property API on :18080
-11:36:53 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
-11:36:53 [fgfs] 0.04 [WARN]:aircraft  missing state node for:cruise
-11:36:55 [flightgear] Paused
-11:36:58 [flightgear] Resumed
-11:36:58 [session] Property API stopped answering
-11:36:59 [session] FlightGear exited (code 0)

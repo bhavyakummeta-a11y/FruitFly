@@ -1,2 +1,0 @@
-    0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
-    0.04 [WARN]:aircraft  C:\GitLab-Runner\builds\flightgear\fgmeta\flightgear\src\Aircraft\initialstate.cxx:72: missing state node for:cruise
