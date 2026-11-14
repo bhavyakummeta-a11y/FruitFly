@@ -5,6 +5,16 @@ configured obstacles, and resumes the original heading. It has a local demo and
 a FlightGear UDP adapter using the same controller. No takeoff/landing or MSFS
 adapter is included.
 
+## Visible obstacles inside FlightGear
+
+The optional [scenery overlay](../flightgear/SCENERY.md) adds three striped towers
+inside FlightGear. Load `flightgear/obstacle-course` as an additional scenery
+folder and pass `--obstacles flightgear/obstacle-course/course.json` to the
+controller. Follow that guide for the matching airborne start location.
+The course has a fixed geographic origin, so visual objects and collision
+checks stay aligned even when Python connects after the aircraft has moved.
+The ordinary default JSON remains a virtual-only course.
+
 ## Local update: bounded turns and companion view
 
 Avoidance now latches one heading target at most 35 degrees from the initial
@@ -34,7 +44,8 @@ For the supplied default course, FlightGear rotates the course ahead of the
 starting heading, increases its forward spacing with the square of starting
 speed relative to 50 m/s, and raises cylinder tops above the starting altitude.
 Custom JSON obstacle files keep their exact local east/north positions and
-heights. Obstacles are still virtual and visible in the companion only.
+heights. This default course is virtual-only; use the optional fixed scenery
+course above for visible objects inside FlightGear.
 
 ### Boeing / two-engine connection
 
@@ -168,9 +179,8 @@ gain tuning on the teammate's machine.
 
 The initial aircraft altitude, heading, and speed become hold targets. Obstacle
 positions use a local east/north frame anchored at the first received aircraft
-position. The default course is rotated ahead of the initial heading and spaced for the initial speed. **These obstacles are virtual
-cylinders, shown in the Python plot; they are not inserted into FlightGear's 3D
-scenery.** There is no automatic detection of terrain, buildings, or AI traffic.
+position. The default course is rotated ahead of the initial heading and spaced for the initial speed. **The default obstacles are virtual cylinders only. The optional scenery
+overlay has visible towers and a separate matching fixed course.json.** There is no automatic detection of terrain, buildings, or AI traffic.
 For a real scene, provide obstacle coordinates/radii and MSL heights in JSON, or
 add a sensor integration later. MSL altitude hold does not follow terrain.
 

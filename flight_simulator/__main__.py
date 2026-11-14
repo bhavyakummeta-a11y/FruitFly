@@ -25,6 +25,11 @@ def load_obstacles(path):
 
 def run(args, runlog=None):
     obstacles = load_obstacles(args.obstacles)
+    course = json.loads(Path(args.obstacles).read_text())
+    course_origin = None
+    if 'origin' in course:
+        from .scenery import validate_origin
+        course_origin = validate_origin(course['origin'])
     brain = {'reflex': ReflexBrain, 'silent': SilentBrain}.get(args.brain)
     brain = brain() if brain else ConnectomeBrain(args.data, seed=args.seed)
     print(brain.name, flush=True)
@@ -37,10 +42,14 @@ def run(args, runlog=None):
         if args.backend == 'flightgear':
             from .flightgear import FlightGear
             bridge = FlightGear(args.telemetry_port, args.control_port, engines=args.engines)
+            if course_origin is not None:
+                bridge.origin = course_origin
             print('Waiting for airborne FlightGear telemetry on localhost...', flush=True)
             state = bridge.read()
             if state.speed < 35 or abs(state.roll) > .35:
                 raise ValueError('Start FlightGear in stable flight, at least 35 m/s and wings near level.')
+            if course_origin is not None and math.hypot(state.east, state.north) > 20000:
+                raise ValueError('Aircraft is over 20 km from the scenery course. Use the course launch position.')
             controller = FlightController(state.altitude, state.heading, state.speed, state.pitch)
             print('FlightGear connected. Initial altitude/heading/speed are the hold targets.', flush=True)
         else:
@@ -57,7 +66,7 @@ def run(args, runlog=None):
                                  top=max(o.top, state.altitude+500)) for o in obstacles]
         if args.plot or (args.backend == 'flightgear' and not args.no_plot):
             from .view import View
-            view = View(obstacles)
+            view = View(obstacles, scenery=bool(course.get('scenery')))
         if args.log:
             Path(args.log).parent.mkdir(parents=True, exist_ok=True)
             log_file = open(args.log, 'w', newline='')

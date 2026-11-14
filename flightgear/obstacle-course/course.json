@@ -1,0 +1,34 @@
+{
+  "description": "Fixed geographic obstacle course matching this FlightGear scenery overlay.",
+  "origin": {
+    "latitude": 37.6,
+    "longitude": -122.35
+  },
+  "scenery": true,
+  "obstacles": [
+    {
+      "name": "Tower A",
+      "east": 0,
+      "north": 1300,
+      "radius": 150,
+      "bottom": 0.0,
+      "top": 2000.0
+    },
+    {
+      "name": "Tower B",
+      "east": 500,
+      "north": 3300,
+      "radius": 180,
+      "bottom": 0.0,
+      "top": 2000.0
+    },
+    {
+      "name": "Tower C",
+      "east": -150,
+      "north": 5400,
+      "radius": 200,
+      "bottom": 0.0,
+      "top": 2000.0
+    }
+  ]
+}

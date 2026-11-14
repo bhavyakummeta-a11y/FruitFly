@@ -62,3 +62,9 @@ The UDP bridge in `flight_simulator/` (see `docs/FLIGHT_SIMULATOR.md`) works wit
 - The cabin hasn't been checked in the running sim yet. The geometry was only checked in an offline render. If a wing flaps *inward*, flip the signs of the two `<factor>` values in `make_cabin.py`.
 - The fuselage's windows are painted onto its texture, so the window holes in our cabin wall may show the inside of the fuselage skin rather than the outside world.
 - Takeoff numbers for the 737: flaps 5 (`/controls/flight/flaps` = 0.625), rotate at about 140–150 kt.
+
+## Visible obstacle course
+
+See [SCENERY.md](SCENERY.md) for the optional striped-tower scenery overlay and
+the matching fixed controller course. It works with the Cessna test setup and
+does not change the aircraft or cabin models.

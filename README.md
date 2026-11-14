@@ -43,6 +43,7 @@ handles flight stability; this is an assisted experiment, not direct neural
 control of every flight surface.
 
 See [setup, FlightGear connection, and limitations](docs/FLIGHT_SIMULATOR.md).
+For towers visible in the simulator, use the [optional scenery overlay](flightgear/SCENERY.md).
 
 ```sh
 python3 -m flight_simulator --brain reflex --seconds 180
