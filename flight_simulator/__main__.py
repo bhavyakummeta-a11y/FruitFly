@@ -295,7 +295,8 @@ def run(args, runlog=None):
                 pilot.update(escape, getattr(brain, 'last_activity', None))
             if state.time >= next_display:
                 if scene:
-                    scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
+                    if not args.no_threat_glow:
+                        scene.threat(stimulus.obstacle, stimulus.looming_hz / 200)
                 if view:
                     try:
                         view.update(state, controller.phase, brain.name, stimulus, escape, controller.target_heading, controller=controller)
@@ -402,6 +403,9 @@ def main():
     parser.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
     parser.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
     parser.add_argument('--no-scene', action='store_true', help='Do not place obstacle tornadoes in FlightGear')
+    parser.add_argument('--no-threat-glow', action='store_true',
+                        help='Place the tornadoes but never change their threat glow during the run '
+                             '(crash isolation: mid-flight fgfs crashes at fgfs.exe+0x5adea5 hit obstacle runs only)')
     parser.add_argument('--note', help='Feedback note saved with this run log')
     parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')
     parser.add_argument('--no-runlog', action='store_true', help='Skip the run log entirely')
