@@ -22,5 +22,6 @@ Run by Kaden VanDine. Command: `python -m flight_simulator takeoff_live landing 
 
 ## Notes
 
+- **Kaden VanDine** (2026-11-14 16:35): LANDING SUCCESS on live FlightGear (Linux 2024.1.7, connectome, 3 nm final KSFO 28R) with the landing fix: handover at the measured approach trim (elevator -0.22, pitch 3.7 deg; Paula's KLAX numbers) -> stable approach 3.6 deg nose-up, -640..-990 fpm, max 11.8 m off centreline; flare from ~100 ft with thrust latched at idle and no pitch-up once the sink was arrested (levelled ~17 ft, max +2 fpm, no balloon); touchdown 630 m past the threshold at 488 fpm, pitch 4.3 deg, no tail strike; rollout on the runway (max 16.5 m off centre) to 14 kt. Earlier run 2026-11-14T2125 (without the flare fix) ballooned to 28 ft with power back on and touched down at 651 fpm. FG stalls of 2-4 s during the rollout only.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
