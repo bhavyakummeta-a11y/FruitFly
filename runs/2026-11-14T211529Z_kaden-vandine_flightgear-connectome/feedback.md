@@ -22,5 +22,6 @@ Run by Kaden VanDine. Command: `python -m flight_simulator takeoff_live takeoff 
 
 ## Notes
 
+- **Kaden VanDine** (2026-11-14 16:19): Takeoff (Linux FG 2024.1.7 AppImage, connectome, KSFO 28R, main at feaefd5 with session video OFF by default): SUCCESS. Roll: heading within 1.1 deg, max 5.4 m off centreline, throttle >= 0.99. Liftoff t=34.5 s at 165 kt, 1,359 m down the runway, no tail strike; 1,000 ft handover reached (takeoff_achieved), then held a 10 deg climb to 3,577 ft until the 200 s time limit paused FG (acknowledged). 502 decisions, latency mean 0.26 s / max 2.6 s, 1x held (0 speed-up resets). FlightGear did not crash or hang this time (earlier today: 4 segfaults/1 hang with video recording on); one missed 5 s HTTP check at 16:19:25 UTC, recovered at once.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
