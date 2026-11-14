@@ -1,0 +1,308 @@
+16:56:15 [session] Session 'landing fly: connectome, 3 nm final KSFO 28R (with landing fix, run 3)' watching fgfs pid 81045 (738-flies)
+16:56:15 [session] Live log page: http://127.0.0.1:8766/
+16:56:21 [session] Connected to property API on :8080
+16:56:21 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: SPD)
+16:56:23 [controller] Run started: 2026-11-14T215622Z_kaden-vandine_flightgear-connectome
+16:56:23 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T215622Z_kaden-vandine_flightgear-connectome
+16:56:23 [controller] [control] FLY BRAIN (connectome) flying the landing
+16:56:23 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+16:56:23 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+16:56:23 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+16:56:25 [controller] CONNECTOME LIF (notebook model)
+16:56:25 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+16:56:26 [controller]   zero points: steer=-17.5
+16:56:26 [controller] Landing fly: flying fly, looming -> DNp07 = flare
+16:56:26 [controller] Waiting for FlightGear runway telemetry on localhost...
+16:56:28 [controller] Real time: FlightGear at 1x, no pause during brain trials.
+16:56:29 [controller] Landing handover: throttle 0.55, elevator -0.22, reference attitude 3.7 deg (plane at 0.4 deg, +110 fpm)
+16:56:45 [controller] NO-AUTOPILOT RULE: autopilot was still on after handover (/autopilot/internal/SPD); forced off.
+16:56:45 [controller] FlightGear resumes with the fly's first controls: the fly has the approach.
+16:56:45 [controller] Handover: airplane autopilot confirmed OFF; the fly flies.
+16:56:46 [control] IN CONTROL: FLY BRAIN (connectome) flying the landing (run 2026-11-14T215622Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover)
+16:56:46 [flightgear] Resumed
+16:56:46 [controller]   decision applied 0.0s after its state  APPROACH       ias=144.3kt agl=  993ft pitch= 0.4deg thr=0.50
+16:56:46 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.5kt agl=  992ft pitch= 1.1deg thr=0.54
+16:56:48 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.3kt agl=  989ft pitch= 1.6deg thr=0.54
+16:56:48 [controller]   decision applied 0.4s after its state  APPROACH       ias=143.3kt agl=  984ft pitch= 2.4deg thr=0.53
+16:56:48 [controller]   decision applied 0.2s after its state  APPROACH       ias=143.4kt agl=  982ft pitch= 2.6deg thr=0.58
+16:56:48 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.6kt agl=  979ft pitch= 2.9deg thr=0.55
+16:56:48 [controller]   decision applied 0.1s after its state  APPROACH       ias=143.7kt agl=  975ft pitch= 3.1deg thr=0.58
+16:56:49 [controller]   decision applied 0.2s after its state  APPROACH       ias=144.1kt agl=  964ft pitch= 3.1deg thr=0.56
+16:56:49 [controller]   decision applied 0.3s after its state  APPROACH       ias=144.4kt agl=  958ft pitch= 3.1deg thr=0.56
+16:56:49 [controller]   decision applied 0.2s after its state  APPROACH       ias=144.5kt agl=  956ft pitch= 3.1deg thr=0.55
+16:56:49 [controller]   decision applied 0.1s after its state  APPROACH       ias=144.6kt agl=  953ft pitch= 3.1deg thr=0.59
+16:56:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=144.8kt agl=  949ft pitch= 3.2deg thr=0.59
+16:56:51 [controller]   decision applied 0.2s after its state  APPROACH       ias=145.3kt agl=  940ft pitch= 3.3deg thr=0.58
+16:56:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=145.4kt agl=  936ft pitch= 3.4deg thr=0.50
+16:56:53 [controller]   decision applied 0.8s after its state  APPROACH       ias=145.5kt agl=  923ft pitch= 3.4deg thr=0.53
+16:56:53 [controller]   decision applied 0.2s after its state  APPROACH       ias=145.6kt agl=  921ft pitch= 3.4deg thr=0.55
+16:56:53 [controller]   decision applied 0.3s after its state  APPROACH       ias=145.7kt agl=  915ft pitch= 3.5deg thr=0.59
+16:56:53 [controller]   decision applied 0.2s after its state  APPROACH       ias=145.8kt agl=  913ft pitch= 3.6deg thr=0.56
+16:56:54 [controller]   decision applied 0.1s after its state  APPROACH       ias=145.8kt agl=  910ft pitch= 3.6deg thr=0.54
+16:56:54 [controller]   decision applied 0.1s after its state  APPROACH       ias=145.9kt agl=  906ft pitch= 3.7deg thr=0.55
+16:56:54 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.0kt agl=  901ft pitch= 3.7deg thr=0.52
+16:56:54 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.0kt agl=  898ft pitch= 3.7deg thr=0.50
+16:56:54 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.0kt agl=  893ft pitch= 3.7deg thr=0.56
+16:56:56 [controller]   decision applied 0.2s after its state  APPROACH       ias=145.9kt agl=  884ft pitch= 3.7deg thr=0.57
+16:56:56 [controller]   decision applied 0.1s after its state  APPROACH       ias=145.9kt agl=  882ft pitch= 3.7deg thr=0.58
+16:56:56 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.1kt agl=  875ft pitch= 3.8deg thr=0.54
+16:56:57 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  872ft pitch= 3.8deg thr=0.55
+16:56:57 [controller]   decision applied 0.4s after its state  APPROACH       ias=146.2kt agl=  866ft pitch= 3.8deg thr=0.46
+16:56:57 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.2kt agl=  864ft pitch= 3.8deg thr=0.53
+16:56:57 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  861ft pitch= 3.7deg thr=0.57
+16:56:59 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  858ft pitch= 3.7deg thr=0.55
+16:56:59 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.4kt agl=  849ft pitch= 3.8deg thr=0.54
+16:56:59 [controller]   decision applied 0.3s after its state  APPROACH       ias=146.4kt agl=  844ft pitch= 3.7deg thr=0.53
+16:56:59 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.4kt agl=  843ft pitch= 3.7deg thr=0.55
+16:57:00 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.4kt agl=  840ft pitch= 3.7deg thr=0.54
+16:57:00 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  837ft pitch= 3.7deg thr=0.56
+16:57:00 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  830ft pitch= 3.7deg thr=0.53
+16:57:00 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  828ft pitch= 3.7deg thr=0.54
+16:57:02 [controller]   decision applied 0.8s after its state  APPROACH       ias=146.6kt agl=  818ft pitch= 3.8deg thr=0.56
+16:57:02 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  816ft pitch= 3.8deg thr=0.54
+16:57:02 [controller]   decision applied 0.3s after its state  APPROACH       ias=146.6kt agl=  812ft pitch= 3.8deg thr=0.51
+16:57:02 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  810ft pitch= 3.8deg thr=0.54
+16:57:03 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  808ft pitch= 3.8deg thr=0.53
+16:57:03 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  805ft pitch= 3.8deg thr=0.52
+16:57:03 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  800ft pitch= 3.7deg thr=0.48
+16:57:03 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  798ft pitch= 3.7deg thr=0.54
+16:57:05 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  795ft pitch= 3.6deg thr=0.48
+16:57:05 [controller]   decision applied 0.4s after its state  APPROACH       ias=146.3kt agl=  788ft pitch= 3.4deg thr=0.47
+16:57:05 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.3kt agl=  786ft pitch= 3.4deg thr=0.47
+16:57:05 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  784ft pitch= 3.3deg thr=0.47
+16:57:05 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.1kt agl=  778ft pitch= 3.3deg thr=0.52
+16:57:06 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.0kt agl=  775ft pitch= 3.3deg thr=0.52
+16:57:06 [controller] Landing fly: approach path re-anchored at 3.1 deg from 769 ft, 4308 m out
+16:57:06 [controller]   decision applied 0.4s after its state  APPROACH       ias=146.1kt agl=  769ft pitch= 3.3deg thr=0.50
+16:57:06 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.1kt agl=  767ft pitch= 3.3deg thr=0.52
+16:57:06 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.1kt agl=  764ft pitch= 3.2deg thr=0.55
+16:57:08 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.2kt agl=  761ft pitch= 3.2deg thr=0.52
+16:57:08 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.3kt agl=  750ft pitch= 3.3deg thr=0.52
+16:57:08 [controller]   decision applied 0.3s after its state  APPROACH       ias=146.4kt agl=  745ft pitch= 3.3deg thr=0.59
+16:57:08 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.4kt agl=  743ft pitch= 3.3deg thr=0.58
+16:57:09 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.5kt agl=  741ft pitch= 3.3deg thr=0.55
+16:57:09 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  737ft pitch= 3.3deg thr=0.51
+16:57:09 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.6kt agl=  729ft pitch= 3.4deg thr=0.54
+16:57:09 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.6kt agl=  726ft pitch= 3.4deg thr=0.52
+16:57:11 [controller]   decision applied 0.8s after its state  APPROACH       ias=146.7kt agl=  714ft pitch= 3.5deg thr=0.57
+16:57:11 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.7kt agl=  712ft pitch= 3.5deg thr=0.52
+16:57:11 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.7kt agl=  705ft pitch= 3.5deg thr=0.54
+16:57:13 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.7kt agl=  703ft pitch= 3.5deg thr=0.52
+16:57:13 [controller]   decision applied 0.4s after its state  APPROACH       ias=146.7kt agl=  696ft pitch= 3.6deg thr=0.53
+16:57:13 [controller]   decision applied 0.2s after its state  APPROACH       ias=146.7kt agl=  694ft pitch= 3.6deg thr=0.60
+16:57:13 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.7kt agl=  692ft pitch= 3.6deg thr=0.55
+16:57:14 [controller]   decision applied 0.1s after its state  APPROACH       ias=146.8kt agl=  689ft pitch= 3.6deg thr=0.56
+16:57:14 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  679ft pitch= 3.6deg thr=0.52
+16:57:14 [controller]   decision applied 0.3s after its state  APPROACH       ias=147.0kt agl=  674ft pitch= 3.6deg thr=0.53
+16:57:14 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.0kt agl=  672ft pitch= 3.5deg thr=0.50
+16:57:16 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  670ft pitch= 3.4deg thr=0.50
+16:57:16 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  667ft pitch= 3.3deg thr=0.49
+16:57:16 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.0kt agl=  661ft pitch= 3.1deg thr=0.52
+16:57:16 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.0kt agl=  659ft pitch= 3.1deg thr=0.51
+16:57:17 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.1kt agl=  655ft pitch= 3.0deg thr=0.47
+16:57:17 [controller]   decision applied 0.4s after its state  APPROACH       ias=147.1kt agl=  646ft pitch= 3.0deg thr=0.48
+16:57:17 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.1kt agl=  645ft pitch= 3.1deg thr=0.52
+16:57:17 [controller]   decision applied 0.3s after its state  APPROACH       ias=147.2kt agl=  638ft pitch= 3.0deg thr=0.50
+16:57:17 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.2kt agl=  636ft pitch= 3.0deg thr=0.50
+16:57:19 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.2kt agl=  632ft pitch= 2.9deg thr=0.54
+16:57:19 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.3kt agl=  628ft pitch= 2.8deg thr=0.57
+16:57:19 [controller]   decision applied 0.2s after its state  APPROACH       ias=147.5kt agl=  623ft pitch= 2.7deg thr=0.53
+16:57:19 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.6kt agl=  620ft pitch= 2.7deg thr=0.53
+16:57:19 [controller]   decision applied 0.1s after its state  APPROACH       ias=147.7kt agl=  616ft pitch= 2.7deg thr=0.55
+16:57:20 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.2kt agl=  600ft pitch= 2.8deg thr=0.49
+16:57:20 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.2kt agl=  593ft pitch= 2.9deg thr=0.52
+16:57:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.3kt agl=  588ft pitch= 2.9deg thr=0.56
+16:57:22 [controller]   decision applied 0.4s after its state  APPROACH       ias=148.6kt agl=  580ft pitch= 2.6deg thr=0.45
+16:57:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  579ft pitch= 2.6deg thr=0.48
+16:57:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  574ft pitch= 2.5deg thr=0.48
+16:57:22 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  570ft pitch= 2.4deg thr=0.45
+16:57:24 [controller]   decision applied 0.4s after its state  APPROACH       ias=148.7kt agl=  560ft pitch= 2.4deg thr=0.46
+16:57:24 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  558ft pitch= 2.4deg thr=0.49
+16:57:24 [controller]   decision applied 0.4s after its state  APPROACH       ias=148.7kt agl=  551ft pitch= 2.5deg thr=0.50
+16:57:24 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  549ft pitch= 2.5deg thr=0.51
+16:57:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.8kt agl=  544ft pitch= 2.5deg thr=0.42
+16:57:25 [controller]   decision applied 0.4s after its state  APPROACH       ias=148.7kt agl=  536ft pitch= 2.5deg thr=0.50
+16:57:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  534ft pitch= 2.5deg thr=0.46
+16:57:25 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.6kt agl=  529ft pitch= 2.4deg thr=0.44
+16:57:25 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.6kt agl=  526ft pitch= 2.4deg thr=0.46
+16:57:27 [controller]   decision applied 0.4s after its state  APPROACH       ias=148.6kt agl=  516ft pitch= 2.5deg thr=0.42
+16:57:27 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.5kt agl=  514ft pitch= 2.5deg thr=0.42
+16:57:27 [controller]   decision applied 0.3s after its state  APPROACH       ias=148.4kt agl=  507ft pitch= 2.6deg thr=0.50
+16:57:27 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.4kt agl=  504ft pitch= 2.6deg thr=0.50
+16:57:27 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.4kt agl=  501ft pitch= 2.6deg thr=0.50
+16:57:28 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.4kt agl=  497ft pitch= 2.6deg thr=0.52
+16:57:28 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.6kt agl=  487ft pitch= 2.7deg thr=0.55
+16:57:28 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  484ft pitch= 2.7deg thr=0.59
+16:57:30 [controller]   decision applied 0.8s after its state  APPROACH       ias=149.3kt agl=  470ft pitch= 2.8deg thr=0.54
+16:57:30 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  469ft pitch= 2.9deg thr=0.50
+16:57:30 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  461ft pitch= 3.0deg thr=0.44
+16:57:30 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  458ft pitch= 3.0deg thr=0.46
+16:57:31 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.1kt agl=  450ft pitch= 3.0deg thr=0.52
+16:57:31 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.1kt agl=  449ft pitch= 2.9deg thr=0.50
+16:57:31 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.0kt agl=  445ft pitch= 2.9deg thr=0.50
+16:57:33 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.0kt agl=  438ft pitch= 2.9deg thr=0.49
+16:57:33 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.0kt agl=  433ft pitch= 2.9deg thr=0.49
+16:57:33 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.0kt agl=  431ft pitch= 3.0deg thr=0.56
+16:57:33 [controller]   decision applied 0.3s after its state  APPROACH       ias=149.1kt agl=  426ft pitch= 3.1deg thr=0.54
+16:57:33 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  425ft pitch= 3.1deg thr=0.57
+16:57:33 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.3kt agl=  420ft pitch= 3.1deg thr=0.55
+16:57:34 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  418ft pitch= 3.1deg thr=0.55
+16:57:34 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.4kt agl=  413ft pitch= 3.1deg thr=0.39
+16:57:34 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.3kt agl=  410ft pitch= 3.1deg thr=0.43
+16:57:34 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  407ft pitch= 3.0deg thr=0.45
+16:57:36 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.0kt agl=  399ft pitch= 2.8deg thr=0.45
+16:57:36 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.9kt agl=  397ft pitch= 2.8deg thr=0.44
+16:57:36 [controller]   decision applied 0.3s after its state  APPROACH       ias=148.8kt agl=  392ft pitch= 2.6deg thr=0.46
+16:57:36 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.8kt agl=  391ft pitch= 2.6deg thr=0.48
+16:57:36 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  387ft pitch= 2.6deg thr=0.49
+16:57:37 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.7kt agl=  383ft pitch= 2.5deg thr=0.49
+16:57:37 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.8kt agl=  375ft pitch= 2.5deg thr=0.46
+16:57:37 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.8kt agl=  372ft pitch= 2.5deg thr=0.45
+16:57:39 [controller]   decision applied 0.8s after its state  APPROACH       ias=148.6kt agl=  359ft pitch= 2.3deg thr=0.49
+16:57:39 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.6kt agl=  357ft pitch= 2.3deg thr=0.52
+16:57:39 [controller]   decision applied 0.3s after its state  APPROACH       ias=148.7kt agl=  351ft pitch= 2.2deg thr=0.51
+16:57:39 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.8kt agl=  349ft pitch= 2.2deg thr=0.54
+16:57:39 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.9kt agl=  346ft pitch= 2.2deg thr=0.48
+16:57:40 [controller]   decision applied 0.1s after its state  APPROACH       ias=148.9kt agl=  341ft pitch= 2.2deg thr=0.47
+16:57:40 [controller]   decision applied 0.2s after its state  APPROACH       ias=148.9kt agl=  335ft pitch= 2.2deg thr=0.53
+16:57:40 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.0kt agl=  332ft pitch= 2.1deg thr=0.50
+16:57:40 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.1kt agl=  328ft pitch= 2.1deg thr=0.46
+16:57:42 [controller]   decision applied 0.4s after its state  APPROACH       ias=149.1kt agl=  317ft pitch= 1.9deg thr=0.48
+16:57:42 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.2kt agl=  314ft pitch= 1.9deg thr=0.42
+16:57:42 [controller]   decision applied 0.3s after its state  APPROACH       ias=149.1kt agl=  308ft pitch= 1.7deg thr=0.46
+16:57:42 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.1kt agl=  305ft pitch= 1.7deg thr=0.47
+16:57:42 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.1kt agl=  301ft pitch= 1.6deg thr=0.46
+16:57:44 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  297ft pitch= 1.6deg thr=0.44
+16:57:44 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.2kt agl=  286ft pitch= 1.5deg thr=0.50
+16:57:44 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.2kt agl=  283ft pitch= 1.5deg thr=0.47
+16:57:45 [controller]   decision applied 0.8s after its state  APPROACH       ias=149.5kt agl=  265ft pitch= 1.4deg thr=0.41
+16:57:45 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.6kt agl=  262ft pitch= 1.4deg thr=0.49
+16:57:45 [controller]   decision applied 0.3s after its state  APPROACH       ias=149.7kt agl=  255ft pitch= 1.3deg thr=0.43
+16:57:45 [controller]   decision applied 0.2s after its state  APPROACH       ias=149.7kt agl=  252ft pitch= 1.3deg thr=0.47
+16:57:45 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.8kt agl=  248ft pitch= 1.3deg thr=0.50
+16:57:47 [controller]   decision applied 0.1s after its state  APPROACH       ias=149.9kt agl=  243ft pitch= 1.3deg thr=0.49
+16:57:47 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.0kt agl=  235ft pitch= 1.3deg thr=0.49
+16:57:47 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  230ft pitch= 1.4deg thr=0.46
+16:57:47 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.2kt agl=  225ft pitch= 1.4deg thr=0.44
+16:57:48 [controller]   decision applied 0.4s after its state  APPROACH       ias=150.3kt agl=  212ft pitch= 1.4deg thr=0.46
+16:57:48 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.4kt agl=  209ft pitch= 1.4deg thr=0.48
+16:57:48 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.4kt agl=  206ft pitch= 1.3deg thr=0.45
+16:57:48 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.5kt agl=  200ft pitch= 1.3deg thr=0.54
+16:57:48 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.6kt agl=  195ft pitch= 1.3deg thr=0.46
+16:57:50 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.7kt agl=  190ft pitch= 1.3deg thr=0.43
+16:57:50 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.8kt agl=  177ft pitch= 1.3deg thr=0.40
+16:57:50 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.7kt agl=  173ft pitch= 1.2deg thr=0.39
+16:57:51 [controller]   decision applied 0.8s after its state  APPROACH       ias=150.6kt agl=  155ft pitch= 1.5deg thr=0.41
+16:57:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.6kt agl=  154ft pitch= 1.5deg thr=0.45
+16:57:51 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.6kt agl=  142ft pitch= 1.6deg thr=0.51
+16:57:51 [controller]   decision applied 0.1s after its state  APPROACH       ias=150.7kt agl=  138ft pitch= 1.6deg thr=0.47
+16:57:53 [controller]   decision applied 0.4s after its state  APPROACH       ias=150.8kt agl=  127ft pitch= 1.7deg thr=0.48
+16:57:53 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.9kt agl=  125ft pitch= 1.7deg thr=0.42
+16:57:53 [controller]   decision applied 0.2s after its state  APPROACH       ias=150.8kt agl=  120ft pitch= 1.8deg thr=0.41
+16:57:55 [controller]   decision applied 0.8s after its state  APPROACH       ias=150.7kt agl=  104ft pitch= 2.0deg thr=0.33
+16:57:55 [controller]   decision applied 0.3s after its state  FINAL          ias=150.5kt agl=  100ft pitch= 2.1deg thr=0.29
+16:57:55 [controller]   decision applied 0.3s after its state  FLARE          ias=150.3kt agl=   94ft pitch= 2.1deg thr=0.00
+16:57:55 [controller]   decision applied 0.3s after its state  FLARE          ias=150.1kt agl=   90ft pitch= 2.2deg thr=0.00
+16:57:55 [controller]   decision applied 0.3s after its state  FLARE          ias=149.8kt agl=   85ft pitch= 2.3deg thr=0.00
+16:57:56 [controller]   decision applied 0.4s after its state  FLARE          ias=149.3kt agl=   78ft pitch= 2.4deg thr=0.00
+16:57:56 [controller]   decision applied 0.3s after its state  FLARE          ias=148.9kt agl=   74ft pitch= 2.5deg thr=0.00
+16:57:56 [controller]   decision applied 0.3s after its state  FLARE          ias=148.6kt agl=   73ft pitch= 2.7deg thr=0.00
+16:57:58 [controller]   decision applied 0.8s after its state  FLARE          ias=147.5kt agl=   62ft pitch= 3.4deg thr=0.00
+16:57:58 [controller]   decision applied 0.4s after its state  FLARE          ias=147.0kt agl=   57ft pitch= 3.8deg thr=0.00
+16:57:58 [controller]   decision applied 0.3s after its state  FLARE          ias=146.6kt agl=   53ft pitch= 4.1deg thr=0.00
+16:57:58 [controller]   decision applied 0.3s after its state  FLARE          ias=146.1kt agl=   49ft pitch= 4.4deg thr=0.00
+16:57:58 [controller]   decision applied 0.3s after its state  FLARE          ias=145.7kt agl=   45ft pitch= 4.7deg thr=0.00
+16:57:59 [controller]   decision applied 0.5s after its state  FLARE          ias=144.8kt agl=   40ft pitch= 5.4deg thr=0.00
+16:57:59 [controller]   decision applied 0.3s after its state  FLARE          ias=144.3kt agl=   37ft pitch= 5.8deg thr=0.00
+16:57:59 [controller]   decision applied 0.3s after its state  FLARE          ias=143.8kt agl=   34ft pitch= 6.1deg thr=0.00
+16:58:01 [controller]   decision applied 0.8s after its state  FLARE          ias=142.3kt agl=   29ft pitch= 6.6deg thr=0.00
+16:58:01 [controller]   decision applied 0.3s after its state  FLARE          ias=141.8kt agl=   27ft pitch= 6.8deg thr=0.00
+16:58:01 [controller]   decision applied 0.3s after its state  FLARE          ias=141.2kt agl=   25ft pitch= 7.0deg thr=0.00
+16:58:01 [controller]   decision applied 0.3s after its state  FLARE          ias=140.7kt agl=   24ft pitch= 7.2deg thr=0.00
+16:58:01 [controller]   decision applied 0.2s after its state  FLARE          ias=140.2kt agl=   23ft pitch= 7.2deg thr=0.00
+16:58:02 [controller]   decision applied 0.1s after its state  FLARE          ias=139.8kt agl=   23ft pitch= 7.2deg thr=0.00
+16:58:02 [controller]   decision applied 0.2s after its state  FLARE          ias=138.9kt agl=   21ft pitch= 7.0deg thr=0.00
+16:58:02 [controller]   decision applied 0.1s after its state  FLARE          ias=138.5kt agl=   21ft pitch= 6.9deg thr=0.00
+16:58:02 [controller]   decision applied 0.1s after its state  FLARE          ias=137.9kt agl=   20ft pitch= 6.6deg thr=0.00
+16:58:04 [controller]   decision applied 0.4s after its state  FLARE          ias=136.7kt agl=   18ft pitch= 5.8deg thr=0.00
+16:58:04 [controller]   decision applied 0.3s after its state  FLARE          ias=136.3kt agl=   17ft pitch= 5.5deg thr=0.00
+16:58:04 [controller]   decision applied 0.3s after its state  FLARE          ias=135.8kt agl=   16ft pitch= 5.2deg thr=0.00
+16:58:04 [controller]   decision applied 0.4s after its state  FLARE          ias=135.3kt agl=   14ft pitch= 4.9deg thr=0.00
+16:58:04 [controller]   decision applied 0.3s after its state  FLARE          ias=134.9kt agl=   12ft pitch= 4.9deg thr=0.00
+16:58:05 [controller]   decision applied 0.3s after its state  FLARE          ias=134.5kt agl=    9ft pitch= 5.0deg thr=0.00
+16:58:05 [controller]   decision applied 0.4s after its state  FLARE          ias=134.1kt agl=    6ft pitch= 5.3deg thr=0.00
+16:58:05 [controller]   decision applied 0.4s after its state  FLARE          ias=133.7kt agl=    3ft pitch= 5.8deg thr=0.00
+16:58:07 [controller]   decision applied 0.8s after its state  ROLLOUT        ias=132.4kt agl=    1ft pitch= 6.2deg thr=0.00
+16:58:07 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=132.1kt agl=    1ft pitch= 6.3deg thr=0.00
+16:58:07 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=131.0kt agl=    1ft pitch= 6.0deg thr=0.00
+16:58:07 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=130.4kt agl=    1ft pitch= 5.5deg thr=0.00
+16:58:08 [controller]   decision applied 0.4s after its state  ROLLOUT        ias=129.1kt agl=    1ft pitch= 4.2deg thr=0.00
+16:58:08 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=128.8kt agl=    1ft pitch= 3.8deg thr=0.00
+16:58:08 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=128.0kt agl=    1ft pitch= 2.9deg thr=0.00
+16:58:10 [controller]   decision applied 0.4s after its state  ROLLOUT        ias=126.3kt agl=    0ft pitch= 1.1deg thr=0.00
+16:58:10 [controller]   decision applied 0.4s after its state  ROLLOUT        ias=124.9kt agl=    0ft pitch= 0.0deg thr=0.00
+16:58:10 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=124.5kt agl=    0ft pitch=-0.0deg thr=0.00
+16:58:10 [controller]   decision applied 0.3s after its state  ROLLOUT        ias=122.9kt agl=    0ft pitch=-0.2deg thr=0.00
+16:58:10 [controller]   decision applied 0.2s after its state  ROLLOUT        ias=122.2kt agl=    0ft pitch=-0.3deg thr=0.00
+16:58:10 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=121.3kt agl=    0ft pitch=-0.4deg thr=0.00
+16:58:11 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=120.3kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:11 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=118.8kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:11 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=117.8kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:11 [controller]   decision applied 0.1s after its state  ROLLOUT        ias=116.7kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:13 [controller]   decision applied 0.2s after its state  ROLLOUT        ias=112.8kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:13 [controller]   decision applied 0.2s after its state  ROLLOUT        ias=110.6kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:13 [controller]   decision applied 0.2s after its state  ROLLOUT        ias=109.5kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:15 [session] Property API stopped answering
+16:58:15 [controller]   decision applied 0.4s after its state  ROLLOUT        ias=107.6kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:15 [controller]   decision stale 1.0s after its state  ROLLOUT        ias=107.2kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:19 [controller]   decision stale 4.0s after its state  ROLLOUT        ias= 92.0kt agl=    0ft pitch=-0.5deg thr=0.00
+16:58:24 [controller]   decision stale 4.0s after its state  ROLLOUT        ias= 76.2kt agl=    0ft pitch=-0.6deg thr=0.00
+16:58:27 [controller]   decision stale 4.0s after its state  ROLLOUT        ias= 60.0kt agl=    0ft pitch=-0.6deg thr=0.00
+16:58:31 [controller]   decision stale 4.0s after its state  ROLLOUT        ias= 43.4kt agl=    0ft pitch=-0.6deg thr=0.00
+16:58:36 [controller]   decision stale 4.0s after its state  ROLLOUT        ias= 26.5kt agl=    0ft pitch=-0.6deg thr=0.00
+16:58:42 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+16:58:42 [controller] {
+16:58:42 [controller]   "fly": "Landing fly",
+16:58:42 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+16:58:42 [controller]   "phase": "ROLLOUT",
+16:58:42 [controller]   "completed": true,
+16:58:42 [controller]   "time_s": 113.2,
+16:58:42 [controller]   "decisions": 232,
+16:58:42 [controller]   "max_centerline_m": 13.3,
+16:58:42 [controller]   "tail_strike": false,
+16:58:42 [controller]   "stall": false,
+16:58:42 [controller]   "left_runway": false,
+16:58:42 [controller]   "touchdown_x_m": 617,
+16:58:42 [controller]   "touchdown_sink_fpm": 452,
+16:58:42 [controller]   "touchdown_pitch_deg": 5.8,
+16:58:42 [controller]   "go_around": false,
+16:58:42 [controller]   "flare_decisions": 26,
+16:58:42 [controller]   "safe_reject": false,
+16:58:42 [controller]   "takeoff_achieved": false,
+16:58:42 [controller]   "outcome": "landed",
+16:58:42 [controller]   "events": [
+16:58:42 [controller]     "68.5s FLARE: DNp07 3 Hz",
+16:58:42 [controller]     "68.8s FLARE: DNp07 4 Hz",
+16:58:42 [controller]     "69.1s FLARE: DNp07 6 Hz",
+16:58:42 [controller]     "...",
+16:58:42 [controller]     "78.7s FLARE: DNp07 21 Hz",
+16:58:42 [controller]     "79.1s FLARE: DNp07 23 Hz",
+16:58:42 [controller]     "79.5s FLARE: DNp07 26 Hz"
+16:58:42 [controller]   ],
+16:58:42 [controller]   "termination_reason": "phase_completed",
+16:58:42 [controller]   "decision_timing": {
+16:58:42 [controller]     "applied": 232,
+16:58:42 [controller]     "completed": 238,
+16:58:42 [controller]     "discarded": 6,
+16:58:42 [controller]     "skipped": 55,
+16:58:42 [controller]     "latency_mean_s": 0.23,
+16:58:42 [controller]     "latency_max_s": 0.833
+16:58:42 [controller]   },
+16:58:42 [controller]   "speed_up_resets": 0,
+16:58:42 [controller]   "requested_phase": "landing",
+16:58:42 [controller]   "backend": "flightgear",
+16:58:42 [controller]   "wall_s": 135.0,
+16:58:42 [controller]   "success": true
+16:58:42 [controller] }
+16:58:42 [controller] Run finished: 2026-11-14T215622Z_kaden-vandine_flightgear-connectome exit=0
+16:59:55 [session] FlightGear exited (code None)
