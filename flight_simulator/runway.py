@@ -158,8 +158,8 @@ class RunwaySim:
         horizontal = s.speed * math.cos(s.gamma)
         s.x += horizontal * math.cos(s.psi) * dt
         s.y += horizontal * math.sin(s.psi) * dt
-        s.agl += s.speed * math.sin(s.gamma) * dt
-        if not s.on_ground and s.agl <= 0:
+        s.agl = max(0.0, s.agl + s.speed * math.sin(s.gamma) * dt)
+        if not s.on_ground and s.agl <= 0 and s.climb < 0:
             self.events.touchdown_x = self.events.touchdown_x or s.x
             if self.events.touchdown_sink_fpm is None:
                 self.events.touchdown_sink_fpm = -s.climb / FPM
