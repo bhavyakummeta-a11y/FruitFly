@@ -1,0 +1,59 @@
+diff --git a/flight_simulator/__main__.py b/flight_simulator/__main__.py
+index c86c660..c60adaf 100644
+--- a/flight_simulator/__main__.py
++++ b/flight_simulator/__main__.py
+@@ -23,7 +23,7 @@ def load_obstacles(path):
+     return obstacles
+ 
+ 
+-def run(args):
++def run(args, runlog=None):
+     obstacles = load_obstacles(args.obstacles)
+     brain = {'reflex': ReflexBrain, 'silent': SilentBrain}.get(args.brain)
+     brain = brain() if brain else ConnectomeBrain(args.data, seed=args.seed)
+@@ -105,6 +105,8 @@ def run(args):
+                   'minimum_clearance_m': round(minimum, 2) if math.isfinite(minimum) else None,
+                   'minimum_altitude_m': round(min_altitude, 2),
+                   'avoidance_activations': controller.activations}
++        if runlog:
++            runlog.result = result
+         print(json.dumps(result, indent=2))
+         return 2 if collision else 0
+     finally:
+@@ -129,19 +131,33 @@ def main():
+     parser.add_argument('--log', help='CSV telemetry output path')
+     parser.add_argument('--telemetry-port', type=int, default=5501)
+     parser.add_argument('--control-port', type=int, default=5502)
++    parser.add_argument('--note', help='Feedback note saved with this run log')
++    parser.add_argument('--no-push', action='store_true', help='Log this run locally, do not push')
++    parser.add_argument('--no-runlog', action='store_true', help='Skip the run log entirely')
+     args = parser.parse_args()
+     if not math.isfinite(args.seconds) or args.seconds < 0:
+         parser.error('--seconds must be finite and nonnegative')
+     if any(not 1 <= p <= 65535 for p in [args.telemetry_port, args.control_port]):
+         parser.error('Ports must be between 1 and 65535')
++    runlog = None
++    if not args.no_runlog:
++        from .runlog import RunLog
++        runlog = RunLog(args, sys.argv[1:], auto_push=not args.no_push)
++        if not args.log:
++            args.log = str(runlog.dir / 'telemetry.csv')
++    code = 1
+     try:
+-        return run(args)
++        code = run(args, runlog)
+     except KeyboardInterrupt:
+         print('\nStopped.')
+-        return 0
++        code = 130
+     except (OSError, ValueError, RuntimeError, ImportError, KeyError) as exc:
+         print(f'Error: {exc}', file=sys.stderr)
+-        return 1
++        code = 1
++    finally:
++        if runlog:
++            runlog.finish(code)
++    return 0 if code == 130 else code
+ 
+ 
+ if __name__ == '__main__':

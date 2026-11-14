@@ -1,0 +1,37 @@
+{
+  "run_id": "2026-11-14T161616Z_michael-taylor_demo-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:16:16.615158+00:00",
+  "command": "python -m flight_simulator --brain reflex --seconds 30 --note smoke test of runlog",
+  "args": {
+    "backend": "demo",
+    "brain": "reflex",
+    "data": "data/brain",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 30.0,
+    "seed": 0,
+    "plot": false,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "note": "smoke test of runlog",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "0781144894d439fd020725ba0ab4e9f5661dc2da",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/__main__.py"
+    ],
+    "untracked": [
+      "flight_simulator/launch_fg.py",
+      "flight_simulator/runlog.py"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "finished_utc": "2026-11-14T16:16:17.595350+00:00",
+  "exit_code": 0
+}
