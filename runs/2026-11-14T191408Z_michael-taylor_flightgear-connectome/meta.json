@@ -1,0 +1,54 @@
+{
+  "run_id": "2026-11-14T191408Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T19:14:08.703611+00:00",
+  "command": "python -m flight_simulator mission --route lax-burbank --brain connectome --seconds 1800 --backend flightgear --telemetry-port 5501 --control-port 5502",
+  "args": {
+    "brain": "connectome",
+    "route": "lax-burbank",
+    "backend": "flightgear",
+    "data": "data/brain",
+    "seed": 0,
+    "noise_seed": null,
+    "period": 0.25,
+    "no_calibrate": false,
+    "seconds": 1800.0,
+    "vision_port": 5601,
+    "vision_obstacles": null,
+    "log": null,
+    "plot": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "body_port": 5600,
+    "no_fly_body": false
+  },
+  "code": {
+    "commit": "26b50af802103bf840189b507e3bb508828bfcbb",
+    "branch": "HEAD",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "LAX 25R takeoff - CONNECTOME, LAX-Burbank route (26b50af), clear weather",
+      "run_id": "2026-11-14T191309Z_michael-taylor_fg-lax-25r-takeoff-connectome-lax-burbank-route-26b50af-clear-weather"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 59
+  },
+  "finished_utc": "2026-11-14T19:15:32.368190+00:00",
+  "exit_code": 1
+}
