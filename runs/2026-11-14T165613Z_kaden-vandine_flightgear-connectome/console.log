@@ -1,0 +1,9 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-14T165613Z_kaden-vandine_flightgear-connectome
+CONNECTOME LIF (notebook model)
+Connectome decisions run synchronously; FlightGear pauses during each trial.
+Waiting for airborne FlightGear telemetry on localhost...
+FlightGear connected. Initial altitude/heading/speed are the hold targets.
+Handover sent: the 737 autopilot (if any) switches off, the controller flies.
+Placed 3 obstacle towers in FlightGear (telnet 5500).
+Sent FlightGear pause request on exit. Verify pause in the simulator.
+Error: Flight departed the test envelope (heading, bank, pitch, speed or altitude); pausing. Check aircraft controls and trim.
