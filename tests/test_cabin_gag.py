@@ -60,14 +60,20 @@ class CabinGagModel(unittest.TestCase):
         nas = (CABIN / 'Nasal/cabin_rows.nas').read_text()
         self.assertIn(nas_floats(nas, 'BABY_ROW_X')[0], nas_floats(nas, 'ROWS'))
 
-    def test_baby_cry_sample_is_a_short_mono_wav(self):
+    def test_baby_cry_clips_match_the_script_and_are_credited(self):
         import wave
-        with wave.open(str(CABIN / 'Sounds/baby-cry.wav')) as w:
-            self.assertEqual(w.getnchannels(), 1)
-            length = w.getnframes() / w.getframerate()
-        self.assertTrue(3 < length < 6, length)
         nas = (CABIN / 'Nasal/cabin_show.nas').read_text()
-        self.assertIn(f'CRY_LEN = {length:.1f}', nas)
+        listed = re.findall(r'\["(baby-cry-\d+\.wav)", ([\d.]+)\]', nas)
+        self.assertEqual(len(listed), 5)
+        for name, seconds in listed:
+            with wave.open(str(CABIN / 'Sounds' / name)) as w:
+                self.assertEqual((w.getnchannels(), w.getsampwidth()), (1, 2))
+                length = w.getnframes() / w.getframerate()
+            self.assertAlmostEqual(length, float(seconds), delta=0.02, msg=name)
+            self.assertLess(length, 6, 'short clips: FlightGear cannot stop a playing sample')
+        self.assertEqual(sorted(p.name for p in (CABIN / 'Sounds').glob('*.wav')), sorted(n for n, _ in listed))
+        credits = (CABIN / 'Sounds/CREDITS.md').read_text()
+        self.assertIn('CC0', credits)
 
     def test_set_file_loads_the_show_and_the_follow_view(self):
         root = ET.parse(SET).getroot()

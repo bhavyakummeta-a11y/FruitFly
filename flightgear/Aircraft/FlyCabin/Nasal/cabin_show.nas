@@ -19,7 +19,7 @@
 #       name of a view to switch to. Cleared once handled.
 #   "Cabin: follow the snack cart" view: the camera rides along the aisle with the cart.
 #   The crying baby (bottom of this file): /fruitfly/cabin/baby/{crying,wiggle-deg,tear-m},
-#   and Sounds/baby-cry.wav while you watch from a cabin view.
+#   and its cry (Sounds/baby-cry-N.wav) while you watch from a cabin view.
 
 var att = props.globals.getNode("/fruitfly/cabin/attendant", 1);
 var served = props.globals.getNode("/fruitfly/cabin/served", 1);
@@ -154,19 +154,22 @@ setlistener("/fruitfly/view-request", func(n) {
 
 # ---- the crying baby -----------------------------------------------------------
 # A fly larva on a parent's lap (row BABY_ROW_X, left aisle seat). It cries in fits,
-# wriggling with tears and an open mouth, and you hear it (Sounds/baby-cry.wav) only
-# in the cabin views. When the flight attendant serves its row it gets a pacifier and
-# goes quiet for a while, then starts again.
+# wriggling with tears and an open mouth, and you hear it only in the cabin views: a real
+# newborn's cry (CC0 recording, Sounds/CREDITS.md) cut into short clips, played one after
+# another in random order. Short clips, because FlightGear can't stop a playing sample:
+# when the flight attendant serves its row it gets a pacifier and falls quiet within a
+# few seconds, for a while, then starts again.
 var baby = props.globals.getNode("/fruitfly/cabin/baby", 1);
-var CRY_FILE = "baby-cry.wav";
-var CRY_LEN = 4.5;                 # seconds, the sample's length
+# [file, seconds] - made by flightgear/tools/fetch_baby_cry.py; tests check the lengths
+var CRY_CLIPS = [["baby-cry-1.wav", 3.40], ["baby-cry-2.wav", 4.30], ["baby-cry-3.wav", 5.20],
+                 ["baby-cry-4.wav", 2.50], ["baby-cry-5.wav", 3.00]];
 var cry_path = nil;
-var full = resolvepath("Aircraft/FlyCabin/Sounds/" ~ CRY_FILE);
+var probe = CRY_CLIPS[0][0];
+var full = resolvepath("Aircraft/FlyCabin/Sounds/" ~ probe);
 if (full != nil and full != "") {
-    var cut = size(full) - size(CRY_FILE);
-    cry_path = substr(full, 0, cut);
+    cry_path = substr(full, 0, size(full) - size(probe));
 } else {
-    print("FruitFly: Sounds/" ~ CRY_FILE ~ " not found - the baby cries silently");
+    print("FruitFly: Sounds/" ~ probe ~ " not found - the baby cries silently");
 }
 var crying = 1;
 var mood_left = 25.0;              # seconds until the next change of mood
@@ -190,9 +193,10 @@ var update_baby = func {
     baby.setDoubleValue("tear-m", crying ? math.mod(bt * 0.12, 0.10) : 0);
     if (crying and cry_path != nil and bt >= next_sob and in_cabin()) {
         var loud = view_name() == "Cabin: follow the snack cart" ? 0.8 : 0.6;
-        fgcommand("play-audio-sample", props.Node.new({path: cry_path, file: CRY_FILE,
+        var clip = CRY_CLIPS[int(rand() * size(CRY_CLIPS))];
+        fgcommand("play-audio-sample", props.Node.new({path: cry_path, file: clip[0],
                                                         volume: loud, queue: "fruitfly-baby"}));
-        next_sob = bt + CRY_LEN;
+        next_sob = bt + clip[1] + 0.15 + 0.6 * rand();   # a breath between cries
     }
 };
 var baby_timer = maketimer(DT, update_baby);
