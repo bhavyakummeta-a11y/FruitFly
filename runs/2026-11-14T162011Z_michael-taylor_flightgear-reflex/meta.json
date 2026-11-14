@@ -1,0 +1,38 @@
+{
+  "run_id": "2026-11-14T162011Z_michael-taylor_flightgear-reflex",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T16:20:11.726481+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain reflex --seconds 40 --telemetry-port 5511 --control-port 5512 --log runs/fg-inst1-reflex.csv",
+  "args": {
+    "backend": "flightgear",
+    "brain": "reflex",
+    "data": "data/brain",
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 40.0,
+    "seed": 0,
+    "plot": false,
+    "realtime": false,
+    "log": "runs/fg-inst1-reflex.csv",
+    "telemetry_port": 5511,
+    "control_port": 5512,
+    "note": null,
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "99a0ff0f7dab11621414c53cd246cda8e6aae980",
+    "branch": "main",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org-instance1\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "c172p",
+    "warning_lines": 30
+  },
+  "finished_utc": "2026-11-14T16:20:14.113682+00:00",
+  "exit_code": 1
+}
