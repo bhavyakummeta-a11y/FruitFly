@@ -1,12 +1,16 @@
 """FlightGear generic UDP bridge. Protocol XML is shipped alongside this module."""
 import math
 import socket
+import select
 import time
 from .core import State, Controls, wrap
 
 
 class FlightGear:
-    def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0):
+    def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0, engines=1):
+        if engines not in (1, 2):
+            raise ValueError('Supported engine counts: 1 or 2')
+        self.engines = engines
         self.rx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             self.rx.bind(('127.0.0.1', telemetry_port))
@@ -65,13 +69,22 @@ class FlightGear:
             except socket.timeout as exc:
                 raise TimeoutError('No FlightGear telemetry; check UDP flags and protocol XML.') from exc
             if peer[0] == '127.0.0.1':
+                # Rendering or a slow neural trial can queue telemetry. Control
+                # the latest state rather than replaying an obsolete turn.
+                for _ in range(128):
+                    if not select.select([self.rx], [], [], 0)[0]:
+                        break
+                    newer, sender = self.rx.recvfrom(8192)
+                    if sender[0] == '127.0.0.1':
+                        packet = newer
                 return self.parse(packet)
         raise TimeoutError('No local FlightGear telemetry')
 
     def send(self, controls, frozen=False):
         c = controls.bounded()
         self.last_controls = c
-        data = f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{c.throttle:.7f},{int(frozen)}\n'
+        throttles = ','.join([f'{c.throttle:.7f}'] * self.engines)
+        data = f'{c.aileron:.7f},{c.elevator:.7f},{c.rudder:.7f},{throttles},{int(frozen)}\n'
         self.tx.sendto(data.encode('ascii'), self.address)
 
     def freeze(self, frozen):

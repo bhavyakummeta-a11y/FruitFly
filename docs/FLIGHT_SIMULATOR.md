@@ -5,6 +5,60 @@ configured obstacles, and resumes the original heading. It has a local demo and
 a FlightGear UDP adapter using the same controller. No takeoff/landing or MSFS
 adapter is included.
 
+## Local update: bounded turns and companion view
+
+Avoidance now latches one heading target at most 35 degrees from the initial
+cruise heading. It holds that target until the triggering obstacle is behind the
+airplane, then returns to cruise. Repeated escape spikes do not renew an endless
+bank command. Bank targets are limited to 18 degrees, and bank/surface changes
+are rate-limited. Roll and pitch damping are reduced from the first prototype.
+The controller retains the initial trimmed pitch for FlightGear altitude hold.
+
+The companion window has a **3D virtual obstacle view on the left** and **the
+full flight path on the right**, including all configured obstacles. It opens by
+default with `--backend flightgear`; use `--no-plot` to disable it. For the local
+demo, use `--plot --realtime`. It is a separate window, not embedded in FlightGear.
+
+```sh
+.venv/bin/python -m flight_simulator --brain reflex --plot --realtime --seconds 180
+```
+
+FlightGear now reads the latest queued telemetry instead of replaying stale
+states. It stops and sends a pause request if heading deviates by over 90 degrees,
+bank exceeds 50 degrees, pitch exceeds 25 degrees, speed falls below 70% of the
+starting speed, or altitude falls 150 m below the starting altitude. Avoidance
+also stops if an obstacle has not been passed after 90 seconds. These are test
+abort conditions, not stall protection or a terrain-avoidance system.
+
+For the supplied default course, FlightGear rotates the course ahead of the
+starting heading, increases its forward spacing with the square of starting
+speed relative to 50 m/s, and raises cylinder tops above the starting altitude.
+Custom JSON obstacle files keep their exact local east/north positions and
+heights. Obstacles are still virtual and visible in the companion only.
+
+### Boeing / two-engine connection
+
+The original protocol controls only one engine. For a two-engine aircraft, copy
+`flight_simulator/protocols/flybrain-controls-twin.xml` into FlightGear's
+`Protocol/` folder, and **replace** the old input argument with:
+
+```text
+--generic=socket,in,20,127.0.0.1,5502,udp,flybrain-controls-twin
+```
+
+Keep the existing state-output argument. Restart FlightGear after changing the
+protocol configuration, start already airborne and trimmed, then run:
+
+```sh
+.venv/bin/python -m flight_simulator --backend flightgear --brain reflex --engines 2 --seconds 180 --log runs/fg-test.csv
+```
+
+Both throttle values are identical. `--engines 2` must be paired with the twin
+protocol; the single-engine XML uses a different packet layout. This fixes the
+missing second-engine command but does not establish Boeing flight-model tuning.
+Disable conflicting autopilot, autothrottle, and joystick control before testing.
+The shared controller still requires live validation with the selected aircraft.
+
 ## What actually controls the airplane
 
 - **Connectome mode:** the starter notebook's LIF equations run on the downloaded
@@ -36,9 +90,8 @@ python -m flight_simulator --brain reflex --plot --realtime --seconds 0
 ```
 
 Close the plot or press Ctrl-C to stop. `--seconds 0` continues cruising until
-stopped; the configured obstacle course is finite. The plot follows the airplane
-and shows its trail, obstacle footprints, flight phase, altitude, speed, and
-escape activity. The local model uses reduced coordinated-turn dynamics, not a
+stopped; the configured obstacle course is finite. The companion shows a 3D obstacle scene and a full-course path map, with flight
+phase, altitude, speed, bank angle, and escape activity. The local model uses reduced coordinated-turn dynamics, not a
 complete aerodynamic model. It cannot establish performance in FlightGear.
 
 Headless validation, requiring no third-party libraries:
@@ -109,7 +162,7 @@ gain tuning on the teammate's machine.
 
 The initial aircraft altitude, heading, and speed become hold targets. Obstacle
 positions use a local east/north frame anchored at the first received aircraft
-position. The sample course is north of that point. **These obstacles are virtual
+position. The default course is rotated ahead of the initial heading and spaced for the initial speed. **These obstacles are virtual
 cylinders, shown in the Python plot; they are not inserted into FlightGear's 3D
 scenery.** There is no automatic detection of terrain, buildings, or AI traffic.
 For a real scene, provide obstacle coordinates/radii and MSL heights in JSON, or
@@ -141,7 +194,23 @@ with `--obstacles path.json`. Logs include aircraft state, input rate, measured
 escape rate, phase, controls, and obstacle clearance. Use matched scenarios and
 seeds for baseline/connectome comparisons.
 
-## Validation recorded on 2026-11-14
+## Bounded-turn regression results (2026-11-14)
+
+Both modes completed 180 seconds in the reduced local model without collision,
+with one avoidance activation followed by a return to the original heading.
+
+| Brain mode | Minimum clearance | Maximum heading deviation | Maximum bank |
+|---|---|---|---|
+| reflex | 234.12 m | 34.80° | 16.98° |
+| connectome | 320.47 m | 34.89° | 16.98° |
+
+All 14 automated checks pass, including a permanently active escape signal,
+no-forward-progress abort, latest-packet selection, and twin-engine commands.
+The updated companion was rendered and visually inspected. These results do not
+verify live FlightGear aircraft behavior; no FlightGear installation is available
+on the development machine.
+
+## Original validation before the bounded-turn update (2026-11-14)
 
 Using the supplied three-obstacle course, 180 seconds of local simulated flight,
 and seed 0:
