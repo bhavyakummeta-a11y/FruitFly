@@ -48,6 +48,7 @@ from . import runlog
 
 HERE = Path(__file__).resolve().parent
 VIEW = HERE / 'session_view.html'
+PAGES = {'/log': HERE / 'session_log.html', '/brain': HERE / 'session_brain.html'}
 POLL_S = 0.5
 HISTORY = 1200            # points kept for the live charts (10 min at 2 Hz)
 NAME_PROP = '/fruitfly/session/name'
@@ -110,6 +111,9 @@ class Process:
 
 
 def find_fgfs():
+    if os.name != 'nt':   # macOS / Linux teammates
+        out = subprocess.run(['pgrep', '-x', 'fgfs'], capture_output=True, text=True).stdout
+        return [int(pid) for pid in out.split()]
     # CREATE_NO_WINDOW: the watchdog runs windowless and polls every 2 s; without it
     # each tasklist call pops up a new console window.
     out = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq fgfs.exe', '/FO', 'CSV', '/NH'],
@@ -131,8 +135,9 @@ def fgfs_cmdline(pid):
     if os.name != 'nt':
         try:
             return Path(f'/proc/{pid}/cmdline').read_bytes().replace(b'\0', b' ').decode()
-        except OSError:
-            return ''
+        except OSError:   # macOS has no /proc
+            return subprocess.run(['ps', '-o', 'command=', '-p', str(pid)],
+                                  capture_output=True, text=True).stdout.strip()
     ps = f'(Get-CimInstance Win32_Process -Filter "ProcessId={int(pid)}").CommandLine'
     out = subprocess.run(['powershell', '-NoProfile', '-Command', ps], capture_output=True, text=True,
                          creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
@@ -249,6 +254,10 @@ SHORTCUT = STARTUP / 'FruitFly FlightGear session logger.lnk'
 
 
 def install_autostart():
+    if os.name != 'nt':
+        raise SystemExit('Autostart is set up for Windows only. On macOS/Linux add this to your '
+                         'login items / crontab (@reboot):\n  cd ' + str(runlog.main_root())
+                         + ' && python3 -m flight_simulator.session watchdog')
     pythonw = Path(sys.executable).with_name('pythonw.exe')
     alias = Path(os.environ.get('LOCALAPPDATA', '')) / 'Microsoft/WindowsApps/pythonw.exe'
     target = alias if alias.exists() else pythonw
@@ -257,7 +266,8 @@ def install_autostart():
           "$s.WorkingDirectory = $env:WD; $s.WindowStyle = 7; "
           "$s.Description = 'Logs and pushes every FlightGear session (FruitFly)'; $s.Save()")
     env = {**os.environ, 'SC': str(SHORTCUT), 'TGT': str(target), 'WD': str(runlog.main_root())}
-    subprocess.run(['powershell', '-NoProfile', '-Command', ps], env=env, check=True)
+    subprocess.run(['powershell', '-NoProfile', '-Command', ps], env=env, check=True,
+                   creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
     print(f'Installed {SHORTCUT}')
     ensure_watchdog()
 
@@ -309,6 +319,9 @@ class Session:
         self.samples = 0
         self.pushed = False
         self.fly_header = ''
+        self.brain_state = {'run': None, 'mode': None, 'active': False}
+        self.brain_trial = {}
+        self.dock = None
         self.maxima = {'alt_ft': None, 'ias_kt': None}
         self._airplane = open(self.dir / 'airplane.csv', 'w', newline='', encoding='utf-8')
         self._aw = csv.writer(self._airplane)
@@ -463,10 +476,23 @@ class Session:
             if st is None:
                 if d.stat().st_mtime < self.started:
                     continue
-                st = self.controller[d.name] = {'console': 0, 'fly': 0, 'done': False}
+                # A teammate's run arriving via git pull is already committed; runs in
+                # progress on this machine are not. Only the latter belong to this session.
+                if runlog.git('ls-files', '--', f'{runlog.RUNS}/{d.name}', cwd=self.base, check=False):
+                    self.controller[d.name] = {'done': True, 'remote': True}
+                    continue
+                st = self.controller[d.name] = {'console': 0, 'fly': 0, 'spikes': 0, 'done': False}
                 self.event('controller', f'Run started: {d.name}')
+            if 'brain' not in st and (d / 'meta.json').exists():
+                try:
+                    st['brain'] = json.loads((d / 'meta.json').read_text(encoding='utf-8'))['args']['brain']
+                    with self.lock:
+                        self.brain_state.update(run=d.name, mode=st['brain'], active=True)
+                except (OSError, ValueError, KeyError):
+                    pass
             if st['done']:
                 continue
+            self._tail_spikes(d, st)
             for name, key in (('console.log', 'console'), ('fly_activity.csv', 'fly')):
                 p = d / name
                 if not p.exists():
@@ -492,6 +518,26 @@ class Session:
                 st['done'] = True
                 st['result'] = json.loads((d / 'result.json').read_text())
                 self.event('controller', f"Run finished: {d.name} exit={st['result'].get('exit_code')}")
+                with self.lock:
+                    if self.brain_state.get('run') == d.name:
+                        self.brain_state['active'] = False
+
+    def _tail_spikes(self, d, st):
+        """Keep only the newest complete trial from the run's fly_spikes.jsonl."""
+        p = d / 'fly_spikes.jsonl'
+        if not p.exists():
+            return
+        with open(p, 'r', encoding='utf-8', errors='replace') as f:
+            f.seek(st['spikes'])
+            chunk = f.read()
+        complete = chunk[:chunk.rfind('\n') + 1]
+        st['spikes'] += len(complete.encode('utf-8'))
+        lines = [line for line in complete.splitlines() if line.strip()]
+        if lines:
+            trial = json.loads(lines[-1])
+            with self.lock:
+                self.brain_trial = {**trial, 'seq': self.brain_trial.get('seq', 0) + len(lines),
+                                    'run': d.name}
 
     # ---- live page ------------------------------------------------------
     def snapshot(self, since):
@@ -537,6 +583,26 @@ class Session:
                     since = int(self.path.partition('since=')[2] or 0)
                     body = json.dumps(session.snapshot(since), default=str).encode()
                     ctype = 'application/json'
+                elif self.path.startswith('/api/brain_map'):
+                    from .brain_map import load
+                    text = None
+                    for root in {runlog.main_root(), runlog.ROOT}:
+                        text = text or load(root / 'data' / 'brain')
+                    if text is None:
+                        self.send_error(404, 'connectome data not downloaded')
+                        return
+                    body, ctype = text.encode(), 'application/json'
+                elif self.path.startswith('/api/brain'):
+                    with session.lock:
+                        data = {**session.brain_state, 'trial': session.brain_trial,
+                                'name': session.name, 'status': session.status,
+                                'fly_header': session.fly_header,
+                                'fly_controller': session.fly_ctrl[-120:]}
+                    body, ctype = json.dumps(data).encode(), 'application/json'
+                elif self.path.split('?')[0] in PAGES:
+                    html = PAGES[self.path.split('?')[0]].read_text(encoding='utf-8')
+                    body = html.replace('{{TAG}}', str(session.a.pid)).encode()
+                    ctype = 'text/html; charset=utf-8'
                 elif self.path in ('/', '/index.html'):
                     body, ctype = VIEW.read_bytes(), 'text/html; charset=utf-8'
                 else:
@@ -548,9 +614,13 @@ class Session:
                 self.end_headers()
                 self.wfile.write(body)
 
+        class Server(ThreadingHTTPServer):
+            allow_reuse_address = False      # parallel sessions must get distinct ports
+            daemon_threads = True
+
         for port in range(8765, 8800):
             try:
-                self.server = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+                self.server = Server(('127.0.0.1', port), Handler)
                 break
             except OSError:
                 continue
@@ -565,7 +635,7 @@ class Session:
     def run(self):
         self.serve()
         if not self.a.no_browser:
-            webbrowser.open(self.url)
+            self.open_windows()
         next_slow = 0
         while self.proc.alive():
             try:
@@ -587,8 +657,29 @@ class Session:
             self.lockfile.unlink(missing_ok=True)
         self.status = 'FlightGear closed - log saved' + (' and pushed' if self.pushed else ' locally')
         self.event('session', self.status)
-        time.sleep(15)            # let the open page show the final status
+        time.sleep(15)            # let the open windows show the final status
+        if self.dock:
+            self.dock.stop(close=True)
+            time.sleep(3)
+            import shutil
+            shutil.rmtree(sessions_dir() / f'edge-{self.a.pid}', ignore_errors=True)
         self.server.shutdown()
+
+    def open_windows(self):
+        """Log window glued under FlightGear, fly-brain window to its right (Windows)."""
+        if os.name == 'nt':
+            try:
+                from .dock import Dock, open_app
+                profile = sessions_dir() / f'edge-{self.a.pid}'
+                self.dock = Dock(self.a.pid, self.url + 'log', self.url + 'brain', str(self.a.pid),
+                                 profile, say=lambda text: self.event('session', text))
+                from .dock import EDGE
+                if any(Path(p).exists() for p in EDGE):
+                    self.dock.start()
+                    return
+            except Exception as exc:
+                self.event('session', f'window docking unavailable: {exc!r}')
+        webbrowser.open(self.url)
 
     def _tails(self):
         """Side streams must never take the logger down; the session log matters more."""

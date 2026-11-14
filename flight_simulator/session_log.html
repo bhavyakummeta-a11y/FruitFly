@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FruitFly log · {{TAG}}</title>
+<style>
+:root {
+  --surface: #fcfcfb; --panel: #ffffff; --border: #e4e3df;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #8a8984;
+  --good: #0ca30c; --warn: #b07800; --bad: #e34948;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #1a1a19; --panel: #222220; --border: #383835;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88;
+    --good: #0ca30c; --warn: #fab219; --bad: #e66767;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--surface); color: var(--text); font: 12px/1.4 system-ui, "Segoe UI", sans-serif;
+  display: grid; grid-template-columns: 230px minmax(0, 1fr); overflow: hidden; }
+aside { border-right: 1px solid var(--border); padding: 8px 10px; overflow: hidden; display: flex; flex-direction: column; gap: 6px; }
+h1 { font-size: 13px; margin: 0; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.status { font-weight: 600; }
+.status::before { content: "●  "; }
+.status.ok { color: var(--good); } .status.wait { color: var(--warn); } .status.done { color: var(--text-2); }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 1px 8px; margin: 0; }
+dt { color: var(--text-2); } dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+form { display: flex; flex-direction: column; gap: 4px; padding: 6px; border: 1px solid var(--warn); border-radius: 6px; }
+form[hidden] { display: none; }
+form input { font: inherit; padding: 3px 6px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); }
+form button { font: inherit; padding: 3px 6px; border-radius: 4px; border: 0; background: var(--text); color: var(--surface); cursor: pointer; }
+main { display: flex; flex-direction: column; min-width: 0; }
+.toolbar { display: flex; gap: 10px; padding: 4px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); }
+.toolbar label { display: flex; gap: 3px; align-items: center; }
+#log { flex: 1; overflow: auto; padding: 4px 10px; font: 11.5px/1.45 ui-monospace, Consolas, monospace; }
+.row { white-space: pre-wrap; word-break: break-word; }
+.row .t { color: var(--muted); }
+.row .src { display: inline-block; min-width: 78px; color: var(--text-2); }
+.row.alert .text { color: var(--bad); }
+</style>
+</head>
+<body>
+<aside>
+  <h1 id="title">FruitFly session</h1>
+  <span id="status" class="status wait">Connecting…</span>
+  <form id="name-form" hidden>
+    <label for="name-input"><b>No session name.</b> Name it:</label>
+    <input id="name-input" maxlength="120" placeholder="what is this session testing?" required>
+    <button type="submit">Save name</button>
+  </form>
+  <dl id="now"></dl>
+</aside>
+<main>
+  <div class="toolbar">
+    <label><input type="checkbox" data-src="session" checked> session</label>
+    <label><input type="checkbox" data-src="fgfs" checked> FlightGear</label>
+    <label><input type="checkbox" data-src="controller" checked> controller</label>
+    <label><input type="checkbox" id="follow" checked> follow</label>
+    <span id="elapsed" style="margin-left:auto"></span>
+  </div>
+  <div id="log" role="log" aria-live="polite"></div>
+</main>
+<script>
+const NOW = [['alt_ft', 'Altitude', 'ft', 0], ['ias_kt', 'Airspeed', 'kt', 0], ['vs_fpm', 'Vert. speed', 'fpm', 0],
+             ['heading_deg', 'Heading', '°', 0], ['roll_deg', 'Roll', '°', 1], ['pitch_deg', 'Pitch', '°', 1],
+             ['throttle', 'Throttle', '', 2]];
+let since = 0, finished = false;
+const fmt = (v, d) => (v === null || v === undefined || v === '' || isNaN(v)) ? '–' : Number(v).toFixed(d);
+
+function render(d) {
+  const st = document.getElementById('status');
+  finished = d.status.startsWith('FlightGear closed') && d.status.includes('saved');
+  st.textContent = d.paused ? 'FlightGear paused' : d.status;
+  st.className = 'status ' + (d.status.startsWith('FlightGear closed') ? 'done' : d.connected ? 'ok' : 'wait');
+  document.getElementById('title').textContent = d.name || 'Unnamed FlightGear session';
+  const form = document.getElementById('name-form');
+  if (form.hidden === !!d.name) form.hidden = !!d.name;
+  const fg = d.flightgear || {};
+  document.getElementById('elapsed').textContent =
+    [fg.aircraft, `${Math.floor(d.elapsed_s / 60)}:${String(d.elapsed_s % 60).padStart(2, '0')}`].filter(Boolean).join(' · ');
+  document.getElementById('now').innerHTML = NOW.map(([k, t, u, dg]) =>
+    `<dt>${t}</dt><dd>${fmt(d.latest[k], dg)} ${u}</dd>`).join('');
+  const log = document.getElementById('log'), frag = document.createDocumentFragment();
+  for (const e of d.events) {
+    const row = document.createElement('div');
+    row.className = `row ${e.src}` + (/\[(ALRT|DEV_ALRT)\]|error|crash/i.test(e.text) ? ' alert' : '');
+    row.dataset.src = e.src;
+    row.innerHTML = '<span class="t"></span> <span class="src"></span> <span class="text"></span>';
+    row.children[0].textContent = e.t; row.children[1].textContent = e.src; row.children[2].textContent = e.text;
+    row.hidden = !document.querySelector(`input[data-src="${e.src}"]`)?.checked;
+    frag.appendChild(row);
+  }
+  log.appendChild(frag);
+  while (log.childElementCount > 3000) log.firstChild.remove();
+  since = d.event_count;
+  if (document.getElementById('follow').checked) log.scrollTop = log.scrollHeight;
+}
+document.querySelectorAll('input[data-src]').forEach(cb => cb.addEventListener('change', () =>
+  document.querySelectorAll(`#log .row[data-src="${cb.dataset.src}"]`).forEach(r => r.hidden = !cb.checked)));
+document.getElementById('name-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = document.getElementById('name-input').value.trim();
+  if (name) await fetch('/api/name', {method: 'POST', body: JSON.stringify({name})});
+});
+async function tick() {
+  try { render(await (await fetch(`/api/state?since=${since}`, {cache: 'no-store'})).json()); }
+  catch (e) {
+    const st = document.getElementById('status');
+    st.textContent = 'Session logger stopped'; st.className = 'status done';
+    return setTimeout(tick, 5000);
+  }
+  setTimeout(tick, finished ? 5000 : 1000);
+}
+tick();
+</script>
+</body>
+</html>

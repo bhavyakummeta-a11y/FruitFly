@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FruitFly brain · {{TAG}}</title>
+<style>
+:root {
+  --surface: #fcfcfb; --panel: #ffffff; --border: #e4e3df;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #8a8984;
+  --neuron: rgba(82, 81, 78, .22); --input: #2a78d6; --spike: #eb6834; --track: #ecebe7;
+  --warn: #b07800;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #1a1a19; --panel: #222220; --border: #383835;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88;
+    --neuron: rgba(195, 194, 183, .16); --input: #3987e5; --spike: #ff8a4c; --track: #2c2c2a;
+    --warn: #fab219;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--surface); color: var(--text); font: 12px/1.4 system-ui, "Segoe UI", sans-serif;
+  display: flex; flex-direction: column; overflow: hidden; width: 100%; overflow-wrap: anywhere; }
+header { padding: 10px 12px 6px; }
+h1 { font-size: 15px; margin: 0 0 2px; }
+#mode { font-weight: 600; }
+#mode.idle, #mode.baseline { color: var(--warn); }
+#detail { color: var(--text-2); }
+#brain-wrap { position: relative; padding: 0 12px; }
+canvas { width: 100%; display: block; }
+.caption { color: var(--text-2); padding: 4px 12px 8px; font-size: 11px; }
+.caption b.s { color: var(--spike); } .caption b.i { color: var(--input); }
+h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); margin: 6px 12px 4px; }
+#bars { flex: 1; overflow: auto; padding: 0 12px 10px; }
+.bar { display: grid; grid-template-columns: 62px minmax(0, 1fr) 54px; gap: 6px; align-items: center; padding: 2px 0; }
+.bar .name { font-weight: 600; font-variant-numeric: tabular-nums; }
+.bar .fn { grid-column: 2; color: var(--text-2); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar .track { grid-column: 2; height: 6px; background: var(--track); border-radius: 3px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--spike); border-radius: 0 3px 3px 0; transition: width .4s; }
+.bar .hz { grid-row: 1 / span 2; grid-column: 3; text-align: right; font-variant-numeric: tabular-nums; }
+.bar.drives .name::after { content: " ✈"; color: var(--text-2); }
+.note { color: var(--muted); font-size: 11px; padding: 0 12px 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Fly brain</h1>
+  <div id="mode" class="idle">Waiting for the session…</div>
+  <div id="detail"></div>
+</header>
+<div id="brain-wrap"><canvas id="brain" role="img" aria-label="Fly brain neurons, frontal view, with neurons that fired highlighted"></canvas></div>
+<div class="caption" id="caption">Frontal view: every dot is one of the fly's neurons at its real FlyWire position.
+  <b class="s">Orange</b>: fired during the latest 200 ms brain trial (brighter = more spikes).
+  <b class="i">Blue</b>: looming-detector input neurons (LC4/LPLC2).</div>
+<h2>Descending neurons (brain → body), latest trial</h2>
+<div id="bars"></div>
+<div class="note">✈ = drives the airplane today (DNp01 escape → avoidance turn). The others are recorded and shown, not yet wired to controls.</div>
+<script>
+const FN = {DNp01: 'Giant Fibre: escape', DNp02: 'looming escape', DNp04: 'looming', DNp06: 'looming',
+  DNp11: 'looming', DNp07: 'landing', DNp10: 'landing', DNp09: 'walk forward', MDN: 'walk backward',
+  DNg02: 'wingbeat amplitude (flight power)', DNa01_L: 'steering L', DNa01_R: 'steering R',
+  DNa02_L: 'steering L', DNa02_R: 'steering R', DNp15_L: 'neck / horizontal motion L', DNp15_R: 'neck / horizontal motion R',
+  DNp20_L: 'vertical motion L', DNp20_R: 'vertical motion R', DNp22_L: 'vertical motion L', DNp22_R: 'vertical motion R',
+  MN9: 'proboscis (feeding)'};
+const DRIVES = new Set(['DNp01']);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const canvas = document.getElementById('brain'), ctx = canvas.getContext('2d');
+let map = null, base = null, spikes = [], flashAt = 0, lastSeq = null, finished = false;
+
+async function loadMap() {
+  try {
+    const r = await fetch('/api/brain_map');
+    if (!r.ok) throw new Error(r.status);
+    map = await r.json();
+  } catch (e) {
+    document.getElementById('caption').textContent =
+      'Neuron map unavailable: the connectome data is not downloaded on this machine (python -m flight_simulator.download_data).';
+  }
+  sizeCanvas();
+}
+
+function sizeCanvas() {
+  if (!map) return;
+  const w = canvas.parentElement.clientWidth - 24, dpr = devicePixelRatio || 1;
+  const h = Math.round(w * map.height / map.width);
+  canvas.style.height = h + 'px';
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+  base = document.createElement('canvas'); base.width = canvas.width; base.height = canvas.height;
+  const b = base.getContext('2d'), sx = canvas.width / map.width, sy = canvas.height / map.height;
+  b.fillStyle = css('--neuron');
+  const s = Math.max(1, dpr * .9);
+  for (let i = 0; i < map.n; i++) if (map.x[i] >= 0) b.fillRect(map.x[i] * sx, map.y[i] * sy, s, s);
+  b.fillStyle = css('--input');
+  for (const name of ['looming']) for (const i of (map.groups[name] || {}).idx || [])
+    if (map.x[i] >= 0) b.fillRect(map.x[i] * sx - s / 2, map.y[i] * sy - s / 2, s * 2, s * 2);
+  if (spikes.length) spikes = spikes.map(p => ({...p, x: map.x[p.i] * sx, y: map.y[p.i] * sy}));
+}
+
+function setTrial(trial) {
+  if (!map || !trial || !trial.idx) return;
+  const sx = canvas.width / map.width, sy = canvas.height / map.height;
+  spikes = trial.idx.map((i, k) => ({i, c: trial.count[k], x: map.x[i] * sx, y: map.y[i] * sy}))
+                    .filter(p => map.x[p.i] >= 0);
+  flashAt = performance.now();
+}
+
+function frame(now) {
+  if (base) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(base, 0, 0);
+    if (spikes.length) {
+      // flash on arrival, then settle to an afterglow that stays until the next trial
+      const k = .25 + .75 * Math.exp(-(now - flashAt) / 900), dpr = devicePixelRatio || 1;
+      ctx.fillStyle = css('--spike');
+      for (const p of spikes) {
+        const r = dpr * (1.1 + Math.log2(1 + p.c) * .7);
+        ctx.globalAlpha = Math.min(1, k * (.45 + .15 * Math.log2(1 + p.c)));
+        ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function bars(header, rows) {
+  const el = document.getElementById('bars');
+  if (!header || !rows.length) { el.innerHTML = ''; return; }
+  const cols = header.split(','), last = rows[rows.length - 1].split(',');
+  const items = cols.map((c, j) => [c, Number(last[j])])
+    .filter(([c, v]) => c.endsWith('_hz') && !c.startsWith('in_') && c !== 'looming_hz' && c !== 'escape_hz' && isFinite(v))
+    .map(([c, v]) => [c.slice(0, -3), v]);
+  const max = Math.max(50, ...items.map(([, v]) => v));
+  el.innerHTML = items.map(([n, v]) => `<div class="bar${DRIVES.has(n) ? ' drives' : ''}">
+      <span class="name">${n}</span><span class="fn">${FN[n] || ''}</span><span class="hz">${v.toFixed(0)} Hz</span>
+      <div class="track"><div class="fill" style="width:${(v / max * 100).toFixed(1)}%"></div></div></div>`).join('');
+}
+
+function render(d) {
+  const mode = document.getElementById('mode'), detail = document.getElementById('detail');
+  const t = d.trial || {};
+  finished = d.status && d.status.startsWith('FlightGear closed');
+  if (!d.run || (!d.active && !t.idx)) {
+    mode.className = 'idle'; mode.textContent = 'Fly brain idle: no controller is flying the airplane';
+    detail.textContent = 'Start one with python -m flight_simulator --backend flightgear --brain connectome';
+  } else if (d.mode !== 'connectome') {
+    mode.className = 'baseline';
+    mode.textContent = `${(d.mode || '').toUpperCase()} BASELINE: no fly brain is running`;
+    detail.textContent = 'This controller is a non-neural test baseline. Use --brain connectome to fly with the fly brain.';
+    spikes = [];
+  } else {
+    mode.className = '';
+    mode.textContent = d.active ? 'Connectome LIF is flying (FlyWire, 138,639 neurons)' : 'Connectome run finished (last trial shown)';
+    detail.textContent = t.idx ? `trial at t = ${Number(t.time).toFixed(1)} s · ${t.idx.length.toLocaleString()} neurons fired`
+                               : 'waiting for the first brain trial…';
+    if (t.seq !== lastSeq) { lastSeq = t.seq; setTrial(t); }
+  }
+  canvas.style.opacity = d.mode && d.mode !== 'connectome' ? .45 : 1;
+  bars(d.mode === 'connectome' ? d.fly_header : '', d.fly_controller || []);
+}
+
+async function tick() {
+  try { render(await (await fetch('/api/brain', {cache: 'no-store'})).json()); }
+  catch (e) { document.getElementById('detail').textContent = 'Session logger stopped'; return setTimeout(tick, 5000); }
+  setTimeout(tick, finished ? 5000 : 500);
+}
+addEventListener('resize', () => { sizeCanvas(); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sizeCanvas);
+loadMap().then(() => { requestAnimationFrame(frame); tick(); });
+</script>
+</body>
+</html>
