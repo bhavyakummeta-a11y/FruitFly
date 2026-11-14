@@ -169,11 +169,15 @@ def main(argv=None):
     p.add_argument('--telemetry-port', type=int, default=5501)
     p.add_argument('--stop-at-ft', type=float, default=None,
                    help='takeoff_live only: end the run (and pause FlightGear) once airborne at this height')
+    p.add_argument('--screen-record', action='store_true',
+                   help='takeoff_live only: screen-record FlightGear + the docked panel (screen_record.py)')
     ns, _ = p.parse_known_args(argv)
     # Our own options are not takeoff_landing's: strip them before handing argv over.
     if ns.stop_at_ft is not None:
         i = next(k for k, a in enumerate(argv) if a.startswith('--stop-at-ft'))
         del argv[i:i + (1 if '=' in argv[i] else 2)]
+    if ns.screen_record:
+        argv.remove('--screen-record')
     telnet = ns.telemetry_port - 1
     hold = ns.backend == 'flightgear' and ns.phase == 'takeoff'
     # Landing starts in the air: nothing flies it while the brain loads and calibrates, so
@@ -186,6 +190,14 @@ def main(argv=None):
         print('FlightGear ' + ('PAUSED' if freeze(telnet, True) else 'could NOT be paused')
               + ' while the fly brain calibrates (the approach waits for the fly).', flush=True)
     runlog = RunLog(ns, ['takeoff_live', *argv])
+    recorder = None
+    if ns.screen_record:
+        from .screen_record import ScreenRecorder
+        try:
+            recorder = ScreenRecorder(f'{ns.phase} {ns.brain}', session_id=runlog.id).start()
+            print(f'Screen recording -> {recorder.path}', flush=True)
+        except (RuntimeError, OSError) as exc:
+            print(f'Screen recording not started: {exc}', flush=True)
     stage = Stage(runlog)
     stage.set('loading', note=f'loading the {ns.brain} brain')
     calibrate = '--no-calibrate' not in argv
@@ -273,6 +285,8 @@ def main(argv=None):
         if 'log' in live:
             live['log'].close()
         stage.set('finished', exit_code=code)
+        if recorder:
+            print(f'Screen recording saved: {recorder.stop()}', flush=True)
         runlog.finish(code)
     return code
 
