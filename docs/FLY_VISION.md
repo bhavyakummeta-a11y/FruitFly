@@ -103,7 +103,7 @@ datum/glideslope checks, phase separation of obstacle and flare inputs, delivery
 to the neural interface, and UDP sample timestamps are covered by tests.
 A real connectome probe received looming 89.44 Hz, HS 200/0 Hz and VS 84/84 Hz and
 returned DNp01 222.5 Hz. This verifies input delivery, not flight performance.
-The combined suite passed 138 tests (one skipped). A local connectome cruise
+The combined suite passed 143 tests (one skipped). A local connectome cruise
 smoke test and the stand-in landing scenario completed successfully. Runway and
 obstacle previews were rendered and inspected without opening FlightGear.
 Live Windows FlightGear testing of the expanded sensory mix is still needed.
