@@ -62,9 +62,18 @@ class Stage:
         self._write()
 
     def _write(self):
+        """Display only: never let it stop a flight. On Windows the replace fails with
+        'Access is denied' while the session logger has stage.json open for reading
+        (2026-11-14: crashed a landing run during calibration), so retry briefly and
+        otherwise skip this update; the next one catches up."""
         tmp = self.path.with_suffix('.tmp')
-        tmp.write_text(json.dumps(self.state), encoding='utf-8')
-        os.replace(tmp, self.path)
+        for attempt in range(10):
+            try:
+                tmp.write_text(json.dumps(self.state), encoding='utf-8')
+                os.replace(tmp, self.path)
+                return
+            except OSError:
+                time.sleep(0.02 * (attempt + 1))
 
 
 def watch_calibration(brain, stage, runlog):

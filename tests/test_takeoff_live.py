@@ -60,6 +60,29 @@ class TakeoffLiveTests(unittest.TestCase):
         self.assertIn('DNp15_L_hz', written[0])
         self.assertIn('in_hs_left_hz', written[0])
 
+    def test_stage_write_survives_locked_file(self):
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+
+        class FakeRunLog:
+            dir = Path(tempfile.mkdtemp())
+        stage = takeoff_live.Stage(FakeRunLog())
+        calls = []
+
+        def flaky_replace(src, dst):
+            calls.append(1)
+            if len(calls) < 3:
+                raise PermissionError(5, 'Access is denied')
+            os.replace(src, dst)
+        with mock.patch.object(takeoff_live.os, 'replace', side_effect=flaky_replace),                 mock.patch.object(takeoff_live.time, 'sleep'):
+            stage.set('calibrating', done=1)
+        self.assertEqual(len(calls), 3)
+        self.assertIn('calibrating', (FakeRunLog.dir / 'stage.json').read_text())
+        with mock.patch.object(takeoff_live.os, 'replace', side_effect=PermissionError(5, 'denied')),                 mock.patch.object(takeoff_live.time, 'sleep'):
+            stage.set('flying')          # gives up quietly, no exception
+        shutil.rmtree(FakeRunLog.dir, ignore_errors=True)
+
     def test_fly_row_names_match_brain_page(self):
         row = takeoff_live.fly_row({'time': 1.0, 'phase': 'ROLL', 'in_sugar': 200, 'dn_MN9': 65, 'x': 3})
         self.assertEqual(row, {'time': 1.0, 'phase': 'ROLL', 'in_sugar_hz': 200, 'MN9_hz': 65})
