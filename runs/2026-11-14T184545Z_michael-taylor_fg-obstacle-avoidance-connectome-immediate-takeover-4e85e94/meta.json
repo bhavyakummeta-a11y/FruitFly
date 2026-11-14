@@ -1,0 +1,56 @@
+{
+  "run_id": "2026-11-14T184545Z_michael-taylor_fg-obstacle-avoidance-connectome-immediate-takeover-4e85e94",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.8,
+      "to_s": 24.2
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: CMDA, SPD; controller 2026-11-14T184733Z_michael-taylor_flightgear-connectome is running",
+      "from_s": 24.2,
+      "to_s": 128.7
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+      "detail": "run 2026-11-14T184733Z_michael-taylor_flightgear-connectome. Neurons decide: escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input. Code decides: synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+      "from_s": 128.7,
+      "to_s": 184.3
+    }
+  ],
+  "name": "obstacle avoidance - CONNECTOME, immediate takeover (4e85e94)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 24432,
+  "fgfs_exit_code": 3221225477,
+  "started_utc": "2026-11-14T18:45:45.492384+00:00",
+  "duration_s": 184,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 79
+  },
+  "airplane_samples": 91,
+  "controller_runs": {
+    "2026-11-14T184606Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    },
+    "2026-11-14T184733Z_michael-taylor_flightgear-connectome": {
+      "exit_code": 1
+    }
+  },
+  "code": {
+    "commit": "4e85e94cb9225528793a8227a4751326715af950",
+    "branch": "main"
+  }
+}
