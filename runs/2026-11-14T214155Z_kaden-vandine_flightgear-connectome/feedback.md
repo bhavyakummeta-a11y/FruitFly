@@ -22,5 +22,6 @@ Run by Kaden VanDine. Command: `python -m flight_simulator takeoff_live takeoff 
 
 ## Notes
 
+- **Kaden VanDine** (2026-11-14 16:44): Takeoff run 2 (Linux FG 2024.1.7, connectome, KSFO 28R): SUCCESS. Roll heading within 0.9 deg, max 4.6 m off centreline; liftoff t=34.8 s at 166 kt; 1,000 ft handover reached, then the Takeoff fly held a 10 deg climb. Stopped by the user's request at ~1,400 ft / 184 kt with Ctrl-C (FG pause acknowledged). FlightGear then hung on 'run exit' and was ended with SIGTERM (same exit hang as earlier sessions).
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
