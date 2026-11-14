@@ -1,0 +1,107 @@
+{
+  "run_id": "2026-11-14T213136Z_kaden-vandine_fg-landing-fix-test-2-measured-approach-trim-flare-envelope-idle-no-balloon-connectome",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 6.4
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: SPD; controller 2026-11-14T213143Z_kaden-vandine_flightgear-connectome is running",
+      "from_s": 6.4,
+      "to_s": 31.3
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the landing",
+      "detail": "run 2026-11-14T213143Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover",
+      "from_s": 31.3,
+      "to_s": 151.1
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 151.1,
+      "to_s": 157.3
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 157.3,
+      "to_s": 210.1
+    }
+  ],
+  "name": "landing fix test 2: measured approach trim + flare envelope/idle (no balloon), connectome",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 70166,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T21:31:36.291355+00:00",
+  "duration_s": 210,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 100,
+  "controller_runs": {
+    "2026-11-14T213143Z_kaden-vandine_flightgear-connectome": {
+      "fly": "Landing fly",
+      "brain": "CONNECTOME LIF (notebook model)",
+      "phase": "ROLLOUT",
+      "completed": true,
+      "time_s": 115.9,
+      "decisions": 270,
+      "max_centerline_m": 16.5,
+      "tail_strike": false,
+      "stall": false,
+      "left_runway": false,
+      "touchdown_x_m": 630,
+      "touchdown_sink_fpm": 488,
+      "touchdown_pitch_deg": 4.3,
+      "go_around": false,
+      "flare_decisions": 22,
+      "safe_reject": false,
+      "takeoff_achieved": false,
+      "outcome": "landed",
+      "events": [
+        "68.8s FLARE: DNp07 4 Hz",
+        "69.3s FLARE: DNp07 6 Hz",
+        "69.6s FLARE: DNp07 8 Hz",
+        "...",
+        "76.9s FLARE: DNp07 3 Hz",
+        "79.1s FLARE: DNp07 8 Hz",
+        "80.1s FLARE: DNp07 16 Hz"
+      ],
+      "termination_reason": "phase_completed",
+      "decision_timing": {
+        "applied": 270,
+        "completed": 272,
+        "discarded": 2,
+        "skipped": 75,
+        "latency_mean_s": 0.254,
+        "latency_max_s": 4.0
+      },
+      "speed_up_resets": 0,
+      "requested_phase": "landing",
+      "backend": "flightgear",
+      "wall_s": 137.8,
+      "success": true,
+      "exit_code": 0
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "feaefd52d7682f58f8916dd2c3e0c48a87de3563",
+    "branch": "main"
+  }
+}
