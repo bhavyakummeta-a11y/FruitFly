@@ -2,6 +2,19 @@
 
 Use simulated fruit fly brains (connectome LIF model, see the [handbook](../README.md)) to control an aircraft in **Microsoft Flight Simulator**.
 
+## Current MVP (as of 2026-11-14)
+
+> **1. Get FlightGear working. 2. Have the fly make the airplane go forward.**
+
+We start in **FlightGear** (free, scriptable) rather than waiting on MSFS access. MSFS stays the eventual target.
+
+| Step | What | Done when |
+|---|---|---|
+| **A. FlightGear running** | Install FlightGear, load a Cessna 172 on a runway, and talk to it from Python through FlightGear's property server (`--telnet` or `--httpd`). | Python can read `/velocities/groundspeed-kt` and set `/controls/engines/engine[0]/throttle`. |
+| **B. Fly goes forward** | Run the fly brain and read **DNp09** (walk forward → more throttle) and **MDN** (walk backward → less throttle), as mapped in [the concept notes](notes/FLY_BRAIN_AIRPLANE_CONCEPT.md). Write the result to FlightGear's throttle. | Stimulating the fly makes the plane roll forward along the runway, and taking the stimulus away makes it slow down. |
+
+Out of scope for the MVP: steering, rotation, takeoff, MSFS, and dopamine learning. Those follow in the milestones below.
+
 ## Goals
 
 | Tier | Goal |

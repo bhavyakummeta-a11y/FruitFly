@@ -14,6 +14,10 @@ No training. **The wiring is the model.** Your job:
 
 Let Claude write the code. This doc is the ideas, the gotchas, and where to get things.
 
+## Current MVP
+
+**Get FlightGear working, and have the fly make the airplane go forward.** Details: [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md#current-mvp-as-of-2026-11-14).
+
 ## Files in this repo
 
 | File | What |
