@@ -25,5 +25,6 @@ Timeline (seconds from session start):
 -     38 to    123: **UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain**
 
 ## Notes
+- **Kaden VanDine** (2026-11-14 13:41): NOT a fly-brain flight and NOT a test of the steering fix: the mission controller (claude-run-check) never received UDP telemetry and exited. The takeoff to ~450 ft / 186 kt with pause/resume every 1-3 s was flown by an unidentified other program or person (UNATTRIBUTED). Disregard as steering-fix evidence.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
