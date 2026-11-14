@@ -1,0 +1,37 @@
+[runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T174635Z_michael-taylor_flightgear-connectome
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-18.8
+Takeoff fly: standing fly, looming -> jump = rotation
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+FlightGear paused (acknowledged), ailerons and rudder centred.
+{
+  "fly": "Takeoff fly",
+  "brain": "CONNECTOME LIF (notebook model)",
+  "phase": "TAKEOFF ROLL",
+  "completed": false,
+  "time_s": 5.8,
+  "decisions": 0,
+  "max_centerline_m": 30.4,
+  "tail_strike": false,
+  "stall": false,
+  "left_runway": true,
+  "liftoff_x_m": null,
+  "rejected": false,
+  "agl_ft": 0,
+  "ias_kt": 13.8,
+  "stop_x_m": null,
+  "events": [],
+  "decision_timing": {
+    "applied": 0,
+    "skipped": 0,
+    "latency_mean_s": null,
+    "latency_max_s": null
+  },
+  "speed_up_resets": 0,
+  "backend": "flightgear",
+  "wall_s": 6.1,
+  "success": false
+}

@@ -1,0 +1,47 @@
+{
+  "run_id": "2026-11-14T174635Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T17:46:35.919671+00:00",
+  "command": "python -m flight_simulator takeoff_live takeoff --brain connectome --backend flightgear --telemetry-port 5501 --control-port 5502 --period 1.0",
+  "args": {
+    "phase": "takeoff",
+    "brain": "connectome",
+    "backend": "flightgear",
+    "telemetry_port": 5501
+  },
+  "code": {
+    "commit": "4e0a47707398791ce078930c281dbdf4808afc18",
+    "branch": "main",
+    "dirty": [
+      "M  CLAUDE.md",
+      "M  docs/FLIGHTGEAR.md",
+      "M  docs/FLIGHT_SIMULATOR.md",
+      "M  docs/RUN_TAKEOFF_LANDING.md",
+      "M  flight_simulator/__main__.py",
+      "M  flight_simulator/flies.py",
+      "M  flight_simulator/flightgear.py",
+      "MM flight_simulator/launch_fg.py",
+      "M  flight_simulator/takeoff_landing.py",
+      "A  tests/test_realtime.py"
+    ],
+    "untracked": [
+      "flight_simulator/takeoff_live.py"
+    ]
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "fg_sessions": [
+    {
+      "name": "takeoff fly - CONNECTOME, auto start (--fly)",
+      "run_id": "2026-11-14T174604Z_michael-taylor_fg-takeoff-fly-connectome-auto-start-fly"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 27
+  },
+  "finished_utc": "2026-11-14T17:49:24.675065+00:00",
+  "exit_code": 2
+}

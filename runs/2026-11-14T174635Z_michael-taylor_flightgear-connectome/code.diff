@@ -1,0 +1,848 @@
+diff --git a/CLAUDE.md b/CLAUDE.md
+index c9b8a5d..e10c95f 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -14,6 +14,20 @@
+ - Don't weaken or bypass any of the three. A design that needs the autopilot
+   (e.g. "autopilot flies the ILS") is out: ask the user instead.
+ 
++## Real time: 1x, no pauses, crashes are data (mandatory)
++
++- **FlightGear runs at 1x** during fly-brain runs. No slow motion, no
++  fast-forward; the controllers lock `/sim/speed-up` at 1 (`SpeedLock`).
++- **The fly decides in real time.** Never pause or slow the sim while the brain
++  works. Brain trials run in a background worker (`DecisionWorker`); the plane
++  flies on the last decision until the next is ready.
++- **Crashes are data.** Leaving the test envelope is logged, not an abort. A
++  run ends on collision/ground contact or its time limit.
++- Allowed pauses: setup before the fly takes the controls, and the end of a run.
++  Fly-training runs (`--learn` / `--load-learning`, a teammate's) keep their own
++  pause per trial.
++- `tests/test_realtime.py` checks all of this; don't weaken it.
++
+ ## Ticket board: claim work before you start (mandatory)
+ 
+ Several agents work in this repo at once, across checkouts and worktrees
+diff --git a/docs/FLIGHTGEAR.md b/docs/FLIGHTGEAR.md
+index ef7bce9..74161bc 100644
+--- a/docs/FLIGHTGEAR.md
++++ b/docs/FLIGHTGEAR.md
+@@ -354,9 +354,9 @@ curl -X POST -d '{"value":0.8}' "http://localhost:8080/json/controls/engines/eng
+ 
+ | Property | Notes |
+ |---|---|
+-| `/sim/freeze/master` | 1 pauses physics, 0 resumes. Use this to **pause the sim while the brain thinks**. |
++| `/sim/freeze/master` | 1 pauses physics, 0 resumes. **Project rule: never pause the sim while the brain thinks**; only during setup and at the end of a run. |
+ | `/sim/freeze/clock` | Freeze the sim clock |
+-| `/sim/speed-up` | Time multiplier, for example 0.5 for half speed. That buys the brain more wall-clock time per sim second. |
++| `/sim/speed-up` | Time multiplier. **Project rule: always 1 during fly-brain runs**; the controllers lock it there. |
+ 
+ ---
+ 
+diff --git a/docs/FLIGHT_SIMULATOR.md b/docs/FLIGHT_SIMULATOR.md
+index 5ba38ff..fcb5381 100644
+--- a/docs/FLIGHT_SIMULATOR.md
++++ b/docs/FLIGHT_SIMULATOR.md
+@@ -394,10 +394,24 @@ packets now have one additional clock-freeze field, so reinstalling is required.
+ telnet confirms that a purported pause did not freeze the clock. The teammate’s pause fix also updates takeoff/landing control packets; the
+ launcher refreshes all protocols together.
+ 
+-Scenery setup happens while paused, before autopilot handover. Connectome mode
+-still pauses during neural calculations by design; reflex mode does not. The
+-40 m altitude abort remains in place. A stopped flight prints its reason: do not
+-interpret a safety abort or a synchronous brain calculation as obstacle avoidance.
++Scenery setup happens while paused, before autopilot handover. After that the
++run is **real time** (project rules, gh #3–#5):
++
++- **1x:** the controller sets `/sim/speed-up` to 1 at the start, re-checks it
++  every 3 s, resets any change and counts it (`speed_up_resets` in the result).
++  It refuses to run if it can't.
++- **No pause per brain trial:** connectome trials run in a background worker.
++  The plane keeps flying on the last decision until the next is ready. Each
++  applied decision is logged with the sim time it started from and its latency
++  (`decision_started`, `decision_latency_s` in `fly_activity.csv`;
++  `decision_latency_s`, `decisions_skipped` in `airplane.csv`; a `decisions`
++  summary in the result). Training runs (`--learn` / `--load-learning`) are the
++  exception: they still pause for each trial.
++- **Crashes are data:** leaving the envelope (heading off >90°, bank >50°,
++  pitch >25°, speed <70 % of target, altitude more than 40 m off) prints
++  `ENVELOPE BREACH (logged, run continues)` and is recorded in the result
++  (`envelope`: first breach, breach count, worst bank/pitch/altitude error). The
++  run ends only on collision/ground contact or the time limit.
+ The brain requests avoidance; conventional rules still stabilize the airplane.
+ 
+ ## Cruise-rule validation
+diff --git a/docs/RUN_TAKEOFF_LANDING.md b/docs/RUN_TAKEOFF_LANDING.md
+index 4766fe4..36188d7 100644
+--- a/docs/RUN_TAKEOFF_LANDING.md
++++ b/docs/RUN_TAKEOFF_LANDING.md
+@@ -115,7 +115,7 @@ This copies the runway protocols into FlightGear, starts the 737 on the runway,
+ What happens:
+ 
+ 1. The fly adapts (about 70 s), then releases the brakes at full power.
+-2. FlightGear **freezes during every brain trial** and resumes afterwards. The flight looks jerky; that's expected.
++2. FlightGear runs in **real time (1x) and is never paused** for a brain trial. Each trial runs in the background and the plane flies on the last decision until the next is ready, so decisions arrive a few seconds late. If that crashes the plane, the crash is data.
+ 3. Near 145 kt the runway "looms", the fly "jumps", and the plane rotates and lifts off. Gear comes up when it's climbing.
+ 4. At 1,000 ft the terminal prints **HANDOVER**. **The fly keeps flying** (wings level, 10° climb) because there's no Cruise fly yet.
+ 5. **Press Ctrl-C** to stop. The fly centres the controls and pauses FlightGear. You should see `FlightGear paused (acknowledged)`.
+diff --git a/flight_simulator/__main__.py b/flight_simulator/__main__.py
+index 2e4e691..05b6b3a 100644
+--- a/flight_simulator/__main__.py
++++ b/flight_simulator/__main__.py
+@@ -23,6 +23,49 @@ def load_obstacles(path):
+     return obstacles
+ 
+ 
++class EnvelopeMonitor:
++    """Crashes are data (gh #5): leaving the test envelope is logged, never aborts the run.
++
++    update() returns the limits newly broken this step. The run goes on until
++    collision/ground contact or the time limit."""
++
++    def __init__(self):
++        self.active = set()
++        self.events = []
++        self.worst = {'bank_deg': 0.0, 'pitch_deg': 0.0, 'altitude_error_m': 0.0,
++                      'heading_error_deg': 0.0, 'speed_fraction': 1.0}
++
++    def update(self, state, controller):
++        heading = math.degrees(abs(wrap(state.heading - controller.heading)))
++        bank, pitch = math.degrees(state.roll), math.degrees(state.pitch)
++        alt = state.altitude - controller.altitude
++        fraction = state.speed / max(controller.speed, 1e-6)
++        w = self.worst
++        w['bank_deg'] = max(w['bank_deg'], abs(bank))
++        w['pitch_deg'] = max(w['pitch_deg'], abs(pitch))
++        w['altitude_error_m'] = max(w['altitude_error_m'], abs(alt))
++        w['heading_error_deg'] = max(w['heading_error_deg'], heading)
++        w['speed_fraction'] = min(w['speed_fraction'], fraction)
++        limits = {
++            'heading': (heading > 90, f'heading off by {heading:.0f} deg (>90)'),
++            'bank': (abs(bank) > 50, f'bank {bank:+.0f} deg (>50)'),
++            'pitch': (abs(pitch) > 25, f'pitch {pitch:+.0f} deg (>25)'),
++            'speed': (fraction < .70, f'speed {state.speed:.0f} m/s (<70% of {controller.speed:.0f})'),
++            'altitude': (abs(alt) > 40, f'altitude {alt:+.0f} m from target (>40)'),
++        }
++        hit = {kind for kind, (broken, _) in limits.items() if broken}
++        new = [{'time_s': round(state.time, 2), 'kind': kind, 'detail': limits[kind][1]}
++               for kind in limits if kind in hit and kind not in self.active]
++        self.events += new
++        self.active = hit
++        return new
++
++    def result(self):
++        return {'breaches': len(self.events), 'first_breach': self.events[0] if self.events else None,
++                **{f'worst_{k}': round(v, 2) for k, v in self.worst.items()},
++                'events': self.events[:100]}
++
++
+ def run(args, runlog=None):
+     obstacles = load_obstacles(args.obstacles)
+     course = json.loads(Path(args.obstacles).read_text())
+@@ -40,8 +83,20 @@ def run(args, runlog=None):
+     else:
+         brain = brain() if brain else ConnectomeBrain(args.data, seed=args.seed)
+     print(brain.name, flush=True)
+-    if args.brain == 'connectome':
+-        print('Connectome decisions run synchronously; FlightGear pauses during each trial.', flush=True)
++    # Real-time rule (gh #4): in FlightGear the connectome decides in a background worker and
++    # the sim is never paused for it. Fly training (--learn / --load-learning) is owned by a
++    # teammate and keeps its synchronous pause per trial.
++    training = bool(args.learn or args.load_learning)
++    realtime = args.backend == 'flightgear' and args.brain == 'connectome' and not training
++    if realtime:
++        print('Real time: FlightGear stays at 1x and is not paused for brain trials; the plane flies on '
++              'the last decision while the connectome works. A crash is data.', flush=True)
++    elif args.brain == 'connectome' and args.backend == 'flightgear':
++        print('Training run: connectome decisions run synchronously; FlightGear pauses during each trial.',
++              flush=True)
++    worker = None
++    speed_lock = None
++    envelope = EnvelopeMonitor()
+     view = None
+     bridge = None
+     body = None
+@@ -57,8 +112,10 @@ def run(args, runlog=None):
+                 bridge.origin = course_origin
+             print('Waiting for airborne FlightGear telemetry on localhost...', flush=True)
+             state = bridge.read()
+-            from .flightgear import telnet_get, wait_until_steady
+-            aircraft = telnet_get(args.telnet_port or args.telemetry_port - 1, '/sim/aircraft') or ''
++            from .flightgear import SpeedLock, telnet_get, wait_until_steady
++            # 1x rule (gh #3): raises if FlightGear can't be put and kept at 1x sim speed.
++            speed_lock = SpeedLock(args.telnet_port or args.telemetry_port - 1)
++            aircraft =telnet_get(args.telnet_port or args.telemetry_port - 1, '/sim/aircraft') or ''
+             if aircraft.startswith('738'):
+                 # The 737 overlay keeps its autopilot on until hand_over(); let it settle first.
+                 state = wait_until_steady(bridge, state)
+@@ -119,7 +176,8 @@ def run(args, runlog=None):
+                       'clearance', 'aileron', 'elevator', 'rudder', 'throttle',
+                       'reward', 'dan_hz', 'plastic_edges_changed', 'altitude_target', 'altitude_error',
+                       'vertical_speed_target', 'pitch_target', 'bank_target', 'heading_target',
+-                      'cross_track', 'predicted_clearance', 'decision_source']
++                      'cross_track', 'predicted_clearance', 'decision_source',
++                      'decision_latency_s', 'decisions_skipped', 'envelope_breached']
+             writer = csv.DictWriter(log_file, fields)
+             writer.writeheader()
+         if bridge:
+@@ -133,7 +191,11 @@ def run(args, runlog=None):
+             ap_guard.wait_off()
+             print('Handover: airplane autopilot confirmed OFF; the controller flies.', flush=True)
+             state = bridge.freeze(False)
+-        next_brain, next_display, next_print = 0.0, 0.0, 0.0
++        if realtime:
++            from .flightgear import DecisionWorker
++            worker = DecisionWorker(lambda hz: (hz, brain.escape(hz), dict(getattr(brain, 'last_activity', {}))))
++        next_brain, next_display, next_print = state.time, 0.0, 0.0
++        latency = None
+         escape, controls = 0.0, Controls()
+         minimum = math.inf
+         min_altitude = state.altitude
+@@ -145,8 +207,23 @@ def run(args, runlog=None):
+             tick = time.monotonic()
+             stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
+             terminal = state.altitude <= 0 or any(o.clearance(state) <= 0 for o in obstacles)
+-            if state.time >= next_brain and not terminal:
+-                if bridge and args.brain == 'connectome':
++            if worker:
++                # Real time: collect a finished decision, start the next one, never wait.
++                done = worker.poll(state.time)
++                if done:
++                    (looming, escape, activity), record = done
++                    latency = record['latency_s']
++                    if runlog:
++                        runlog.fly({'time': round(state.time, 3), 'brain': args.brain,
++                                    'looming_hz': looming, 'escape_hz': escape,
++                                    'decision_started': round(record['started'], 3),
++                                    'decision_latency_s': round(latency, 3),
++                                    'brain_wall_s': round(record['brain_wall_s'], 3), **activity})
++                if state.time >= next_brain and not terminal and not worker.busy:
++                    worker.submit(state.time, stimulus.looming_hz, missed=(state.time - next_brain) / .5)
++                    next_brain = state.time + .5
++            elif state.time >= next_brain and not terminal:
++                if bridge and args.brain == 'connectome':  # training runs only (see `realtime`)
+                     state = bridge.freeze(True)
+                     stimulus = sense(state, obstacles, horizon=max(25.0, state.speed / 2))
+                 if args.learn and previous_decision is not None:
+@@ -165,19 +242,10 @@ def run(args, runlog=None):
+                 if bridge and args.brain == 'connectome':
+                     state = bridge.freeze(False)
+             if bridge:
+-                limits = {
+-                    f'heading off by {math.degrees(abs(wrap(state.heading-controller.heading))):.0f} deg (>90)':
+-                        abs(wrap(state.heading-controller.heading)) > math.radians(90),
+-                    f'bank {math.degrees(state.roll):+.0f} deg (>50)': abs(state.roll) > math.radians(50),
+-                    f'pitch {math.degrees(state.pitch):+.0f} deg (>25)': abs(state.pitch) > math.radians(25),
+-                    f'speed {state.speed:.0f} m/s (<70% of {controller.speed:.0f})': state.speed < .70 * controller.speed,
+-                    f'altitude {state.altitude-controller.altitude:+.0f} m from target (>40)':
+-                        abs(state.altitude-controller.altitude) > 40,
+-                }
+-                broken = [name for name, hit in limits.items() if hit]
+-                if broken:
+-                    raise RuntimeError('Flight departed the test envelope: ' + '; '.join(broken)
+-                                       + '. Pausing. Check aircraft controls and trim.')
++                # Crashes are data (gh #5): log the breach and keep flying.
++                for breach in envelope.update(state, controller):
++                    print(f'{state.time:6.1f}s ENVELOPE BREACH (logged, run continues): {breach["detail"]}',
++                          flush=True)
+             controls = controller.update(state, stimulus, escape)
+             clearance = min((o.clearance(state) for o in obstacles), default=math.inf)
+             minimum = min(minimum, clearance)
+@@ -197,7 +265,10 @@ def run(args, runlog=None):
+                                  'heading_target': controller.target_heading,
+                                  'cross_track': controller.guidance.cross_track,
+                                  'predicted_clearance': controller.guidance.clearance,
+-                                 'decision_source': controller.decision_source})
++                                 'decision_source': controller.decision_source,
++                                 'decision_latency_s': '' if latency is None else round(latency, 3),
++                                 'decisions_skipped': worker.skipped if worker else '',
++                                 'envelope_breached': ' '.join(sorted(envelope.active))})
+             if state.time >= next_print:
+                 print(f'{state.time:6.1f}s {controller.phase:6} altitude={state.altitude:7.1f}m '
+                       f'speed={state.speed:5.1f}m/s escape={escape:5.1f}Hz clearance={clearance:7.1f}m', flush=True)
+@@ -222,6 +293,7 @@ def run(args, runlog=None):
+                 break
+             if bridge:
+                 ap_guard.check()  # no-autopilot rule; raises if it can't be forced off
++                speed_lock.check()  # 1x rule; resets and records any change
+                 bridge.send(controls)
+                 state = bridge.read()
+             else:
+@@ -235,6 +307,11 @@ def run(args, runlog=None):
+                   'avoidance_activations': controller.activations}
+         if ap_guard:
+             result['autopilot_violations'] = len(ap_guard.violations)
++        if bridge:
++            result['envelope'] = envelope.result()
++            result['speed_up_resets'] = len(speed_lock.events)
++        if worker:
++            result['decisions'] = worker.summary()
+         if hasattr(brain, 'plasticity'):
+             result['learning'] = brain.plasticity.summary()
+             result['learning_enabled'] = args.learn
+@@ -256,6 +333,8 @@ def run(args, runlog=None):
+                     pilot.close()
+                 if ap_guard:
+                     ap_guard.close()
++                if speed_lock:
++                    speed_lock.close()
+                 if bridge:
+                     bridge.close()
+                     print('Sent FlightGear pause request on exit. Verify pause in the simulator.', flush=True)
+diff --git a/flight_simulator/flies.py b/flight_simulator/flies.py
+index a990bc9..0fd3f3c 100644
+--- a/flight_simulator/flies.py
++++ b/flight_simulator/flies.py
+@@ -153,20 +153,42 @@ class PhaseFly:
+             self.elevator_i = clip(self.elevator_i - 4.0 * error * dt, -1, 1)
+         return clip(self.elevator_i - 8.0 * error, -1, 1)
+ 
++    # Set to a flightgear.DecisionWorker for live, real-time flight: brain trials then run
++    # in the background and step() never waits for one (the sim is not paused). None
++    # (default) runs each trial inline, for the offline sims and tests.
++    worker = None
++
++    def run_in_background(self):
++        from .flightgear import DecisionWorker
++        self.worker = DecisionWorker(lambda inputs: (inputs, self.brain.run(inputs, self.readouts)))
++        return self.worker
++
++    def _apply(self, inputs, rates, s):
++        # One 200 ms trial reads 1-2 neurons per group, so rates jitter by +-20 Hz.
++        # The nerve cord integrates: low-pass the DN rates across trials.
++        if self.smoothed is None:
++            self.smoothed = dict(rates)
++        else:
++            self.smoothed = {k: SMOOTHING * v + (1 - SMOOTHING) * self.smoothed.get(k, v)
++                             for k, v in rates.items()}
++        note = self.decode(self.smoothed, s)
++        self.decisions.append(Decision(s.time, inputs, rates, note or ''))
++
+     def step(self, s, dt):
+-        """Called at the sim rate. Runs a brain trial when one is due."""
+-        if s.time >= self.next_decision and (not self.status.done or self.hold):
++        """Called at the sim rate. Runs (or, with a worker, starts/collects) a brain trial
++        when one is due."""
++        if self.worker is not None:
++            done = self.worker.poll(s.time)
++            if done:
++                self._apply(*done[0], s)  # decided on an older state, applied now
++            if self.decision_due(s) and not self.worker.busy:
++                period = self.current_period(s)
++                missed = (s.time - self.next_decision) / period if self.next_decision > -1e8 else 0
++                self.worker.submit(s.time, self.encode(s), missed=missed)
++                self.next_decision = s.time + period
++        elif self.decision_due(s):
+             inputs = self.encode(s)
+-            rates = self.brain.run(inputs, self.readouts)
+-            # One 200 ms trial reads 1-2 neurons per group, so rates jitter by +-20 Hz.
+-            # The nerve cord integrates: low-pass the DN rates across trials.
+-            if self.smoothed is None:
+-                self.smoothed = dict(rates)
+-            else:
+-                self.smoothed = {k: SMOOTHING * v + (1 - SMOOTHING) * self.smoothed.get(k, v)
+-                                 for k, v in rates.items()}
+-            note = self.decode(self.smoothed, s)
+-            self.decisions.append(Decision(s.time, inputs, rates, note or ''))
++            self._apply(inputs, self.brain.run(inputs, self.readouts), s)
+             self.next_decision = s.time + self.current_period(s)
+         self.check(s)
+         return AirlinerControls(self.aileron, self.haltere(s, dt), self.rudder,
+diff --git a/flight_simulator/flightgear.py b/flight_simulator/flightgear.py
+index f8ac51e..838a211 100644
+--- a/flight_simulator/flightgear.py
++++ b/flight_simulator/flightgear.py
+@@ -223,6 +223,139 @@ class AutopilotGuard:
+         self.sock.close()
+ 
+ 
++# ---------------------------------------------------------------- real-time rules
++# RULES (project owner, 2026-11-14): FlightGear runs at 1x sim speed during fly-brain
++# runs, and the fly decides in real time: the sim is never paused or slowed while the
++# brain works. A brain that is too slow flies on its last decision; a crash is data.
++
++class SpeedLock:
++    """Holds /sim/speed-up at 1 over FlightGear's telnet server (gh #3).
++
++    The constructor sets and verifies 1x and raises if it can't. check() (rate-limited)
++    resets any drift and records it in `events` as (wall time, value found)."""
++
++    PATH = '/sim/speed-up'
++
++    def __init__(self, telnet_port, every=3.0, timeout=3.0):
++        try:
++            self.sock = socket.create_connection(('127.0.0.1', telnet_port), timeout=timeout)
++        except OSError as exc:
++            raise RuntimeError(f'Cannot lock FlightGear at 1x speed (no telnet on port {telnet_port}: {exc}). '
++                               'Start FlightGear with --telnet (the project launchers do).') from exc
++        self.file = self.sock.makefile('rb')
++        self.sock.sendall(b'data\r\n')
++        self.every, self.next = every, time.monotonic() + every
++        self.events = []
++        found = self._get()
++        self._set()
++        now = self._get()
++        if not self._is_one(now):
++            self.close()
++            raise RuntimeError(f'FlightGear would not go to 1x sim speed ({self.PATH} = {now!r}).')
++        if not self._is_one(found):
++            print(f'1x RULE: FlightGear was at {found}x sim speed; set to 1x.', flush=True)
++
++    def _get(self):
++        self.sock.sendall(f'get {self.PATH}\r\n'.encode())
++        return self.file.readline().decode(errors='replace').strip()
++
++    def _set(self):
++        self.sock.sendall(f'set {self.PATH} 1\r\n'.encode())
++
++    @staticmethod
++    def _is_one(value):
++        try:
++            return abs(float(value) - 1.0) < 1e-6
++        except (TypeError, ValueError):
++            return False
++
++    def check(self, force=False):
++        if not force and time.monotonic() < self.next:
++            return
++        self.next = time.monotonic() + self.every
++        value = self._get()
++        if self._is_one(value):
++            return
++        self.events.append((time.time(), value))
++        print(f'1x RULE: sim speed was changed to {value}x during the run; reset to 1x.', flush=True)
++        self._set()
++        if not self._is_one(self._get()):
++            raise RuntimeError(f'FlightGear would not return to 1x sim speed ({self.PATH} = {value!r}).')
++
++    def close(self):
++        try:
++            self.sock.sendall(b'quit\r\n')
++        except OSError:
++            pass
++        self.file.close()
++        self.sock.close()
++
++
++class DecisionWorker:
++    """Runs brain trials in a background thread so the control loop never waits (gh #4).
++
++    submit() starts a trial from the latest state unless one is still running; poll()
++    hands back a finished trial once, with the sim time it started from, the sim time
++    it was applied and the latency. A failure in the brain is re-raised by poll()."""
++
++    def __init__(self, fn):
++        import threading
++        self._threading = threading
++        self.fn = fn
++        self.thread = None
++        self._done = None
++        self.records = []      # one dict per applied decision
++        self.skipped = 0       # decision slots that passed while the brain was still busy
++
++    @property
++    def busy(self):
++        return self.thread is not None
++
++    def submit(self, sim_time, *args, missed=0):
++        """Start a trial; False (nothing started) if the previous one is still running."""
++        if self.thread is not None:
++            return False
++        self.skipped += max(0, int(missed))
++        box = {'started': sim_time, 'wall': time.monotonic()}
++
++        def work():
++            try:
++                box['result'] = self.fn(*args)
++            except BaseException as exc:  # handed to the control loop by poll()
++                box['error'] = exc
++            box['wall_s'] = time.monotonic() - box['wall']
++            self._done = box
++
++        self._done = None
++        self.thread = self._threading.Thread(target=work, name='fly-brain', daemon=True)
++        self.thread.start()
++        return True
++
++    def poll(self, sim_time):
++        """None while the brain is working or idle; otherwise (result, record), once."""
++        box = self._done
++        if box is None:
++            return None
++        self.thread.join()
++        self.thread, self._done = None, None
++        if 'error' in box:
++            raise box['error']
++        record = {'started': box['started'], 'applied': sim_time,
++                  'latency_s': sim_time - box['started'], 'brain_wall_s': box['wall_s']}
++        self.records.append(record)
++        return box['result'], record
++
++    def summary(self):
++        lat = [r['latency_s'] for r in self.records]
++        return {'applied': len(lat), 'skipped': self.skipped,
++                'latency_mean_s': round(sum(lat) / len(lat), 3) if lat else None,
++                'latency_max_s': round(max(lat), 3) if lat else None}
++
++    def close(self, wait=10.0):
++        if self.thread is not None:
++            self.thread.join(wait)
++
++
+ class FlightGear:
+     def __init__(self, telemetry_port=5501, control_port=5502, timeout=2.0, engines=1):
+         if engines not in (1, 2):
+diff --git a/flight_simulator/launch_fg.py b/flight_simulator/launch_fg.py
+index 0edd047..ee1b65e 100644
+--- a/flight_simulator/launch_fg.py
++++ b/flight_simulator/launch_fg.py
+@@ -41,7 +41,8 @@ def default_fg():
+ 
+ DEFAULT_FG = default_fg()
+ # Project default aircraft: 737-800 with fly passengers (run flightgear/setup_aircraft.py once).
+-REPO_AIRCRAFT = Path(__file__).resolve().parent.parent / 'flightgear' / 'Aircraft'
++REPO = Path(__file__).resolve().parent.parent
++REPO_AIRCRAFT = REPO / 'flightgear' / 'Aircraft'
+ DEFAULT_AIRCRAFT = '738-flies'
+ # In-air start speed. 100 kt is fine for the C172 but stalls a 737.
+ START_KT = {'c172p': 100}
+@@ -141,11 +142,15 @@ def wait_ready(telnet_port, timeout=600):
+ 
+ def fly_command(args):
+     p = ports(args.instance)
+-    cmd = [sys.executable, '-m', 'flight_simulator.takeoff_landing', args.phase, '--brain', args.fly,
++    # takeoff_live = takeoff_landing + a run log, so the session's brain page shows the fly live.
++    # The connectome needs the project venv (requirements-brain.txt) if there is one.
++    venv = REPO / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
++    python = str(venv) if venv.exists() else sys.executable
++    cmd = [python, '-m', 'flight_simulator.takeoff_live', args.phase, '--brain', args.fly,
+            '--backend', 'flightgear', '--telemetry-port', str(p['telemetry']), '--control-port', str(p['control'])]
+-    if not args.no_smooth:
+-        cmd += ['--smooth', '--period', '1.0', '--speed-up', f'{args.speed:g}']
+-    return cmd
++    # Always real time: the controller locks FlightGear at 1x and never pauses it for a
++    # brain trial (project rules, gh #3 / #4). There is no speed or pause option.
++    return cmd + ['--period', '1.0']
+ 
+ 
+ def main():
+@@ -161,10 +166,6 @@ def main():
+     parser.add_argument('--fly', nargs='?', const='connectome', choices=['connectome', 'standin'],
+                         help='With --phase: start the fly-brain controller as soon as FlightGear is ready '
+                              '(default brain: connectome)')
+-    parser.add_argument('--speed', type=float, default=1.0,
+-                        help='With --fly: sim speed (1 = real time); the brain decides as fast as it can')
+-    parser.add_argument('--no-smooth', action='store_true',
+-                        help='With --fly: pause FlightGear for every brain trial instead of slow motion')
+     parser.add_argument('extra', nargs='*', help='Extra fgfs arguments (after --)')
+     args = parser.parse_args()
+     if args.instance is None:
+diff --git a/flight_simulator/takeoff_landing.py b/flight_simulator/takeoff_landing.py
+index bd02874..83cb243 100644
+--- a/flight_simulator/takeoff_landing.py
++++ b/flight_simulator/takeoff_landing.py
+@@ -77,18 +77,11 @@ def run_demo(args, fly, log):
+     return run_phase(fly, sim, args.seconds, log=log, on_tick=progress)
+ 
+ 
+-def _set_speed_up(telnet_port, value):
+-    import socket
+-    try:
+-        with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as sock:
+-            sock.sendall(f'data\r\nset /sim/speed-up {value}\r\nquit\r\n'.encode())
+-    except OSError as exc:
+-        print(f'WARNING: could not set /sim/speed-up over telnet ({exc}).', flush=True)
+-
+-
+ def run_flightgear(args, fly, log):
+-    """Live FlightGear. The sim is frozen during every brain trial."""
+-    from .flightgear import RunwayFlightGear
++    """Live FlightGear, in real time: the sim stays at 1x and is never paused or slowed for
++    a brain trial. Trials run in a background worker; the plane flies on the last decision
++    until the next one is ready. If the brain is too slow and the plane crashes, that is data."""
++    from .flightgear import RunwayFlightGear, SpeedLock
+     runway = tuple(args.runway) if args.runway else None
+     # Without --runway, landing assumes the launch_fg --phase landing start:
+     # on the extended centerline, --final-nm before the threshold.
+@@ -96,16 +89,14 @@ def run_flightgear(args, fly, log):
+     bridge = RunwayFlightGear(args.telemetry_port, args.control_port, runway=runway, ahead_m=ahead)
+     pilot = None
+     ap_guard = None
+-    if args.smooth:
+-        # Smooth mode: no freeze per brain trial. The whole sim runs in steady slow motion
+-        # and keeps flying on the last commands while the brain computes, so each decision
+-        # acts on a state ~trial*speed-up sim-seconds old (like a slow fly's latency).
+-        _set_speed_up(args.telemetry_port - 1, args.speed_up)
+-        print(f'Smooth mode: sim at {args.speed_up:g}x, no pause during brain trials '
+-              f'(decisions use a slightly stale state).', flush=True)
++    speed_lock = None
++    worker = fly.run_in_background()
+     try:
+         print('Waiting for FlightGear runway telemetry on localhost...', flush=True)
+         s = bridge.read()
++        # 1x rule (gh #3): raises if FlightGear can't be put and kept at 1x sim speed.
++        speed_lock = SpeedLock(args.telemetry_port - 1)
++        print('Real time: FlightGear at 1x, no pause during brain trials.', flush=True)
+         if args.phase == 'takeoff' and not s.on_ground:
+             raise ValueError('Start FlightGear on the runway (main gear on the ground) for takeoff')
+         if args.phase == 'landing' and (s.on_ground or s.agl < 300 * FT):
+@@ -147,23 +138,23 @@ def run_flightgear(args, fly, log):
+                 print(f'{fly.status.phase} reached in the air. No Cruise fly yet, so the {fly.name} keeps '
+                       f'flying: wings level, {HOLD_PITCH:.0f} deg climb, climb power. '
+                       'Press Ctrl-C to pause FlightGear and exit.', flush=True)
+-            if fly.decision_due(s):
+-                if not args.smooth:
+-                    s = bridge.freeze(True)
+-                t0 = time.monotonic()
+-                controls = fly.step(s, max(s.time - previous, 1e-3))
+-                if args.brain == 'connectome':
+-                    print(f'  brain trial {time.monotonic() - t0:.1f}s  {fly.status.phase:14s} '
+-                          f'ias={s.speed / KT:5.1f}kt agl={s.agl / FT:5.0f}ft pitch={math.degrees(s.pitch):4.1f}deg '
+-                          f'thr={controls.throttle:.2f}', flush=True)
+-                if not args.smooth:
+-                    s = bridge.freeze(False)
+-            else:
+-                controls = fly.step(s, max(s.time - previous, 1e-3))
++            applied = len(worker.records)
++            controls = fly.step(s, max(s.time - previous, 1e-3))  # never waits for the brain
++            if len(worker.records) > applied and args.brain == 'connectome':
++                rec = worker.records[-1]
++                print(f'  decision applied {rec["latency_s"]:.1f}s after its state  {fly.status.phase:14s} '
++                      f'ias={s.speed / KT:5.1f}kt agl={s.agl / FT:5.0f}ft pitch={math.degrees(s.pitch):4.1f}deg '
++                      f'thr={controls.throttle:.2f}', flush=True)
+             if isinstance(fly, TakeoffFly) and not s.on_ground and s.climb > 1 and s.agl > 10:
+                 bridge.gear_down = False  # scripted checklist: gear up at positive climb
+-            log.append(row(fly, s, controls))
++            entry = row(fly, s, controls)
++            if worker.records:
++                entry['decision_started'] = round(worker.records[-1]['started'], 3)
++                entry['decision_latency_s'] = round(worker.records[-1]['latency_s'], 3)
++            entry['decisions_skipped'] = worker.skipped
++            log.append(entry)
+             ap_guard.check()  # no-autopilot rule; raises if it can't be forced off
++            speed_lock.check()  # 1x rule; resets and records any change
+             if body:
+                 last = fly.decisions[-1] if fly.decisions else None
+                 rates = {f'{k}_hz': v for k, v in last.rates.items()} if last else None
+@@ -199,7 +190,10 @@ def run_flightgear(args, fly, log):
+             touchdown_x=touchdown and touchdown[0],
+             touchdown_sink_fpm=touchdown and touchdown[1],
+             touchdown_pitch_deg=touchdown and touchdown[2]))()
+-        return summarize(fly, sim_like, max_y)
++        result = summarize(fly, sim_like, max_y)
++        result['decision_timing'] = worker.summary()
++        result['speed_up_resets'] = len(speed_lock.events)
++        return result
+     finally:
+         if pilot:
+             pilot.close()
+@@ -208,9 +202,10 @@ def run_flightgear(args, fly, log):
+                 print(f'NO-AUTOPILOT RULE: {len(ap_guard.violations)} autopilot engagement(s) were forced off '
+                       'during this run.', flush=True)
+             ap_guard.close()
+-        if args.smooth:
+-            _set_speed_up(args.telemetry_port - 1, 1.0)
+-        paused = bridge.close()
++        if speed_lock:
++            speed_lock.close()
++        fly.worker = None
++        paused = bridge.close()  # end of run only: stops a pilotless 737
+         print('FlightGear paused (acknowledged), ailerons and rudder centred.' if paused else
+               'WARNING: FlightGear did not acknowledge the pause. Pause it by hand (p) NOW: '
+               'it keeps the last controls it received.', flush=True)
+@@ -247,8 +242,8 @@ def main(argv=None):
+     p.add_argument('--body-port', type=int, default=5600, help='UDP port of the live 3D fly window')
+     p.add_argument('--no-fly-body', action='store_true', help='Do not stream to the 3D fly window')
+     p.add_argument('--smooth', action='store_true',
+-                   help='FlightGear: no pause per brain trial; run the sim in slow motion instead')
+-    p.add_argument('--speed-up', type=float, default=0.5, help='Sim speed in --smooth mode')
++                   help='Accepted for old commands, no effect: FlightGear runs are always real time '
++                        '(1x, no pause per brain trial)')
+     p.add_argument('--no-cockpit-fly', action='store_true', help='Do not animate the fly pilot in the 737 cockpit')
+     p.add_argument('--plot', help='PNG of sugar input, brain activity, altitude and airspeed (needs matplotlib)')
+     args = p.parse_args(argv)
+diff --git a/tests/test_realtime.py b/tests/test_realtime.py
+new file mode 100644
+index 0000000..20e7309
+--- /dev/null
++++ b/tests/test_realtime.py
+@@ -0,0 +1,179 @@
++"""Real-time rules: FlightGear at 1x (gh #3), no pause per brain trial (gh #4),
++envelope breaches are logged, not fatal (gh #5). No FlightGear needed."""
++from pathlib import Path
++import math
++import socket
++import sys
++import time
++import unittest
++
++ROOT = Path(__file__).resolve().parent.parent
++sys.path.insert(0, str(ROOT))
++from flight_simulator.__main__ import EnvelopeMonitor  # noqa: E402
++from flight_simulator.core import FlightController, State  # noqa: E402
++from flight_simulator.flies import StandInBrain, TakeoffFly  # noqa: E402
++from flight_simulator.flightgear import DecisionWorker, SpeedLock  # noqa: E402
++from flight_simulator.runway import takeoff_start  # noqa: E402
++from tests.test_no_autopilot import FakeFG  # noqa: E402
++
++
++class SpeedLockTests(unittest.TestCase):
++    def lock(self, props, sticky=(), **kw):
++        fg = FakeFG(props, sticky)
++        self.addCleanup(fg.server_close)
++        self.addCleanup(fg.shutdown)
++        lock = SpeedLock(fg.port, **kw)
++        self.addCleanup(lock.close)
++        return fg, lock
++
++    def test_sets_1x_at_start(self):
++        fg, lock = self.lock({'/sim/speed-up': '8'})
++        self.assertEqual(float(fg.props['/sim/speed-up']), 1.0)
++        self.assertEqual(lock.events, [])
++
++    def test_drift_is_reset_and_recorded(self):
++        fg, lock = self.lock({'/sim/speed-up': '1'})
++        lock.check(force=True)
++        self.assertEqual(lock.events, [])
++        fg.props['/sim/speed-up'] = '0.5'
++        lock.check()  # rate-limited: not polled yet
++        self.assertEqual(fg.props['/sim/speed-up'], '0.5')
++        lock.check(force=True)
++        self.assertEqual(float(fg.props['/sim/speed-up']), 1.0)
++        self.assertEqual([v for _, v in lock.events], ['0.5'])
++
++    def test_fails_loudly_without_telnet_or_if_speed_wont_change(self):
++        with socket.socket() as s:
++            s.bind(('127.0.0.1', 0))
++            free = s.getsockname()[1]
++        with self.assertRaisesRegex(RuntimeError, 'Cannot lock FlightGear at 1x'):
++            SpeedLock(free, timeout=0.5)
++
++        class Frozen(dict):          # a FlightGear that ignores `set`
++            def __setitem__(self, key, value):
++                pass
++        fg = FakeFG({})
++        self.addCleanup(fg.server_close)
++        self.addCleanup(fg.shutdown)
++        fg.props = Frozen({'/sim/speed-up': '8'})
++        with self.assertRaisesRegex(RuntimeError, 'would not go to 1x'):
++            SpeedLock(fg.port)
++
++
++class DecisionWorkerTests(unittest.TestCase):
++    def test_slow_brain_never_blocks_and_latency_is_logged(self):
++        worker = DecisionWorker(lambda x: (time.sleep(0.3), x * 2)[1])
++        t0 = time.monotonic()
++        self.assertTrue(worker.submit(10.0, 21))
++        self.assertFalse(worker.submit(10.5, 99))      # still busy: nothing started
++        self.assertIsNone(worker.poll(10.6))
++        self.assertLess(time.monotonic() - t0, 0.2)    # none of that waited for the brain
++        while worker.poll(12.5) is None and time.monotonic() - t0 < 5:
++            time.sleep(0.02)
++        self.assertEqual(len(worker.records), 1)
++        rec = worker.records[0]
++        self.assertEqual((rec['started'], rec['applied'], rec['latency_s']), (10.0, 12.5, 2.5))
++        self.assertGreaterEqual(rec['brain_wall_s'], 0.25)
++        self.assertIsNone(worker.poll(13.0))           # handed back once
++        self.assertTrue(worker.submit(13.0, 1, missed=5.9))
++        self.assertEqual(worker.skipped, 5)
++        worker.close()
++        self.assertEqual(worker.summary()['applied'], 1)
++
++    def test_result_and_brain_errors_reach_the_loop(self):
++        worker = DecisionWorker(lambda x: x + 1)
++        worker.submit(0.0, 41)
++        worker.close()
++        self.assertEqual(worker.poll(0.1)[0], 42)
++        worker = DecisionWorker(lambda: 1 / 0)
++        worker.submit(0.0)
++        worker.close()
++        with self.assertRaises(ZeroDivisionError):
++            worker.poll(0.1)
++
++
++class SlowBrain(StandInBrain):
++    delay = 0.25
++
++    def run(self, inputs, readouts):
++        time.sleep(self.delay)
++        return super().run(inputs, readouts)
++
++
++class FlyInBackground(unittest.TestCase):
++    def test_step_does_not_wait_for_the_brain(self):
++        fly = TakeoffFly(SlowBrain([]), 0.5)
++        worker = fly.run_in_background()
++        s = takeoff_start()
++        t0 = time.monotonic()
++        for i in range(20):                      # 1 s of sim time at 20 Hz
++            s.time = i * 0.05
++            controls = fly.step(s, 0.05)
++        self.assertLess(time.monotonic() - t0, 0.2, 'step() waited for the brain')
++        self.assertEqual(fly.decisions, [])      # nothing decided yet: flying on defaults
++        self.assertTrue(all(math.isfinite(v) for v in (controls.aileron, controls.elevator, controls.throttle)))
++        worker.close()
++        s.time = 3.0
++        fly.step(s, 0.05)                        # the late decision is applied now
++        self.assertEqual(len(fly.decisions), 1)
++        self.assertAlmostEqual(worker.records[0]['latency_s'], 3.0)
++        worker.close()
++
++    def test_inline_mode_unchanged_without_worker(self):
++        fly = TakeoffFly(StandInBrain([]), 0.5)
++        s = takeoff_start()
++        fly.step(s, 0.05)
++        self.assertEqual(len(fly.decisions), 1)
++
++
++class Envelope(unittest.TestCase):
++    def test_breach_is_logged_once_and_run_continues(self):
++        env, ctl = EnvelopeMonitor(), FlightController(900.0, 0.0, 50.0)
++        self.assertEqual(env.update(State(time=1.0), ctl), [])
++        new = env.update(State(time=2.0, roll=math.radians(62)), ctl)   # past 50 deg: no exception
++        self.assertEqual([b['kind'] for b in new], ['bank'])
++        self.assertEqual(env.update(State(time=2.1, roll=math.radians(70)), ctl), [])  # same breach
++        env.update(State(time=3.0), ctl)                                 # recovered
++        new = env.update(State(time=4.0, roll=math.radians(-55), altitude=800.0, pitch=math.radians(-30)), ctl)
++        self.assertEqual(sorted(b['kind'] for b in new), ['altitude', 'bank', 'pitch'])
++        r = env.result()
++        self.assertEqual(r['breaches'], 4)
++        self.assertEqual((r['first_breach']['time_s'], r['first_breach']['kind']), (2.0, 'bank'))
++        self.assertAlmostEqual(r['worst_bank_deg'], 70.0, places=1)
++        self.assertAlmostEqual(r['worst_pitch_deg'], 30.0, places=1)
++        self.assertAlmostEqual(r['worst_altitude_error_m'], 100.0, places=1)
++
++    def test_no_breach_result(self):
++        r = EnvelopeMonitor().result()
++        self.assertEqual((r['breaches'], r['first_breach']), (0, None))
++
++
++class Lint(unittest.TestCase):
++    def src(self, name):
++        return (ROOT / 'flight_simulator' / name).read_text(encoding='utf-8')
++
++    def test_takeoff_landing_never_pauses_or_slows_the_sim(self):
++        src = self.src('takeoff_landing.py')
++        for banned in ('.freeze(', '--speed-up', '_set_speed_up'):
++            self.assertNotIn(banned, src)
++        for needed in ('SpeedLock(', 'speed_lock.check()', 'run_in_background()'):
++            self.assertIn(needed, src)
++
++    def test_cruise_controller_is_real_time_and_does_not_abort_on_envelope(self):
++        src = self.src('__main__.py')
++        self.assertNotIn('Flight departed the test envelope', src)
++        for needed in ('SpeedLock(', 'speed_lock.check()', 'DecisionWorker(', 'envelope.update('):
++            self.assertIn(needed, src)
++        # The only per-trial pause left is the training path.
++        loop = src[src.index('while args.seconds == 0'):src.index("result = {'backend'")]
++        self.assertEqual(loop.count('bridge.freeze(True)'), 2)   # training trial + training collision
++        self.assertIn('if worker:', loop)
++
++    def test_launcher_has_no_speed_or_pause_option(self):
++        src = self.src('launch_fg.py')
++        for banned in ("'--speed'", '--no-smooth', '--speed-up'):
++            self.assertNotIn(banned, src)
++
++
++if __name__ == '__main__':
++    unittest.main()
