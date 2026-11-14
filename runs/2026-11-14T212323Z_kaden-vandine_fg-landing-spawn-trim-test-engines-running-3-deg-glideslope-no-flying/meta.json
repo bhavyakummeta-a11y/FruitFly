@@ -1,0 +1,41 @@
+{
+  "run_id": "2026-11-14T212323Z_kaden-vandine_fg-landing-spawn-trim-test-engines-running-3-deg-glideslope-no-flying",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 7.7
+    },
+    {
+      "who": "AUTOPILOT",
+      "label": "AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying",
+      "detail": "engaged: SPD",
+      "from_s": 7.7,
+      "to_s": 68.9
+    }
+  ],
+  "name": "landing spawn trim test: engines running + 3 deg glideslope (no flying)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "storm",
+  "fgfs_pid": 65966,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-14T21:23:23.777771+00:00",
+  "duration_s": 69,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 29,
+  "controller_runs": {},
+  "videos": [],
+  "code": {
+    "commit": "feaefd52d7682f58f8916dd2c3e0c48a87de3563",
+    "branch": "main"
+  }
+}

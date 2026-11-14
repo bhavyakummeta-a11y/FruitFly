@@ -1,0 +1,6 @@
+16:23:23 [session] Session 'landing spawn trim test: engines running + 3 deg glideslope (no flying)' watching fgfs pid 65966 (738-flies)
+16:23:23 [session] Live log page: http://127.0.0.1:8765/
+16:23:31 [session] Connected to property API on :8080
+16:23:31 [control] IN CONTROL: AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying (engaged: SPD)
+16:24:16 [session] Property API stopped answering
+16:24:22 [session] FlightGear exited (code None)
