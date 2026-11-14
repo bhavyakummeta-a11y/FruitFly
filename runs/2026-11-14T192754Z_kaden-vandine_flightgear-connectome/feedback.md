@@ -22,5 +22,6 @@ Run by Kaden VanDine. Command: `python -m flight_simulator takeoff_live landing 
 
 ## Notes
 
+- **Kaden VanDine** (2026-11-14 14:31): Landing re-run after 4e28172 (Linux FG 2024.1.7, screenshots OFF). First controller attempt died at SpeedLock: telnet 'get /sim/speed-up' timed out (FG busy ~10 s after start); restarted controller. Handover OK (throttle 0.55, elevator 0, ref attitude 1.5 deg); approach re-anchored at 2.7 deg from 667 ft. Then FlightGear itself stalled ~16 s (19:28:35-51 UTC; session sampler and controller both got nothing) and fast-forwarded 16 s of sim time on the last controls (aileron 0.35): 60 deg bank, -18 deg pitch, -7,500 fpm, ground contact ~1.7 ft, go-around, later dive and ground impact. Not a fly-brain or 4e28172 failure. FG then hung for good (0% CPU, no HTTP/telnet, threads in futex wait); terminated with SIGTERM. Screenshots off did not prevent the stall/hang.
 
 <!-- add feedback: python -m flight_simulator.runlog note "..." -->
