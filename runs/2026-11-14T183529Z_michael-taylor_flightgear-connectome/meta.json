@@ -1,0 +1,62 @@
+{
+  "run_id": "2026-11-14T183529Z_michael-taylor_flightgear-connectome",
+  "who": "Michael Taylor",
+  "started_utc": "2026-11-14T18:35:29.181135+00:00",
+  "command": "python -m flight_simulator --backend flightgear --brain connectome --seconds 120 --note 'obstacle avoidance, connectome, numba brain + vision; started after the 737 AP had levelled (first attempt timed out in wait_until_steady, ticket #1)'",
+  "args": {
+    "backend": "flightgear",
+    "brain": "connectome",
+    "data": "data/brain",
+    "learn": false,
+    "load_learning": null,
+    "save_learning": "runs/learning-checkpoint.npz",
+    "vision_port": 5601,
+    "obstacles": "C:\\Users\\micha\\FruitFly\\scenarios\\obstacles.json",
+    "seconds": 120.0,
+    "seed": 0,
+    "plot": false,
+    "no_plot": false,
+    "engines": 1,
+    "realtime": false,
+    "log": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "telnet_port": null,
+    "body_port": 5600,
+    "no_fly_body": false,
+    "no_cockpit_fly": false,
+    "no_scene": false,
+    "note": "obstacle avoidance, connectome, numba brain + vision; started after the 737 AP had levelled (first attempt timed out in wait_until_steady, ticket #1)",
+    "no_push": false,
+    "no_runlog": false
+  },
+  "code": {
+    "commit": "bcfa42e5a8db000ebe01a6f104004decd180a476",
+    "branch": "main",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.12.10",
+  "platform": "Windows 11",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) decides when to escape; code flies the airplane",
+    "neurons_decide": "escape request: Giant Fibre (DNp01) response to synthetic looming and path cues; training retains looming-only input",
+    "code_decides": "synthetic visual encoding, turn direction (from obstacle geometry), holding altitude, speed and heading, and flying the avoidance turn (conventional FlightController)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "obstacle avoidance - CONNECTOME (numba brain + vision, bcfa42e)",
+      "run_id": "2026-11-14T183145Z_michael-taylor_fg-obstacle-avoidance-connectome-numba-brain-vision-bcfa42e"
+    }
+  ],
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "warning_lines": 103
+  },
+  "finished_utc": "2026-11-14T18:35:46.303704+00:00",
+  "exit_code": 1
+}
