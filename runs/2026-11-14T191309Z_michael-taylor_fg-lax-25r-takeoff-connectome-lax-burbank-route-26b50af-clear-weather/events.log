@@ -1,0 +1,106 @@
+14:13:10 [session] Session 'LAX 25R takeoff - CONNECTOME, LAX-Burbank route (26b50af), clear weather' watching fgfs pid 27600 (738-flies)
+14:13:10 [session] Live log page: http://127.0.0.1:8766/
+14:13:11 [fgfs] 0.00 [WARN]:gui       :0: SetProcessDpiAwarenessContext() failed: The operation completed successfully.
+14:13:11 [fgfs] 0.04 [WARN]:aircraft  Aircraft does not specify a minimum FG version: please add one at /sim/minimum-fg-version
+14:13:11 [fgfs] 0.04 [ALRT]:view      Creating osgViewer::CompositeViewer
+14:13:11 [fgfs] 0.05 [ALRT]:general   affinity=none
+14:13:11 [fgfs] 0.05 [ALRT]:view      Calling composite_viewer->setUseConfigureAffinity() with flag=0
+14:13:11 [fgfs] 0.88 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:13:11 [fgfs] 0.88 [WARN]:osg       osgXR: Failed to count OpenXR instance extensions: -51
+14:13:11 [fgfs] 0.89 [WARN]:general   Enabling ATI/AMD viewport hack
+14:13:11 [fgfs] 0.93 [ALRT]:view      affinity=none
+14:13:15 [session] Docked: log below and fly brain right of FlightGear
+14:13:18 [fgfs] 8.82 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "HDG-SEL".
+14:13:18 [fgfs] 8.82 [WARN]:general   Warning: knob animation applies to multiple distinct objects named "ALT-SEL".
+14:13:18 [fgfs] 9.74 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:13:19 [fgfs] 9.82 [ALRT]:input     Texture file not found: 'Aircraft/Instruments-3d/cdu2/boeing-lightmap.png'
+14:13:21 [fgfs] 12.10 [WARN]:nasal     ERROR: Cannot add listener to tied property /sim[0]/freeze[0]/replay-state[0]
+14:13:21 [fgfs] 12.15 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate_worst = /sim/frame-rate-worst -> /sim/frame-rate-worst
+14:13:21 [fgfs] 12.15 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.elapsed_seconds = /sim/time/elapsed-sec -> /sim/time/elapsed-sec
+14:13:21 [fgfs] 12.15 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.frame_rate = /sim/frame-rate -> /sim/frame-rate
+14:13:21 [fgfs] 12.15 [WARN]:nasal     D:/FlightGear/data/Nasal/emexec.nas:88: (EMEXEC) FrameNotification.eframe_rate = /sim/emexec/frame-rate -> /sim/emexec/frame-rate
+14:13:21 [fgfs] 12.74 [WARN]:nasal     ERROR: Cannot add listener to tied property /fdm[0]/jsbsim[0]/fcs[0]/flap-pos-norm[0]
+14:13:22 [fgfs] 13.96 [WARN]:input     Unhandled HID usage page:d with usage 5
+14:13:22 [fgfs] 13.97 [WARN]:input     Unhandled HID usage page:d with usage e
+14:13:33 [session] Connected to property API on :8080
+14:13:33 [fgfs] 24.84 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:13:38 [fgfs] 30.31 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:13:44 [fgfs] 35.77 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:13:49 [fgfs] 39.72 [WARN]:io        mipmapping: texture size not a power-of-two: D:/FlightGear/data/Textures/Terrain/california-shrub3.png
+14:13:49 [fgfs] 41.27 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:13:56 [fgfs] 47.55 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:13:59 [session] _auto_video skipped: TimeoutError('timed out')
+14:14:01 [session] Property API stopped answering
+14:14:01 [fgfs] 50.90 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'horizon' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:14:01 [fgfs] 51.08 [WARN]:nasal     D:/FlightGear/data/Nasal/canvas/svg.nas:29: parsesvg: Invalid or unsupported clip for element 'ladderLimiter' [path='C:/Users/micha/FruitFly-run/flightgear/Aircraft/737-800/Models/Instruments/PFD/PFD.svg']
+14:14:01 [fgfs] 52.02 [WARN]:io        mipmapping: texture size not a power-of-two: C:/Users/micha/FlightGear/Downloads/TerraSync/Objects/w120n30/w119n33/LAX_pylons_1.rgb
+14:14:01 [fgfs] 52.03 [WARN]:io        mipmapping: texture size not a power-of-two: C:/Users/micha/FlightGear/Downloads/TerraSync/Objects/w120n30/w119n33/LAX_pylons_2.rgb
+14:14:02 [fgfs] 53.48 [WARN]:io        mipmapping: texture size not a power-of-two: C:/Users/micha/FlightGear/Downloads/TerraSync/Objects/w120n30/w119n33/KLAX_Roadway.png
+14:14:02 [fgfs] 53.81 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:14:04 [fgfs] 54.52 [WARN]:general   Canvas: invalid clip: 124, 1024, 1024, 0
+14:14:04 [fgfs] 54.74 [ALRT]:flight    Failed to save initial FDM property state
+14:14:08 [session] Connected to property API on :8080
+14:14:08 [fgfs] 59.96 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:08 [session] Video start failed: FlightGear did not answer (HTTP Error 404: Not Found)
+14:14:10 [fgfs] 60.41 [WARN]:network   JsonUriHandler: requested node not found: 'sim/video/is-encoding'
+14:14:10 [controller] Run started: 2026-11-14T191408Z_michael-taylor_flightgear-connectome
+14:14:10 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T191408Z_michael-taylor_flightgear-connectome
+14:14:10 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+14:14:10 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+14:14:10 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+14:14:10 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:14:12 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-14T191408Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py))
+14:14:12 [fgfs] 64.34 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:16 [fgfs] 68.09 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:16 [controller] CONNECTOME LIF (notebook model)
+14:14:19 [fgfs] 71.30 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:19 [controller] === START: Takeoff fly (standing)  ===
+14:14:19 [controller]     adapted: steer zero -18.8 Hz
+14:14:19 [controller] Waiting for FlightGear runway telemetry on localhost...
+14:14:24 [fgfs] 75.66 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:27 [fgfs] 78.88 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:31 [fgfs] 83.10 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:34 [fgfs] 86.44 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:38 [fgfs] 89.86 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:38 [controller] Run started: 2026-11-14T191437Z_michael-taylor_demo-standin
+14:14:38 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T191437Z_michael-taylor_demo-standin
+14:14:38 [controller] [control] NO FLY BRAIN: probe-table stand-in flying the takeoff
+14:14:38 [controller] [control]   neurons decide: nothing (no connectome is simulated in this run)
+14:14:38 [controller] [control]   code decides:   everything: a lookup table of DN rates measured earlier from the connectome
+14:14:38 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:14:38 [controller] PROBE-TABLE STAND-IN (no connectome)
+14:14:38 [controller] Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+14:14:38 [controller]   zero points: steer=-34.0
+14:14:38 [controller] Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+14:14:38 [controller]    0.0s TAKEOFF ROLL         x=      0m agl=     0ft ias=  0.0kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller]    5.0s TAKEOFF ROLL         x=     17m agl=     0ft ias= 17.2kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller]   10.1s TAKEOFF ROLL         x=     96m agl=     0ft ias= 44.0kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller]   15.1s TAKEOFF ROLL         x=    244m agl=     0ft ias= 70.5kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller]   20.1s TAKEOFF ROLL         x=    458m agl=     0ft ias= 95.4kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller]   25.1s TAKEOFF ROLL         x=    734m agl=     0ft ias=118.4kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller]   30.1s V1                   x=   1066m agl=     0ft ias=139.5kt pitch=  0.0° thr=1.00 | MN9=105 DNp20_L=32 DNp15_R=42
+14:14:38 [controller] Run started: 2026-11-14T191437Z_michael-taylor_flightgear-standin
+14:14:38 [controller] [runlog] C:\Users\micha\FruitFly\.sim-logs\runs\2026-11-14T191437Z_michael-taylor_flightgear-standin
+14:14:38 [controller] [control] NO FLY BRAIN: probe-table stand-in flying the landing
+14:14:38 [controller] [control]   neurons decide: nothing (no connectome is simulated in this run)
+14:14:38 [controller] [control]   code decides:   everything: a lookup table of DN rates measured earlier from the connectome
+14:14:38 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+14:14:38 [controller] FlightGear resumes with the fly's first controls: the fly has the approach.
+14:14:38 [controller] Run finished: 2026-11-14T191437Z_michael-taylor_flightgear-standin exit=0
+14:14:42 [fgfs] 94.10 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:46 [fgfs] 97.46 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:50 [fgfs] 102.45 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:54 [fgfs] 105.75 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:14:58 [fgfs] 109.94 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:02 [fgfs] 113.59 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:05 [fgfs] 117.21 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:09 [fgfs] 120.53 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:12 [fgfs] 123.89 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:15 [fgfs] 127.32 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:19 [fgfs] 130.66 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:23 [fgfs] 134.57 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:26 [fgfs] 137.92 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:30 [session] Property API stopped answering
+14:15:30 [fgfs] 141.16 [WARN]:network   JsonUriHandler: requested node not found: 'autopilot/KAP140/locks'
+14:15:30 [session] tail_controller skipped: JSONDecodeError('Extra data: line 1 column 2 (char 1)')
+14:15:30 [session] FlightGear exited (code 1073741845) - crashed or force-closed

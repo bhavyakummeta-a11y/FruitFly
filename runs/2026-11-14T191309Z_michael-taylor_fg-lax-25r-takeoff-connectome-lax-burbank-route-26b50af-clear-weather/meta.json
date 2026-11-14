@@ -1,0 +1,51 @@
+{
+  "run_id": "2026-11-14T191309Z_michael-taylor_fg-lax-25r-takeoff-connectome-lax-burbank-route-26b50af-clear-weather",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.9,
+      "to_s": 63.0
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+      "detail": "run 2026-11-14T191408Z_michael-taylor_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+      "from_s": 63.0,
+      "to_s": 150.8
+    }
+  ],
+  "name": "LAX 25R takeoff - CONNECTOME, LAX-Burbank route (26b50af), clear weather",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 27600,
+  "fgfs_exit_code": 1073741845,
+  "started_utc": "2026-11-14T19:13:09.844746+00:00",
+  "duration_s": 151,
+  "httpd_port": 8080,
+  "flightgear": {
+    "version": "2024.1.4",
+    "aircraft": "738-flies",
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 59
+  },
+  "airplane_samples": 54,
+  "controller_runs": {
+    "2026-11-14T191408Z_michael-taylor_flightgear-connectome": null,
+    "2026-11-14T191437Z_michael-taylor_demo-standin": null,
+    "2026-11-14T191437Z_michael-taylor_flightgear-standin": {
+      "phase": "APPROACH",
+      "requested_phase": "landing",
+      "exit_code": 0
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "2e79f0d91d845de26ce6e282816978902a390693",
+    "branch": "main"
+  }
+}
