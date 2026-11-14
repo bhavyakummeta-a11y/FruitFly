@@ -73,7 +73,10 @@ class ScreenRecorder:
                '-f', 'gdigrab', '-framerate', str(self.fps), '-draw_mouse', '1',
                '-offset_x', str(x), '-offset_y', str(y), '-video_size', f'{w}x{h}', '-i', 'desktop',
                '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '26', '-pix_fmt', 'yuv420p',
-               '-movflags', '+faststart', str(self.path)]
+               # Fragmented MP4: playable up to the last second even if the
+               # recorder is killed (two takeoff videos were lost that way).
+               '-movflags', '+frag_keyframe+empty_moov+default_base_moof', '-g', str(self.fps),
+               str(self.path)]
         self.started = datetime.now(timezone.utc)
         self.proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL,
                                      stderr=subprocess.PIPE,
