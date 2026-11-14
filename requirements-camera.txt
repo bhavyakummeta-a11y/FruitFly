@@ -1,2 +1,2 @@
 # Optional standalone camera observer; no changes to controller dependencies.
-opencv-python>=4.10,<5
+opencv-python>=4.10,<6

@@ -7,7 +7,7 @@
   "scenery": true,
   "obstacles": [
     {
-      "name": "Tower A",
+      "name": "Tornado A",
       "east": 0,
       "north": 1300,
       "radius": 150,
@@ -15,7 +15,7 @@
       "top": 2000.0
     },
     {
-      "name": "Tower B",
+      "name": "Tornado B",
       "east": 500,
       "north": 3300,
       "radius": 180,
@@ -23,7 +23,7 @@
       "top": 2000.0
     },
     {
-      "name": "Tower C",
+      "name": "Tornado C",
       "east": -150,
       "north": 5400,
       "radius": 200,

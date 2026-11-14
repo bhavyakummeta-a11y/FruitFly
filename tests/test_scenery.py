@@ -11,7 +11,7 @@ from flight_simulator.flightgear import FlightGear
 class SceneryTests(unittest.TestCase):
     def test_known_flightgear_tile(self):
         # Example object coordinates/tile from FlightGear's UFO placement guide.
-        self.assertEqual(str(tile_path(50.03667992,8.57928135)), 'Objects/e000n50/e008n50/3089154.stg')
+        self.assertEqual(tile_path(50.03667992,8.57928135).as_posix(), 'Objects/e000n50/e008n50/3089154.stg')
 
     def test_coordinate_roundtrip_and_dateline(self):
         for origin in [(37.6,-122.35),(-35.2,149.1),(40,179.999)]:
@@ -48,8 +48,14 @@ class SceneryTests(unittest.TestCase):
                 vertices=[tuple(map(float,l.split())) for l in lines[index+1:index+1+count]]
                 self.assertEqual(min(v[1] for v in vertices),0)
                 self.assertEqual(max(v[1] for v in vertices),o.top-o.bottom)
+                # Tornado funnel: never outside the controller's cylinder, as wide as it at the top.
                 for x,y,z in vertices:
-                    self.assertAlmostEqual(math.hypot(x,z),o.radius,places=5)
+                    self.assertLessEqual(math.hypot(x,z),o.radius+1e-5)
+                top=[math.hypot(x,z) for x,y,z in vertices if y==o.top-o.bottom]
+                self.assertAlmostEqual(max(top),o.radius,places=5)
+                foot=[math.hypot(x,z) for x,y,z in vertices if y==0]
+                self.assertLess(max(foot),o.radius*.5)
+                self.assertTrue(model.name.startswith('tornado-'))
                 for j,line in enumerate(lines):
                     if line.startswith('refs '):
                         for ref in lines[j+1:j+1+int(line.split()[1])]:

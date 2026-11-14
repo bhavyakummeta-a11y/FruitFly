@@ -1,4 +1,5 @@
-"""Read-only FlightGear camera observer. Fixed forward view, daylight, known red towers."""
+"""Read-only FlightGear camera observer. Fixed forward view; obstacle tornadoes (dark funnels
+under a storm sky) or the older red towers, and runway edges."""
 import argparse
 from datetime import datetime, timezone
 import json
@@ -32,7 +33,8 @@ def detect(image):
     edges=cv2.Canny(white,60,160)
     lines=cv2.HoughLinesP(edges,1,np.pi/180,30,minLineLength=max(25,h*.18),maxLineGap=20)
     sides=[[],[]]
-    for x1,y1,x2,y2 in ([] if lines is None else lines[:,0]):
+    # OpenCV 4 returns lines as (N,1,4), OpenCV 5 as (N,4).
+    for x1,y1,x2,y2 in ([] if lines is None else np.asarray(lines).reshape(-1,4)):
         if abs(y2-y1)<h*.12:continue
         m=(x2-x1)/(y2-y1);b=x1-m*y1
         if .08<abs(m)<2.5:
@@ -49,7 +51,33 @@ def detect(image):
                 runway={'edges':[[left,yb,xv,yv],[right,yb,xv,yv]],
                         'center_offset':(center-w/2)/(w/2),
                         'axis_tilt_deg':math.degrees(math.atan2(xv-center,yb-yv))}
-    return {'tower_candidates':towers[:20],'runway_candidate':runway}
+    return {'tower_candidates':towers[:20],'tornado_candidates':find_tornadoes(hsv)[:20],
+            'runway_candidate':runway}
+
+
+def find_tornadoes(hsv):
+    """Candidates only: tall dark gray funnels, wider at the top, against a brighter sky.
+
+    The obstacle tornadoes (tornado_shape.py) are dark, unsaturated and widest at the
+    top. Rows of dark wider than 45% of the image (sea, ground, cockpit) are ignored, so
+    a tornado that fills the view is not reported. Tuned on generated images only."""
+    h,w=hsv.shape[:2]
+    s,v=cv2.medianBlur(hsv[:,:,1],5),cv2.medianBlur(hsv[:,:,2],5)   # smooths rain streaks
+    sky=float(np.median(v[:max(1,h//4)]))                           # top quarter = sky brightness
+    if sky<60:return []                                             # too dark to tell
+    dark=((v<sky*.72)&(s<110)).astype(np.uint8)*255
+    wide=cv2.morphologyEx(dark,cv2.MORPH_OPEN,np.ones((1,max(3,int(w*.45))),np.uint8))
+    mask=cv2.morphologyEx(cv2.bitwise_and(dark,cv2.bitwise_not(wide)),cv2.MORPH_OPEN,np.ones((3,3),np.uint8))
+    found=[]
+    for c in cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]:
+        x,y,bw,bh=cv2.boundingRect(c)
+        if bw<6 or bh<max(15,h*.035) or bh/bw<.8:continue
+        widths=np.count_nonzero(mask[y:y+bh,x:x+bw],axis=1)
+        third=max(1,bh//3)
+        top,bottom=widths[:third].mean(),widths[-third:].mean()
+        if top>=1.3*max(bottom,1) and cv2.contourArea(c)/(bw*bh)>.3:
+            found.append([int(x),int(y),int(bw),int(bh)])
+    return sorted(found,key=lambda b:b[2]*b[3],reverse=True)
 
 
 def iou(a,b):
@@ -63,7 +91,9 @@ class Observer:
 
     def update(self,image,timestamp):
         result=detect(image);h,w=image.shape[:2]
-        current=result['tower_candidates'][0] if result['tower_candidates'] else None
+        # Track the largest obstacle candidate of either kind (tornado or red tower).
+        obstacles=sorted(result['tower_candidates']+result['tornado_candidates'],key=lambda b:b[2]*b[3],reverse=True)
+        current=obstacles[0] if obstacles else None
         expansion=None;motion=None
         if current and self.previous:
             old,then,shape=self.previous;dt=timestamp-then
@@ -87,16 +117,19 @@ def annotate(image,result,synthetic=None):
     for x,y,w,h in result['tower_candidates']:
         cv2.rectangle(out,(x,y),(x+w,y+h),(0,140,255),2)
         cv2.putText(out,'tower candidate',(x,max(15,y-5)),cv2.FONT_HERSHEY_SIMPLEX,.45,(0,140,255),1)
+    for x,y,w,h in result.get('tornado_candidates',[]):
+        cv2.rectangle(out,(x,y),(x+w,y+h),(255,200,0),2)
+        cv2.putText(out,'tornado candidate',(x,max(15,y-5)),cv2.FONT_HERSHEY_SIMPLEX,.45,(255,200,0),1)
     runway=result['runway_candidate']
     if runway:
         for a,b,c,d in runway['edges']:cv2.line(out,(round(a),round(b)),(round(c),round(d)),(0,255,0),2)
     panel=np.zeros((175,out.shape[1],3),np.uint8)
     cues=result['candidate_inputs']
     lines=['CAMERA OBSERVER ONLY - no aircraft commands / no brain stimulation',
-           f"Towers: {len(result['tower_candidates'])} | Runway: {'candidate' if runway else 'NOT DETECTED'}",
+           f"Tornadoes: {len(result.get('tornado_candidates',[]))} | Towers: {len(result['tower_candidates'])} | Runway: {'candidate' if runway else 'NOT DETECTED'}",
            'Candidate inputs: '+', '.join(f'{k}={v:.1f}' if v is not None else f'{k}=unknown' for k,v in cues.items())]
     expansion=result.get('expansion_per_s');motion=result.get('lateral_motion_per_s')
-    if expansion is not None:lines.append(f'Tracked tower: expansion {expansion:+.3f}/s; lateral motion {motion:+.3f} image-width/s')
+    if expansion is not None:lines.append(f'Tracked obstacle: expansion {expansion:+.3f}/s; lateral motion {motion:+.3f} image-width/s')
     if runway:lines.append(f"Runway image offset {runway['center_offset']:+.2f}; axis tilt {runway['axis_tilt_deg']:+.1f} deg (not aircraft heading)")
     if synthetic:
         lines.append(f"Synthetic: cross-track {synthetic.get('cross_track_m',0):+.1f} m; heading {synthetic.get('heading_error_deg',0):+.1f} deg")

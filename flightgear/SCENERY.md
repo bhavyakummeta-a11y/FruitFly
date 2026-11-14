@@ -1,13 +1,15 @@
 # Visible obstacle course for FlightGear
 
-This optional scenery overlay adds three large **red-and-white striped towers**
-to the FlightGear world. They are deliberately oversized test markers (2,000 m
-high), not realistic buildings. The same centres, radii, and MSL base/top heights
-are used by the Python controller and companion map. The 32-sided visual mesh is
-inscribed in the controller's cylinder (less than 1 m difference at its edges).
+This optional scenery overlay adds three large **tornadoes** (dark funnels, the
+same shape as the live obstacle tornadoes) to the FlightGear world. They are
+deliberately oversized test markers (2,000 m high) and stand still: scenery
+objects are static, so these funnels don't turn. The same centres, radii, and MSL base/top heights
+are used by the Python controller and companion map. The funnel stays inside
+the controller's cylinder: it is as wide as the cylinder at the top and narrows
+towards the ground.
 
 The bundled course is near San Francisco Bay, with origin **37.600000° N,
-122.350000° W** and towers north of that point. Keep normal terrain scenery
+122.350000° W** and tornadoes north of that point. Keep normal terrain scenery
 installed: this overlay contains objects only and does not replace terrain.
 It does not automatically start the engine, configure trim, or enable native
 FlightGear aircraft collision physics. The Python controller retains its own
@@ -45,7 +47,7 @@ collision/clearance checks.
    Each UDP argument should occur only once. Use daylight, clear visibility and
    calm weather. Restart FlightGear to load the scenery. Start with a running
    engine and stable trim as in the existing Cessna setup. The paused start keeps
-   the plane from passing the first tower while you launch the controller.
+   the plane from passing the first tornado while you launch the controller.
 
 3. From the repository root, run:
 
@@ -54,8 +56,8 @@ collision/clearance checks.
    ```
 
    The companion opens automatically. The controller resumes the paused flight.
-   The first tower is 1.3 km north of the starting point, directly ahead at heading
-   000°. The other towers are 3.3 km and 5.4 km north, offset sideways.
+   The first tornado is 1.3 km north of the starting point, directly ahead at heading
+   000°. The other tornadoes are 3.3 km and 5.4 km north, offset sideways.
 
 4. Once stable, replace `--brain reflex` with `--brain connectome` for neural
    escape decisions. That mode pauses between full-brain trials.
@@ -63,12 +65,12 @@ collision/clearance checks.
 **Use the course.json argument every time.** Running without it uses the older
 moving-origin virtual course, whose objects will not match this scenery. For the
 fixed scenery course, the controller never rotates, rescales, or reanchors the
-towers at startup. Initial heading should be north so the airplane flies through
+tornadoes at startup. Initial heading should be north so the airplane flies through
 the course. Starting more than 20 km away fails with a location error.
 
 ## Troubleshooting
 
-- No towers: confirm the selected scenery folder contains `Objects`, restart
+- No tornadoes: confirm the selected scenery folder contains `Objects`, restart
   FlightGear, check your starting coordinates, and check FlightGear's log for
   missing `.stg` or `.ac` files. Increase visibility and use the supplied static
   object range setting. This course uses FlightGear's classic STG object overlay.

@@ -34,6 +34,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from make_cabin import Mesh, write_ac  # noqa: E402  (same AC writer + FG->AC axes)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+from flight_simulator.tornado_shape import (funnel_radius, funnel_centre,  # noqa: E402,F401
+                                            funnel_rings, is_dark_band)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "Aircraft", "FlyCabin", "Models", "Obstacles")
@@ -48,18 +51,6 @@ TALL = ("Dark", "Mid", "Cap", "Debris", "Bolt")  # scaled by the obstacle's heig
 ALL = TALL + ("Ring",)
 
 
-def funnel_radius(z):
-    """Narrow at the ground, as wide as the obstacle cylinder (1.0) at the top."""
-    return 0.16 + 0.84 * z ** 1.7
-
-
-def funnel_centre(z):
-    """Sideways bend of the funnel; zero at the top so it never leaves the cylinder."""
-    slack = max(0.0, 1.0 - funnel_radius(z))        # room left inside the unit cylinder
-    return (0.8 * slack * 0.45 * math.sin(2.4 * math.pi * z),
-            0.8 * slack * 0.35 * math.sin(1.6 * math.pi * z + 1.0))
-
-
 def circle(z, r, centre=(0.0, 0.0)):
     return [(centre[0] + r * math.cos(2 * math.pi * k / SIDES),
              centre[1] + r * math.sin(2 * math.pi * k / SIDES), z) for k in range(SIDES)]
@@ -67,12 +58,10 @@ def circle(z, r, centre=(0.0, 0.0)):
 
 def tornado_meshes():
     dark, mid = Mesh("Dark", "dark"), Mesh("Mid", "mid")
-    rings = [circle(L / LEVELS, funnel_radius(L / LEVELS), funnel_centre(L / LEVELS))
-             for L in range(LEVELS + 1)]
+    rings = funnel_rings(LEVELS, SIDES)             # shape shared with the scenery course
     for L in range(LEVELS):
         for k in range(SIDES):
-            # Two tones in a helix, so the spin is visible.
-            m = dark if ((k + 3 * L) // 5) % 2 == 0 else mid
+            m = dark if is_dark_band(L, k) else mid
             lo, hi = rings[L], rings[L + 1]
             m.quad(lo[k], lo[(k + 1) % SIDES], hi[(k + 1) % SIDES], hi[k])
     cap = Mesh("Cap", "cap")                         # flat storm cloud closing the top
