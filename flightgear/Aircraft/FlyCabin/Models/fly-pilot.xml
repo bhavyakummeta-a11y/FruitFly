@@ -3,15 +3,21 @@
      The fly pilot in the captain's seat. Its brain is the controller flying the plane:
      the Python controller writes /fruitfly/pilot/{active,power,steer,escape} from the
      brain's descending-neuron rates, and fruitfly.nas turns them into the values below.
+     Its front legs hold the yoke and turn/push with it (/controls/flight/aileron and
+     /elevator, the same rotations as the 737's yoke1).
      Display only - nothing here touches the flight controls. -->
 <PropertyList>
-  <path>fly.ac</path>
+  <path>fly-pilot.ac</path>
   <!-- Hidden in the stock captain view (its eye point is inside the fly's head). -->
   <animation>
     <type>select</type>
     <object-name>Body</object-name><object-name>AbdomenBands</object-name><object-name>Eyes</object-name>
     <object-name>Legs</object-name><object-name>Head</object-name>
     <object-name>WingR</object-name><object-name>WingL</object-name>
+    <object-name>ArmUpperL</object-name>
+    <object-name>ArmUpperR</object-name>
+    <object-name>ArmLowerL</object-name>
+    <object-name>ArmLowerR</object-name>
     <condition><not><equals><property>/sim/current-view/view-number</property><value>0</value></equals></not></condition>
   </animation>
   <animation>
@@ -55,5 +61,29 @@
     <object-name>WingR</object-name><object-name>WingL</object-name>
     <property>/fruitfly/pilot/hop-m</property>
     <axis><x>0</x><y>0</y><z>1</z></axis>
+  </animation>
+  <!-- Front legs on the yoke. Same order and numbers as yoke1 in
+       Aircraft/737-800/Models/cockpit.xml, moved into this model's frame, so the claws
+       stay on the horns: the whole leg swings with the column (elevator), the lower leg
+       also turns with the wheel (aileron) about the hub; the elbow is on that axis. -->
+  <animation>
+    <type>rotate</type>
+    <object-name>ArmUpperL</object-name>
+    <object-name>ArmUpperR</object-name>
+    <object-name>ArmLowerL</object-name>
+    <object-name>ArmLowerR</object-name>
+    <property>/controls/flight/elevator</property>
+    <factor>14.0</factor>
+    <center><x-m>-0.485</x-m><y-m>0.510</y-m><z-m>-0.360</z-m></center>
+    <axis><x>0</x><y>-1</y><z>0</z></axis>
+  </animation>
+  <animation>
+    <type>rotate</type>
+    <object-name>ArmLowerL</object-name>
+    <object-name>ArmLowerR</object-name>
+    <property>/controls/flight/aileron</property>
+    <factor>87.0</factor>
+    <center><x-m>-0.210</x-m><y-m>-0.025</y-m><z-m>0.448</z-m></center>
+    <axis><x>-1</x><y>0</y><z>0</z></axis>
   </animation>
 </PropertyList>
