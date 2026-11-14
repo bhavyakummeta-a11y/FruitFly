@@ -77,5 +77,18 @@ From a checkout whose branch predates `tickets.py`, run the main copy:
 5. When testing the logging code itself, set `FRUITFLY_NO_PUSH=1` so test logs
    are never committed to the shared `sim-logs` branch.
 6. Ask the user before opening FlightGear windows; they take over the screen/GPU.
+7. **The logs must always say who is flying** (fly brain / code / autopilot /
+   LLM / human). The session log keeps a control timeline automatically; you
+   must keep it truthful:
+   - An **LLM agent (you) that sends control inputs to FlightGear directly**
+     (telnet/HTTP `set` on `/controls/...`, keyboard/mouse automation) must
+     declare it first and end it after:
+     `python -m flight_simulator.session control llm --who "<session name>" --note "<what you are doing>"`
+     ... then `python -m flight_simulator.session control end`.
+     Undeclared inputs are logged as "UNATTRIBUTED: human or external program".
+   - A **new controller** that uses `RunLog` must be added to
+     `control_attribution()` in `flight_simulator/runlog.py` with what the
+     neurons decide vs. what code decides; otherwise its runs log "UNKNOWN".
+   - Never label code, a lookup table or a stand-in as the fly brain.
 
 Details: `docs/FLIGHT_SIMULATOR.md` (section "FlightGear sessions").

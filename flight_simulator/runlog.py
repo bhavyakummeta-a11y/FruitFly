@@ -266,11 +266,17 @@ class RunLog:
         self._saved = sys.stdout, sys.stderr
         sys.stdout, sys.stderr = Tee(sys.stdout, self._console), Tee(sys.stderr, self._console)
         self._write_meta()
+        self.control = control_attribution(calling_program(self.argv), self.args)
+        self._meta['control'] = self.control
         sessions = active_sessions(self.base)
         if sessions:
             self._meta['fg_sessions'] = sessions
-            self._dump('meta.json', self._meta)
+        self._dump('meta.json', self._meta)
         print(f'[runlog] {self.dir}', flush=True)
+        print(f"[control] {self.control['label']}\n"
+              f"[control]   neurons decide: {self.control['neurons_decide']}\n"
+              f"[control]   code decides:   {self.control['code_decides']}\n"
+              f"[control]   autopilot:      {self.control['autopilot']}", flush=True)
 
     def _write_meta(self):
         status = git('status', '--porcelain', check=False).splitlines()
@@ -364,8 +370,16 @@ class RunLog:
             rows.append(('FlightGear', f"{fg.get('version', '?')}, {fg.get('aircraft', '?')}, "
                                        f"{fg['warning_lines']} warning lines"))
         notes = getattr(self.args, 'note', None)
+        c = self.control
+        who_flew = ('\n## Who was flying\n\n'
+                    f"**{c['label']}**\n\n"
+                    f"- Neurons decide: {c['neurons_decide']}\n"
+                    f"- Code decides: {c['code_decides']}\n"
+                    f"- Airplane autopilot: {c['autopilot']} (actual autopilot state over time is in the "
+                    'FlightGear session log)\n')
         text = (f'# {self.id}\n\nRun by {self.who}. Command: `{self._meta["command"]}`\n\n'
                 '| | |\n|---|---|\n' + ''.join(f'| {k} | {v} |\n' for k, v in rows)
+                + who_flew
                 + '\n## Notes\n\n' + (f'- {notes}\n' if notes else '')
                 + '\n<!-- add feedback: python -m flight_simulator.runlog note "..." -->\n')
         (self.dir / 'feedback.md').write_text(text, encoding='utf-8')
@@ -414,6 +428,65 @@ def active_sessions(base):
         if isinstance(info, dict):
             found.append({'name': info.get('name'), 'run_id': info.get('run_id')})
     return found
+
+
+AUTOPILOT_RULE = ('never: the fly does not use the airplane autopilot/autothrottle; '
+                  'AutopilotGuard forces it off and stops the run if it cannot')
+
+
+def control_attribution(program, args):
+    """Who controls the airplane in this run, stated plainly for the logs.
+
+    `kind` is one of: FLY_BRAIN (connectome neurons make decisions), NO_FLY_BRAIN
+    (code or a table decides; labelled baseline/stand-in). The airplane autopilot is
+    never part of a controller (repo rule); the session log records its real state.
+    Update this table when a controller changes what it hands to the neurons."""
+    brain = getattr(args, 'brain', None)
+    phase = getattr(args, 'phase', None)
+    if program in ('flight_simulator.takeoff_live', 'flight_simulator.takeoff_landing',
+                   'flight_simulator.mission'):
+        what = {'flight_simulator.mission': 'full mission (takeoff, circuit, landing)'}.get(program, f'{phase or "takeoff"} ')
+        if brain == 'connectome':
+            return {'kind': 'FLY_BRAIN', 'label': f'FLY BRAIN (connectome) flying the {what.strip()}',
+                    'neurons_decide': 'pitch (jump/rotation, flare), steering and roll through descending-neuron '
+                                      'rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)',
+                    'code_decides': 'sensory encoding of the aircraft state, the fixed decoder from DN rates to '
+                                    'controls, the behavioural-state gate (standing/flying), a fixed-gain '
+                                    'pitch-rate reflex (haltere stand-in), and phase handover (flies.py)'
+                                    + ('; takeoff_live holds the parking brake while the brain calibrates and '
+                                       'releases it at the handover' if program == 'flight_simulator.takeoff_live' else ''),
+                    'autopilot': AUTOPILOT_RULE}
+        return {'kind': 'NO_FLY_BRAIN', 'label': f'NO FLY BRAIN: probe-table stand-in flying the {what.strip()}',
+                'neurons_decide': 'nothing (no connectome is simulated in this run)',
+                'code_decides': 'everything: a lookup table of DN rates measured earlier from the connectome',
+                'autopilot': AUTOPILOT_RULE}
+    # obstacle avoidance: python -m flight_simulator
+    if brain == 'connectome':
+        return {'kind': 'FLY_BRAIN', 'label': 'FLY BRAIN (connectome) decides when to escape; code flies the airplane',
+                'neurons_decide': 'when to avoid: the Giant Fibre (DNp01) rate in response to looming',
+                'code_decides': 'turn direction (from obstacle geometry), holding altitude, speed and heading, '
+                                'and flying the avoidance turn (conventional FlightController)',
+                'autopilot': AUTOPILOT_RULE}
+    if brain == 'reflex':
+        return {'kind': 'NO_FLY_BRAIN', 'label': 'NO FLY BRAIN: reflex baseline (a threshold rule) + conventional controller',
+                'neurons_decide': 'nothing (no connectome is simulated in this run)',
+                'code_decides': 'everything: escape = looming above a fixed threshold; the conventional '
+                                'controller holds altitude/speed/heading and flies the turn',
+                'autopilot': AUTOPILOT_RULE}
+    if brain == 'silent':
+        return {'kind': 'NO_FLY_BRAIN', 'label': 'NO FLY BRAIN: silenced-escape control; conventional controller only',
+                'neurons_decide': 'nothing (no connectome; escape disabled)',
+                'code_decides': 'everything: the conventional controller holds altitude/speed/heading',
+                'autopilot': AUTOPILOT_RULE}
+    return {'kind': 'UNKNOWN', 'label': f'UNKNOWN controller ({program}, brain={brain}): add it to control_attribution()',
+            'neurons_decide': '?', 'code_decides': '?', 'autopilot': AUTOPILOT_RULE}
+
+
+def calling_program(argv):
+    if argv and argv[0] == 'takeoff_live':
+        return 'flight_simulator.takeoff_live'
+    spec = getattr(sys.modules.get('__main__'), '__spec__', None)
+    return getattr(spec, 'name', None) or 'flight_simulator.__main__'
 
 
 def runs_dir():

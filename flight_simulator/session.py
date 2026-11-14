@@ -40,6 +40,7 @@ import subprocess
 import sys
 import threading
 import time
+import urllib.error
 import urllib.request
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -71,11 +72,35 @@ AIRPLANE = {
     'elevator': ('/controls/flight/elevator', 1),
     'rudder': ('/controls/flight/rudder', 1),
     'flaps': ('/controls/flight/flaps', 1),
-    'throttle': ('/controls/engines/engine[0]/throttle', 1),
+    'throttle': ('/controls/engines/engine/throttle', 1),      # engine[0]
     'gear_down': ('/controls/gear/gear-down', 1),
     'paused': ('/sim/freeze/clock', 1),
 }
 FLY = {'cabin_activity': ('/fruitfly/passengers/activity', 1)}
+INPUTS = ('aileron', 'elevator', 'rudder', 'throttle')
+CONTROL_LABELS = {
+    'AUTOPILOT': 'AIRPLANE AUTOPILOT ENGAGED: the fly is NOT flying',
+    'UNATTRIBUTED': 'UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) '
+                    'is moving the controls; not the fly brain',
+    'NOBODY': 'Nobody: no controller running and no control inputs',
+}
+
+
+def _branches(props):
+    """Group property paths by parent branch: one HTTP request per branch, not per property."""
+    out = {}
+    for path in props:
+        parent, _, leaf = path.rpartition('/')
+        out.setdefault(parent, []).append(leaf)
+    return out
+
+
+def _ap_text(value):
+    if value is None:
+        return ''
+    if isinstance(value, bool):
+        return '1' if value else '0'
+    return str(value)
 
 
 class Process:
@@ -342,12 +367,18 @@ class Session:
         self.pushed = False
         self.fly_header = ''
         self.brain_state = {'run': None, 'mode': None, 'active': False}
+        self._poll_n = 0
+        self.autopilot = []
+        self.declared = None             # {'by': 'llm'|'human'|'script', 'who', 'note'} via `session control`
+        self.last_inputs, self.inputs_moved = None, 0.0
+        self.control = {'who': 'NOBODY', 'label': CONTROL_LABELS['NOBODY'], 'detail': '', 'since': time.time()}
+        self.control_log = []            # closed segments
         self.brain_trial = {}
         self.dock = None
         self.maxima = {'alt_ft': None, 'ias_kt': None}
         self._airplane = open(self.dir / 'airplane.csv', 'w', newline='', encoding='utf-8')
         self._aw = csv.writer(self._airplane)
-        self._aw.writerow(['wall_utc', *AIRPLANE])
+        self._aw.writerow(['wall_utc', *AIRPLANE, 'autopilot', 'in_control'])
         self._fly = open(self.dir / 'fly_activity.csv', 'w', newline='', encoding='utf-8')
         self._fw = csv.writer(self._fly)
         self._fw.writerow(['wall_utc', 'sim_time_s', 'source', *FLY])
@@ -419,10 +450,39 @@ class Session:
         with urllib.request.urlopen(url, timeout=1.0) as r:
             return json.loads(r.read() or b'{}').get('value')
 
+    def _branch(self, path):
+        url = f'http://127.0.0.1:{self.httpd}/json{path}'
+        with urllib.request.urlopen(url, timeout=1.0) as r:
+            node = json.loads(r.read() or b'{}')
+        return {c['name'] + (f"[{c['index']}]" if c.get('index') else ''): c.get('value')
+                for c in node.get('children', [])}
+
+    def _read(self, props):
+        values = {}
+        for parent, leaves in _branches(props).items():
+            try:
+                kids = self._branch(parent)
+            except urllib.error.HTTPError:      # branch absent on this aircraft
+                kids = {}
+            for leaf in leaves:
+                values[f'{parent}/{leaf}'] = kids.get(leaf)
+        return values
+
+    def _autopilot(self):
+        """Engaged autopilot properties (same list the AutopilotGuard enforces)."""
+        from .flightgear import AUTOPILOT_OFF, autopilot_value_engaged
+        values = self._read(AUTOPILOT_OFF)
+        return [p.rsplit('/', 1)[-1] if '/internal/' in p else p.replace('/autopilot/', '')
+                for p, v in values.items() if autopilot_value_engaged(_ap_text(v))]
+
     def poll(self):
         try:
-            row = {k: self._get(p) for k, (p, _) in AIRPLANE.items()}
-            fly = {k: self._get(p) for k, (p, _) in FLY.items()}
+            raw = self._read([p for p, _ in AIRPLANE.values()] + [p for p, _ in FLY.values()])
+            row = {k: raw[p] for k, (p, _) in AIRPLANE.items()}
+            fly = {k: raw[p] for k, (p, _) in FLY.items()}
+            self._poll_n += 1
+            if self._poll_n % 2 == 1:           # autopilot state at 1 Hz
+                self.autopilot = self._autopilot()
         except (OSError, ValueError):
             if self.connected:
                 self.event('session', 'Property API stopped answering')
@@ -436,7 +496,8 @@ class Session:
             if isinstance(row[k], (int, float)) and not isinstance(row[k], bool) and scale != 1:
                 row[k] = row[k] * scale
         wall = datetime.now(timezone.utc).isoformat(timespec='milliseconds')
-        self._aw.writerow([wall, *row.values()])
+        self._update_control(row)
+        self._aw.writerow([wall, *row.values(), ' '.join(self.autopilot) or 'off', self.control['who']])
         self._fw.writerow([wall, row['sim_time_s'], 'flightgear', *fly.values()])
         self.samples += 1
         if self.samples % 10 == 0:
@@ -459,6 +520,61 @@ class Session:
             s['cabin_activity'].append(fly.get('cabin_activity'))
             for v in s.values():
                 del v[:-HISTORY]
+
+    # ---- who is flying ---------------------------------------------------
+    def _active_controller(self):
+        for name, st in self.controller.items():
+            if not st.get('done') and st.get('control'):
+                return name, st['control']
+        return None, None
+
+    def _update_control(self, row):
+        now = time.time()
+        inputs = tuple(row.get(k) for k in INPUTS)
+        if self.last_inputs and any(isinstance(a, (int, float)) and isinstance(b, (int, float))
+                                    and abs(a - b) > 0.01 for a, b in zip(inputs, self.last_inputs)):
+            self.inputs_moved = now
+        self.last_inputs = inputs
+        run, ctl = self._active_controller()
+        if self.autopilot:
+            who, label = 'AUTOPILOT', CONTROL_LABELS['AUTOPILOT']
+            detail = 'engaged: ' + ', '.join(self.autopilot) + (f'; controller {run} is running' if run else '')
+        elif run:
+            who, label = ctl.get('kind', 'UNKNOWN'), ctl.get('label', run)
+            detail = f"run {run}. Neurons decide: {ctl.get('neurons_decide')}. Code decides: {ctl.get('code_decides')}"
+        elif self.declared:
+            d = self.declared
+            who = d['by'].upper()
+            label = {'LLM': 'LLM agent', 'HUMAN': 'Human pilot', 'SCRIPT': 'Script'}.get(who, who) + f": {d['who']}"
+            detail = d.get('note') or ''
+        elif now - self.inputs_moved < 5:
+            who, label, detail = 'UNATTRIBUTED', CONTROL_LABELS['UNATTRIBUTED'], ''
+        else:
+            who, label, detail = 'NOBODY', CONTROL_LABELS['NOBODY'], ''
+        if (who, label) != (self.control['who'], self.control['label']):
+            self.control_log.append({**self.control, 'until': now})
+            self.control = {'who': who, 'label': label, 'detail': detail, 'since': now}
+            self.event('control', f'IN CONTROL: {label}' + (f' ({detail})' if detail else ''))
+        else:
+            self.control['detail'] = detail
+
+    def declare(self, by, who, note=''):
+        if by == 'end':
+            if self.declared:
+                self.event('control', f"Declared controller ended: {self.declared['by']} {self.declared['who']}")
+            self.declared = None
+        else:
+            self.declared = {'by': by, 'who': who or 'unnamed', 'note': note}
+            self.event('control', f'Declared controller: {by} {who}' + (f' ({note})' if note else ''))
+        return True
+
+    def control_summary(self):
+        segments = self.control_log + [{**self.control, 'until': time.time()}]
+        segments = [g for g in segments if g['until'] - g['since'] >= 0.5]
+        totals = {}
+        for g in segments:
+            totals[g['label']] = totals.get(g['label'], 0) + (g['until'] - g['since'])
+        return segments, totals
 
     # ---- fgfs.log -------------------------------------------------------
     def tail_fg_log(self):
@@ -507,13 +623,24 @@ class Session:
                 self.event('controller', f'Run started: {d.name}')
             if 'brain' not in st and (d / 'meta.json').exists():
                 try:
-                    st['brain'] = json.loads((d / 'meta.json').read_text(encoding='utf-8'))['args']['brain']
+                    meta = json.loads((d / 'meta.json').read_text(encoding='utf-8'))
+                    st['control'] = meta.get('control')
+                    st['brain'] = meta['args'].get('brain')
                     with self.lock:
-                        self.brain_state.update(run=d.name, mode=st['brain'], active=True)
+                        self.brain_state.update(run=d.name, mode=st['brain'], active=True, stage=None)
                 except (OSError, ValueError, KeyError):
                     pass
             if st['done']:
                 continue
+            # What the fly brain is doing right now (loading / calibrating k of n /
+            # flying), written by takeoff_live; the brain page shows it.
+            try:
+                stage = json.loads((d / 'stage.json').read_text(encoding='utf-8'))
+                with self.lock:
+                    if self.brain_state.get('run') == d.name:
+                        self.brain_state['stage'] = stage
+            except (OSError, ValueError):
+                pass
             self._tail_spikes(d, st)
             for name, key in (('console.log', 'console'), ('fly_activity.csv', 'fly')):
                 p = d / name
@@ -566,6 +693,7 @@ class Session:
         with self.lock:
             return {
                 'id': self.id, 'name': self.name, 'status': self.status,
+                'control': self.control, 'autopilot': self.autopilot,
                 'connected': self.connected, 'paused': self.paused,
                 'elapsed_s': round(time.time() - self.started),
                 'flightgear': self.fg_info, 'latest': self.latest,
@@ -587,12 +715,16 @@ class Session:
                 pass
 
             def do_POST(self):
-                if self.path != '/api/name':
+                if self.path not in ('/api/name', '/api/control'):
                     self.send_error(404)
                     return
                 try:
                     body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
-                    ok = session.set_name(str(body.get('name', '')))
+                    if self.path == '/api/control':
+                        ok = body.get('by') in ('llm', 'human', 'script', 'end') and session.declare(
+                            body['by'], str(body.get('who', ''))[:120], str(body.get('note', ''))[:300])
+                    else:
+                        ok = session.set_name(str(body.get('name', '')))
                 except ValueError:
                     ok = False
                 self.send_response(200 if ok else 400)
@@ -617,6 +749,7 @@ class Session:
                 elif self.path.startswith('/api/brain'):
                     with session.lock:
                         data = {**session.brain_state, 'trial': session.brain_trial,
+                                'control': session.control, 'autopilot': session.autopilot,
                                 'name': session.name, 'status': session.status,
                                 'fly_header': session.fly_header,
                                 'fly_controller': session.fly_ctrl[-120:]}
@@ -724,7 +857,11 @@ class Session:
             '\n'.join(runlog.filter_fg_log(self.fg_kept)) + '\n', encoding='utf-8')
         duration = round(time.time() - self.started)
         controller = {k: v.get('result') for k, v in self.controller.items()}
+        segments, totals = self.control_summary()
         meta = {'run_id': self.id, 'who': self.who, 'kind': 'flightgear-session',
+                'control_timeline': [{'who': g['who'], 'label': g['label'], 'detail': g['detail'],
+                                      'from_s': round(g['since'] - self.started, 1),
+                                      'to_s': round(g['until'] - self.started, 1)} for g in segments],
                 'name': self.name, 'aircraft': self.aircraft,
                 'fgfs_pid': self.a.pid, 'fgfs_exit_code': code,
                 'started_utc': datetime.fromtimestamp(self.started, timezone.utc).isoformat(),
@@ -750,6 +887,14 @@ class Session:
                 + ('' if self.name else '> **This session was never named.** Name sessions with '
                    '`--name` on the launcher or on the live page.\n\n')
                 + '| | |\n|---|---|\n' + ''.join(f'| {k} | {v} |\n' for k, v in rows)
+                + '\n## Who was flying\n\n'
+                + '| Who | Time |\n|---|---|\n'
+                + ''.join(f'| {label} | {t // 60:.0f} min {t % 60:.0f} s |\n'
+                          for label, t in sorted(totals.items(), key=lambda kv: -kv[1]))
+                + '\nTimeline (seconds from session start):\n\n'
+                + ''.join(f"- {g['since'] - self.started:6.0f} to {g['until'] - self.started:6.0f}: "
+                          f"**{g['label']}**" + (f" ({g['detail']})" if g['detail'] else '') + '\n'
+                          for g in segments)
                 + '\n## Notes\n\n<!-- add feedback: python -m flight_simulator.runlog note "..." -->\n')
         (self.dir / 'feedback.md').write_text(text, encoding='utf-8')
         message = f'sim log: FlightGear session "{title}" {outcome}, {duration // 60} min ({self.who})'
@@ -769,6 +914,12 @@ def main(argv=None):
     at.add_argument('--pid', type=int)
     at.add_argument('--name')
     at.add_argument('--no-browser', action='store_true')
+    ct = sub.add_parser('control', help='declare who is flying when it is not a project controller '
+                                        '(required for LLM agents sending control inputs)')
+    ct.add_argument('by', choices=['llm', 'human', 'script', 'end'])
+    ct.add_argument('--who', default='', help='e.g. the Claude session name')
+    ct.add_argument('--note', default='')
+    ct.add_argument('--pid', type=int)
     sub.add_parser('watchdog', help='(internal) attach a logger to every fgfs that appears')
     sub.add_parser('ensure-watchdog', help='start the watchdog if it is not running')
     sub.add_parser('install-autostart', help='run the watchdog at every Windows logon')
@@ -793,6 +944,15 @@ def main(argv=None):
         else:
             spawn(pids[0], a.name, not a.no_browser)
             print('Session logger attached; live page opening.')
+    elif a.cmd == 'control':
+        pids = [a.pid] if a.pid else find_fgfs()
+        info = read_lock(sessions_dir() / f'{pids[0]}.lock') if len(pids) == 1 else None
+        if not info or not info.get('url'):
+            sys.exit('No single logged FlightGear session found; pass --pid.')
+        req = urllib.request.Request(info['url'] + 'api/control', method='POST',
+                                     data=json.dumps({'by': a.by, 'who': a.who, 'note': a.note}).encode())
+        urllib.request.urlopen(req, timeout=3).read()
+        print(f"Session {info.get('name')!r}: control declared as {a.by} {a.who}".strip())
     elif a.cmd == 'watchdog':
         watchdog()
     elif a.cmd == 'ensure-watchdog':
