@@ -119,8 +119,11 @@ class StormScript(unittest.TestCase):
 
     def test_aircraft_loads_the_storm_script_in_both_copies(self):
         overlay = (ROOT / 'flightgear' / 'overlay' / '738-flies-set.xml').read_text(encoding='utf-8')
-        installed = (ROOT / 'flightgear' / 'Aircraft' / '737-800' / '738-flies-set.xml').read_text(encoding='utf-8')
         self.assertIn('Aircraft/FlyCabin/Nasal/storm.nas', overlay)
+        installed = ROOT / 'flightgear' / 'Aircraft' / '737-800' / '738-flies-set.xml'
+        if not installed.exists():   # the stock 737 is not committed
+            self.skipTest('stock 737-800 not installed: run flightgear/setup_aircraft.py')
+        installed = installed.read_text(encoding='utf-8')
         self.assertEqual(overlay.replace('\r\n', '\n'), installed.replace('\r\n', '\n'))
 
 

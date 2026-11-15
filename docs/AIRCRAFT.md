@@ -15,7 +15,7 @@ Alternatives we considered: the CRJ700 (smaller and more forgiving), the Q400 (a
 Everything lives in [`flightgear/`](../flightgear/README.md):
 
 ```
-python flightgear/setup_aircraft.py   # stock FGAddon 737-800 (package id 738) is committed in flightgear/Aircraft/737-800; this installs our overlay
+python flightgear/setup_aircraft.py   # downloads the stock FGAddon 737-800 (package id 738) into flightgear/Aircraft/737-800 (not committed) and installs our overlay
 python flightgear/launch.py           # KSFO 28R, telnet 5500, httpd 8080
 ```
 

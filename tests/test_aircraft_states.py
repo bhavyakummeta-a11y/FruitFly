@@ -12,6 +12,8 @@ from flight_simulator.aircraft_states import (REPO_AIRCRAFT, check_command,  # n
 
 ROOT = Path(__file__).resolve().parent.parent
 REPO_IDS = sorted(p.name[:-len('-set.xml')] for p in REPO_AIRCRAFT.glob('*/*-set.xml'))
+# The stock 737 is not committed; flightgear/setup_aircraft.py downloads it.
+needs_737 = unittest.skipUnless(REPO_IDS, 'stock 737-800 not installed: run flightgear/setup_aircraft.py')
 
 
 class StateParsing(unittest.TestCase):
@@ -31,6 +33,7 @@ class StateParsing(unittest.TestCase):
             with self.assertRaises(ValueError):
                 check_command(cmd + ['--state=landing'])
 
+    @needs_737
     def test_738_flies_has_no_cruise_state(self):
         """Regression for issue #2: this exact command must be rejected."""
         cmd = ['fgfs', f'--fg-aircraft={REPO_AIRCRAFT}', '--aircraft=738-flies', '--state=cruise']
@@ -39,6 +42,7 @@ class StateParsing(unittest.TestCase):
 
 
 class LauncherCommands(unittest.TestCase):
+    @needs_737
     def test_launch_fg_command_is_valid_for_every_repo_aircraft(self):
         from flight_simulator import launch_fg
         self.assertTrue(REPO_IDS, 'no aircraft found under flightgear/Aircraft')

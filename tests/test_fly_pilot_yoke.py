@@ -15,6 +15,9 @@ import make_cabin as mc  # noqa: E402
 
 MODELS = ROOT / 'flightgear' / 'Aircraft' / 'FlyCabin' / 'Models'
 COCKPIT = ROOT / 'flightgear' / 'Aircraft' / '737-800' / 'Models'
+# The stock 737 is not committed; flightgear/setup_aircraft.py downloads it.
+needs_737 = unittest.skipUnless((COCKPIT / 'cockpit.xml').exists(),
+                                'stock 737-800 not installed: run flightgear/setup_aircraft.py')
 
 
 def ac_objects(path):
@@ -60,6 +63,7 @@ def yoke_animations():
 
 
 class YokeGeometry(unittest.TestCase):
+    @needs_737
     def test_constants_match_the_737_cockpit_model(self):
         anims = yoke_animations()
         (pc, pa, pf), (hc, ha, hf) = anims['elevator'], anims['aileron']
@@ -75,6 +79,7 @@ class YokeGeometry(unittest.TestCase):
         m = re.search(r'<name>flypilot</name>.*?<x-m>([-\d.]+)</x-m><y-m>([-\d.]+)</y-m><z-m>([-\d.]+)</z-m>', xml)
         self.assertEqual(tuple(map(float, m.groups())), mc.PILOT_SEAT)
 
+    @needs_737
     def test_claws_stay_on_the_horns_and_elbows_attached_as_the_yoke_moves(self):
         yoke = ac_objects(COCKPIT / 'cockpit.ac')['yoke1']
         yoke = [(x - 18.31, y, z) for x, y, z in yoke]

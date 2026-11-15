@@ -17,9 +17,10 @@ __pycache__/
 data/brain/
 runs/
 
-# FlightGear: download cache for flightgear/setup_aircraft.py
-# (the stock 737-800 itself is committed under flightgear/Aircraft/737-800/)
+# FlightGear: download cache for flightgear/setup_aircraft.py, and the stock
+# 737-800 it installs (not committed; setup_aircraft.py downloads it)
 flightgear/downloads/
+flightgear/Aircraft/737-800/
 
 # Local checkout of the sim-logs branch (flight_simulator/runlog.py)
 .sim-logs/

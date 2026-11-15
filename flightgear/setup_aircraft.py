@@ -3,7 +3,7 @@
     python flightgear/setup_aircraft.py
 
 Result (flightgear/Aircraft/ is what you pass to --fg-aircraft):
-    flightgear/Aircraft/737-800/                stock aircraft (committed, ~46 MB; re-downloaded only if missing)
+    flightgear/Aircraft/737-800/                stock aircraft (not committed, ~46 MB; downloaded if missing)
     flightgear/Aircraft/737-800/738-flies-set.xml   copied from overlay/
     flightgear/Aircraft/FlyCabin/               our cabin + fly models (committed)
 
