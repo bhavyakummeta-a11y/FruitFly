@@ -475,7 +475,8 @@ def control_attribution(program, args):
                     'code_decides': 'synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to '
                                     'controls, the behavioural-state gate (standing/flying), a fixed-gain '
                                     'pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, '
-                                    'stale-decision rejection, a fixed flare pitch envelope, and phase handover (flies.py)'
+                                    'stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), '
+                                    'landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py)'
                                     + ('; airport waypoints, MSL/runway transforms, predictive obstacle heading selection, '
                                        'and destination rollout braking are code rules (airport_route.py)' if getattr(args,'route',None) else '')
                                     + ('; takeoff_live holds the parking brake while the brain calibrates and '

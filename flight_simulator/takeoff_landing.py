@@ -30,6 +30,7 @@ from .flies import TakeoffFly, LandingFly, StandInBrain, run_phase, row, summari
 from .runway import (RunwaySim, FLAPS5, FLAPS30, FT, KT, RUNWAY_LENGTH,
                      takeoff_start, trimmed_approach, trim_elevator)
 
+FG_APPROACH_ELEVATOR, FG_APPROACH_PITCH = -0.22, 3.7  # FlightGear 737, flaps 30, ~147 kt
 TOUCHDOWN_ZONE = (0.0, 900.0)  # m past the threshold
 MAX_SINK_FPM = 500.0
 
@@ -123,9 +124,14 @@ def run_flightgear(args, fly, log):
                     return default
             throttle_now = fg_value('/controls/engines/engine[0]/throttle', args.approach_throttle)
             fly.trim_throttle = fly.throttle = throttle_now if throttle_now > 0.15 else args.approach_throttle
-            fly.elevator_i = fg_value('/controls/flight/elevator', 0.0)
-            from .flies import APPROACH_ALPHA
-            fly.trim_pitch_deg = APPROACH_ALPHA - 3.0  # not the sampled pitch: it may be mid-balloon or mid-dive
+            # Measured on FlightGear's 737 (KLAX connectome landing, 2026-11-14, 111 samples of a
+            # stable 3 deg approach at 147 kt, flaps 30, throttle 0.51): elevator -0.22 and pitch
+            # 3.7 deg. Starting the reflex at FlightGear's spawn elevator (0.0) and holding a
+            # 1.5 deg reference made the 737 dive at -1,500 fpm, speed up past Vref+15 and go around.
+            elevator_now = fg_value('/controls/flight/elevator', 0.0)
+            fly.elevator_i = elevator_now if abs(elevator_now) > 0.05 else FG_APPROACH_ELEVATOR
+            fly.approach_alpha = FG_APPROACH_PITCH + 3.0
+            fly.trim_pitch_deg = FG_APPROACH_PITCH  # not the sampled pitch: it may be mid-balloon or mid-dive
             print(f'Landing handover: throttle {fly.trim_throttle:.2f}, elevator {fly.elevator_i:+.2f}, '
                   f'reference attitude {fly.trim_pitch_deg:.1f} deg (plane at {math.degrees(s.pitch):.1f} deg, '
                   f'{s.climb / FT * 60:+.0f} fpm)', flush=True)

@@ -39,6 +39,9 @@ VREF = 140 * KT
 VAPP = VREF + 5 * KT   # approach speed target
 LOOM_TAU = 8.0         # s, time-to-contact at which the runway starts to loom
 FLARE_GAIN = 2.5       # deg/s of nose-up per 20 Hz of DNp07
+FLARE_PITCH_ABOVE_APPROACH = 5.0  # deg: flare envelope above the approach attitude (never past 9). A live
+                       # FlightGear flare went 3.4 -> 8.5 deg with power, ballooned to 28 ft and floated 700 m.
+IDLE_BELOW_FT = 30.0   # scripted: thrust levers to idle in the flare or below this height
 GS_GAIN = 3.0          # deg of pitch target per deg below the glideslope
 JUMP_RATE = 2.5        # deg/s nose-up at full escape activity (FG 737 lifted off at 10.9 deg with 3.0)
 AIR_RUDDER = 0.1       # max rudder in the air (0.3 held after handover rolled the FG 737 over)
@@ -371,6 +374,7 @@ class LandingFly(PhaseFly):
         self.low_appetite = 0
         self.go_around = False
         self.touched_down = False
+        self.flaring = False      # latched at the first neural flare (DNp07) below 100 ft
         self.flare_pitch_deg = None
         self.handover_time = None
         self.anchored = False
@@ -392,7 +396,7 @@ class LandingFly(PhaseFly):
             self.anchored = True
             here = math.atan2(s.agl, max(AIM_POINT - s.x, 1.0))
             self.path_angle = min(max(here, math.radians(1.5)), math.radians(4.0))
-            self.trim_pitch_deg = APPROACH_ALPHA - math.degrees(self.path_angle)
+            self.trim_pitch_deg = getattr(self, 'approach_alpha', APPROACH_ALPHA) - math.degrees(self.path_angle)
             self.flare_pitch_deg = None
             print(f'Landing fly: approach path re-anchored at {math.degrees(self.path_angle):.1f} deg '
                   f'from {s.agl / FT:.0f} ft, {AIM_POINT - s.x:.0f} m out', flush=True)
@@ -463,17 +467,27 @@ class LandingFly(PhaseFly):
             # (takeoff jump) are decoupled and only logged.
             if s.agl < 100 * FT and not self.go_around:
                 flare = FLARE_GAIN * clip(r["DNp07"] / 20.0, 0, 1.6)
-                q_deg += flare
-                # Fixed flare-envelope rule: leave margin below the model's 11-degree
-                # tail strike attitude, including momentum from the current pitch rate.
-                q_deg = min(q_deg, 2.0 * (9.0 - math.degrees(s.pitch))
-                            - math.degrees(s.pitch_rate))
                 if flare > 0.3:
+                    self.flaring = True
                     note = f'FLARE: DNp07 {r["DNp07"]:.0f} Hz'
+                # Fixed flare-envelope rules (code): the flare only arrests the sink - once the
+                # plane stops descending it holds its attitude instead of pitching up into a
+                # balloon - and stays within a few degrees of the approach attitude, with margin
+                # below the 11-degree tail strike, including momentum from the pitch rate.
+                if s.climb >= 0:
+                    flare, q_deg = 0.0, min(q_deg, 0.0)
+                q_deg += flare
+                cap = min(9.0, (self.trim_pitch_deg or APPROACH_ALPHA - 3.0) + FLARE_PITCH_ABOVE_APPROACH)
+                q_deg = min(q_deg, 2.0 * (cap - math.degrees(s.pitch)) - math.degrees(s.pitch_rate))
             # Throttle from MN9 around the approach power. Go-around: MN9 collapses
             # (bitter suppresses appetite) while still above 100 ft.
             if self.go_around:
                 self.throttle = HOLD_THROTTLE if self.hold else 1.0
+            elif self.flaring or s.agl < IDLE_BELOW_FT * FT:
+                # Scripted landing checklist: thrust to idle in the flare and stays there, so
+                # MN9 can't add power in a float (it did: 0.22 -> 0.59 over the runway).
+                self.flaring = True
+                self.throttle = 0.0
             else:
                 self.throttle = clip(self.trim_throttle + 0.005 * (r['MN9'] - self.zero['MN9']), 0, 1)
                 if s.agl > 100 * FT:
@@ -502,7 +516,7 @@ class LandingFly(PhaseFly):
             if s.speed < 30 * KT:
                 self.status.done = True
         elif s.agl < 100 * FT:
-            self.status.phase = 'FLARE' if self.q_cmd > math.radians(0.5) else 'FINAL'
+            self.status.phase = 'FLARE' if (self.flaring or self.q_cmd > math.radians(0.5)) else 'FINAL'
 
 
 class StandInBrain:
