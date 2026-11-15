@@ -1,0 +1,4 @@
+11:56:50 [session] Session 'UNNAMED' watching fgfs pid 24516
+11:56:50 [session] This session has NO NAME - enter one on the live page (or: python -m flight_simulator.session attach --name "...")
+11:56:50 [session] Live log page: http://127.0.0.1:8765/
+11:56:51 [session] FlightGear exited (code 1) - crashed or force-closed

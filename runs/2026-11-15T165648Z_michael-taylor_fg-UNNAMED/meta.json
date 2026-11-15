@@ -1,0 +1,34 @@
+{
+  "run_id": "2026-11-15T165648Z_michael-taylor_fg-UNNAMED",
+  "who": "Michael Taylor",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 1.2,
+      "to_s": 12.9
+    }
+  ],
+  "name": null,
+  "aircraft": null,
+  "graphics": "not set (FlightGear defaults or launcher settings)",
+  "weather": "not set (FlightGear defaults or launcher settings)",
+  "fgfs_pid": 24516,
+  "fgfs_exit_code": 1,
+  "started_utc": "2026-11-15T16:56:48.849121+00:00",
+  "duration_s": 13,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "C:\\Users\\micha\\AppData\\Roaming\\flightgear.org\\fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 0,
+  "controller_runs": {},
+  "videos": [],
+  "code": {
+    "commit": "feaefd52d7682f58f8916dd2c3e0c48a87de3563",
+    "branch": "main"
+  }
+}
