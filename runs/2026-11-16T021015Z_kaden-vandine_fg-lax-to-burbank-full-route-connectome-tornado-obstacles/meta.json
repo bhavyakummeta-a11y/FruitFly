@@ -1,0 +1,45 @@
+{
+  "run_id": "2026-11-16T021015Z_kaden-vandine_fg-lax-to-burbank-full-route-connectome-tornado-obstacles",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 13.5
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+      "detail": "run 2026-11-16T021027Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+      "from_s": 13.5,
+      "to_s": 604.2
+    }
+  ],
+  "name": "LAX to Burbank full route, connectome, tornado obstacles",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "lax",
+  "fgfs_pid": 143837,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-16T02:10:15.960205+00:00",
+  "duration_s": 604,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 368,
+  "controller_runs": {
+    "2026-11-16T021027Z_kaden-vandine_flightgear-connectome": {
+      "exit_code": 1
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "ba9fab7e24bc7691b37d601650023759c2d958be",
+    "branch": "main"
+  }
+}

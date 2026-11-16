@@ -1,0 +1,33 @@
+21:10:15 [session] Session 'LAX to Burbank full route, connectome, tornado obstacles' watching fgfs pid 143837 (738-flies)
+21:10:15 [session] Live log page: http://127.0.0.1:8765/
+21:10:27 [session] Connected to property API on :8080
+21:10:27 [controller] Run started: 2026-11-16T021027Z_kaden-vandine_flightgear-connectome
+21:10:27 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T021027Z_kaden-vandine_flightgear-connectome
+21:10:27 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+21:10:27 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+21:10:27 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+21:10:27 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+21:10:29 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-16T021027Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py))
+21:10:30 [controller] CONNECTOME LIF (notebook model)
+21:10:35 [controller] === START: Takeoff fly (standing)  ===
+21:10:35 [controller]     adapted: steer zero -18.8 Hz
+21:10:35 [controller] Waiting for FlightGear runway telemetry on localhost...
+21:12:17 [session] Property API stopped answering
+21:12:20 [session] Connected to property API on :8080
+21:20:03 [session] Property API stopped answering
+21:20:06 [controller] Sky -> clear
+21:20:06 [controller] === HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1005 ft, 191 kt ===
+21:20:06 [controller]     adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+21:20:06 [controller]     sky: darkening (12.3 km along the route)
+21:20:06 [controller] Sky -> darkening
+21:20:06 [controller]     sky: storm (16.1 km along the route)
+21:20:06 [controller] Sky -> storm
+21:20:06 [controller]     sky: clearing (39.0 km along the route)
+21:20:06 [controller] Sky -> clearing
+21:20:06 [controller]     sky: burbank (44.7 km along the route)
+21:20:06 [controller]     runway briefing: KBUR runway 08: heading 91 true, 1768 m long, 46 m wide, threshold 727 ft, 3 degree glide path, wind calm. Cleared to land runway 08.
+21:20:06 [controller] Sky -> burbank
+21:20:06 [controller] WARNING: FlightGear did not acknowledge the end-of-run pause.
+21:20:06 [controller] Error: [Errno 104] Connection reset by peer
+21:20:06 [controller] Run finished: 2026-11-16T021027Z_kaden-vandine_flightgear-connectome exit=1
+21:20:10 [session] FlightGear exited (code None)
