@@ -1,0 +1,124 @@
+diff --git a/flight_simulator/takeoff_live.py b/flight_simulator/takeoff_live.py
+index 2a7cb8c..9c915c4 100644
+--- a/flight_simulator/takeoff_live.py
++++ b/flight_simulator/takeoff_live.py
+@@ -30,14 +30,33 @@ def parking_brake(telnet_port, on):
+     The takeoff start has the engines already running and the parking brake off, so
+     without this the airplane creeps off the runway at idle before the fly ever gets
+     the controls (2026-11-14: 30 m off the centerline, heading 195 instead of 284, at
+-    handover). Released right before the fly takes over. Not an autopilot."""
+-    from .flightgear import telnet_get
+-    try:
+-        with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
+-            s.sendall(f'data\r\nset /controls/gear/brake-parking {int(on)}\r\nquit\r\n'.encode())
+-    except OSError:
+-        return False
+-    return telnet_get(telnet_port, '/controls/gear/brake-parking') in (str(int(on)), str(bool(on)).lower())
++    handover). Released right before the fly takes over. Not an autopilot.
++
++    Set and read back on ONE connection, retried for a few seconds. Sending
++    `set` + `quit` and closing at once let FlightGear drop the `set` (it can see the
++    close before the buffered command), so the separate read-back found the old value:
++    "Could not hold/release the parking brake" (2026-11-16, Linux, twice)."""
++    want = (str(int(on)), str(bool(on)).lower())
++    deadline = time.monotonic() + 5.0
++    while True:
++        try:
++            with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
++                s.sendall(f'data\r\nset /controls/gear/brake-parking {int(on)}\r\n'
++                          'get /controls/gear/brake-parking\r\n'.encode())
++                reply, end = b'', time.monotonic() + 3
++                while b'\n' not in reply and time.monotonic() < end:
++                    chunk = s.recv(256)
++                    if not chunk:
++                        break
++                    reply += chunk
++                s.sendall(b'quit\r\n')
++            if reply.decode(errors='replace').strip() in want:
++                return True
++        except OSError:
++            pass
++        if time.monotonic() >= deadline:
++            return False
++        time.sleep(0.25)
+ 
+ 
+ CALIBRATION_TRIALS = 20  # flies.PhaseFly.calibrate() default
+diff --git a/tests/test_takeoff_live.py b/tests/test_takeoff_live.py
+index ea8e542..fba6fa2 100644
+--- a/tests/test_takeoff_live.py
++++ b/tests/test_takeoff_live.py
+@@ -120,5 +120,73 @@ class TakeoffLiveTests(unittest.TestCase):
+         self.assertEqual(row, {'time': 1.0, 'phase': 'ROLL', 'in_sugar_hz': 200, 'MN9_hz': 65})
+ 
+ 
++class FakeTelnet:
++    """FlightGear telnet stand-in that drops the first `drop` sets, like fgfs did
++    when the client closed right after `set` (2026-11-16)."""
++    def __init__(self, drop):
++        import socket, threading
++        self.value, self.drop, self.connections = '0', drop, 0
++        self.server = socket.socket()
++        self.server.bind(('127.0.0.1', 0))
++        self.server.listen()
++        self.port = self.server.getsockname()[1]
++        threading.Thread(target=self.serve, daemon=True).start()
++
++    def serve(self):
++        while True:
++            try:
++                conn, _ = self.server.accept()
++            except OSError:
++                return
++            self.connections += 1
++            with conn:
++                buf = b''
++                while True:
++                    data = conn.recv(256)
++                    if not data:
++                        break
++                    buf += data
++                    while b'\r\n' in buf:
++                        line, buf = buf.split(b'\r\n', 1)
++                        words = line.decode().split()
++                        if words[:1] == ['set']:
++                            if self.drop:
++                                self.drop -= 1
++                            else:
++                                self.value = words[2]
++                        elif words[:1] == ['get']:
++                            conn.sendall(self.value.encode() + b'\r\n')
++                        elif words[:1] == ['quit']:
++                            break
++
++    def close(self):
++        self.server.close()
++
++
++class ParkingBrakeTests(unittest.TestCase):
++    def test_set_is_read_back_on_the_same_connection(self):
++        fg = FakeTelnet(drop=0)
++        self.addCleanup(fg.close)
++        self.assertTrue(takeoff_live.parking_brake(fg.port, True))
++        self.assertEqual(fg.value, '1')
++        self.assertEqual(fg.connections, 1)
++
++    def test_dropped_set_is_retried(self):
++        fg = FakeTelnet(drop=2)
++        self.addCleanup(fg.close)
++        self.assertTrue(takeoff_live.parking_brake(fg.port, True))
++        self.assertEqual(fg.value, '1')
++        self.assertEqual(fg.connections, 3)
++
++    def test_no_flightgear_fails_after_retrying(self):
++        import socket
++        s = socket.socket()
++        s.bind(('127.0.0.1', 0))
++        port = s.getsockname()[1]
++        s.close()  # nothing listens here
++        with mock.patch.object(takeoff_live.time, 'sleep'):
++            self.assertFalse(takeoff_live.parking_brake(port, False))
++
++
+ if __name__ == '__main__':
+     unittest.main()
