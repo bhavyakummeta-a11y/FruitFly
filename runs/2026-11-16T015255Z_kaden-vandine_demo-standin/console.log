@@ -1,0 +1,102 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T015255Z_kaden-vandine_demo-standin
+[control] NO FLY BRAIN: probe-table stand-in flying the takeoff
+[control]   neurons decide: nothing (no connectome is simulated in this run)
+[control]   code decides:   everything: a lookup table of DN rates measured earlier from the connectome
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+usage: python -m flight_simulator.takeoff_live [-h]
+                                               --brain {connectome,standin}
+                                               [--backend {demo,flightgear}]
+                                               [--data DATA] [--seed SEED]
+                                               [--no-calibrate]
+                                               [--noise-seed NOISE_SEED]
+                                               [--silence {sugar,bitter,looming,hs_left,hs_right,vs_left,vs_right,translational_flow,DNp01,DNp02,DNp04,DNp06,DNp11,DNp07,DNp10,DNp09,MDN,DNg02,DNa01_L,DNa01_R,DNa02_L,DNa02_R,DNp15_L,DNp15_R,DNp20_L,DNp20_R,DNp22_L,DNp22_R,MN9} [{sugar,bitter,looming,hs_left,hs_right,vs_left,vs_right,translational_flow,DNp01,DNp02,DNp04,DNp06,DNp11,DNp07,DNp10,DNp09,MDN,DNg02,DNa01_L,DNa01_R,DNa02_L,DNa02_R,DNp15_L,DNp15_R,DNp20_L,DNp20_R,DNp22_L,DNp22_R,MN9} ...]]
+                                               [--period PERIOD]
+                                               [--seconds SECONDS]
+                                               [--fault-at-kt FAULT_AT_KT]
+                                               [--offset-m OFFSET_M]
+                                               [--yaw-drift YAW_DRIFT]
+                                               [--start-speed-kt START_SPEED_KT]
+                                               [--high-ft HIGH_FT]
+                                               [--runway LAT LON HDG]
+                                               [--final-nm FINAL_NM]
+                                               [--approach-throttle APPROACH_THROTTLE]
+                                               [--telemetry-port TELEMETRY_PORT]
+                                               [--control-port CONTROL_PORT]
+                                               [--vision-port VISION_PORT]
+                                               [--vision-obstacles VISION_OBSTACLES]
+                                               [--log LOG]
+                                               [--body-port BODY_PORT]
+                                               [--no-fly-body] [--smooth]
+                                               [--no-cockpit-fly]
+                                               [--plot PLOT]
+                                               {takeoff,landing}
+
+Fly the 737-800 through takeoff or landing with a fly brain.
+
+    python -m flight_simulator.takeoff_landing takeoff --brain connectome
+    python -m flight_simulator.takeoff_landing landing --brain connectome
+    python -m flight_simulator.takeoff_landing takeoff --brain standin --fault-at-kt 100   # rejected takeoff
+    python -m flight_simulator.takeoff_landing landing --brain connectome --silence looming  # lesion control
+
+Two configured brains on one connectome (docs/TAKEOFF_LANDING_PLAN.md):
+the Takeoff fly is a *standing* fly (looming -> jump = rotation), the Landing
+fly is a *flying* fly (looming -> DNp07 leg extension = flare).
+
+--brain connectome runs the real FlyWire 783 LIF model (needs requirements-brain.txt
+and `python -m flight_simulator.download_data`). --brain standin is a
+deterministic lookup of the measured probe table, labelled as NOT a fly brain,
+for fast offline runs and tests.
+
+Exit status: 0 = success criteria met, 2 = failed (crash, tail strike, hard
+landing, off the runway), 1 = configuration/runtime error.
+
+positional arguments:
+  {takeoff,landing}
+
+options:
+  -h, --help            show this help message and exit
+  --brain {connectome,standin}
+  --backend {demo,flightgear}
+  --data DATA
+  --seed SEED
+  --no-calibrate        Skip the pre-flight adaptation trials that measure the
+                        zero points
+  --noise-seed NOISE_SEED
+                        standin only: add the connectome's spike-count noise
+                        (1-4 neurons per readout)
+  --silence {sugar,bitter,looming,hs_left,hs_right,vs_left,vs_right,translational_flow,DNp01,DNp02,DNp04,DNp06,DNp11,DNp07,DNp10,DNp09,MDN,DNg02,DNa01_L,DNa01_R,DNa02_L,DNa02_R,DNp15_L,DNp15_R,DNp20_L,DNp20_R,DNp22_L,DNp22_R,MN9} [{sugar,bitter,looming,hs_left,hs_right,vs_left,vs_right,translational_flow,DNp01,DNp02,DNp04,DNp06,DNp11,DNp07,DNp10,DNp09,MDN,DNg02,DNa01_L,DNa01_R,DNa02_L,DNa02_R,DNp15_L,DNp15_R,DNp20_L,DNp20_R,DNp22_L,DNp22_R,MN9} ...]
+                        Lesion control: cut the outgoing synapses of these
+                        groups
+  --period PERIOD       Seconds of sim time between brain trials
+  --seconds SECONDS
+  --fault-at-kt FAULT_AT_KT
+                        Takeoff: inject a reject condition at this speed
+  --offset-m OFFSET_M   Initial centerline offset (demo)
+  --yaw-drift YAW_DRIFT
+                        Takeoff ground yaw disturbance, rad/s (demo)
+  --start-speed-kt START_SPEED_KT
+                        Landing: initial approach speed (demo)
+  --high-ft HIGH_FT     Landing: start this far above the glideslope (demo)
+  --runway LAT LON HDG  FlightGear: runway threshold/brake-release point and
+                        true heading
+  --final-nm FINAL_NM   FlightGear landing without --runway: start distance
+                        before the threshold, nm
+  --approach-throttle APPROACH_THROTTLE
+                        FlightGear landing: approach power
+  --telemetry-port TELEMETRY_PORT
+  --control-port CONTROL_PORT
+  --vision-port VISION_PORT
+                        Synthetic fly-view UDP port; 0 disables display stream
+  --vision-obstacles VISION_OBSTACLES
+                        Known obstacles JSON in runway coordinates:
+                        east=right, north=along; heights above runway
+  --log LOG             CSV of every sim step, incl. sensory inputs and DN
+                        rates
+  --body-port BODY_PORT
+                        UDP port of the live 3D fly window
+  --no-fly-body         Do not stream to the 3D fly window
+  --smooth              Accepted for old commands, no effect: FlightGear runs
+                        are always real time (1x, no pause per brain trial)
+  --no-cockpit-fly      Do not animate the fly pilot in the 737 cockpit
+  --plot PLOT           PNG of sugar input, brain activity, altitude and
+                        airspeed (needs matplotlib)

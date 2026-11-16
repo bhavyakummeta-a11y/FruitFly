@@ -1,0 +1,31 @@
+{
+  "run_id": "2026-11-16T015255Z_kaden-vandine_demo-standin",
+  "who": "Kaden VanDine",
+  "started_utc": "2026-11-16T01:52:55.268613+00:00",
+  "command": "python -m flight_simulator takeoff_live --help",
+  "args": {
+    "phase": "takeoff",
+    "brain": "standin",
+    "backend": "demo",
+    "telemetry_port": 5501,
+    "stop_at_ft": null,
+    "screen_record": false
+  },
+  "code": {
+    "commit": "04784bb51aac28f705ff052e2262f7e701b89402",
+    "branch": "main",
+    "dirty": [],
+    "untracked": []
+  },
+  "python": "3.14.4",
+  "platform": "Linux 7.0.0-43-generic",
+  "control": {
+    "kind": "NO_FLY_BRAIN",
+    "label": "NO FLY BRAIN: probe-table stand-in flying the takeoff",
+    "neurons_decide": "nothing (no connectome is simulated in this run)",
+    "code_decides": "everything: a lookup table of DN rates measured earlier from the connectome",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "finished_utc": "2026-11-16T01:52:55.282594+00:00",
+  "exit_code": 1
+}
