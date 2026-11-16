@@ -1,0 +1,8 @@
+20:53:03 [session] Session 'takeoff run, connectome fly brain, 1x' watching fgfs pid 123488 (738-flies)
+20:53:03 [session] Live log page: http://127.0.0.1:8765/
+20:53:07 [session] Connected to property API on :8080
+20:53:08 [session] Property API stopped answering
+20:53:11 [session] Connected to property API on :8080
+20:53:25 [session] Property API stopped answering
+20:53:27 [session] Connected to property API on :8080
+20:53:47 [session] FlightGear exited (code None)

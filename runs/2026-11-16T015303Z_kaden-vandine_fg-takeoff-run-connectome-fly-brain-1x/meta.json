@@ -1,0 +1,34 @@
+{
+  "run_id": "2026-11-16T015303Z_kaden-vandine_fg-takeoff-run-connectome-fly-brain-1x",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 54.8
+    }
+  ],
+  "name": "takeoff run, connectome fly brain, 1x",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "clear",
+  "fgfs_pid": 123488,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-16T01:53:03.167197+00:00",
+  "duration_s": 55,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 24,
+  "controller_runs": {},
+  "videos": [],
+  "code": {
+    "commit": "04784bb51aac28f705ff052e2262f7e701b89402",
+    "branch": "main"
+  }
+}
