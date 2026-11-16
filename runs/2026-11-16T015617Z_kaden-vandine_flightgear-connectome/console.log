@@ -1,0 +1,10 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T015617Z_kaden-vandine_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the takeoff
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-18.8
+Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+Error: Could not release the parking brake for the takeoff roll
