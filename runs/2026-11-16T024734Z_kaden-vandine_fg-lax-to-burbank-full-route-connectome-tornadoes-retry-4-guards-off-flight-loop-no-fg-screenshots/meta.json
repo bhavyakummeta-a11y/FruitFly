@@ -1,0 +1,177 @@
+{
+  "run_id": "2026-11-16T024734Z_kaden-vandine_fg-lax-to-burbank-full-route-connectome-tornadoes-retry-4-guards-off-flight-loop-no-fg-screenshots",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 11.1
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+      "detail": "run 2026-11-16T024743Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+      "from_s": 11.1,
+      "to_s": 786.3
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 786.3,
+      "to_s": 791.1
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 791.1,
+      "to_s": 998.4
+    }
+  ],
+  "name": "LAX to Burbank full route, connectome, tornadoes (retry 4: guards off flight loop, no FG screenshots)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "lax",
+  "fgfs_pid": 178423,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-16T02:47:34.836552+00:00",
+  "duration_s": 998,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 595,
+  "controller_runs": {
+    "2026-11-16T024743Z_kaden-vandine_flightgear-connectome": {
+      "departure": "KLAX 25R",
+      "destination": "KBUR 08",
+      "route": "lax-burbank",
+      "minimum_clearance_m": 333.2,
+      "avoidance_count": 3,
+      "sky": "burbank",
+      "runway_briefed": true,
+      "sky_stages": [
+        {
+          "stage": "darkening",
+          "time_s": 156.5,
+          "route_km": 12.26
+        },
+        {
+          "stage": "storm",
+          "time_s": 200.9,
+          "route_km": 16.12
+        },
+        {
+          "stage": "clearing",
+          "time_s": 428.9,
+          "route_km": 38.96
+        },
+        {
+          "stage": "burbank",
+          "time_s": 471.4,
+          "route_km": 44.63
+        }
+      ],
+      "runway_briefing": {
+        "airport": "KBUR",
+        "runway": "08",
+        "threshold_lat": 34.197911,
+        "threshold_lon": -118.369143,
+        "heading_true_deg": 91.0,
+        "length_m": 1768.0,
+        "width_m": 45.72,
+        "threshold_elevation_ft": 727.4,
+        "glideslope_deg": 3.0,
+        "wind": "calm",
+        "source": "code-supplied runway data (FAA via airnav.com), not perceived",
+        "time_s": 471.4
+      },
+      "sky_applied": [
+        {
+          "stage": "clear",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "darkening",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "storm",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "clearing",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "burbank",
+          "metar_confirmed": true
+        }
+      ],
+      "brain": "CONNECTOME LIF (notebook model)",
+      "ended_in": "Landing fly: ROLLOUT",
+      "handovers": [
+        {
+          "time": 0.0,
+          "to": "Takeoff fly",
+          "state": "standing",
+          "agl_ft": 0,
+          "ias_kt": 0,
+          "zero_steer": -18.75
+        },
+        {
+          "time": 77.8,
+          "to": "Circuit fly",
+          "state": "cruising",
+          "agl_ft": 1005,
+          "ias_kt": 220,
+          "zero_steer": -22.5,
+          "zero_pitch": 107.0,
+          "zero_roll": -43.0,
+          "zero_MN9": 65.0
+        },
+        {
+          "time": 674.2,
+          "to": "Landing fly",
+          "state": "flying",
+          "agl_ft": 1139,
+          "ias_kt": 148,
+          "zero_steer": -21.25,
+          "zero_pitch": 107.0,
+          "zero_roll": -43.0,
+          "zero_MN9": 65.0
+        }
+      ],
+      "touchdown_x_m": 497,
+      "touchdown_sink_fpm": 535,
+      "time_s": 759.27,
+      "max_centerline_m": 3.3,
+      "outcome": "landing_outside_criteria",
+      "termination_reason": "landing_outside_criteria",
+      "safe_reject": false,
+      "success": false,
+      "decision_timing": {
+        "applied": 2391,
+        "completed": 2393,
+        "discarded": 2,
+        "skipped": 128,
+        "latency_mean_s": 0.3,
+        "latency_max_s": 9.017
+      },
+      "speed_up_resets": 0,
+      "stop_x_m": 955.3814293669853,
+      "wall_s": 766.0,
+      "exit_code": 2
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "ba9fab7e24bc7691b37d601650023759c2d958be",
+    "branch": "main"
+  }
+}

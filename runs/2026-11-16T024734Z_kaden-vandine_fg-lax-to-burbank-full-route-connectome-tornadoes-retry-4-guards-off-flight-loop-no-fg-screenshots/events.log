@@ -1,0 +1,158 @@
+21:47:34 [session] Session 'LAX to Burbank full route, connectome, tornadoes (retry 4: guards off flight loop, no FG screenshots)' watching fgfs pid 178423 (738-flies)
+21:47:34 [session] Live log page: http://127.0.0.1:8766/
+21:47:44 [session] Connected to property API on :8080
+21:47:44 [controller] Run started: 2026-11-16T024743Z_kaden-vandine_flightgear-connectome
+21:47:44 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T024743Z_kaden-vandine_flightgear-connectome
+21:47:44 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+21:47:44 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+21:47:44 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+21:47:44 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+21:47:45 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-16T024743Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py))
+21:47:47 [controller] CONNECTOME LIF (notebook model)
+21:47:53 [controller] === START: Takeoff fly (standing)  ===
+21:47:53 [controller]     adapted: steer zero -18.8 Hz
+21:47:53 [controller] Waiting for FlightGear runway telemetry on localhost...
+21:48:39 [session] Property API stopped answering
+21:48:58 [session] Connected to property API on :8080
+21:59:27 [controller] Sky -> clear
+21:59:27 [controller] === HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1005 ft, 220 kt ===
+21:59:27 [controller]     adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+21:59:27 [controller]     sky: darkening (12.3 km along the route)
+21:59:27 [controller] Sky -> darkening
+21:59:27 [controller]     sky: storm (16.1 km along the route)
+21:59:27 [controller] Sky -> storm
+21:59:27 [controller]     sky: clearing (39.0 km along the route)
+21:59:27 [controller] Sky -> clearing
+21:59:27 [controller]     sky: burbank (44.6 km along the route)
+21:59:27 [controller]     runway briefing: KBUR runway 08: heading 91 true, 1768 m long, 46 m wide, threshold 727 ft, 3 degree glide path, wind calm. Cleared to land runway 08.
+21:59:27 [controller] Sky -> burbank
+21:59:27 [controller] === HANDOVER: Circuit fly (cruising) -> Landing fly (flying) at 1139 ft, 148 kt ===
+21:59:27 [controller]     adapted: steer zero -21.2 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+21:59:27 [controller] Landing fly: approach path re-anchored at 3.1 deg from 754 ft, 4260 m out
+22:00:39 [flightgear] Paused
+22:00:39 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+22:00:39 [controller] {
+22:00:39 [controller]   "departure": "KLAX 25R",
+22:00:39 [controller]   "destination": "KBUR 08",
+22:00:39 [controller]   "route": "lax-burbank",
+22:00:39 [controller]   "minimum_clearance_m": 333.2,
+22:00:39 [controller]   "avoidance_count": 3,
+22:00:39 [controller]   "sky": "burbank",
+22:00:39 [controller]   "runway_briefed": true,
+22:00:39 [controller]   "sky_stages": [
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "darkening",
+22:00:39 [controller]       "time_s": 156.5,
+22:00:39 [controller]       "route_km": 12.26
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "storm",
+22:00:39 [controller]       "time_s": 200.9,
+22:00:39 [controller]       "route_km": 16.12
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "clearing",
+22:00:39 [controller]       "time_s": 428.9,
+22:00:39 [controller]       "route_km": 38.96
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "burbank",
+22:00:39 [controller]       "time_s": 471.4,
+22:00:39 [controller]       "route_km": 44.63
+22:00:39 [controller]     }
+22:00:39 [controller]   ],
+22:00:39 [controller]   "runway_briefing": {
+22:00:39 [controller]     "airport": "KBUR",
+22:00:39 [controller]     "runway": "08",
+22:00:39 [controller]     "threshold_lat": 34.197911,
+22:00:39 [controller]     "threshold_lon": -118.369143,
+22:00:39 [controller]     "heading_true_deg": 91.0,
+22:00:39 [controller]     "length_m": 1768.0,
+22:00:39 [controller]     "width_m": 45.72,
+22:00:39 [controller]     "threshold_elevation_ft": 727.4,
+22:00:39 [controller]     "glideslope_deg": 3.0,
+22:00:39 [controller]     "wind": "calm",
+22:00:39 [controller]     "source": "code-supplied runway data (FAA via airnav.com), not perceived",
+22:00:39 [controller]     "time_s": 471.4
+22:00:39 [controller]   },
+22:00:39 [controller]   "sky_applied": [
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "clear",
+22:00:39 [controller]       "metar_confirmed": true
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "darkening",
+22:00:39 [controller]       "metar_confirmed": true
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "storm",
+22:00:39 [controller]       "metar_confirmed": true
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "clearing",
+22:00:39 [controller]       "metar_confirmed": true
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "stage": "burbank",
+22:00:39 [controller]       "metar_confirmed": true
+22:00:39 [controller]     }
+22:00:39 [controller]   ],
+22:00:39 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+22:00:39 [controller]   "ended_in": "Landing fly: ROLLOUT",
+22:00:39 [controller]   "handovers": [
+22:00:39 [controller]     {
+22:00:39 [controller]       "time": 0.0,
+22:00:39 [controller]       "to": "Takeoff fly",
+22:00:39 [controller]       "state": "standing",
+22:00:39 [controller]       "agl_ft": 0,
+22:00:39 [controller]       "ias_kt": 0,
+22:00:39 [controller]       "zero_steer": -18.75
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "time": 77.8,
+22:00:39 [controller]       "to": "Circuit fly",
+22:00:39 [controller]       "state": "cruising",
+22:00:39 [controller]       "agl_ft": 1005,
+22:00:39 [controller]       "ias_kt": 220,
+22:00:39 [controller]       "zero_steer": -22.5,
+22:00:39 [controller]       "zero_pitch": 107.0,
+22:00:39 [controller]       "zero_roll": -43.0,
+22:00:39 [controller]       "zero_MN9": 65.0
+22:00:39 [controller]     },
+22:00:39 [controller]     {
+22:00:39 [controller]       "time": 674.2,
+22:00:39 [controller]       "to": "Landing fly",
+22:00:39 [controller]       "state": "flying",
+22:00:39 [controller]       "agl_ft": 1139,
+22:00:39 [controller]       "ias_kt": 148,
+22:00:39 [controller]       "zero_steer": -21.25,
+22:00:39 [controller]       "zero_pitch": 107.0,
+22:00:39 [controller]       "zero_roll": -43.0,
+22:00:39 [controller]       "zero_MN9": 65.0
+22:00:39 [controller]     }
+22:00:39 [controller]   ],
+22:00:39 [controller]   "touchdown_x_m": 497,
+22:00:39 [controller]   "touchdown_sink_fpm": 535,
+22:00:39 [controller]   "time_s": 759.27,
+22:00:39 [controller]   "max_centerline_m": 3.3,
+22:00:39 [controller]   "outcome": "landing_outside_criteria",
+22:00:39 [controller]   "termination_reason": "landing_outside_criteria",
+22:00:39 [controller]   "safe_reject": false,
+22:00:39 [controller]   "success": false,
+22:00:39 [controller]   "decision_timing": {
+22:00:39 [controller]     "applied": 2391,
+22:00:39 [controller]     "completed": 2393,
+22:00:39 [controller]     "discarded": 2,
+22:00:39 [controller]     "skipped": 128,
+22:00:39 [controller]     "latency_mean_s": 0.3,
+22:00:39 [controller]     "latency_max_s": 9.017
+22:00:39 [controller]   },
+22:00:39 [controller]   "speed_up_resets": 0,
+22:00:39 [controller]   "stop_x_m": 955.3814293669853,
+22:00:39 [controller]   "wall_s": 766.0
+22:00:39 [controller] }
+22:00:39 [controller] Run finished: 2026-11-16T024743Z_kaden-vandine_flightgear-connectome exit=2
+22:00:41 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+22:00:45 [control] IN CONTROL: Nobody: no controller running and no control inputs
+22:03:32 [session] Property API stopped answering
+22:04:03 [session] FlightGear exited (code None)
