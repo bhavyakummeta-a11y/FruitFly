@@ -1,0 +1,1 @@
+{"type": "image", "file": "fg-031234-001.jpg", "kind": "fg", "utc": "2026-11-16T03:12:34+00:00", "caption": "", "source": "httpd:8080", "who": "recorder", "w": 1280, "h": 1005, "telemetry": {"alt_ft": 99.91, "agl_ft": 7.95, "ias_kt": 0.01, "heading_deg": 262.98, "pitch_deg": -0.39, "roll_deg": -0.06, "sim_time_s": 1.86, "paused": false}}

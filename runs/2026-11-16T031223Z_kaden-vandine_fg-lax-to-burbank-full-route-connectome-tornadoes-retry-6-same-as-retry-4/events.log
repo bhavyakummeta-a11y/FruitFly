@@ -1,0 +1,20 @@
+22:12:23 [session] Session 'LAX to Burbank full route, connectome, tornadoes (retry 6: same as retry 4)' watching fgfs pid 193517 (738-flies)
+22:12:23 [session] Live log page: http://127.0.0.1:8766/
+22:12:30 [session] Connected to property API on :8080
+22:12:30 [controller] Run started: 2026-11-16T031230Z_kaden-vandine_flightgear-connectome
+22:12:30 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T031230Z_kaden-vandine_flightgear-connectome
+22:12:30 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+22:12:30 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+22:12:30 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+22:12:30 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+22:12:32 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-16T031230Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py))
+22:12:32 [controller] CONNECTOME LIF (notebook model)
+22:12:35 [controller] === START: Takeoff fly (standing)  ===
+22:12:35 [controller]     adapted: steer zero -18.8 Hz
+22:12:35 [controller] Waiting for FlightGear runway telemetry on localhost...
+22:12:48 [session] Property API stopped answering
+22:12:57 [controller] Sky -> clear
+22:12:57 [controller] WARNING: FlightGear did not acknowledge the end-of-run pause.
+22:12:57 [controller] Error: Could not release parking brake before route handover
+22:12:57 [controller] Run finished: 2026-11-16T031230Z_kaden-vandine_flightgear-connectome exit=1
+22:12:58 [session] FlightGear exited (code None)
