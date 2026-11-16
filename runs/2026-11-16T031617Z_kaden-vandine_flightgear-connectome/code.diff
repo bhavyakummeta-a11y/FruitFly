@@ -1,0 +1,481 @@
+diff --git a/flight_simulator/flightgear.py b/flight_simulator/flightgear.py
+index 1ed95b6..16815de 100644
+--- a/flight_simulator/flightgear.py
++++ b/flight_simulator/flightgear.py
+@@ -142,6 +142,63 @@ class AutopilotEngaged(RuntimeError):
+     """The airplane autopilot is on while the fly is (or is about to be) flying."""
+ 
+ 
++class TelnetPoller:
++    """Runs a rule check's telnet polling in a background thread, off the flight loop.
++
++    FlightGear's telnet server answers slowly: 300-500 ms per round trip on the Linux
++    AppImage (2026-11-16), and seconds when the sim is busy. Polled inline, the
++    AutopilotGuard/SpeedLock checks blocked the control loop: on the Burbank approach
++    the loop stood still for ~10 s, the 737 flew on a frozen 0.24 aileron command, rolled
++    to 70 deg and hit the ground 2 km short of the runway.
++
++    The first plain check() starts the thread, which runs check(force=True) every
++    `every` seconds. Later plain check() calls never touch the socket: they re-raise
++    whatever the thread hit (AutopilotEngaged, a lost connection), so the run still stops
++    exactly as before. check(force=True) stays synchronous. A lock keeps the thread and a
++    forced check from using the socket at once."""
++
++    def _poll_init(self):
++        import threading
++        self._poll_lock = threading.RLock()
++        self._poll_thread = self._poll_error = None
++        self._poll_stop = threading.Event()
++
++    def _poll_start(self):
++        import threading
++        self._poll_thread = threading.Thread(target=self._poll_loop, daemon=True,
++                                             name=f'{type(self).__name__}-poll')
++        self._poll_thread.start()
++
++    def _poll_loop(self):
++        while not self._poll_stop.wait(max(0.0, self.next - time.monotonic())):
++            try:
++                self.check(force=True)
++            except Exception as exc:  # handed to the flight loop by the next check()
++                self._poll_error = exc
++                return
++
++    def _poll_check(self, force):
++        """Returns True if the caller should run its synchronous check."""
++        if force:
++            return True
++        if self._poll_thread is None:
++            # First call: a poll that is already due runs inline once (as before), then
++            # the thread takes over from the next interval.
++            if time.monotonic() >= self.next:
++                self.check(force=True)
++            self._poll_start()
++            return False
++        if self._poll_error is not None:
++            raise self._poll_error
++        return False
++
++    def _poll_close(self):
++        thread = self._poll_thread
++        if thread is not None:
++            self._poll_stop.set()
++            thread.join(timeout=5)
++
++
+ def autopilot_value_engaged(value):
+     """True if a telnet `get` reply means engaged. Missing nodes ('-ERR ...') and
+     empty / 0 / false mean off."""
+@@ -154,10 +211,11 @@ def autopilot_value_engaged(value):
+         return True  # any other non-empty lock string (e.g. 'dg-heading-hold') is engaged
+ 
+ 
+-class AutopilotGuard:
++class AutopilotGuard(TelnetPoller):
+     """Enforces the no-autopilot rule over FlightGear's telnet server, for any aircraft.
+ 
+-    wait_off() before the fly takes the controls; check() every loop (rate-limited).
++    wait_off() before the fly takes the controls; check() every loop: it polls every
++    `every` seconds in a background thread (TelnetPoller), never blocking the loop.
+     An engaged autopilot is forced off and recorded in `violations`; if it is still on
+     after that, AutopilotEngaged is raised and the controller must stop.
+     No telnet means the rule can't be verified, so the constructor raises.
+@@ -175,35 +233,41 @@ class AutopilotGuard:
+         self.sock.sendall(b'data\r\n')
+         self.every, self.next = every, 0.0
+         self.violations = []
++        self._poll_init()
+ 
+     def _get_all(self):
+         paths = list(AUTOPILOT_OFF)
+-        self.sock.sendall(''.join(f'get {p}\r\n' for p in paths).encode())
+-        return {p: self.file.readline().decode(errors='replace').strip() for p in paths}
++        with self._poll_lock:
++            self.sock.sendall(''.join(f'get {p}\r\n' for p in paths).encode())
++            return {p: self.file.readline().decode(errors='replace').strip() for p in paths}
+ 
+     def engaged(self):
+         """Autopilot properties that are currently on."""
+         return [p for p, v in self._get_all().items() if autopilot_value_engaged(v)]
+ 
+     def force_off(self, paths):
+-        self.sock.sendall(''.join(f'set {p} {AUTOPILOT_OFF[p]}\r\n' for p in paths).encode())
++        with self._poll_lock:
++            self.sock.sendall(''.join(f'set {p} {AUTOPILOT_OFF[p]}\r\n' for p in paths).encode())
+ 
+     def check(self, force=False):
+-        if not force and time.monotonic() < self.next:
+-            return
+-        self.next = time.monotonic() + self.every
+-        on = self.engaged()
+-        if not on:
++        """Plain check(): non-blocking; the background poll does the telnet work and any
++        AutopilotEngaged it raised is raised here. check(force=True): poll now, inline."""
++        if not self._poll_check(force):
+             return
+-        self.violations.append(on)
+-        print(f'NO-AUTOPILOT RULE: airplane autopilot engaged while the fly is flying ({", ".join(on)}). '
+-              'Forcing it off.', flush=True)
+-        self.force_off(on)
+-        time.sleep(0.2)
+-        still = self.engaged()
+-        if still:
+-            raise AutopilotEngaged(f'Airplane autopilot could not be switched off ({", ".join(still)}); '
+-                                   'stopping: the fly never flies with the autopilot.')
++        with self._poll_lock:
++            self.next = time.monotonic() + self.every
++            on = self.engaged()
++            if not on:
++                return
++            self.violations.append(on)
++            print(f'NO-AUTOPILOT RULE: airplane autopilot engaged while the fly is flying ({", ".join(on)}). '
++                  'Forcing it off.', flush=True)
++            self.force_off(on)
++            time.sleep(0.2)
++            still = self.engaged()
++            if still:
++                raise AutopilotEngaged(f'Airplane autopilot could not be switched off ({", ".join(still)}); '
++                                       'stopping: the fly never flies with the autopilot.')
+ 
+     def wait_off(self, timeout=15.0):
+         """Before the fly takes the controls: wait for the handover to switch the autopilot
+@@ -224,6 +288,7 @@ class AutopilotGuard:
+               flush=True)
+ 
+     def close(self):
++        self._poll_close()
+         try:
+             self.sock.sendall(b'quit\r\n')
+         except OSError:
+@@ -237,14 +302,15 @@ class AutopilotGuard:
+ # runs, and the fly decides in real time: the sim is never paused or slowed while the
+ # brain works. A brain that is too slow flies on its last decision; a crash is data.
+ 
+-class SpeedLock:
++class SpeedLock(TelnetPoller):
+     """Holds /sim/speed-up at the run's sim speed over FlightGear's telnet server (gh #3).
+ 
+     1x by default. FRUITFLY_SIM_SPEED=0.5 runs the sim at half speed (project owner,
+     2026-11-14: give the fly brain twice the sim time per decision); allowed 0.1-1, never
+     faster than real time. The constructor sets and verifies the speed and raises if it
+-    can't. check() (rate-limited) resets any drift and records it in `events` as
+-    (wall time, value found)."""
++    can't. check() resets any drift and records it in `events` as (wall time, value
++    found); it polls every `every` seconds in a background thread (TelnetPoller), never
++    blocking the flight loop."""
+ 
+     PATH = '/sim/speed-up'
+ 
+@@ -263,6 +329,7 @@ class SpeedLock:
+         self.sock.sendall(b'data\r\n')
+         self.every, self.next = every, time.monotonic() + every
+         self.events = []
++        self._poll_init()
+         found = self._get()
+         self._set()
+         now = self._get()
+@@ -276,11 +343,13 @@ class SpeedLock:
+                   f'{1 / speed:g}x the sim time per decision.', flush=True)
+ 
+     def _get(self):
+-        self.sock.sendall(f'get {self.PATH}\r\n'.encode())
+-        return self.file.readline().decode(errors='replace').strip()
++        with self._poll_lock:
++            self.sock.sendall(f'get {self.PATH}\r\n'.encode())
++            return self.file.readline().decode(errors='replace').strip()
+ 
+     def _set(self):
+-        self.sock.sendall(f'set {self.PATH} {self.speed:g}\r\n'.encode())
++        with self._poll_lock:
++            self.sock.sendall(f'set {self.PATH} {self.speed:g}\r\n'.encode())
+ 
+     def _is_target(self, value):
+         try:
+@@ -289,19 +358,23 @@ class SpeedLock:
+             return False
+ 
+     def check(self, force=False):
+-        if not force and time.monotonic() < self.next:
+-            return
+-        self.next = time.monotonic() + self.every
+-        value = self._get()
+-        if self._is_target(value):
++        """Plain check(): non-blocking; the background poll does the telnet work and any
++        error it hit is raised here. check(force=True): poll now, inline."""
++        if not self._poll_check(force):
+             return
+-        self.events.append((time.time(), value))
+-        print(f'SIM SPEED: changed to {value}x during the run; reset to {self.speed:g}x.', flush=True)
+-        self._set()
+-        if not self._is_target(self._get()):
+-            raise RuntimeError(f'FlightGear would not return to {self.speed:g}x sim speed ({self.PATH} = {value!r}).')
++        with self._poll_lock:
++            self.next = time.monotonic() + self.every
++            value = self._get()
++            if self._is_target(value):
++                return
++            self.events.append((time.time(), value))
++            print(f'SIM SPEED: changed to {value}x during the run; reset to {self.speed:g}x.', flush=True)
++            self._set()
++            if not self._is_target(self._get()):
++                raise RuntimeError(f'FlightGear would not return to {self.speed:g}x sim speed ({self.PATH} = {value!r}).')
+ 
+     def close(self):
++        self._poll_close()
+         try:
+             self.sock.sendall(b'quit\r\n')
+         except OSError:
+diff --git a/flight_simulator/media.py b/flight_simulator/media.py
+index b73ac86..f492fba 100644
+--- a/flight_simulator/media.py
++++ b/flight_simulator/media.py
+@@ -327,13 +327,19 @@ class Track:
+         """A session can opt out of FlightGear screenshots with
+         --prop:bool:/fruitfly/no-screenshots=true (e.g. launch_fg ... -- that prop).
+         Used to test whether /screenshot requests mid-render crash fgfs (2026-11-14:
+-        in-air runs crashed with 0xC0000005 shortly before the next screenshot)."""
++        in-air runs crashed with 0xC0000005 shortly before the next screenshot).
++
++        Confirmed 2026-11-16 on Linux: fgfs+0x8e98ba is flightgear::http::ImageCompressor::run()
++        (ScreenshotUriHandler.cxx:129), the thread that compresses a /screenshot. It can
++        crash seconds after the request. So an unreadable opt-out (FlightGear still
++        loading) counts as OFF and is not cached: before, the first failed read cached
++        "screenshots on" for 30 s and the opted-out session still got screenshots."""
+         if getattr(self, '_off_checked', 0) > time.time() - 30:
+             return self._off
+         try:
+             self._off = bool(http_json(self.httpd, '/fruitfly/no-screenshots'))
+         except (OSError, ValueError):
+-            self._off = False
++            return True   # unknown yet: no screenshot, ask again next tick
+         self._off_checked = time.time()
+         if self._off and not getattr(self, '_off_said', False):
+             print(f'{self.info["run_id"]}: FlightGear screenshots OFF for this session (/fruitfly/no-screenshots)',
+diff --git a/flight_simulator/takeoff_live.py b/flight_simulator/takeoff_live.py
+index 2a7cb8c..9c915c4 100644
+--- a/flight_simulator/takeoff_live.py
++++ b/flight_simulator/takeoff_live.py
+@@ -30,14 +30,33 @@ def parking_brake(telnet_port, on):
+     The takeoff start has the engines already running and the parking brake off, so
+     without this the airplane creeps off the runway at idle before the fly ever gets
+     the controls (2026-11-14: 30 m off the centerline, heading 195 instead of 284, at
+-    handover). Released right before the fly takes over. Not an autopilot."""
+-    from .flightgear import telnet_get
+-    try:
+-        with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
+-            s.sendall(f'data\r\nset /controls/gear/brake-parking {int(on)}\r\nquit\r\n'.encode())
+-    except OSError:
+-        return False
+-    return telnet_get(telnet_port, '/controls/gear/brake-parking') in (str(int(on)), str(bool(on)).lower())
++    handover). Released right before the fly takes over. Not an autopilot.
++
++    Set and read back on ONE connection, retried for a few seconds. Sending
++    `set` + `quit` and closing at once let FlightGear drop the `set` (it can see the
++    close before the buffered command), so the separate read-back found the old value:
++    "Could not hold/release the parking brake" (2026-11-16, Linux, twice)."""
++    want = (str(int(on)), str(bool(on)).lower())
++    deadline = time.monotonic() + 5.0
++    while True:
++        try:
++            with socket.create_connection(('127.0.0.1', telnet_port), timeout=3) as s:
++                s.sendall(f'data\r\nset /controls/gear/brake-parking {int(on)}\r\n'
++                          'get /controls/gear/brake-parking\r\n'.encode())
++                reply, end = b'', time.monotonic() + 3
++                while b'\n' not in reply and time.monotonic() < end:
++                    chunk = s.recv(256)
++                    if not chunk:
++                        break
++                    reply += chunk
++                s.sendall(b'quit\r\n')
++            if reply.decode(errors='replace').strip() in want:
++                return True
++        except OSError:
++            pass
++        if time.monotonic() >= deadline:
++            return False
++        time.sleep(0.25)
+ 
+ 
+ CALIBRATION_TRIALS = 20  # flies.PhaseFly.calibrate() default
+diff --git a/tests/test_no_autopilot.py b/tests/test_no_autopilot.py
+index e3d6a5f..834e13e 100644
+--- a/tests/test_no_autopilot.py
++++ b/tests/test_no_autopilot.py
+@@ -127,6 +127,74 @@ class Guard(unittest.TestCase):
+         self.assertEqual(len(g.violations), 1)
+ 
+ 
++class GuardOffTheFlightLoop(unittest.TestCase):
++    """2026-11-16 Burbank crash: inline telnet polls (300-500 ms each, seconds when the sim
++    was busy) froze the flight loop for ~10 s on the approach. check() must not block,
++    and the rule must still be enforced from the background poll."""
++
++    def slow_fg(self, props, sticky=(), delay=0.4):
++        fg = FakeFG(props, sticky)
++        self.addCleanup(fg.server_close)
++        self.addCleanup(fg.shutdown)
++        real = FakeFG.Handler.handle
++
++        class Slow(FakeFG.Handler):
++            def handle(self):
++                import time
++                self.wfile.flush = (lambda f: (lambda: (time.sleep(delay), f())))(self.wfile.flush)
++                orig_write = self.wfile.write
++                def write(b):
++                    time.sleep(delay)
++                    return orig_write(b)
++                self.wfile.write = write
++                real(self)
++        fg.RequestHandlerClass = Slow
++        return fg
++
++    def test_check_does_not_block_on_slow_telnet(self):
++        import time
++        fg = self.slow_fg({'/autopilot/internal/CMDA': '0'})
++        g = AutopilotGuard(fg.port, every=0.05)
++        self.addCleanup(g.close)
++        g.next = time.monotonic() + 0.05   # not due on the first call
++        start = time.monotonic()
++        for _ in range(50):
++            g.check()
++            time.sleep(0.01)
++        self.assertLess(time.monotonic() - start, 1.5)   # inline: 8 gets x 0.4 s per poll
++
++    def test_background_poll_forces_autopilot_off_and_counts_it(self):
++        import time
++        fg, g = FakeFG({'/autopilot/internal/CMDA': '0'}), None
++        self.addCleanup(fg.server_close)
++        self.addCleanup(fg.shutdown)
++        g = AutopilotGuard(fg.port, every=0.05)
++        self.addCleanup(g.close)
++        g.check()
++        fg.props['/autopilot/internal/CMDA'] = '1'
++        deadline = time.monotonic() + 3
++        while not g.violations and time.monotonic() < deadline:
++            g.check()
++            time.sleep(0.02)
++        self.assertEqual(g.violations[0], ['/autopilot/internal/CMDA'])
++        self.assertEqual(fg.props['/autopilot/internal/CMDA'], '0')
++
++    def test_autopilot_that_wont_turn_off_still_stops_the_run(self):
++        import time
++        fg = FakeFG({'/autopilot/internal/CMDB': '0'}, sticky={'/autopilot/internal/CMDB'})
++        self.addCleanup(fg.server_close)
++        self.addCleanup(fg.shutdown)
++        g = AutopilotGuard(fg.port, every=0.05)
++        self.addCleanup(g.close)
++        g.check()
++        fg.props['/autopilot/internal/CMDB'] = '1'
++        deadline = time.monotonic() + 3
++        with self.assertRaisesRegex(AutopilotEngaged, 'could not be switched off'):
++            while time.monotonic() < deadline:
++                g.check()
++                time.sleep(0.02)
++
++
+ def tracked(*globs):
+     out = subprocess.run(['git', 'ls-files', '-z', *globs], cwd=ROOT, capture_output=True, text=True, check=True)
+     return [f for f in out.stdout.split('\0') if f  # -z: filenames may contain spaces
+diff --git a/tests/test_realtime.py b/tests/test_realtime.py
+index 2d8539d..f319a10 100644
+--- a/tests/test_realtime.py
++++ b/tests/test_realtime.py
+@@ -61,6 +61,20 @@ class SpeedLockTests(unittest.TestCase):
+         self.assertEqual(float(fg.props['/sim/speed-up']), 1.0)
+         self.assertEqual([v for _, v in lock.events], ['0.5'])
+ 
++    def test_background_poll_resets_drift(self):
++        # check() polls in a background thread (never blocks the flight loop) and
++        # still resets a speed change.
++        import time
++        fg, lock = self.lock({'/sim/speed-up': '1'}, every=0.05)
++        lock.check()
++        fg.props['/sim/speed-up'] = '4'
++        deadline = time.monotonic() + 3
++        while not lock.events and time.monotonic() < deadline:
++            lock.check()
++            time.sleep(0.02)
++        self.assertEqual([v for _, v in lock.events], ['4'])
++        self.assertEqual(float(fg.props['/sim/speed-up']), 1.0)
++
+     def test_fails_loudly_without_telnet_or_if_speed_wont_change(self):
+         with socket.socket() as s:
+             s.bind(('127.0.0.1', 0))
+diff --git a/tests/test_takeoff_live.py b/tests/test_takeoff_live.py
+index ea8e542..fba6fa2 100644
+--- a/tests/test_takeoff_live.py
++++ b/tests/test_takeoff_live.py
+@@ -120,5 +120,73 @@ class TakeoffLiveTests(unittest.TestCase):
+         self.assertEqual(row, {'time': 1.0, 'phase': 'ROLL', 'in_sugar_hz': 200, 'MN9_hz': 65})
+ 
+ 
++class FakeTelnet:
++    """FlightGear telnet stand-in that drops the first `drop` sets, like fgfs did
++    when the client closed right after `set` (2026-11-16)."""
++    def __init__(self, drop):
++        import socket, threading
++        self.value, self.drop, self.connections = '0', drop, 0
++        self.server = socket.socket()
++        self.server.bind(('127.0.0.1', 0))
++        self.server.listen()
++        self.port = self.server.getsockname()[1]
++        threading.Thread(target=self.serve, daemon=True).start()
++
++    def serve(self):
++        while True:
++            try:
++                conn, _ = self.server.accept()
++            except OSError:
++                return
++            self.connections += 1
++            with conn:
++                buf = b''
++                while True:
++                    data = conn.recv(256)
++                    if not data:
++                        break
++                    buf += data
++                    while b'\r\n' in buf:
++                        line, buf = buf.split(b'\r\n', 1)
++                        words = line.decode().split()
++                        if words[:1] == ['set']:
++                            if self.drop:
++                                self.drop -= 1
++                            else:
++                                self.value = words[2]
++                        elif words[:1] == ['get']:
++                            conn.sendall(self.value.encode() + b'\r\n')
++                        elif words[:1] == ['quit']:
++                            break
++
++    def close(self):
++        self.server.close()
++
++
++class ParkingBrakeTests(unittest.TestCase):
++    def test_set_is_read_back_on_the_same_connection(self):
++        fg = FakeTelnet(drop=0)
++        self.addCleanup(fg.close)
++        self.assertTrue(takeoff_live.parking_brake(fg.port, True))
++        self.assertEqual(fg.value, '1')
++        self.assertEqual(fg.connections, 1)
++
++    def test_dropped_set_is_retried(self):
++        fg = FakeTelnet(drop=2)
++        self.addCleanup(fg.close)
++        self.assertTrue(takeoff_live.parking_brake(fg.port, True))
++        self.assertEqual(fg.value, '1')
++        self.assertEqual(fg.connections, 3)
++
++    def test_no_flightgear_fails_after_retrying(self):
++        import socket
++        s = socket.socket()
++        s.bind(('127.0.0.1', 0))
++        port = s.getsockname()[1]
++        s.close()  # nothing listens here
++        with mock.patch.object(takeoff_live.time, 'sleep'):
++            self.assertFalse(takeoff_live.parking_brake(port, False))
++
++
+ if __name__ == '__main__':
+     unittest.main()
