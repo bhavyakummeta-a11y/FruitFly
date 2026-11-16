@@ -1,0 +1,182 @@
+21:28:38 [session] Session 'LAX to Burbank full route, connectome, tornadoes (retry 3: brake fix, no FG screenshots)' watching fgfs pid 163932 (738-flies)
+21:28:38 [session] Live log page: http://127.0.0.1:8765/
+21:28:47 [session] Connected to property API on :8080
+21:28:47 [controller] Run started: 2026-11-16T022846Z_kaden-vandine_flightgear-connectome
+21:28:47 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T022846Z_kaden-vandine_flightgear-connectome
+21:28:47 [controller] [control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+21:28:47 [controller] [control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+21:28:47 [controller] [control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+21:28:47 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+21:28:49 [control] IN CONTROL: FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing) (run 2026-11-16T022846Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py))
+21:28:50 [controller] CONNECTOME LIF (notebook model)
+21:28:52 [controller] === START: Takeoff fly (standing)  ===
+21:28:52 [controller]     adapted: steer zero -18.8 Hz
+21:28:52 [controller] Waiting for FlightGear runway telemetry on localhost...
+21:34:06 [session] Property API stopped answering
+21:34:08 [session] Connected to property API on :8080
+21:40:33 [session] Property API stopped answering
+21:40:44 [session] Connected to property API on :8080
+21:40:47 [controller] Sky -> clear
+21:40:47 [controller] === HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1009 ft, 190 kt ===
+21:40:47 [controller]     adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+21:40:47 [controller]     sky: darkening (12.3 km along the route)
+21:40:47 [controller] Sky -> darkening
+21:40:47 [controller]     sky: storm (16.1 km along the route)
+21:40:47 [controller] Sky -> storm
+21:40:47 [controller]     sky: clearing (39.0 km along the route)
+21:40:47 [controller] Sky -> clearing
+21:40:47 [controller]     sky: burbank (44.6 km along the route)
+21:40:47 [controller]     runway briefing: KBUR runway 08: heading 91 true, 1768 m long, 46 m wide, threshold 727 ft, 3 degree glide path, wind calm. Cleared to land runway 08.
+21:40:47 [controller] Sky -> burbank
+21:40:47 [controller] === HANDOVER: Circuit fly (cruising) -> Landing fly (flying) at 806 ft, 155 kt ===
+21:40:47 [controller]     adapted: steer zero -21.2 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+21:40:47 [controller] Landing fly: approach path re-anchored at 1.5 deg from 5 ft, 2176 m out
+21:41:04 [flightgear] Paused
+21:41:04 [controller] FlightGear paused (acknowledged), ailerons and rudder centred.
+21:41:04 [controller] {
+21:41:04 [controller]   "departure": "KLAX 25R",
+21:41:04 [controller]   "destination": "KBUR 08",
+21:41:04 [controller]   "route": "lax-burbank",
+21:41:04 [controller]   "minimum_clearance_m": 344.5,
+21:41:04 [controller]   "avoidance_count": 4,
+21:41:04 [controller]   "sky": "burbank",
+21:41:04 [controller]   "runway_briefed": true,
+21:41:04 [controller]   "sky_stages": [
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "darkening",
+21:41:04 [controller]       "time_s": 151.7,
+21:41:04 [controller]       "route_km": 12.26
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "storm",
+21:41:04 [controller]       "time_s": 195.4,
+21:41:04 [controller]       "route_km": 16.13
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "clearing",
+21:41:04 [controller]       "time_s": 423.3,
+21:41:04 [controller]       "route_km": 38.98
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "burbank",
+21:41:04 [controller]       "time_s": 465.5,
+21:41:04 [controller]       "route_km": 44.6
+21:41:04 [controller]     }
+21:41:04 [controller]   ],
+21:41:04 [controller]   "runway_briefing": {
+21:41:04 [controller]     "airport": "KBUR",
+21:41:04 [controller]     "runway": "08",
+21:41:04 [controller]     "threshold_lat": 34.197911,
+21:41:04 [controller]     "threshold_lon": -118.369143,
+21:41:04 [controller]     "heading_true_deg": 91.0,
+21:41:04 [controller]     "length_m": 1768.0,
+21:41:04 [controller]     "width_m": 45.72,
+21:41:04 [controller]     "threshold_elevation_ft": 727.4,
+21:41:04 [controller]     "glideslope_deg": 3.0,
+21:41:04 [controller]     "wind": "calm",
+21:41:04 [controller]     "source": "code-supplied runway data (FAA via airnav.com), not perceived",
+21:41:04 [controller]     "time_s": 465.5
+21:41:04 [controller]   },
+21:41:04 [controller]   "sky_applied": [
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "clear",
+21:41:04 [controller]       "metar_confirmed": true
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "darkening",
+21:41:04 [controller]       "metar_confirmed": true
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "storm",
+21:41:04 [controller]       "metar_confirmed": true
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "clearing",
+21:41:04 [controller]       "metar_confirmed": true
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "stage": "burbank",
+21:41:04 [controller]       "metar_confirmed": true
+21:41:04 [controller]     }
+21:41:04 [controller]   ],
+21:41:04 [controller]   "brain": "CONNECTOME LIF (notebook model)",
+21:41:04 [controller]   "ended_in": "Landing fly: FLARE",
+21:41:04 [controller]   "handovers": [
+21:41:04 [controller]     {
+21:41:04 [controller]       "time": 0.0,
+21:41:04 [controller]       "to": "Takeoff fly",
+21:41:04 [controller]       "state": "standing",
+21:41:04 [controller]       "agl_ft": 0,
+21:41:04 [controller]       "ias_kt": 0,
+21:41:04 [controller]       "zero_steer": -18.75
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "time": 62.3,
+21:41:04 [controller]       "to": "Circuit fly",
+21:41:04 [controller]       "state": "cruising",
+21:41:04 [controller]       "agl_ft": 1009,
+21:41:04 [controller]       "ias_kt": 190,
+21:41:04 [controller]       "zero_steer": -22.5,
+21:41:04 [controller]       "zero_pitch": 107.0,
+21:41:04 [controller]       "zero_roll": -43.0,
+21:41:04 [controller]       "zero_MN9": 65.0
+21:41:04 [controller]     },
+21:41:04 [controller]     {
+21:41:04 [controller]       "time": 693.9,
+21:41:04 [controller]       "to": "Landing fly",
+21:41:04 [controller]       "state": "flying",
+21:41:04 [controller]       "agl_ft": 806,
+21:41:04 [controller]       "ias_kt": 155,
+21:41:04 [controller]       "zero_steer": -21.25,
+21:41:04 [controller]       "zero_pitch": 107.0,
+21:41:04 [controller]       "zero_roll": -43.0,
+21:41:04 [controller]       "zero_MN9": 65.0
+21:41:04 [controller]     }
+21:41:04 [controller]   ],
+21:41:04 [controller]   "touchdown_x_m": null,
+21:41:04 [controller]   "touchdown_sink_fpm": null,
+21:41:04 [controller]   "time_s": 724.77,
+21:41:04 [controller]   "max_centerline_m": 1537.4,
+21:41:04 [controller]   "outcome": "runway_departure",
+21:41:04 [controller]   "termination_reason": "runway_departure",
+21:41:04 [controller]   "safe_reject": false,
+21:41:04 [controller]   "success": false,
+21:41:04 [controller]   "decision_timing": {
+21:41:04 [controller]     "applied": 1787,
+21:41:04 [controller]     "completed": 1813,
+21:41:04 [controller]     "discarded": 26,
+21:41:04 [controller]     "skipped": 411,
+21:41:04 [controller]     "latency_mean_s": 0.372,
+21:41:04 [controller]     "latency_max_s": 2.8
+21:41:04 [controller]   },
+21:41:04 [controller]   "speed_up_resets": 0,
+21:41:04 [controller]   "stop_x_m": -1400.3708328961084,
+21:41:04 [controller]   "wall_s": 731.6
+21:41:04 [controller] }
+21:41:04 [controller] Run finished: 2026-11-16T022846Z_kaden-vandine_flightgear-connectome exit=2
+21:41:06 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+21:41:10 [control] IN CONTROL: Nobody: no controller running and no control inputs
+21:43:11 [session] Property API stopped answering
+21:43:13 [session] Connected to property API on :8080
+21:43:15 [session] Property API stopped answering
+21:43:20 [session] Connected to property API on :8080
+21:44:57 [controller] Run started: 2026-11-16T024457Z_kaden-vandine_flightgear-standin
+21:44:57 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T024457Z_kaden-vandine_flightgear-standin
+21:44:57 [controller] [control] NO FLY BRAIN: probe-table stand-in flying the landing
+21:44:57 [controller] [control]   neurons decide: nothing (no connectome is simulated in this run)
+21:44:57 [controller] [control]   code decides:   everything: a lookup table of DN rates measured earlier from the connectome
+21:44:57 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+21:44:57 [controller] FlightGear resumes with the fly's first controls: the fly has the approach.
+21:44:57 [controller] Run finished: 2026-11-16T024457Z_kaden-vandine_flightgear-standin exit=0
+21:46:18 [control] IN CONTROL: UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain
+21:46:24 [control] IN CONTROL: Nobody: no controller running and no control inputs
+21:46:32 [controller] Run started: 2026-11-16T024630Z_kaden-vandine_flightgear-standin
+21:46:32 [controller] [runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T024630Z_kaden-vandine_flightgear-standin
+21:46:32 [controller] [control] NO FLY BRAIN: probe-table stand-in flying the landing
+21:46:32 [controller] [control]   neurons decide: nothing (no connectome is simulated in this run)
+21:46:32 [controller] [control]   code decides:   everything: a lookup table of DN rates measured earlier from the connectome
+21:46:32 [controller] [control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+21:46:32 [controller] FlightGear resumes with the fly's first controls: the fly has the approach.
+21:46:32 [controller] Run finished: 2026-11-16T024630Z_kaden-vandine_flightgear-standin exit=0
+21:46:54 [session] Property API stopped answering
+21:47:24 [session] FlightGear exited (code None)

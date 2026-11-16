@@ -1,0 +1,201 @@
+{
+  "run_id": "2026-11-16T022838Z_kaden-vandine_fg-lax-to-burbank-full-route-connectome-tornadoes-retry-3-brake-fix-no-fg-screenshots",
+  "who": "Kaden VanDine",
+  "kind": "flightgear-session",
+  "control_timeline": [
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 0.0,
+      "to_s": 10.7
+    },
+    {
+      "who": "FLY_BRAIN",
+      "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+      "detail": "run 2026-11-16T022846Z_kaden-vandine_flightgear-connectome. Neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9). Code decides: synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+      "from_s": 10.7,
+      "to_s": 747.7
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 747.7,
+      "to_s": 752.2
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 752.2,
+      "to_s": 1059.6
+    },
+    {
+      "who": "UNATTRIBUTED",
+      "label": "UNATTRIBUTED inputs: a human or an external program (e.g. an LLM agent) is moving the controls; not the fly brain",
+      "detail": "",
+      "from_s": 1059.6,
+      "to_s": 1065.8
+    },
+    {
+      "who": "NOBODY",
+      "label": "Nobody: no controller running and no control inputs",
+      "detail": "",
+      "from_s": 1065.8,
+      "to_s": 1136.0
+    }
+  ],
+  "name": "LAX to Burbank full route, connectome, tornadoes (retry 3: brake fix, no FG screenshots)",
+  "aircraft": "738-flies",
+  "graphics": "light",
+  "weather": "lax",
+  "fgfs_pid": 163932,
+  "fgfs_exit_code": null,
+  "started_utc": "2026-11-16T02:28:38.657294+00:00",
+  "duration_s": 1136,
+  "httpd_port": 8080,
+  "flightgear": {
+    "fgfs_log": "/home/kaden/flightgear.org/fgfs.log",
+    "warning_lines": 0
+  },
+  "airplane_samples": 685,
+  "controller_runs": {
+    "2026-11-16T022846Z_kaden-vandine_flightgear-connectome": {
+      "departure": "KLAX 25R",
+      "destination": "KBUR 08",
+      "route": "lax-burbank",
+      "minimum_clearance_m": 344.5,
+      "avoidance_count": 4,
+      "sky": "burbank",
+      "runway_briefed": true,
+      "sky_stages": [
+        {
+          "stage": "darkening",
+          "time_s": 151.7,
+          "route_km": 12.26
+        },
+        {
+          "stage": "storm",
+          "time_s": 195.4,
+          "route_km": 16.13
+        },
+        {
+          "stage": "clearing",
+          "time_s": 423.3,
+          "route_km": 38.98
+        },
+        {
+          "stage": "burbank",
+          "time_s": 465.5,
+          "route_km": 44.6
+        }
+      ],
+      "runway_briefing": {
+        "airport": "KBUR",
+        "runway": "08",
+        "threshold_lat": 34.197911,
+        "threshold_lon": -118.369143,
+        "heading_true_deg": 91.0,
+        "length_m": 1768.0,
+        "width_m": 45.72,
+        "threshold_elevation_ft": 727.4,
+        "glideslope_deg": 3.0,
+        "wind": "calm",
+        "source": "code-supplied runway data (FAA via airnav.com), not perceived",
+        "time_s": 465.5
+      },
+      "sky_applied": [
+        {
+          "stage": "clear",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "darkening",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "storm",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "clearing",
+          "metar_confirmed": true
+        },
+        {
+          "stage": "burbank",
+          "metar_confirmed": true
+        }
+      ],
+      "brain": "CONNECTOME LIF (notebook model)",
+      "ended_in": "Landing fly: FLARE",
+      "handovers": [
+        {
+          "time": 0.0,
+          "to": "Takeoff fly",
+          "state": "standing",
+          "agl_ft": 0,
+          "ias_kt": 0,
+          "zero_steer": -18.75
+        },
+        {
+          "time": 62.3,
+          "to": "Circuit fly",
+          "state": "cruising",
+          "agl_ft": 1009,
+          "ias_kt": 190,
+          "zero_steer": -22.5,
+          "zero_pitch": 107.0,
+          "zero_roll": -43.0,
+          "zero_MN9": 65.0
+        },
+        {
+          "time": 693.9,
+          "to": "Landing fly",
+          "state": "flying",
+          "agl_ft": 806,
+          "ias_kt": 155,
+          "zero_steer": -21.25,
+          "zero_pitch": 107.0,
+          "zero_roll": -43.0,
+          "zero_MN9": 65.0
+        }
+      ],
+      "touchdown_x_m": null,
+      "touchdown_sink_fpm": null,
+      "time_s": 724.77,
+      "max_centerline_m": 1537.4,
+      "outcome": "runway_departure",
+      "termination_reason": "runway_departure",
+      "safe_reject": false,
+      "success": false,
+      "decision_timing": {
+        "applied": 1787,
+        "completed": 1813,
+        "discarded": 26,
+        "skipped": 411,
+        "latency_mean_s": 0.372,
+        "latency_max_s": 2.8
+      },
+      "speed_up_resets": 0,
+      "stop_x_m": -1400.3708328961084,
+      "wall_s": 731.6,
+      "exit_code": 2
+    },
+    "2026-11-16T024457Z_kaden-vandine_flightgear-standin": {
+      "phase": "APPROACH",
+      "requested_phase": "landing",
+      "exit_code": 0
+    },
+    "2026-11-16T024630Z_kaden-vandine_flightgear-standin": {
+      "phase": "APPROACH",
+      "requested_phase": "landing",
+      "exit_code": 0
+    }
+  },
+  "videos": [],
+  "code": {
+    "commit": "ba9fab7e24bc7691b37d601650023759c2d958be",
+    "branch": "main"
+  }
+}
