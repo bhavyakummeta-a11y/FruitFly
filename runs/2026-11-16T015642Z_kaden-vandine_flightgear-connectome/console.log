@@ -1,0 +1,269 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T015642Z_kaden-vandine_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the takeoff
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); takeoff_live holds the parking brake while the brain calibrates and releases it at the handover
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+Adapting: measuring zero points with the neutral stimulus mix (20 brain trials)...
+  zero points: steer=-18.8
+Takeoff fly: standing fly, looming stimulus presented at Vr -> jump = rotation
+Parking brake released: the fly has the airplane.
+Waiting for FlightGear runway telemetry on localhost...
+Real time: FlightGear at 1x, no pause during brain trials.
+Handover: airplane autopilot confirmed OFF; the fly flies.
+  decision applied 2.5s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.6deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.0kt agl=    0ft pitch=-0.6deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  0.2kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias=  0.8kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  1.2kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=  1.9kt agl=    0ft pitch=-0.5deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias=  5.0kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=  6.1kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias=  9.1kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 11.8kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 12.9kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 14.4kt agl=    0ft pitch=-0.4deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 16.4kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 19.6kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 21.1kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 23.1kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 26.2kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 27.7kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 33.0kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 34.0kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 35.6kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 39.4kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 40.5kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 42.0kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 45.8kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 46.9kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias= 49.6kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 52.1kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 53.2kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 54.7kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 56.5kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 59.4kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 60.9kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.3s after its state  TAKEOFF ROLL   ias= 62.3kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision stale 1.6s after its state  TAKEOFF ROLL   ias= 73.0kt agl=    0ft pitch=-0.3deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 75.4kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 76.4kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 78.2kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 81.3kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 82.3kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 83.7kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 87.2kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 88.1kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias= 92.9kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 93.9kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 95.2kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias= 96.9kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias= 99.5kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=100.8kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=102.5kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=105.1kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=108.4kt agl=    0ft pitch=-0.2deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=110.5kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=111.8kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=113.8kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=115.9kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=117.1kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=118.7kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias=123.4kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=124.3kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=127.4kt agl=    0ft pitch=-0.1deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=128.9kt agl=    0ft pitch=-0.0deg thr=1.00
+  decision applied 0.4s after its state  TAKEOFF ROLL   ias=131.6kt agl=    0ft pitch=-0.0deg thr=1.00
+  decision applied 0.2s after its state  TAKEOFF ROLL   ias=132.5kt agl=    0ft pitch=-0.0deg thr=1.00
+  decision applied 0.1s after its state  TAKEOFF ROLL   ias=133.7kt agl=    0ft pitch=-0.0deg thr=1.00
+  decision applied 0.1s after its state  V1             ias=135.2kt agl=    0ft pitch=-0.0deg thr=1.00
+  decision applied 0.4s after its state  V1             ias=138.7kt agl=    0ft pitch= 0.0deg thr=1.00
+  decision applied 0.2s after its state  V1             ias=139.5kt agl=    0ft pitch= 0.0deg thr=1.00
+  decision applied 0.3s after its state  V1             ias=141.6kt agl=    0ft pitch= 0.0deg thr=1.00
+  decision applied 0.3s after its state  V1             ias=143.0kt agl=    0ft pitch= 0.0deg thr=1.00
+  decision applied 0.3s after its state  V1             ias=144.4kt agl=    0ft pitch= 0.0deg thr=1.00
+  decision applied 0.4s after its state  V1             ias=146.6kt agl=    0ft pitch= 0.1deg thr=1.00
+  decision applied 0.3s after its state  V1             ias=148.0kt agl=    0ft pitch= 0.1deg thr=1.00
+  decision applied 0.4s after its state  V1             ias=149.8kt agl=    0ft pitch= 0.2deg thr=1.00
+  decision applied 0.9s after its state  ROTATE         ias=154.4kt agl=    0ft pitch= 1.3deg thr=1.00
+  decision applied 0.6s after its state  ROTATE         ias=157.2kt agl=    0ft pitch= 2.9deg thr=1.00
+  decision applied 0.4s after its state  ROTATE         ias=158.9kt agl=    1ft pitch= 4.1deg thr=1.00
+  decision applied 0.6s after its state  ROTATE         ias=161.8kt agl=    1ft pitch= 6.2deg thr=1.00
+  decision applied 0.4s after its state  ROTATE         ias=163.4kt agl=    1ft pitch= 7.2deg thr=1.00
+  decision stale 1.0s after its state  CLIMB          ias=167.5kt agl=    5ft pitch= 8.7deg thr=1.00
+  decision applied 0.2s after its state  CLIMB          ias=168.1kt agl=    7ft pitch= 8.8deg thr=1.00
+  decision applied 0.3s after its state  CLIMB          ias=169.7kt agl=   11ft pitch= 9.2deg thr=1.00
+  decision applied 0.2s after its state  CLIMB          ias=170.2kt agl=   12ft pitch= 9.3deg thr=1.00
+  decision applied 0.2s after its state  CLIMB          ias=171.2kt agl=   16ft pitch= 9.7deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=171.9kt agl=   19ft pitch=10.1deg thr=1.00
+  decision applied 0.2s after its state  CLIMB          ias=173.4kt agl=   27ft pitch=10.9deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=174.0kt agl=   31ft pitch=11.3deg thr=1.00
+  decision applied 0.8s after its state  CLIMB          ias=176.1kt agl=   52ft pitch=12.5deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=176.4kt agl=   56ft pitch=12.6deg thr=1.00
+  decision applied 0.3s after its state  CLIMB          ias=177.2kt agl=   69ft pitch=13.2deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=177.5kt agl=   73ft pitch=13.3deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=178.0kt agl=   82ft pitch=13.6deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=178.4kt agl=   92ft pitch=13.9deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=179.0kt agl=  107ft pitch=14.1deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=179.4kt agl=  118ft pitch=14.3deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=179.8kt agl=  130ft pitch=14.5deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=180.7kt agl=  164ft pitch=14.7deg thr=1.00
+  decision applied 0.5s after its state  CLIMB          ias=181.4kt agl=  195ft pitch=15.0deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=181.5kt agl=  202ft pitch=15.1deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=181.8kt agl=  217ft pitch=15.2deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=182.3kt agl=  245ft pitch=15.3deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=182.4kt agl=  252ft pitch=15.3deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=182.6kt agl=  268ft pitch=15.4deg thr=1.00
+  decision applied 0.8s after its state  CLIMB          ias=183.2kt agl=  321ft pitch=15.5deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=183.3kt agl=  329ft pitch=15.5deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=183.7kt agl=  363ft pitch=15.5deg thr=1.00
+  decision applied 0.2s after its state  CLIMB          ias=183.9kt agl=  385ft pitch=15.4deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=184.2kt agl=  414ft pitch=15.4deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=184.2kt agl=  422ft pitch=15.4deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=184.4kt agl=  439ft pitch=15.4deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=184.7kt agl=  473ft pitch=15.4deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=185.0kt agl=  497ft pitch=15.5deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=185.0kt agl=  505ft pitch=15.5deg thr=1.00
+  decision applied 0.3s after its state  CLIMB          ias=185.3kt agl=  533ft pitch=15.4deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=185.3kt agl=  541ft pitch=15.3deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=185.5kt agl=  559ft pitch=15.2deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=185.7kt agl=  578ft pitch=15.1deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=185.9kt agl=  602ft pitch=15.1deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=186.1kt agl=  620ft pitch=15.1deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=186.2kt agl=  638ft pitch=15.2deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=186.7kt agl=  699ft pitch=15.0deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=187.1kt agl=  735ft pitch=14.9deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=187.3kt agl=  754ft pitch=14.9deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=187.6kt agl=  788ft pitch=14.9deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=187.6kt agl=  796ft pitch=14.9deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=187.8kt agl=  815ft pitch=14.9deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=188.0kt agl=  833ft pitch=14.9deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=188.3kt agl=  873ft pitch=14.7deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=188.4kt agl=  882ft pitch=14.7deg thr=1.00
+  decision applied 0.5s after its state  CLIMB          ias=188.8kt agl=  922ft pitch=14.8deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=188.9kt agl=  930ft pitch=14.8deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=189.1kt agl=  949ft pitch=14.8deg thr=1.00
+  decision applied 0.4s after its state  CLIMB          ias=189.4kt agl=  983ft pitch=14.8deg thr=1.00
+  decision applied 0.1s after its state  CLIMB          ias=189.4kt agl=  992ft pitch=14.7deg thr=1.00
+HANDOVER (1,000 ft) reached in the air. No Cruise fly yet, so the Takeoff fly keeps flying: wings level, 10 deg climb, climb power. Press Ctrl-C to pause FlightGear and exit.
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=189.6kt agl= 1014ft pitch=14.7deg thr=0.70
+  decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=187.8kt agl= 1069ft pitch=14.0deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=187.5kt agl= 1077ft pitch=13.8deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=186.3kt agl= 1112ft pitch=12.7deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=185.7kt agl= 1128ft pitch=12.2deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=184.8kt agl= 1158ft pitch=11.4deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=184.6kt agl= 1167ft pitch=11.2deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=184.2kt agl= 1181ft pitch=10.9deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=183.9kt agl= 1192ft pitch=10.7deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=183.1kt agl= 1225ft pitch= 9.9deg thr=0.70
+  decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=182.5kt agl= 1249ft pitch= 9.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.4kt agl= 1253ft pitch= 9.2deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=182.2kt agl= 1263ft pitch= 8.9deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=181.9kt agl= 1280ft pitch= 8.6deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.9kt agl= 1284ft pitch= 8.5deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.8kt agl= 1292ft pitch= 8.4deg thr=0.70
+  decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=181.7kt agl= 1317ft pitch= 8.1deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=181.6kt agl= 1321ft pitch= 8.1deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.6kt agl= 1333ft pitch= 8.1deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1339ft pitch= 8.1deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1350ft pitch= 8.2deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1352ft pitch= 8.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1357ft pitch= 8.3deg thr=0.70
+  decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1375ft pitch= 8.4deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1377ft pitch= 8.4deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1386ft pitch= 8.5deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1388ft pitch= 8.5deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1395ft pitch= 8.5deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1404ft pitch= 8.5deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1407ft pitch= 8.5deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.5kt agl= 1414ft pitch= 8.6deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.4kt agl= 1420ft pitch= 8.7deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=181.3kt agl= 1430ft pitch= 8.8deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.3kt agl= 1432ft pitch= 8.8deg thr=0.70
+  decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=181.1kt agl= 1444ft pitch= 9.1deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.1kt agl= 1446ft pitch= 9.1deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=181.0kt agl= 1450ft pitch= 9.3deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=180.9kt agl= 1460ft pitch= 9.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.9kt agl= 1464ft pitch= 9.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.8kt agl= 1471ft pitch= 9.2deg thr=0.70
+  decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=180.6kt agl= 1495ft pitch= 9.2deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.6kt agl= 1498ft pitch= 9.2deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=180.5kt agl= 1508ft pitch= 9.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.4kt agl= 1511ft pitch= 9.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.3kt agl= 1518ft pitch= 9.3deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=180.2kt agl= 1524ft pitch= 9.3deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=180.1kt agl= 1535ft pitch= 9.5deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=180.0kt agl= 1541ft pitch= 9.5deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=179.9kt agl= 1547ft pitch= 9.6deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.6kt agl= 1566ft pitch= 9.9deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.3kt agl= 1579ft pitch=10.0deg thr=0.70
+  decision applied 0.1s after its state  HANDOVER (1,000 ft) ias=179.1kt agl= 1586ft pitch=10.0deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=178.9kt agl= 1599ft pitch= 9.8deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=178.8kt agl= 1604ft pitch= 9.7deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=178.7kt agl= 1609ft pitch= 9.7deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=178.6kt agl= 1618ft pitch= 9.6deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=178.4kt agl= 1626ft pitch= 9.6deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=178.3kt agl= 1630ft pitch= 9.6deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=178.2kt agl= 1637ft pitch= 9.7deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=178.1kt agl= 1642ft pitch= 9.7deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=177.9kt agl= 1648ft pitch= 9.7deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=177.7kt agl= 1658ft pitch= 9.6deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=177.6kt agl= 1664ft pitch= 9.5deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=177.6kt agl= 1669ft pitch= 9.5deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=177.5kt agl= 1677ft pitch= 9.4deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=177.4kt agl= 1686ft pitch= 9.4deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=177.3kt agl= 1690ft pitch= 9.5deg thr=0.70
+  decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=177.1kt agl= 1702ft pitch= 9.5deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=177.1kt agl= 1707ft pitch= 9.5deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=177.0kt agl= 1713ft pitch= 9.5deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.9kt agl= 1723ft pitch= 9.4deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=176.9kt agl= 1727ft pitch= 9.4deg thr=0.70
+  decision applied 0.2s after its state  HANDOVER (1,000 ft) ias=176.8kt agl= 1731ft pitch= 9.3deg thr=0.70
+  decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=176.6kt agl= 1746ft pitch= 9.4deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=176.5kt agl= 1757ft pitch= 9.5deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.4kt agl= 1763ft pitch= 9.5deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=176.3kt agl= 1768ft pitch= 9.6deg thr=0.70
+  decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 1776ft pitch= 9.4deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 1781ft pitch= 9.3deg thr=0.70
+  decision stale 1.1s after its state  HANDOVER (1,000 ft) ias=176.0kt agl= 1799ft pitch= 8.7deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=176.1kt agl= 1807ft pitch= 8.4deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.1kt agl= 1811ft pitch= 8.2deg thr=0.70
+  decision applied 0.7s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 1818ft pitch= 8.2deg thr=0.70
+  decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 1824ft pitch= 8.2deg thr=0.70
+  decision applied 0.5s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 1832ft pitch= 8.3deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.2kt agl= 1841ft pitch= 8.4deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=176.3kt agl= 1856ft pitch= 8.7deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.3kt agl= 1868ft pitch= 9.0deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=176.3kt agl= 1879ft pitch= 9.2deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.3kt agl= 1884ft pitch= 9.3deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=176.1kt agl= 1888ft pitch= 9.1deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.1kt agl= 1894ft pitch= 8.9deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.0kt agl= 1903ft pitch= 8.8deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=176.0kt agl= 1909ft pitch= 8.7deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1915ft pitch= 8.7deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1925ft pitch= 9.0deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1931ft pitch= 9.0deg thr=0.70
+  decision applied 1.0s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1946ft pitch= 9.0deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1953ft pitch= 9.0deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.9kt agl= 1957ft pitch= 8.9deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.8kt agl= 1961ft pitch= 8.8deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.8kt agl= 1964ft pitch= 8.6deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.8kt agl= 1968ft pitch= 8.4deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=175.8kt agl= 1970ft pitch= 8.3deg thr=0.70
+  decision applied 0.8s after its state  HANDOVER (1,000 ft) ias=175.7kt agl= 1977ft pitch= 8.5deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=175.7kt agl= 1982ft pitch= 8.8deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.6kt agl= 1985ft pitch= 8.9deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=175.6kt agl= 1990ft pitch= 9.1deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.6kt agl= 1994ft pitch= 9.2deg thr=0.70
+  decision applied 0.6s after its state  HANDOVER (1,000 ft) ias=175.5kt agl= 1993ft pitch= 9.2deg thr=0.70
+  decision applied 0.4s after its state  HANDOVER (1,000 ft) ias=175.5kt agl= 1995ft pitch= 9.2deg thr=0.70
+  decision applied 0.3s after its state  HANDOVER (1,000 ft) ias=175.4kt agl= 1999ft pitch= 9.2deg thr=0.70
+Reached 2000 ft (agl 2003 ft, 175 kt): end of run, pausing FlightGear.
+
+Ctrl-C: pausing FlightGear.
+Reached 2000 ft (agl 2003 ft, 175 kt): end of run, pausing FlightGear.
+
+Stopped.
