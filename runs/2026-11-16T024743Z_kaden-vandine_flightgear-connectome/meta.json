@@ -1,0 +1,55 @@
+{
+  "run_id": "2026-11-16T024743Z_kaden-vandine_flightgear-connectome",
+  "who": "Kaden VanDine",
+  "started_utc": "2026-11-16T02:47:43.648461+00:00",
+  "command": "python -m flight_simulator mission --route lax-burbank --brain connectome --seconds 1800 --backend flightgear --telemetry-port 5501 --control-port 5502",
+  "args": {
+    "brain": "connectome",
+    "route": "lax-burbank",
+    "backend": "flightgear",
+    "data": "data/brain",
+    "seed": 0,
+    "noise_seed": null,
+    "period": 0.25,
+    "no_calibrate": false,
+    "seconds": 1800.0,
+    "vision_port": 5601,
+    "sky": "story",
+    "vision_obstacles": null,
+    "log": null,
+    "plot": null,
+    "telemetry_port": 5501,
+    "control_port": 5502,
+    "body_port": 5600,
+    "no_fly_body": false
+  },
+  "code": {
+    "commit": "ba9fab7e24bc7691b37d601650023759c2d958be",
+    "branch": "main",
+    "dirty": [
+      "M flight_simulator/flightgear.py",
+      " M flight_simulator/takeoff_live.py",
+      " M tests/test_no_autopilot.py",
+      " M tests/test_realtime.py",
+      " M tests/test_takeoff_live.py"
+    ],
+    "untracked": []
+  },
+  "python": "3.14.4",
+  "platform": "Linux 7.0.0-43-generic",
+  "control": {
+    "kind": "FLY_BRAIN",
+    "label": "FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)",
+    "neurons_decide": "pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)",
+    "code_decides": "synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)",
+    "autopilot": "never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot"
+  },
+  "fg_sessions": [
+    {
+      "name": "LAX to Burbank full route, connectome, tornadoes (retry 4: guards off flight loop, no FG screenshots)",
+      "run_id": "2026-11-16T024734Z_kaden-vandine_fg-lax-to-burbank-full-route-connectome-tornadoes-retry-4-guards-off-flight-loop-no-fg-screenshots"
+    }
+  ],
+  "finished_utc": "2026-11-16T03:00:38.309154+00:00",
+  "exit_code": 2
+}

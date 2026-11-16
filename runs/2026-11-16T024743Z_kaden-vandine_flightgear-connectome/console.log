@@ -1,0 +1,148 @@
+[runlog] /home/kaden/fruitfly/FruitFly/.sim-logs/runs/2026-11-16T024743Z_kaden-vandine_flightgear-connectome
+[control] FLY BRAIN (connectome) flying the full mission (takeoff, circuit, landing)
+[control]   neurons decide: pitch (jump/rotation, flare), steering and roll through descending-neuron rates (DNp01/02/04/11, DNp07, DNp15, DNa02, DNp20, MN9)
+[control]   code decides:   synthetic runway/path and known-obstacle sensory encoding of aircraft state, the fixed decoder from DN rates to controls, the behavioural-state gate (standing/flying), a fixed-gain pitch-rate reflex (haltere stand-in), speed-dependent ground steering limits/yaw damping, stale-decision rejection, a fixed flare pitch envelope (no pitch-up once the sink is arrested), landing thrust to idle in the flare (MN9 sets approach power only above it), and phase handover (flies.py); airport waypoints, MSL/runway transforms, predictive obstacle heading selection, and destination rollout braking are code rules (airport_route.py)
+[control]   autopilot:      never: the fly does not use the airplane autopilot/autothrottle; AutopilotGuard forces it off and stops the run if it cannot
+CONNECTOME LIF (notebook model)
+
+=== START: Takeoff fly (standing)  ===
+    adapted: steer zero -18.8 Hz
+Waiting for FlightGear runway telemetry on localhost...
+Sky -> clear
+
+=== HANDOVER: Takeoff fly (standing) -> Circuit fly (cruising) at 1005 ft, 220 kt ===
+    adapted: steer zero -22.5 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+    sky: darkening (12.3 km along the route)
+Sky -> darkening
+    sky: storm (16.1 km along the route)
+Sky -> storm
+    sky: clearing (39.0 km along the route)
+Sky -> clearing
+    sky: burbank (44.6 km along the route)
+    runway briefing: KBUR runway 08: heading 91 true, 1768 m long, 46 m wide, threshold 727 ft, 3 degree glide path, wind calm. Cleared to land runway 08.
+Sky -> burbank
+
+=== HANDOVER: Circuit fly (cruising) -> Landing fly (flying) at 1139 ft, 148 kt ===
+    adapted: steer zero -21.2 Hz, pitch zero 107.0 Hz, roll zero -43.0 Hz, MN9 zero 65.0 Hz
+Landing fly: approach path re-anchored at 3.1 deg from 754 ft, 4260 m out
+FlightGear paused (acknowledged), ailerons and rudder centred.
+{
+  "departure": "KLAX 25R",
+  "destination": "KBUR 08",
+  "route": "lax-burbank",
+  "minimum_clearance_m": 333.2,
+  "avoidance_count": 3,
+  "sky": "burbank",
+  "runway_briefed": true,
+  "sky_stages": [
+    {
+      "stage": "darkening",
+      "time_s": 156.5,
+      "route_km": 12.26
+    },
+    {
+      "stage": "storm",
+      "time_s": 200.9,
+      "route_km": 16.12
+    },
+    {
+      "stage": "clearing",
+      "time_s": 428.9,
+      "route_km": 38.96
+    },
+    {
+      "stage": "burbank",
+      "time_s": 471.4,
+      "route_km": 44.63
+    }
+  ],
+  "runway_briefing": {
+    "airport": "KBUR",
+    "runway": "08",
+    "threshold_lat": 34.197911,
+    "threshold_lon": -118.369143,
+    "heading_true_deg": 91.0,
+    "length_m": 1768.0,
+    "width_m": 45.72,
+    "threshold_elevation_ft": 727.4,
+    "glideslope_deg": 3.0,
+    "wind": "calm",
+    "source": "code-supplied runway data (FAA via airnav.com), not perceived",
+    "time_s": 471.4
+  },
+  "sky_applied": [
+    {
+      "stage": "clear",
+      "metar_confirmed": true
+    },
+    {
+      "stage": "darkening",
+      "metar_confirmed": true
+    },
+    {
+      "stage": "storm",
+      "metar_confirmed": true
+    },
+    {
+      "stage": "clearing",
+      "metar_confirmed": true
+    },
+    {
+      "stage": "burbank",
+      "metar_confirmed": true
+    }
+  ],
+  "brain": "CONNECTOME LIF (notebook model)",
+  "ended_in": "Landing fly: ROLLOUT",
+  "handovers": [
+    {
+      "time": 0.0,
+      "to": "Takeoff fly",
+      "state": "standing",
+      "agl_ft": 0,
+      "ias_kt": 0,
+      "zero_steer": -18.75
+    },
+    {
+      "time": 77.8,
+      "to": "Circuit fly",
+      "state": "cruising",
+      "agl_ft": 1005,
+      "ias_kt": 220,
+      "zero_steer": -22.5,
+      "zero_pitch": 107.0,
+      "zero_roll": -43.0,
+      "zero_MN9": 65.0
+    },
+    {
+      "time": 674.2,
+      "to": "Landing fly",
+      "state": "flying",
+      "agl_ft": 1139,
+      "ias_kt": 148,
+      "zero_steer": -21.25,
+      "zero_pitch": 107.0,
+      "zero_roll": -43.0,
+      "zero_MN9": 65.0
+    }
+  ],
+  "touchdown_x_m": 497,
+  "touchdown_sink_fpm": 535,
+  "time_s": 759.27,
+  "max_centerline_m": 3.3,
+  "outcome": "landing_outside_criteria",
+  "termination_reason": "landing_outside_criteria",
+  "safe_reject": false,
+  "success": false,
+  "decision_timing": {
+    "applied": 2391,
+    "completed": 2393,
+    "discarded": 2,
+    "skipped": 128,
+    "latency_mean_s": 0.3,
+    "latency_max_s": 9.017
+  },
+  "speed_up_resets": 0,
+  "stop_x_m": 955.3814293669853,
+  "wall_s": 766.0
+}
